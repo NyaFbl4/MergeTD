@@ -19,12 +19,17 @@ namespace Project.Scripts.Gameplay.Towers
 
         private float _cooldown;
         private EnemyHealth _currentTarget;
+        private bool _canFire;
+        
+        public void SetCanFire(bool canFire) => _canFire = canFire;
 
         private void OnEnable() => IGameListener.Register(this);
         private void OnDisable() => IGameListener.Unregister(this);
 
         public void OnUpdate(float deltaTime)
         {
+            if (!_canFire) return;
+            
             _cooldown -= deltaTime;
             _currentTarget = FindNearestEnemyInRange();
 
