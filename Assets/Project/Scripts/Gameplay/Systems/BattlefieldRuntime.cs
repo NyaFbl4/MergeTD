@@ -103,7 +103,11 @@ namespace Project.Scripts.Gameplay.Systems
             var lanes = _context.Lanes;
             if (lanes == null || lanes.Length == 0 || _context.EnemiesConfig == null)
                 return;
+
             var enemyPrefab = GetRandomEnemy(_context.EnemiesConfig.Enemies);
+            if (enemyPrefab == null)
+                return;
+
             var lane = lanes[Random.Range(0, lanes.Length)];
             if (lane == null)
                 return;
@@ -148,4 +152,3 @@ namespace Project.Scripts.Gameplay.Systems
         }
     }
 }
-

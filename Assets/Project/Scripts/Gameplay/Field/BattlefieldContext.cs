@@ -34,5 +34,39 @@ namespace Project.Scripts.Gameplay.Field
         {
             return _enemiesConfig != null && _baseHealth != null && _lanes != null && _lanes.Length > 0;
         }
+
+        public TowerSlot FindFirstFreeSlot(ETowerSlotType slotType)
+        {
+            if (_towerSlots == null)
+                return null;
+
+            for (var i = 0; i < _towerSlots.Length; i++)
+            {
+                var slot = _towerSlots[i];
+                if (slot == null || slot.IsOccupied || slot.SlotType != slotType)
+                    continue;
+
+                return slot;
+            }
+
+            return null;
+        }
+
+        public TowerSlot FindFirstOccupiedSlot(ETowerSlotType slotType)
+        {
+            if (_towerSlots == null)
+                return null;
+
+            for (var i = 0; i < _towerSlots.Length; i++)
+            {
+                var slot = _towerSlots[i];
+                if (slot == null || !slot.IsOccupied || slot.SlotType != slotType)
+                    continue;
+
+                return slot;
+            }
+
+            return null;
+        }
     }
 }
