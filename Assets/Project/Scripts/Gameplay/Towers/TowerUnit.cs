@@ -1,5 +1,6 @@
 ﻿using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
+using TMPro;
 using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Towers
@@ -8,6 +9,7 @@ namespace Project.Scripts.Gameplay.Towers
     {
         [SerializeField] private Transform _turretPivot;
         [SerializeField] private Transform _firePoint;
+        [SerializeField] private TextMeshProUGUI _currentLevelText;
         [SerializeField] private Projectile _projectilePrefab;
         [SerializeField] private float _angleOffset = -90f;
         [SerializeField] private float _rotationSpeed = 360f;

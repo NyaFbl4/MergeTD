@@ -25,6 +25,7 @@ namespace Project.Scripts.Gameplay.Field
                 return false;
 
             _currentTower = Instantiate(towerPrefab, TowerAnchor.position, TowerAnchor.rotation, TowerAnchor);
+            BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
 
             return true;
@@ -49,8 +50,16 @@ namespace Project.Scripts.Gameplay.Field
             _currentTower = tower;
             _currentTower.transform.SetParent(TowerAnchor);
             _currentTower.transform.SetPositionAndRotation(TowerAnchor.position, TowerAnchor.rotation);
+            BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
             return true;
+        }
+        
+        private void BindDragHandler(GameObject towerObject)
+        {
+            var drag = towerObject.GetComponent<Project.Scripts.Gameplay.Towers.TowerDragHandler>();
+            if (drag != null)
+                drag.Init(this);
         }
 
         public void SetTower(GameObject towerInstance)
