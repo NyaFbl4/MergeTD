@@ -45,9 +45,21 @@ namespace Project.Scripts.GameManager
                 return;
 
             var deltaTime = Time.deltaTime;
-            foreach (var listener in _gameUpdateListeners)
+            var listenersSnapshot = _gameUpdateListeners.ToArray();
+            for (var i = 0; i < listenersSnapshot.Length; i++)
             {
-                listener.OnUpdate(deltaTime);
+                var listener = listenersSnapshot[i];
+                if (listener == null)
+                    continue;
+
+                try
+                {
+                    listener.OnUpdate(deltaTime);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
             }
         }
 
@@ -57,9 +69,21 @@ namespace Project.Scripts.GameManager
                 return;
 
             var deltaTime = Time.deltaTime;
-            foreach (var listener in _gameFixedUpdateListeners)
+            var listenersSnapshot = _gameFixedUpdateListeners.ToArray();
+            for (var i = 0; i < listenersSnapshot.Length; i++)
             {
-                listener.OnFixedUpdate(deltaTime);
+                var listener = listenersSnapshot[i];
+                if (listener == null)
+                    continue;
+
+                try
+                {
+                    listener.OnFixedUpdate(deltaTime);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
             }
         }
 

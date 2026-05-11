@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
+using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Field;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -98,20 +101,50 @@ namespace Project.Scripts.Gameplay.Systems
         private void SpawnEnemy()
         {
             var lanes = _context.Lanes;
-            if (lanes == null || lanes.Length == 0 || _context.EnemyPrefab == null)
+            if (lanes == null || lanes.Length == 0 || _context.EnemiesConfig == null)
                 return;
-
+            var enemyPrefab = GetRandomEnemy(_context.EnemiesConfig.Enemies);
             var lane = lanes[Random.Range(0, lanes.Length)];
             if (lane == null)
                 return;
 
             var enemy = UnityEngine.Object.Instantiate(
-                _context.EnemyPrefab,
+                enemyPrefab,
                 lane.GetSpawnPosition(),
                 Quaternion.identity,
                 _context.EnemiesRoot);
 
             enemy.Initialize(lane, _context.BaseHealth);
+        }
+        
+        private EnemyUnit GetRandomEnemy(List<EnemyUnit> enemies)
+        {
+            if (enemies == null || enemies.Count == 0)
+                return null;
+
+            var validCount = 0;
+            for (var i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i] != null)
+                    validCount++;
+            }
+
+            if (validCount == 0)
+                return null;
+
+            var pick = Random.Range(0, validCount);
+            for (var i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i] == null)
+                    continue;
+
+                if (pick == 0)
+                    return enemies[i];
+
+                pick--;
+            }
+
+            return null;
         }
     }
 }

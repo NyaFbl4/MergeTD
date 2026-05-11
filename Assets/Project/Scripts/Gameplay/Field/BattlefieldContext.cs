@@ -1,4 +1,5 @@
-﻿using Project.Scripts.Gameplay.Base;
+﻿using Project.Scripts.Configs;
+using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Enemies;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private TowerSlot[] _towerSlots;
 
         [Header("Spawn")]
-        [SerializeField] private EnemyUnit _enemyPrefab;
+        [SerializeField] private EnemiesConfig _enemiesConfig;
         [SerializeField, Min(0.1f)] private float _spawnInterval = 1.5f;
         [SerializeField, Min(1)] private int _enemiesPerWave = 6;
         [SerializeField, Min(0f)] private float _waveDelay = 2f;
@@ -22,7 +23,7 @@ namespace Project.Scripts.Gameplay.Field
 
         public LanePath[] Lanes => _lanes;
         public TowerSlot[] TowerSlots => _towerSlots;
-        public EnemyUnit EnemyPrefab => _enemyPrefab;
+        public EnemiesConfig EnemiesConfig => _enemiesConfig;
         public float SpawnInterval => _spawnInterval;
         public int EnemiesPerWave => _enemiesPerWave;
         public float WaveDelay => _waveDelay;
@@ -31,7 +32,7 @@ namespace Project.Scripts.Gameplay.Field
 
         public bool IsReady()
         {
-            return _enemyPrefab != null && _baseHealth != null && _lanes != null && _lanes.Length > 0;
+            return _enemiesConfig != null && _baseHealth != null && _lanes != null && _lanes.Length > 0;
         }
     }
 }
