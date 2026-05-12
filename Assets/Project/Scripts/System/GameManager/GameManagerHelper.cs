@@ -1,5 +1,6 @@
 ﻿using System;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Towers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using VContainer;
@@ -16,7 +17,7 @@ namespace Project.Scripts.GameManager
 
         [Header("Debug Tower Spawn")]
         [SerializeField] private BattlefieldContext _battlefieldContext;
-        [SerializeField] private GameObject _towerPrefab;
+        [SerializeField] private TowerUnit _towerPrefab;
 
         private IGameManagerService _gameManagerService;
 

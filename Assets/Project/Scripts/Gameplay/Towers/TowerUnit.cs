@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Towers
 {
-    public class TowerUnit : MonoBehaviour, IGameUpdateListener
+    public class TowerUnit : MonoBehaviour, ITowerUnit, IGameUpdateListener
     {
         [SerializeField] private Transform _turretPivot;
         [SerializeField] private Transform _firePoint;
-        [SerializeField] private TextMeshProUGUI _currentLevelText;
+        [SerializeField] private TMP_Text _currentLevelText;
         [SerializeField] private Projectile _projectilePrefab;
         [SerializeField] private float _angleOffset = -90f;
         [SerializeField] private float _rotationSpeed = 360f;
@@ -18,6 +18,9 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private float _range = 3f;
         [SerializeField] private int _damage = 1;
         [SerializeField] private float _fireRate = 1f;
+        
+        [Header("Tower parametrs")]
+        [SerializeField] private int _towerLevel = 1;
 
         private float _cooldown;
         private EnemyHealth _currentTarget;
@@ -33,6 +36,16 @@ namespace Project.Scripts.Gameplay.Towers
         private void OnEnable() => IGameListener.Register(this);
         private void OnDisable() => IGameListener.Unregister(this);
 
+        public void CreateTower()
+        {
+            _currentLevelText.text = _towerLevel.ToString();
+        }
+
+        public void UpdateTower()
+        {
+            
+        }
+        
         public void OnUpdate(float deltaTime)
         {
             if (!_canFire) return;

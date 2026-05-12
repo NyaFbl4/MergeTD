@@ -18,6 +18,9 @@ namespace Project.Scripts.Gameplay.Towers
             _towerUnit = GetComponent<TowerUnit>();
             _camera = Camera.main;
             _towerCollider = GetComponent<Collider2D>();
+            
+            if (_sourceSlot == null)
+                _sourceSlot = GetComponentInParent<TowerSlot>();
         }
 
         public void Init(TowerSlot sourceSlot)
@@ -27,7 +30,11 @@ namespace Project.Scripts.Gameplay.Towers
         
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (_sourceSlot == null) return;
+            if (_sourceSlot == null)
+                _sourceSlot = GetComponentInParent<TowerSlot>();
+            if (_sourceSlot == null)
+                return;
+            
             _startPos = transform.position;
             _sourceSlot.DetachTower();
             _towerUnit?.SetCanFire(false);
@@ -48,7 +55,7 @@ namespace Project.Scripts.Gameplay.Towers
              world.z = _z;
 
              var targetSlot = FindSlotUnderPointer(world);
-             if (targetSlot != null && targetSlot.TryAttachExistingTower(gameObject))
+             if (targetSlot != null && targetSlot.TryAttachExistingTower(_towerUnit))
              {
                  if (_towerCollider != null)
                      _towerCollider.enabled = true;
@@ -56,7 +63,7 @@ namespace Project.Scripts.Gameplay.Towers
              }
 
              // rollback
-             if (_sourceSlot != null && _sourceSlot.TryAttachExistingTower(gameObject))
+             if (_sourceSlot != null && _sourceSlot.TryAttachExistingTower(_towerUnit))
              {
                  if (_towerCollider != null)
                      _towerCollider.enabled = true;
@@ -66,7 +73,7 @@ namespace Project.Scripts.Gameplay.Towers
              transform.position = _startPos;
              if (_towerCollider != null)
                  _towerCollider.enabled = true;
-       }
+        }
 
         private TowerSlot FindSlotUnderPointer(Vector3 worldPosition)
         {

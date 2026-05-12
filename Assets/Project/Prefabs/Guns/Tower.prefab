@@ -244,12 +244,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Towers.TowerUnit
   _turretPivot: {fileID: 9002335383536459500}
   _firePoint: {fileID: 2502189378863360425}
+  _currentLevelText: {fileID: 7537546963133529158}
   _projectilePrefab: {fileID: 8319070672697281119, guid: 8118189810209a54b8b80f1390418189, type: 3}
   _angleOffset: -90
   _rotationSpeed: 360
   _range: 6
   _damage: 1
   _fireRate: 0.5
+  _towerLevel: 1
 --- !u!114 &-2286130548361520535
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,30 +8,31 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private Transform _towerAnchor;
         [SerializeField] private ETowerSlotType _slotType = ETowerSlotType.SpawnOnly;
 
-        private GameObject _currentTower;
+        private TowerUnit _currentTower;
 
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
-        public GameObject CurrentTower => _currentTower;
+        public TowerUnit CurrentTower => _currentTower;
         public bool IsSpawnOnly => _slotType == ETowerSlotType.SpawnOnly;
         public bool IsActiveOnly => _slotType == ETowerSlotType.ActiveOnly;
         public ETowerSlotType SlotType => _slotType;
         public void SetSlotType(ETowerSlotType slotType) => _slotType = slotType;
 
         
-        public bool TryPlaceTower(GameObject towerPrefab)
+        public bool TryPlaceTower(TowerUnit towerPrefab)
         {
             if (IsOccupied || towerPrefab == null)
                 return false;
 
             _currentTower = Instantiate(towerPrefab, TowerAnchor.position, TowerAnchor.rotation, TowerAnchor);
+            _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
 
             return true;
         }
 
-        public GameObject DetachTower()
+        public TowerUnit DetachTower()
         {
             if (_currentTower == null)
                 return null;
@@ -42,7 +43,7 @@ namespace Project.Scripts.Gameplay.Field
             return tower;
         }
 
-        public bool TryAttachExistingTower(GameObject tower)
+        public bool TryAttachExistingTower(TowerUnit tower)
         {
             if (tower == null || IsOccupied)
                 return false;
@@ -55,14 +56,14 @@ namespace Project.Scripts.Gameplay.Field
             return true;
         }
         
-        private void BindDragHandler(GameObject towerObject)
+        private void BindDragHandler(TowerUnit towerObject)
         {
             var drag = towerObject.GetComponent<Project.Scripts.Gameplay.Towers.TowerDragHandler>();
             if (drag != null)
                 drag.Init(this);
         }
 
-        public void SetTower(GameObject towerInstance)
+        public void SetTower(TowerUnit towerInstance)
         {
             _currentTower = towerInstance;
             if (_currentTower != null)
@@ -77,7 +78,7 @@ namespace Project.Scripts.Gameplay.Field
             _currentTower = null;
         }
 
-        private void ApplyFireState(GameObject towerObject)
+        private void ApplyFireState(TowerUnit towerObject)
         {
             var towerUnit = towerObject.GetComponent<TowerUnit>();
             if (towerUnit != null)
