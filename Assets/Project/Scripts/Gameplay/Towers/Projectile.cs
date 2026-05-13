@@ -9,8 +9,9 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private float _speed = 10f;
         [SerializeField] private float _lifeTime = 3f;
         [SerializeField] private int _defaultDamage = 1;
+        [SerializeField] private float _angleOffset = -90f;
 
-        private EnemyHealth _target;
+        private Vector3 _direction;
         private int _damage;
         private bool _isLaunched;
 
@@ -33,11 +34,19 @@ namespace Project.Scripts.Gameplay.Towers
             _rigidbody2D.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
 
-        public void Launch(EnemyHealth target, int damage)
+        public void Launch(Vector3 origin, Vector3 targetPosition, int damage)
         {
-            _target = target;
+            transform.position = origin;
+
+            _direction = (targetPosition - origin).normalized;
+            if (_direction.sqrMagnitude <= 0.000001f)
+                _direction = Vector3.right;
+
             _damage = damage > 0 ? damage : _defaultDamage;
             _isLaunched = true;
+
+            var angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle + _angleOffset);
 
             Destroy(gameObject, _lifeTime);
         }
@@ -47,14 +56,7 @@ namespace Project.Scripts.Gameplay.Towers
             if (!_isLaunched)
                 return;
 
-            if (_target == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            var targetPosition = _target.transform.position;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
+            transform.position += _direction * (_speed * Time.deltaTime);
         }
 
         private void OnTriggerEnter2D(Collider2D other)

@@ -10,9 +10,8 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private Transform _turretPivot;
         [SerializeField] private Transform _firePoint;
         [SerializeField] private TMP_Text _currentLevelText;
+        [SerializeField] private Animator _animator;
         [SerializeField] private Projectile _projectilePrefab;
-        [SerializeField] private float _angleOffset = -90f;
-        [SerializeField] private float _rotationSpeed = 360f;
 
         [Header("Fire parametrs")]
         [SerializeField] private float _range = 3f;
@@ -21,10 +20,13 @@ namespace Project.Scripts.Gameplay.Towers
         
         [Header("Tower parametrs")]
         [SerializeField] private int _towerLevel = 1;
+        [SerializeField] private float _angleOffset = -90f;
+        [SerializeField] private float _rotationSpeed = 360f;
 
         private float _cooldown;
         private EnemyHealth _currentTarget;
         private bool _canFire;
+        private bool _isFire;
 
         public void SetCanFire(bool canFire)
         {
@@ -46,6 +48,20 @@ namespace Project.Scripts.Gameplay.Towers
             
         }
         
+        // ВЫЗЫВАЕТСЯ ИЗ ANIMATION EVENT в нужном кадре
+        public void OnAttackFireEvent()
+        {
+            if (_currentTarget == null) return;
+            Shoot(_currentTarget);
+        }
+
+        // ВЫЗЫВАЕТСЯ ИЗ ANIMATION EVENT в конце клипа (или через StateMachineBehaviour)
+        public void OnAttackFinishedEvent()
+        {
+            _isFire = false;
+            _currentTarget = null;
+        }
+        
         public void OnUpdate(float deltaTime)
         {
             if (!_canFire) return;
@@ -59,10 +75,19 @@ namespace Project.Scripts.Gameplay.Towers
             if (_cooldown > 0f || _currentTarget == null)
                 return;
 
-            Shoot(_currentTarget);
+            TryAttack(_currentTarget);
             _cooldown = 1f / Mathf.Max(0.01f, _fireRate);
         }
 
+        private void TryAttack(EnemyHealth target)
+        {
+            if (_isFire || target == null) return;
+
+            _currentTarget = target;
+            _isFire = true;
+            _animator.SetTrigger("Shoot"); // запускаем анимацию
+        }
+        
         private void RotateToTargetSmooth(Vector3 targetPosition, float deltaTime)
         {
             var pivot = _turretPivot != null ? _turretPivot : transform;
@@ -84,8 +109,9 @@ namespace Project.Scripts.Gameplay.Towers
             }
 
             var origin = _firePoint != null ? _firePoint.position : transform.position;
+            var targetPosition = target.transform.position;
             var projectile = Instantiate(_projectilePrefab, origin, Quaternion.identity);
-            projectile.Launch(target, _damage);
+            projectile.Launch(origin, targetPosition, _damage);
         }
 
         private EnemyHealth FindNearestEnemyInRange()

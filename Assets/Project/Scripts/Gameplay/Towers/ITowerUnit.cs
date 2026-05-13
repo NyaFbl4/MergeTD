@@ -6,5 +6,7 @@ namespace Project.Scripts.Gameplay.Towers
     {
         void CreateTower();
         void UpdateTower();
+        void OnAttackFireEvent();
+        void OnAttackFinishedEvent();
     }
 }
