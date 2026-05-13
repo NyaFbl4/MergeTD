@@ -1,7 +1,10 @@
-﻿using Project.Scripts.GameManager;
+using MessagePipe;
+using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.System.UseCases;
+using Project.Scripts.Systems.UI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -16,6 +19,9 @@ namespace Installers
         [SerializeField] private BattlefieldContext _battlefieldContext;
         [SerializeField] private BaseHealth _baseHealth;
 
+        [Header("UI")]
+        [SerializeField] private LayoutsRepository _layoutsRepository;
+
         protected override void Configure(IContainerBuilder builder)
         {
             RegisterSystem(builder);
@@ -27,10 +33,18 @@ namespace Installers
 
         private static void RegisterSystem(IContainerBuilder builder)
         {
-            // BubbleShooter-style: register game loop entry points in system block.
+            builder.RegisterMessagePipe();
+
+            // Game loop
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton).As<IGameBootstrapControl>();
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton);
+
+            // UI core
+            builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
+            builder.RegisterEntryPoint<UIMessageHandler>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<ShowPopUpUseCase>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<HidePopUpUseCase>(Lifetime.Singleton);
         }
 
         private void RegisterSceneComponents(IContainerBuilder builder)
@@ -65,14 +79,31 @@ namespace Installers
             // Register gameplay services and systems here.
         }
 
-        private static void RegisterUI(IContainerBuilder builder)
+        private void RegisterUI(IContainerBuilder builder)
         {
-            // Register UI presenters/controllers here.
+            if (_layoutsRepository == null)
+            {
+                Debug.LogWarning("ProjectLifetimeScope: LayoutsRepository is not assigned. UI views will not be spawned.");
+                return;
+            }
+
+            var views = _layoutsRepository.Views;
+            if (views == null)
+                return;
+
+            foreach (var prefab in views)
+            {
+                if (prefab == null)
+                    continue;
+
+                builder.RegisterComponentInNewPrefab(prefab, Lifetime.Scoped).AsSelf().AsImplementedInterfaces();
+            }
         }
 
-        private static void RegisterConfigs(IContainerBuilder builder)
+        private void RegisterConfigs(IContainerBuilder builder)
         {
-            // Register ScriptableObject configs here.
+            if (_layoutsRepository != null)
+                builder.RegisterInstance(_layoutsRepository).As<ILayoutRepository>();
         }
     }
 
