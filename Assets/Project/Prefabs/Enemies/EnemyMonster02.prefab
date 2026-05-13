@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7959539266852331667}
   - component: {fileID: 7203089955899784126}
   - component: {fileID: 7370198648229999818}
+  - component: {fileID: 8339742275230638339}
   - component: {fileID: -7331161638962114990}
   m_Layer: 0
   m_Name: EnemyMonster02
@@ -133,6 +134,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyHealth
   _maxHealth: 1
+--- !u!95 &8339742275230638339
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4678525740623520173}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9d3f263b0154b8e43b4b9a0d0e826f4b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!58 &-7331161638962114990
 CircleCollider2D:
   m_ObjectHideFlags: 0
