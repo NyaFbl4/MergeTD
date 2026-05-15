@@ -101,10 +101,10 @@ namespace Project.Scripts.Gameplay.Systems
         private void SpawnEnemy()
         {
             var lanes = _context.Lanes;
-            if (lanes == null || lanes.Length == 0 || _context.EnemiesConfig == null)
+            if (lanes == null || lanes.Length == 0 || _context.UnitsConfig == null)
                 return;
 
-            var enemyPrefab = GetRandomEnemy(_context.EnemiesConfig.Enemies);
+            var enemyPrefab = GetRandomEnemy(_context.UnitsConfig.Enemies);
             if (enemyPrefab == null)
                 return;
 

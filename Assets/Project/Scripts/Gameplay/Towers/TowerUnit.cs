@@ -85,7 +85,7 @@ namespace Project.Scripts.Gameplay.Towers
 
             _currentTarget = target;
             _isFire = true;
-            _animator.SetTrigger("Shoot"); // запускаем анимацию
+            _animator.SetTrigger("Shoot");
         }
         
         private void RotateToTargetSmooth(Vector3 targetPosition, float deltaTime)

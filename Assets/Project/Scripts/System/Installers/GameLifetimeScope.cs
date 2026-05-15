@@ -1,10 +1,12 @@
 using MessagePipe;
+using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.UI.LevelUI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -19,19 +21,22 @@ namespace Installers
         [SerializeField] private BattlefieldContext _battlefieldContext;
         [SerializeField] private BaseHealth _baseHealth;
 
-        [Header("UI")]
+        [Header("Configs")]
         [SerializeField] private LayoutsRepository _layoutsRepository;
+        [SerializeField] private UnitsConfig _unitsConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
             RegisterSystem(builder);
-            RegisterSceneComponents(builder);
             RegisterGameplay(builder);
-            RegisterUI(builder);
             RegisterConfigs(builder);
+            RegisterSceneComponents(builder);
+            RegisterViews(builder);
+            RegisterPresenters(builder);
+            RegisterUseCases(builder);
         }
 
-        private static void RegisterSystem(IContainerBuilder builder)
+        private void RegisterSystem(IContainerBuilder builder)
         {
             builder.RegisterMessagePipe();
 
@@ -43,8 +48,6 @@ namespace Installers
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
             builder.RegisterEntryPoint<UIMessageHandler>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<ShowPopUpUseCase>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<HidePopUpUseCase>(Lifetime.Singleton);
         }
 
         private void RegisterSceneComponents(IContainerBuilder builder)
@@ -74,12 +77,25 @@ namespace Installers
                 Debug.LogWarning("ProjectLifetimeScope: BaseHealth is not assigned and was not found in scene.");
         }
 
-        private static void RegisterGameplay(IContainerBuilder builder)
+        private void RegisterPresenters(IContainerBuilder builder)
+        {
+            builder.RegisterEntryPoint<LevelUIPresenter>(Lifetime.Singleton).As<ILevelUIPresenter>();
+        }
+
+        private void RegisterUseCases(IContainerBuilder builder)
+        {
+            builder.RegisterEntryPoint<ShowPopUpUseCase>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<HidePopUpUseCase>(Lifetime.Singleton);
+
+            builder.RegisterEntryPoint<LevelUIUseCase>(Lifetime.Singleton).As<ILevelUIUseCase>();
+        }
+        
+        private void RegisterGameplay(IContainerBuilder builder)
         {
             // Register gameplay services and systems here.
         }
 
-        private void RegisterUI(IContainerBuilder builder)
+        private void RegisterViews(IContainerBuilder builder)
         {
             if (_layoutsRepository == null)
             {
@@ -102,8 +118,7 @@ namespace Installers
 
         private void RegisterConfigs(IContainerBuilder builder)
         {
-            if (_layoutsRepository != null)
-                builder.RegisterInstance(_layoutsRepository).As<ILayoutRepository>();
+            builder.RegisterInstance(_unitsConfig);
         }
     }
 

@@ -1622,6 +1622,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705898688}
   - component: {fileID: 705898687}
+  - component: {fileID: 705898689}
   m_Layer: 0
   m_Name: LevelUI
   m_TagString: Untagged
@@ -1667,6 +1668,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &705898689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705898686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8a88955b3045558a71e0fea26d1732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.UI.LevelUI.LevelUIView
 --- !u!1 &732707263
 GameObject:
   m_ObjectHideFlags: 0
