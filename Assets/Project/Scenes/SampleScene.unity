@@ -769,7 +769,6 @@ MonoBehaviour:
   - {fileID: 815318312}
   - {fileID: 2138125084}
   - {fileID: 2086550982}
-  _enemiesConfig: {fileID: 11400000, guid: 35ef857e8180f154d856e16c20861830, type: 2}
   _spawnInterval: 1.5
   _enemiesPerWave: 6
   _waveDelay: 2
@@ -1037,7 +1036,8 @@ MonoBehaviour:
   _gameManagerHelper: {fileID: 382001235}
   _battlefieldContext: {fileID: 319326778}
   _baseHealth: {fileID: 688097476}
-  _layoutsRepository: {fileID: 0}
+  _layoutsRepository: {fileID: 11400000, guid: ace66e3baded0ee4587b1e39e036bc94, type: 2}
+  _unitsConfig: {fileID: 11400000, guid: 35ef857e8180f154d856e16c20861830, type: 2}
 --- !u!1 &392971864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,74 +1612,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Base.BaseHealth
   _maxHealth: 10
---- !u!1 &705898686
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 705898688}
-  - component: {fileID: 705898687}
-  - component: {fileID: 705898689}
-  m_Layer: 0
-  m_Name: LevelUI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &705898687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705898686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: c212ed35802064c4797212e7d4b1437f, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 5cad85ec6af64c944958b72000a3a22d, type: 3}
-  m_SortingOrder: 0
-  m_Position: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
---- !u!4 &705898688
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705898686}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.09584, y: -0.20534, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &705898689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705898686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8a88955b3045558a71e0fea26d1732, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.UI.LevelUI.LevelUIView
 --- !u!1 &732707263
 GameObject:
   m_ObjectHideFlags: 0
@@ -4967,10 +4899,71 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1001 &141744032546683001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 518791275245178269, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_Name
+      value: LevelUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 518791275245178269, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.09584
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.20534
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3773721671249166111, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b565bc8e169852c4cb5592caf39eaa7b, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1706087768}
   - {fileID: 1506953441}
-  - {fileID: 705898688}
+  - {fileID: 141744032546683001}
