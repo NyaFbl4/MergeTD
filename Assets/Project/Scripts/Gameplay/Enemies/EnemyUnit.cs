@@ -10,6 +10,8 @@ namespace Project.Scripts.Gameplay.Enemies
         [SerializeField, Min(0.1f)] private float _moveSpeed = 2f;
         [SerializeField, Min(1)] private int _damageToBase = 1;
 
+        [SerializeField] private Animator _animator;
+        
         private LanePath _lanePath;
         private BaseHealth _baseHealth;
         private int _targetWaypointIndex;
@@ -51,6 +53,17 @@ namespace Project.Scripts.Gameplay.Enemies
 
             if (Vector3.SqrMagnitude(transform.position - targetPosition) <= 0.0001f)
                 _targetWaypointIndex++;
+        }
+
+        public void IsDie()
+        {
+            _moveSpeed = 0f;
+            _animator.SetTrigger("IsDie");
+        }
+
+        public void DestroyEnemy()
+        {
+            Destroy(gameObject);
         }
 
         private void ReachBase()

@@ -113,10 +113,10 @@ GameObject:
   - component: {fileID: 1893437728107086310}
   - component: {fileID: 6868427807285015421}
   - component: {fileID: 7959539266852331667}
-  - component: {fileID: 7203089955899784126}
-  - component: {fileID: 5810107060852785228}
   - component: {fileID: 8755048110118992812}
   - component: {fileID: 8339742275230638339}
+  - component: {fileID: 7203089955899784126}
+  - component: {fileID: 5810107060852785228}
   m_Layer: 0
   m_Name: EnemyMonster01
   m_TagString: Untagged
@@ -210,37 +210,6 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_SortAtRoot: 0
---- !u!114 &7203089955899784126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4678525740623520173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6111018786864ab48aaacd6dd2d11559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyUnit
-  _moveSpeed: 0.5
-  _damageToBase: 1
---- !u!114 &5810107060852785228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4678525740623520173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9d671ad8822479587a56b954b393f5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyHealth
-  _maxHealth: 5
-  _hpCanvas: {fileID: 1480370929524123548}
-  _hpFill: {fileID: 1769377855931644214}
-  _hideWhenFull: 0
-  _hideWhenDead: 1
 --- !u!58 &8755048110118992812
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -299,6 +268,39 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7203089955899784126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4678525740623520173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6111018786864ab48aaacd6dd2d11559, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyUnit
+  _moveSpeed: 0.5
+  _damageToBase: 1
+  _animator: {fileID: 8339742275230638339}
+--- !u!114 &5810107060852785228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4678525740623520173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9d671ad8822479587a56b954b393f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyHealth
+  _enemy: {fileID: 7203089955899784126}
+  _maxHealth: 5
+  _hpCanvas: {fileID: 1480370929524123548}
+  _hpFill: {fileID: 1769377855931644214}
+  _hideWhenFull: 0
+  _hideWhenDead: 1
 --- !u!1 &6020048289431803655
 GameObject:
   m_ObjectHideFlags: 0

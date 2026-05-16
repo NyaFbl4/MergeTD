@@ -6,6 +6,7 @@ namespace Project.Scripts.Gameplay.Enemies
     [RequireComponent(typeof(Collider2D))]
     public class EnemyHealth : MonoBehaviour
     {
+        [SerializeField] private EnemyUnit _enemy;
         [Header("Health")]
         [SerializeField] private int _maxHealth = 3;
         private int _currentHealth;
@@ -36,7 +37,8 @@ namespace Project.Scripts.Gameplay.Enemies
                 if (_hideWhenDead && _hpCanvas != null)
                     _hpCanvas.gameObject.SetActive(false);
 
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                _enemy.IsDie();
                 return;
             }
             UpdateHpBar();
