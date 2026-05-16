@@ -299,6 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyUnit
   _moveSpeed: 0.5
   _damageToBase: 1
+  _animator: {fileID: 8339742275230638339}
 --- !u!114 &7042625966658443645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,6 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d671ad8822479587a56b954b393f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyHealth
+  _enemy: {fileID: 7203089955899784126}
   _maxHealth: 5
   _hpCanvas: {fileID: 6398329504225864446}
   _hpFill: {fileID: 8361002308794760729}
