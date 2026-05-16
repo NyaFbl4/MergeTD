@@ -1,43 +1,55 @@
-﻿using Project.Scripts.Systems.UI;
+﻿using Project.Scripts.System.UseCases;
+using Project.Scripts.Systems.UI;
 using UnityEngine;
 
 namespace Project.Scripts.UI.LevelUI
 {
     public class LevelUIPresenter : LayoutPresenterBase<ILevelUIView>, ILevelUIPresenter
     {
-        private readonly ILevelUIUseCase _levelUIUseCase;
+        //private readonly ILevelUIUseCase _levelUIUseCase;
+        private readonly IBuyTowerUseCase _buyTowerUseCase;
+        private readonly IPlayerStatsUseCase _playerStatsUseCase;
 
-        public LevelUIPresenter(ILevelUIUseCase levelUIUseCase)
+        public LevelUIPresenter(IBuyTowerUseCase buyTowerUseCase, IPlayerStatsUseCase playerStatsUseCase)
         {
-            _levelUIUseCase = levelUIUseCase;
+            _buyTowerUseCase = buyTowerUseCase;
+            _playerStatsUseCase = playerStatsUseCase;
         }
-        
+
         public override void Initialize()
         {
             base.Initialize();
-            _layoutView.Show();
 
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
+            _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
+            
+            _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
+            _layoutView.SetMoney(_playerStatsUseCase.Gold);
         }
 
         private void OnPayTowerButtonClicked()
         {
-            Debug.Log("OnPayTowerButtonClicked");
-            _levelUIUseCase.TryBuyTower();
+            var result = _buyTowerUseCase.TryBuyTower();
+            Debug.Log($"BuyTower result: {result}");
         }
         
         private void OnShopButtonClicked()
         {
             Debug.Log("OnShopButtonClicked");
-            _levelUIUseCase.OpenShop();
+            //_levelUIUseCase.OpenShop();
         }
         
+         private void OnGoldChanged(int gold)
+        {
+            _layoutView.SetMoney(gold);
+        }
         
         public override void Dispose()
         {
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
+            _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             
             base.Dispose();
         }

@@ -24,6 +24,8 @@ namespace Installers
         [Header("Configs")]
         [SerializeField] private LayoutsRepository _layoutsRepository;
         [SerializeField] private UnitsConfig _unitsConfig;
+        [SerializeField] private TowerConfig _towerConfig;
+        [SerializeField] private LevelConfig _levelConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -42,7 +44,7 @@ namespace Installers
 
             // Game loop
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
-            builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton).As<IGameBootstrapControl>();
+            builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton);
 
             // UI core
@@ -86,6 +88,8 @@ namespace Installers
         {
             builder.RegisterEntryPoint<ShowPopUpUseCase>(Lifetime.Singleton);
             builder.RegisterEntryPoint<HidePopUpUseCase>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<PlayerStatsUseCase>().As<IPlayerStatsUseCase>();
+            builder.RegisterEntryPoint<BuyTowerUseCase>().As<IBuyTowerUseCase>();
 
             builder.RegisterEntryPoint<LevelUIUseCase>(Lifetime.Singleton).As<ILevelUIUseCase>();
         }
@@ -119,6 +123,8 @@ namespace Installers
         private void RegisterConfigs(IContainerBuilder builder)
         {
             builder.RegisterInstance(_unitsConfig);
+            builder.RegisterInstance(_towerConfig);
+            builder.RegisterInstance(_levelConfig);
         }
     }
 
