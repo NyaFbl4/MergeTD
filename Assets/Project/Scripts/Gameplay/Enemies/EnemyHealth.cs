@@ -10,6 +10,7 @@ namespace Project.Scripts.Gameplay.Enemies
         [Header("Health")]
         [SerializeField] private int _maxHealth;
         [SerializeField] private int _currentHealth;
+        [SerializeField] private EnemyDamageUI _damageUI;
         
         [Header("HP Bar")]
         [SerializeField] private Canvas _hpCanvas;
@@ -30,6 +31,7 @@ namespace Project.Scripts.Gameplay.Enemies
                 return;
 
             _currentHealth -= damage;
+            _damageUI.ShowDamage(damage);
             if (_currentHealth <= 0)
             {
                 _currentHealth = 0;
