@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd9736acdde14150880b63f2c624e44b, type: 3}
-  m_Name: Tower Config
+  m_Name: Tower Config 10
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.TowerConfig
   _startPrice: 10
-  _startDamage: 100
+  _startDamage: 200
   _startAttackSpeed: 1
   _updatePrice: 10
   _updateDamage: 100

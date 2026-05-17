@@ -9,6 +9,7 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private ETowerSlotType _slotType = ETowerSlotType.SpawnOnly;
 
         private TowerUnit _currentTower;
+        private IUnitsCatalog _unitsCatalog;
 
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
@@ -17,7 +18,11 @@ namespace Project.Scripts.Gameplay.Field
         public bool IsActiveOnly => _slotType == ETowerSlotType.ActiveOnly;
         public ETowerSlotType SlotType => _slotType;
         public void SetSlotType(ETowerSlotType slotType) => _slotType = slotType;
-
+        
+        public void Construct(IUnitsCatalog unitsCatalog)
+        {
+            _unitsCatalog = unitsCatalog;
+        }
         
         public bool TryPlaceTower(TowerUnit towerPrefab)
         {
@@ -45,14 +50,51 @@ namespace Project.Scripts.Gameplay.Field
 
         public bool TryAttachExistingTower(TowerUnit tower)
         {
-            if (tower == null || IsOccupied)
+            if (tower == null)
                 return false;
+
+            if (IsOccupied)
+                return TryMergeTower(tower);
 
             _currentTower = tower;
             _currentTower.transform.SetParent(TowerAnchor);
             _currentTower.transform.SetPositionAndRotation(TowerAnchor.position, TowerAnchor.rotation);
+
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
+
+            return true;
+        }
+        
+        private bool TryMergeTower(TowerUnit incomingTower)
+        {
+            if (_currentTower == null)
+                return false;
+
+            if (!_currentTower.CanMergeWith(incomingTower))
+                return false;
+
+            var nextLevel = _currentTower.CurrentLevel + 1;
+            var nextPrefab = _unitsCatalog.GetTowerPrefabByLevel(nextLevel);
+
+            if (nextPrefab == null)
+                return false;
+
+            
+            Destroy(_currentTower.gameObject);
+            Destroy(incomingTower.gameObject);
+
+            _currentTower = Instantiate(
+                nextPrefab,
+                TowerAnchor.position,
+                TowerAnchor.rotation,
+                TowerAnchor
+            );
+
+            _currentTower.CreateTower();
+            BindDragHandler(_currentTower);
+            ApplyFireState(_currentTower);
+
             return true;
         }
         

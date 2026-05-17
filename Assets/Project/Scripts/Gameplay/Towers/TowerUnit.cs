@@ -9,7 +9,6 @@ namespace Project.Scripts.Gameplay.Towers
     public class TowerUnit : MonoBehaviour, ITowerUnit, IGameUpdateListener
     {
         [SerializeField] private TowerConfig _towerConfig;
-        
         [SerializeField] private Transform _turretPivot;
         [SerializeField] private Transform _firePoint;
         [SerializeField] private TMP_Text _currentLevelText;
@@ -25,7 +24,10 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private int _towerLevel = 1;
         [SerializeField] private float _angleOffset = -90f;
         [SerializeField] private float _rotationSpeed = 360f;
-
+        
+        public int CurrentLevel => _towerLevel;
+        public TowerConfig TowerConfig => _towerConfig;
+        
         private float _cooldown;
         private EnemyHealth _currentTarget;
         private bool _canFire;
@@ -52,6 +54,20 @@ namespace Project.Scripts.Gameplay.Towers
         public void UpdateLevelTower()
         {
             
+        }
+        
+        public bool CanMergeWith(TowerUnit other)
+        {
+            if (other == null)
+                return false;
+
+            if (other == this)
+                return false;
+
+            if (other.TowerConfig != TowerConfig)
+                return false;
+
+            return other.CurrentLevel == CurrentLevel;
         }
 
         public void OnAttackFireEvent()

@@ -1,6 +1,7 @@
 using MessagePipe;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
+using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Systems;
@@ -93,6 +94,8 @@ namespace Installers
             builder.RegisterEntryPoint<BuyTowerUseCase>().As<IBuyTowerUseCase>();
             builder.RegisterEntryPoint<EnemyDeathUseCase>(Lifetime.Singleton);
             builder.RegisterEntryPoint<LevelUIUseCase>(Lifetime.Singleton).As<ILevelUIUseCase>();
+            
+            builder.Register<UnitsCatalog>(Lifetime.Singleton).As<IUnitsCatalog>();
         }
         
         private void RegisterGameplay(IContainerBuilder builder)

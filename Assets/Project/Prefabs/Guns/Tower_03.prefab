@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a0507468c945d6aae00ffe675975ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Towers.TowerUnit
-  _towerConfig: {fileID: 11400000, guid: 2172613c9130cc546a95d2f64c59645a, type: 2}
+  _towerConfig: {fileID: 11400000, guid: b313a1d8ef2a65b4c9d074099c995c82, type: 2}
   _turretPivot: {fileID: 9002335383536459500}
   _firePoint: {fileID: 2502189378863360425}
   _currentLevelText: {fileID: 7537546963133529158}

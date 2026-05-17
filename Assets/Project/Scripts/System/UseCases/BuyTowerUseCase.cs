@@ -1,4 +1,5 @@
 ﻿using Project.Scripts.Configs;
+using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.System.Enums;
 using NotImplementedException = System.NotImplementedException;
@@ -9,16 +10,18 @@ namespace Project.Scripts.System.UseCases
     {
         private readonly TowerConfig _towerConfig;
         private readonly BattlefieldContext _battlefieldContext;
-        private IPlayerStatsUseCase _playerStats;
+        private readonly IUnitsCatalog _unitsCatalog;
+        private readonly IPlayerStatsUseCase _playerStats;
 
         public int TowerCost => ResolveTowerCost();
 
         public BuyTowerUseCase(BattlefieldContext battlefieldContext, IPlayerStatsUseCase playerStatsUseCase,
-            TowerConfig towerConfig)
+            TowerConfig towerConfig, IUnitsCatalog unitsCatalog)
         {
             _battlefieldContext = battlefieldContext;
             _playerStats = playerStatsUseCase;
             _towerConfig = towerConfig;
+            _unitsCatalog = unitsCatalog;
         }
 
         public EBuyTowerResult TryBuyTower()
@@ -30,7 +33,12 @@ namespace Project.Scripts.System.UseCases
             if (!_playerStats.CanSpend(TowerCost))
                 return EBuyTowerResult.NotEnoughGold;
 
-            if (!slot.TryPlaceTower(_battlefieldContext.UnitsConfig.Towers[0]))
+            var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(1);
+            
+            if (towerPrefab == null)
+                return EBuyTowerResult.PlaceFailed;
+
+            if (!slot.TryPlaceTower(towerPrefab))
                 return EBuyTowerResult.PlaceFailed;
 
             _playerStats.TrySpend(TowerCost);

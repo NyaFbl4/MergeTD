@@ -22,11 +22,24 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private BaseHealth _baseHealth;
 
         private UnitsConfig _unitsConfig;
+        private IUnitsCatalog _unitsCatalog;
         
         [Inject]
-        public void Construct(UnitsConfig unitsConfig)
+        public void Construct(UnitsConfig unitsConfig, IUnitsCatalog unitsCatalog)
         {
             _unitsConfig = unitsConfig;
+            _unitsCatalog = unitsCatalog;
+            
+            if (_towerSlots == null)
+                return;
+
+            for (var i = 0; i < _towerSlots.Length; i++)
+            {
+                if (_towerSlots[i] == null)
+                    continue;
+
+                _towerSlots[i].Construct(_unitsCatalog);
+            }
         }
         
         public LanePath[] Lanes => _lanes;

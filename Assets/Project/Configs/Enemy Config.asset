@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.EnemyConfig
   _startHealth: 500
   _startDamage: 1
-  _startMoveSpeed: 1
+  _startMoveSpeed: 0.5
   _killRewardGold: 10
