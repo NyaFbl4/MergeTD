@@ -27,6 +27,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/Gameplay/Towers/TowerUnit.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/System/Enums/EBuyTowerResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/System/UseCases/BuyTowerUseCase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/System/UseCases/EnemyDeathUseCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/System/UseCases/IBuyTowerUseCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/System/UseCases/PlayerStatsUseCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/LevelUI/ILevelUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />

@@ -91,7 +91,7 @@ namespace Installers
             builder.RegisterEntryPoint<HidePopUpUseCase>(Lifetime.Singleton);
             builder.RegisterEntryPoint<PlayerStatsUseCase>().As<IPlayerStatsUseCase>();
             builder.RegisterEntryPoint<BuyTowerUseCase>().As<IBuyTowerUseCase>();
-
+            builder.RegisterEntryPoint<EnemyDeathUseCase>(Lifetime.Singleton);
             builder.RegisterEntryPoint<LevelUIUseCase>(Lifetime.Singleton).As<ILevelUIUseCase>();
         }
         

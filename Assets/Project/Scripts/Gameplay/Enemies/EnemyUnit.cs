@@ -1,4 +1,5 @@
-﻿using Project.Scripts.Configs;
+﻿using System;
+using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
@@ -17,6 +18,9 @@ namespace Project.Scripts.Gameplay.Enemies
         private BaseHealth _baseHealth;
         private int _targetWaypointIndex;
         private bool _isInitialized;
+        private int _killRewardGold;
+
+        public static event Action<EnemyUnit, int> DieEnemy; 
 
         public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config)
         {
@@ -27,6 +31,7 @@ namespace Project.Scripts.Gameplay.Enemies
 
             _moveSpeed = config.StartMoveSpeed;
             _damageToBase = config.StartDamage;
+            _killRewardGold = config.KillRewardGold;
 
             var enemyHP = this.gameObject.GetComponent<IEnemyHealth>();
             enemyHP.SetHealth(config.StartHealth);
@@ -66,6 +71,8 @@ namespace Project.Scripts.Gameplay.Enemies
         {
             _moveSpeed = 0f;
             _animator.SetTrigger("IsDie");
+            
+            DieEnemy?.Invoke(this, _killRewardGold);
         }
 
         public void DestroyEnemy()
