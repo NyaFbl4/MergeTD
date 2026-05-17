@@ -19,6 +19,7 @@ namespace Project.Scripts.Gameplay.Enemies
         private int _targetWaypointIndex;
         private bool _isInitialized;
         private int _killRewardGold;
+        private bool _isDead;
 
         public static event Action<EnemyUnit, int> DieEnemy; 
 
@@ -28,13 +29,14 @@ namespace Project.Scripts.Gameplay.Enemies
             _baseHealth = baseHealth;
             _targetWaypointIndex = 0;
             _isInitialized = _lanePath != null;
+            _isDead = false;
 
             _moveSpeed = config.StartMoveSpeed;
             _damageToBase = config.StartDamage;
             _killRewardGold = config.KillRewardGold;
 
-            var enemyHP = this.gameObject.GetComponent<IEnemyHealth>();
-            enemyHP.SetHealth(config.StartHealth);
+            var enemyHP = gameObject.GetComponent<IEnemyHealth>();
+            enemyHP?.SetHealth(config.StartHealth);
 
             transform.position = _lanePath != null ? _lanePath.GetSpawnPosition() : transform.position;
         }
@@ -51,7 +53,7 @@ namespace Project.Scripts.Gameplay.Enemies
 
         public void OnUpdate(float deltaTime)
         {
-            if (!_isInitialized || _lanePath == null)
+            if (!_isInitialized || _lanePath == null || _isDead)
                 return;
 
             if (_targetWaypointIndex >= _lanePath.WaypointCount)
@@ -69,8 +71,14 @@ namespace Project.Scripts.Gameplay.Enemies
 
         public void IsDie()
         {
+            if (_isDead)
+                return;
+
+            _isDead = true;
             _moveSpeed = 0f;
-            _animator.SetTrigger("IsDie");
+
+            if (_animator != null)
+                _animator.SetTrigger("IsDie");
             
             DieEnemy?.Invoke(this, _killRewardGold);
         }
@@ -82,6 +90,7 @@ namespace Project.Scripts.Gameplay.Enemies
 
         private void ReachBase()
         {
+            _isDead = true;
             _baseHealth?.ApplyDamage(_damageToBase);
             Destroy(gameObject);
         }

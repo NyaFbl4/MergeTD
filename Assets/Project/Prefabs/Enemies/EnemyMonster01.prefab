@@ -61,7 +61,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &4915566498462425823
 MonoBehaviour:
@@ -464,6 +464,10 @@ PrefabInstance:
     - target: {fileID: 2968648293104246196, guid: bff07a4c2e9c9c245b5caff8f3af3cd5, type: 3}
       propertyPath: m_Name
       value: DamageUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686637992267102116, guid: bff07a4c2e9c9c245b5caff8f3af3cd5, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6198644133145104317, guid: bff07a4c2e9c9c245b5caff8f3af3cd5, type: 3}
       propertyPath: m_Pivot.x

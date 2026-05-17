@@ -18,30 +18,36 @@ namespace Project.Scripts.Gameplay.Enemies
         [SerializeField] private bool _hideWhenFull;
         [SerializeField] private bool _hideWhenDead = true;
 
+        private bool _isDead;
+
         public void SetHealth(int health)
         {
-            _maxHealth = health;
+            _isDead = false;
+            _maxHealth = Mathf.Max(1, health);
             _currentHealth = _maxHealth;
             UpdateHpBar();
         }
         
         public void TakeDamage(int damage)
         {
-            if (damage <= 0)
+            if (_isDead || damage <= 0)
                 return;
 
             _currentHealth -= damage;
-            _damageUI.ShowDamage(damage);
+            if (_damageUI != null)
+                _damageUI.ShowDamage(damage);
+
             if (_currentHealth <= 0)
             {
+                _isDead = true;
                 _currentHealth = 0;
                 UpdateHpBar();
 
                 if (_hideWhenDead && _hpCanvas != null)
                     _hpCanvas.gameObject.SetActive(false);
 
-                //Destroy(gameObject);
-                _enemy.IsDie();
+                if (_enemy != null)
+                    _enemy.IsDie();
                 return;
             }
             UpdateHpBar();
