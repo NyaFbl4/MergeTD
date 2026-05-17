@@ -21,8 +21,9 @@ namespace Project.Scripts.UI.LevelUI
             Debug.Log("TryBuyTower");
             
             var slot = _battlefieldContext.FindFirstFreeSlot(ETowerSlotType.SpawnOnly);
-
-            slot.TryPlaceTower(_unitsConfig.Tower);
+            var currentTower = _unitsConfig.Towers[0];
+            
+            slot.TryPlaceTower(currentTower);
         }
 
         public void OpenShop()

@@ -9,9 +9,9 @@ namespace Project.Scripts.Configs
     public class UnitsConfig : ScriptableObject
     {
         [SerializeField] private List<EnemyUnit> _enemies = new();
-        [SerializeField] private TowerUnit _tower;
+        [SerializeField] private List<TowerUnit> _towers;
 
         public List<EnemyUnit> Enemies => _enemies;
-        public TowerUnit Tower => _tower;
+        public List<TowerUnit> Towers => _towers;
     }
 }

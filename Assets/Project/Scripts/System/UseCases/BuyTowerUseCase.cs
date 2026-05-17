@@ -23,9 +23,6 @@ namespace Project.Scripts.System.UseCases
 
         public EBuyTowerResult TryBuyTower()
         {
-            if (_battlefieldContext == null || _battlefieldContext.UnitsConfig == null || _battlefieldContext.UnitsConfig.Tower == null)
-                return EBuyTowerResult.ConfigError;
-
             var slot = _battlefieldContext.FindFirstFreeSlot(ETowerSlotType.SpawnOnly);
             if (slot == null)
                 return EBuyTowerResult.NoFreeSpawnSlot;
@@ -33,7 +30,7 @@ namespace Project.Scripts.System.UseCases
             if (!_playerStats.CanSpend(TowerCost))
                 return EBuyTowerResult.NotEnoughGold;
 
-            if (!slot.TryPlaceTower(_battlefieldContext.UnitsConfig.Tower))
+            if (!slot.TryPlaceTower(_battlefieldContext.UnitsConfig.Towers[0]))
                 return EBuyTowerResult.PlaceFailed;
 
             _playerStats.TrySpend(TowerCost);
