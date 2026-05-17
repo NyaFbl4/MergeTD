@@ -1,4 +1,5 @@
-﻿using Project.Scripts.GameManager;
+﻿using Project.Scripts.Configs;
+using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
 using TMPro;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace Project.Scripts.Gameplay.Towers
 {
     public class TowerUnit : MonoBehaviour, ITowerUnit, IGameUpdateListener
     {
+        [SerializeField] private TowerConfig _towerConfig;
+        
         [SerializeField] private Transform _turretPivot;
         [SerializeField] private Transform _firePoint;
         [SerializeField] private TMP_Text _currentLevelText;
@@ -15,8 +18,8 @@ namespace Project.Scripts.Gameplay.Towers
 
         [Header("Fire parametrs")]
         [SerializeField] private float _range = 3f;
-        [SerializeField] private int _damage = 1;
-        [SerializeField] private float _fireRate = 1f;
+        private int _damage;
+        private float _fireRate;
         
         [Header("Tower parametrs")]
         [SerializeField] private int _towerLevel = 1;
@@ -41,21 +44,22 @@ namespace Project.Scripts.Gameplay.Towers
         public void CreateTower()
         {
             _currentLevelText.text = _towerLevel.ToString();
+
+            _damage = _towerConfig.StartTowerDamage;
+            _fireRate = _towerConfig.StartAttackSpeed;
         }
 
-        public void UpdateTower()
+        public void UpdateLevelTower()
         {
             
         }
-        
-        // ВЫЗЫВАЕТСЯ ИЗ ANIMATION EVENT в нужном кадре
+
         public void OnAttackFireEvent()
         {
             if (_currentTarget == null) return;
             Shoot(_currentTarget);
         }
-
-        // ВЫЗЫВАЕТСЯ ИЗ ANIMATION EVENT в конце клипа (или через StateMachineBehaviour)
+        
         public void OnAttackFinishedEvent()
         {
             _isFire = false;
@@ -102,12 +106,6 @@ namespace Project.Scripts.Gameplay.Towers
 
         private void Shoot(EnemyHealth target)
         {
-            if (_projectilePrefab == null)
-            {
-                target.TakeDamage(_damage);
-                return;
-            }
-
             var origin = _firePoint != null ? _firePoint.position : transform.position;
             var targetPosition = target.transform.position;
             var projectile = Instantiate(_projectilePrefab, origin, Quaternion.identity);

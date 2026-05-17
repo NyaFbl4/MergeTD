@@ -338,14 +338,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a0507468c945d6aae00ffe675975ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Towers.TowerUnit
+  _towerConfig: {fileID: 11400000, guid: 2172613c9130cc546a95d2f64c59645a, type: 2}
   _turretPivot: {fileID: 9002335383536459500}
   _firePoint: {fileID: 2502189378863360425}
   _currentLevelText: {fileID: 7537546963133529158}
   _animator: {fileID: 6705187990689304865}
   _projectilePrefab: {fileID: 8319070672697281119, guid: 8118189810209a54b8b80f1390418189, type: 3}
   _range: 6
-  _damage: 1
-  _fireRate: 0.5
   _towerLevel: 1
   _angleOffset: -90
   _rotationSpeed: 360

@@ -64,7 +64,7 @@ namespace Project.Scripts.Gameplay.Towers
             if (!_isLaunched)
                 return;
 
-            var enemy = other.GetComponent<EnemyHealth>();
+            var enemy = other.GetComponent<IEnemyHealth>();
             if (enemy == null)
                 return;
 

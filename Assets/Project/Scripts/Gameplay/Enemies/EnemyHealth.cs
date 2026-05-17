@@ -4,12 +4,12 @@ using UnityEngine.UI;
 namespace Project.Scripts.Gameplay.Enemies
 {
     [RequireComponent(typeof(Collider2D))]
-    public class EnemyHealth : MonoBehaviour
+    public class EnemyHealth : MonoBehaviour, IEnemyHealth
     {
         [SerializeField] private EnemyUnit _enemy;
         [Header("Health")]
-        [SerializeField] private int _maxHealth = 3;
-        private int _currentHealth;
+        [SerializeField] private int _maxHealth;
+        [SerializeField] private int _currentHealth;
         
         [Header("HP Bar")]
         [SerializeField] private Canvas _hpCanvas;
@@ -17,12 +17,13 @@ namespace Project.Scripts.Gameplay.Enemies
         [SerializeField] private bool _hideWhenFull;
         [SerializeField] private bool _hideWhenDead = true;
 
-        private void Awake()
+        public void SetHealth(int health)
         {
+            _maxHealth = health;
             _currentHealth = _maxHealth;
             UpdateHpBar();
         }
-
+        
         public void TakeDamage(int damage)
         {
             if (damage <= 0)

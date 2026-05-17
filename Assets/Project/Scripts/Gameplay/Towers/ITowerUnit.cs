@@ -5,7 +5,7 @@ namespace Project.Scripts.Gameplay.Towers
     public interface ITowerUnit
     {
         void CreateTower();
-        void UpdateTower();
+        void UpdateLevelTower();
         void OnAttackFireEvent();
         void OnAttackFinishedEvent();
     }

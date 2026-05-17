@@ -13,7 +13,8 @@ namespace Project.Scripts.Gameplay.Systems
     public class BattlefieldRuntime : IStartable, IDisposable, IGameStartListener, IGameFinishListener, IGameUpdateListener
     {
         private readonly BattlefieldContext _context;
-
+        private readonly EnemyConfig _enemyConfig;
+        
         private bool _isRunning;
         private bool _isSpawningWave;
         private float _spawnTimer;
@@ -22,9 +23,10 @@ namespace Project.Scripts.Gameplay.Systems
         private int _spawnedInWave;
         private int _targetEnemiesInWave;
 
-        public BattlefieldRuntime(BattlefieldContext context)
+        public BattlefieldRuntime(BattlefieldContext context, EnemyConfig enemyConfig)
         {
             _context = context;
+            _enemyConfig = enemyConfig;
             IGameListener.Register(this);
         }
 
@@ -118,7 +120,7 @@ namespace Project.Scripts.Gameplay.Systems
                 Quaternion.identity,
                 _context.EnemiesRoot);
 
-            enemy.Initialize(lane, _context.BaseHealth);
+            enemy.Initialize(lane, _context.BaseHealth, _enemyConfig);
         }
         
         private EnemyUnit GetRandomEnemy(List<EnemyUnit> enemies)

@@ -1040,6 +1040,7 @@ MonoBehaviour:
   _unitsConfig: {fileID: 11400000, guid: 35ef857e8180f154d856e16c20861830, type: 2}
   _towerConfig: {fileID: 11400000, guid: 2172613c9130cc546a95d2f64c59645a, type: 2}
   _levelConfig: {fileID: 11400000, guid: e7d968fed011a32449ff24c15a417b59, type: 2}
+  _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
 --- !u!1 &392971864
 GameObject:
   m_ObjectHideFlags: 0

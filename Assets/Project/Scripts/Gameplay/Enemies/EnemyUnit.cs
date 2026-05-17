@@ -1,4 +1,5 @@
-﻿using Project.Scripts.GameManager;
+﻿using Project.Scripts.Configs;
+using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using UnityEngine;
@@ -7,8 +8,8 @@ namespace Project.Scripts.Gameplay.Enemies
 {
     public class EnemyUnit : MonoBehaviour, IGameUpdateListener
     {
-        [SerializeField, Min(0.1f)] private float _moveSpeed = 2f;
-        [SerializeField, Min(1)] private int _damageToBase = 1;
+        private float _moveSpeed;
+        private int _damageToBase = 1;
 
         [SerializeField] private Animator _animator;
         
@@ -17,12 +18,18 @@ namespace Project.Scripts.Gameplay.Enemies
         private int _targetWaypointIndex;
         private bool _isInitialized;
 
-        public void Initialize(LanePath lanePath, BaseHealth baseHealth)
+        public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config)
         {
             _lanePath = lanePath;
             _baseHealth = baseHealth;
             _targetWaypointIndex = 0;
             _isInitialized = _lanePath != null;
+
+            _moveSpeed = config.StartMoveSpeed;
+            _damageToBase = config.StartDamage;
+
+            var enemyHP = this.gameObject.GetComponent<IEnemyHealth>();
+            enemyHP.SetHealth(config.StartHealth);
 
             transform.position = _lanePath != null ? _lanePath.GetSpawnPosition() : transform.position;
         }

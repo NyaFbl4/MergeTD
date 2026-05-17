@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: Tower Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.TowerConfig
   _startPrice: 10
+  _startDamage: 100
+  _startAttackSpeed: 1
+  _updatePrice: 10
+  _updateDamage: 100
+  _updateAttackSpeed: 1

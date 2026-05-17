@@ -26,6 +26,7 @@ namespace Installers
         [SerializeField] private UnitsConfig _unitsConfig;
         [SerializeField] private TowerConfig _towerConfig;
         [SerializeField] private LevelConfig _levelConfig;
+        [SerializeField] private EnemyConfig _enemyConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -125,6 +126,7 @@ namespace Installers
             builder.RegisterInstance(_unitsConfig);
             builder.RegisterInstance(_towerConfig);
             builder.RegisterInstance(_levelConfig);
+            builder.RegisterInstance(_enemyConfig);
         }
     }
 
