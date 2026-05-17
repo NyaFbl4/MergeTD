@@ -6,7 +6,10 @@ namespace Project.Scripts.Configs
     public class LevelConfig : ScriptableObject
     {
         [SerializeField] private int _startGold;
+        [SerializeField] private int _towerPriceIncreaseOnBuy;
         
         public int StartGold => _startGold;
+        public int TowerPriceIncreaseOnBuy => _towerPriceIncreaseOnBuy;
     }
+    
 }

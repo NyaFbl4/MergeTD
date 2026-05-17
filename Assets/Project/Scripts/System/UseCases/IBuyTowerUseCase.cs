@@ -1,9 +1,11 @@
-﻿using Project.Scripts.System.Enums;
+﻿using System;
+using Project.Scripts.System.Enums;
 
 namespace Project.Scripts.System.UseCases
 {
     public interface IBuyTowerUseCase
     {
+        event Action<int> TowerCostChanged;
         int TowerCost { get; }
         EBuyTowerResult TryBuyTower();
     }

@@ -1,4 +1,5 @@
-﻿using Project.Scripts.Configs;
+﻿using System;
+using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.System.Enums;
@@ -8,20 +9,27 @@ namespace Project.Scripts.System.UseCases
 {
     public class BuyTowerUseCase : IBuyTowerUseCase
     {
+        private readonly LevelConfig _levelConfig;
         private readonly TowerConfig _towerConfig;
         private readonly BattlefieldContext _battlefieldContext;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IPlayerStatsUseCase _playerStats;
+        
+        private int _currentTowerCost;
 
-        public int TowerCost => ResolveTowerCost();
+        public int TowerCost => _currentTowerCost;
+        public event Action<int> TowerCostChanged;
 
         public BuyTowerUseCase(BattlefieldContext battlefieldContext, IPlayerStatsUseCase playerStatsUseCase,
-            TowerConfig towerConfig, IUnitsCatalog unitsCatalog)
+            TowerConfig towerConfig, IUnitsCatalog unitsCatalog, LevelConfig levelConfig)
         {
             _battlefieldContext = battlefieldContext;
             _playerStats = playerStatsUseCase;
             _towerConfig = towerConfig;
             _unitsCatalog = unitsCatalog;
+            _levelConfig = levelConfig;
+            
+            _currentTowerCost = _towerConfig.StartTowerPrice;
         }
 
         public EBuyTowerResult TryBuyTower()
@@ -42,13 +50,14 @@ namespace Project.Scripts.System.UseCases
                 return EBuyTowerResult.PlaceFailed;
 
             _playerStats.TrySpend(TowerCost);
+            IncreaseTowerCost();
             return EBuyTowerResult.Success;
         }
         
-        private int ResolveTowerCost()
+        private void IncreaseTowerCost()
         {
-            var towerConfig = _towerConfig.StartTowerPrice;
-            return towerConfig;
+            _currentTowerCost += _levelConfig.TowerPriceIncreaseOnBuy;
+            TowerCostChanged?.Invoke(_currentTowerCost);
         }
     }
 }

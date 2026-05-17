@@ -20,6 +20,8 @@ namespace Project.Scripts.UI.LevelUI
         {
             base.Initialize();
 
+            _buyTowerUseCase.TowerCostChanged += OnTowerCostChanged;
+            
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
@@ -28,6 +30,11 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
         }
 
+        private void OnTowerCostChanged(int price)
+        {
+            _layoutView.SetPriceTower(price);
+        }
+        
         private void OnPayTowerButtonClicked()
         {
             var result = _buyTowerUseCase.TryBuyTower();
@@ -40,7 +47,7 @@ namespace Project.Scripts.UI.LevelUI
             //_levelUIUseCase.OpenShop();
         }
         
-         private void OnGoldChanged(int gold)
+        private void OnGoldChanged(int gold)
         {
             _layoutView.SetMoney(gold);
         }
@@ -50,6 +57,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
+            _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             
             base.Dispose();
         }
