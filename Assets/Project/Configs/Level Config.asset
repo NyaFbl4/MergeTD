@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Level Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.LevelConfig
   _startGold: 300
+  _towerPriceIncreaseOnBuy: 10

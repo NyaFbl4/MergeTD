@@ -8,6 +8,7 @@ namespace Project.Scripts.UI.LevelUI
     {
         event Action BuyTowerButtonClicked;
         event Action ShopButtonClicked;
+        event Action ADButtonClicked;
         
         void SetPriceTower(int price);
         void SetMoney(int money);

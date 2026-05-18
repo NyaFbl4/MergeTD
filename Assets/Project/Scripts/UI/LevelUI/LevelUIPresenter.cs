@@ -24,6 +24,7 @@ namespace Project.Scripts.UI.LevelUI
             
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
+            _layoutView.ADButtonClicked += OnADButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
@@ -46,6 +47,11 @@ namespace Project.Scripts.UI.LevelUI
             Debug.Log("OnShopButtonClicked");
             //_levelUIUseCase.OpenShop();
         }
+
+        private void OnADButtonClicked()
+        {
+            Debug.Log("OnADButtonClicked");
+        }
         
         private void OnGoldChanged(int gold)
         {
@@ -56,6 +62,7 @@ namespace Project.Scripts.UI.LevelUI
         {
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
+            _layoutView.ADButtonClicked -= OnADButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             
