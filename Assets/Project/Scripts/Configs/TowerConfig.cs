@@ -11,6 +11,7 @@ namespace Project.Scripts.Configs
         [SerializeField] private int _startPrice;
         [SerializeField] private int _startDamage;
         [SerializeField] private float _startAttackSpeed;
+        [SerializeField] private float _animationSpeed;
         
         [Header("LevelUp parametrs")]
         [SerializeField] private int _updatePrice;
@@ -20,5 +21,6 @@ namespace Project.Scripts.Configs
         public int StartTowerPrice => _startPrice;
         public int StartTowerDamage => _startDamage;
         public float StartAttackSpeed => _startAttackSpeed;
+        public float AnimationSpeed => _animationSpeed;
     }
 }

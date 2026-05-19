@@ -24,6 +24,7 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private int _towerLevel = 1;
         [SerializeField] private float _angleOffset = -90f;
         [SerializeField] private float _rotationSpeed = 360f;
+        [SerializeField] private float _animationSpeed;
         
         public int CurrentLevel => _towerLevel;
         public TowerConfig TowerConfig => _towerConfig;
@@ -49,6 +50,7 @@ namespace Project.Scripts.Gameplay.Towers
 
             _damage = _towerConfig.StartTowerDamage;
             _fireRate = _towerConfig.StartAttackSpeed;
+            _animationSpeed = _towerConfig.AnimationSpeed;
         }
 
         public void UpdateLevelTower()
@@ -102,7 +104,9 @@ namespace Project.Scripts.Gameplay.Towers
         private void TryAttack(EnemyHealth target)
         {
             if (_isFire || target == null) return;
-
+            
+            //_animator.SetFloat("Shoot", _animationSpeed);
+            _animator.SetFloat("ShootSpeedMultiplier", _animationSpeed);
             _currentTarget = target;
             _isFire = true;
             _animator.SetTrigger("Shoot");
