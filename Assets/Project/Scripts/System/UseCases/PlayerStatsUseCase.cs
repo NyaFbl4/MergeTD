@@ -11,18 +11,25 @@ namespace Project.Scripts.System.UseCases
         
         private int _gold;
         private int _currentWave;
+        private int _selectedTowerLevel;
         
         public int Gold => _gold;
         public int Wave => _currentWave;
+        public int SelectedTowerLevel => _selectedTowerLevel;
         
         public event Action<int> OnGoldChanged;
         public event Action<int> WaveChanged;
+        public event Action<int> SelectedTowerLevelChanged;
 
         public void Initialize()
         {
             _gold = _levelConfig.StartGold;
-            _currentWave = 1;
             OnGoldChanged?.Invoke(_gold);
+            
+            _selectedTowerLevel = _levelConfig.LevelTowerSelected;
+            SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
+            
+            _currentWave = 1;
             WaveChanged?.Invoke(_currentWave);
         }
         
@@ -31,6 +38,17 @@ namespace Project.Scripts.System.UseCases
             _levelConfig = levelConfig;
             
             //IGameListener.Register(this);
+        }
+        
+        public void SetSelectedTowerLevel(int level)
+        {
+            var safeLevel = Math.Max(1, level);
+
+            if (_selectedTowerLevel == safeLevel)
+                return;
+
+            _selectedTowerLevel = safeLevel;
+            SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
         }
         
         public bool CanSpend(int amount) => amount > 0 && _gold >= amount;

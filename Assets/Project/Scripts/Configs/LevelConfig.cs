@@ -7,9 +7,11 @@ namespace Project.Scripts.Configs
     {
         [SerializeField] private int _startGold;
         [SerializeField] private int _towerPriceIncreaseOnBuy;
+        [SerializeField] private int _levelTowerSelected;
         
         public int StartGold => _startGold;
         public int TowerPriceIncreaseOnBuy => _towerPriceIncreaseOnBuy;
+        public int LevelTowerSelected => _levelTowerSelected;
     }
     
 }

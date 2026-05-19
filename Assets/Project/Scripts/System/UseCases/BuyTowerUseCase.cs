@@ -41,7 +41,7 @@ namespace Project.Scripts.System.UseCases
             if (!_playerStats.CanSpend(TowerCost))
                 return EBuyTowerResult.NotEnoughGold;
 
-            var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(1);
+            var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(_playerStats.SelectedTowerLevel);
             
             if (towerPrefab == null)
                 return EBuyTowerResult.PlaceFailed;

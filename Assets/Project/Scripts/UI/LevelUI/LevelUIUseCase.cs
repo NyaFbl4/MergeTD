@@ -1,6 +1,8 @@
 ﻿using Project.Scripts.Configs;
+using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.System.UseCases;
 using UnityEngine;
 
 namespace Project.Scripts.UI.LevelUI
@@ -9,11 +11,16 @@ namespace Project.Scripts.UI.LevelUI
     {
         private readonly BattlefieldContext _battlefieldContext;
         private readonly UnitsConfig _unitsConfig;
+        private readonly IPlayerStatsUseCase _playerStats;
+        private readonly IUnitsCatalog _unitsCatalog;
 
-        public LevelUIUseCase(BattlefieldContext battlefieldContext, UnitsConfig unitsConfig)
+        public LevelUIUseCase(BattlefieldContext battlefieldContext, UnitsConfig unitsConfig, 
+                            IUnitsCatalog  unitsCatalog, IPlayerStatsUseCase playerStats)
         {
             _battlefieldContext = battlefieldContext;
             _unitsConfig = unitsConfig;
+            _playerStats = playerStats;
+            _unitsCatalog = unitsCatalog;
         }
         
         public void TryBuyTower()
@@ -24,6 +31,12 @@ namespace Project.Scripts.UI.LevelUI
             var currentTower = _unitsConfig.Towers[0];
             
             slot.TryPlaceTower(currentTower);
+        }
+        
+        public Sprite GetSelectedTowerIcon()
+        {
+            var towerConfig = _unitsCatalog.GetTowerConfigByLevel(_playerStats.SelectedTowerLevel);
+            return towerConfig != null ? towerConfig.Icon : null;
         }
 
         public void OpenShop()

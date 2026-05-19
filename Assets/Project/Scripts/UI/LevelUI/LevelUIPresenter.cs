@@ -6,14 +6,18 @@ namespace Project.Scripts.UI.LevelUI
 {
     public class LevelUIPresenter : LayoutPresenterBase<ILevelUIView>, ILevelUIPresenter
     {
-        //private readonly ILevelUIUseCase _levelUIUseCase;
+        private readonly ILevelUIUseCase _levelUIUseCase;
         private readonly IBuyTowerUseCase _buyTowerUseCase;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
 
-        public LevelUIPresenter(IBuyTowerUseCase buyTowerUseCase, IPlayerStatsUseCase playerStatsUseCase)
+        public LevelUIPresenter(
+            IBuyTowerUseCase buyTowerUseCase,
+            IPlayerStatsUseCase playerStatsUseCase,
+            ILevelUIUseCase levelUIUseCase)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
+            _levelUIUseCase = levelUIUseCase;
         }
 
         public override void Initialize()
@@ -21,7 +25,7 @@ namespace Project.Scripts.UI.LevelUI
             base.Initialize();
 
             _buyTowerUseCase.TowerCostChanged += OnTowerCostChanged;
-            
+            _playerStatsUseCase.SelectedTowerLevelChanged += OnSelectedTowerLevelChanged;
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
             _layoutView.ADButtonClicked += OnADButtonClicked;
@@ -29,6 +33,8 @@ namespace Project.Scripts.UI.LevelUI
             
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
+            
+            UpdateTowerIcon();
         }
 
         private void OnTowerCostChanged(int price)
@@ -58,9 +64,21 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetMoney(gold);
         }
         
+        private void OnSelectedTowerLevelChanged(int level)
+        {
+            UpdateTowerIcon();
+        }
+
+        private void UpdateTowerIcon()
+        {
+            var icon = _levelUIUseCase.GetSelectedTowerIcon();
+            _layoutView.SetTowerIcon(icon);
+        }
+        
         public override void Dispose()
         {
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
+            _playerStatsUseCase.SelectedTowerLevelChanged -= OnSelectedTowerLevelChanged;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
             _layoutView.ADButtonClicked -= OnADButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;

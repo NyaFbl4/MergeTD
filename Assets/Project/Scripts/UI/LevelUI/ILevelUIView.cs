@@ -1,5 +1,6 @@
 ﻿using System;
 using Project.Scripts.Systems.UI;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.LevelUI
@@ -12,5 +13,6 @@ namespace Project.Scripts.UI.LevelUI
         
         void SetPriceTower(int price);
         void SetMoney(int money);
+        void SetTowerIcon(Sprite towerIcon);
     }
 }

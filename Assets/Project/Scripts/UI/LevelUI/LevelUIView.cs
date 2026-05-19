@@ -13,6 +13,8 @@ namespace Project.Scripts.UI.LevelUI
         private Button _adButton;
         private Label _payTowerLabel;
         private Label _moneyLabel;
+        private VisualElement _payButtonTowerIcon;
+        private VisualElement _adButtonTowerIcon;
         
         public event Action BuyTowerButtonClicked;
         public event Action ShopButtonClicked;
@@ -23,8 +25,10 @@ namespace Project.Scripts.UI.LevelUI
             base.Awake();
             
             _payTowerButton = _root.Q<Button>("PayTowerButton");
+            _payButtonTowerIcon = _payTowerButton.Q<VisualElement>("TowerIcon");
             _shopButton = _root.Q<Button>("ShopButton");
             _adButton = _root.Q<Button>("ADButton");
+            _adButtonTowerIcon = _adButton.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel =  _root.Q<Label>("MoneyLabel");
             
@@ -44,6 +48,12 @@ namespace Project.Scripts.UI.LevelUI
         public void SetMoney(int money)
         {
             _moneyLabel.text = money.ToString();
+        }
+
+        public void SetTowerIcon(Sprite towerIcon)
+        {
+            _payButtonTowerIcon.style.backgroundImage = new StyleBackground(towerIcon);
+            _adButtonTowerIcon.style.backgroundImage = new StyleBackground(towerIcon);
         }
         
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();

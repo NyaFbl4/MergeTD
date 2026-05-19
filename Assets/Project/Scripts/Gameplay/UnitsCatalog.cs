@@ -16,6 +16,16 @@ namespace Project.Scripts.Gameplay
         {
             return level >= 1 && level <= _unitsConfig.Towers.Count;
         }
+        
+        public TowerConfig GetTowerConfigByLevel(int level)
+        {
+            var towerPrefab = GetTowerPrefabByLevel(level);
+
+            if (towerPrefab == null)
+                return null;
+
+            return towerPrefab.TowerConfig;
+        }
 
         public TowerUnit GetTowerPrefabByLevel(int level)
         {
