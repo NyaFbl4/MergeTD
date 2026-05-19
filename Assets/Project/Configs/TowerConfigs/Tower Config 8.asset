@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9736acdde14150880b63f2c624e44b, type: 3}
   m_Name: Tower Config 8
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.TowerConfig
+  _icon: {fileID: 8018528669636757146, guid: fc91ba00403045d43ac8a703833f2380, type: 3}
   _startPrice: 10
   _startDamage: 200
   _startAttackSpeed: 1
+  _animationSpeed: 1
   _updatePrice: 10
   _updateDamage: 100
   _updateAttackSpeed: 1

@@ -13,6 +13,8 @@ namespace Project.Scripts.UI.LevelUI
         private Button _adButton;
         private Label _payTowerLabel;
         private Label _moneyLabel;
+        private Label _currentBaseHealthLabel;
+        private Label _maxBaseHealthLabel;
         private VisualElement _payButtonTowerIcon;
         private VisualElement _adButtonTowerIcon;
         
@@ -30,7 +32,9 @@ namespace Project.Scripts.UI.LevelUI
             _adButton = _root.Q<Button>("ADButton");
             _adButtonTowerIcon = _adButton.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
-            _moneyLabel =  _root.Q<Label>("MoneyLabel");
+            _moneyLabel = _root.Q<Label>("MoneyLabel");
+            _currentBaseHealthLabel =  _root.Q<Label>("CurrentBaseHealthLabel");
+            _maxBaseHealthLabel = _root.Q<Label>("MaxBaseHealthLabel");
             
             if (_payTowerButton != null)
                 _payTowerButton.clicked += OnBuyTowerButtonClicked;
@@ -55,7 +59,25 @@ namespace Project.Scripts.UI.LevelUI
             _payButtonTowerIcon.style.backgroundImage = new StyleBackground(towerIcon);
             _adButtonTowerIcon.style.backgroundImage = new StyleBackground(towerIcon);
         }
-        
+
+        public void SetTowerLevel(int towerLevel)
+        {
+            var towerLabel1 = _payButtonTowerIcon.Q<Label>("TowerLeveLabel");
+            towerLabel1.text = towerLevel.ToString();
+            var towerLabel2 = _adButtonTowerIcon.Q<Label>("TowerLeveLabel");
+            towerLabel2.text = towerLevel.ToString();
+        }
+
+        public void SetCurrentBaseHealth(int baseHealth)
+        {
+            _currentBaseHealthLabel.text = baseHealth.ToString();
+        }
+
+        public void SetMaxBaseHealth(int baseMaxHealth)
+        {
+            _maxBaseHealthLabel.text = baseMaxHealth.ToString();
+        }
+
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnShopButtonClicked() => ShopButtonClicked?.Invoke();
         private void OnADButtonClicked() => ADButtonClicked?.Invoke();

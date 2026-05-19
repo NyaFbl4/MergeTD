@@ -8,6 +8,8 @@ namespace Project.Scripts.Configs
     public class TowerConfig : ScriptableObject
     {
         [SerializeField] private Sprite _icon;
+        [SerializeField] private int _towerLevel;
+        
         [Header("Start parametrs")]
         [SerializeField] private int _startPrice;
         [SerializeField] private int _startDamage;
@@ -24,5 +26,6 @@ namespace Project.Scripts.Configs
         public float StartAttackSpeed => _startAttackSpeed;
         public float AnimationSpeed => _animationSpeed;
         public Sprite Icon => _icon;
+        public int TowerLevel => _towerLevel;
     }
 }

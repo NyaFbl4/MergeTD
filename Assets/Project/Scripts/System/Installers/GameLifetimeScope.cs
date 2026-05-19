@@ -76,7 +76,7 @@ namespace Installers
                 Debug.LogWarning("ProjectLifetimeScope: BattlefieldContext is not assigned and was not found in scene.");
 
             if (_baseHealth != null)
-                builder.RegisterComponent(_baseHealth).AsSelf();
+                builder.RegisterComponent(_baseHealth).As<IBaseHealth>().AsSelf();
             else
                 Debug.LogWarning("ProjectLifetimeScope: BaseHealth is not assigned and was not found in scene.");
         }

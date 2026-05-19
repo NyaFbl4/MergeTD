@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Project.Scripts.Configs;
+using UnityEngine;
 
 namespace Project.Scripts.UI.LevelUI
 {
@@ -6,6 +7,6 @@ namespace Project.Scripts.UI.LevelUI
     {
         void TryBuyTower();
         void OpenShop();
-        Sprite GetSelectedTowerIcon();
+        TowerConfig GetSelectedTowerConfig();
     }
 }

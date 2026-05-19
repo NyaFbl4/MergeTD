@@ -1,4 +1,5 @@
-﻿using Project.Scripts.System.UseCases;
+﻿using Project.Scripts.Gameplay.Base;
+using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using UnityEngine;
 
@@ -9,15 +10,18 @@ namespace Project.Scripts.UI.LevelUI
         private readonly ILevelUIUseCase _levelUIUseCase;
         private readonly IBuyTowerUseCase _buyTowerUseCase;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
+        private readonly BaseHealth _baseHealth;
 
         public LevelUIPresenter(
             IBuyTowerUseCase buyTowerUseCase,
             IPlayerStatsUseCase playerStatsUseCase,
-            ILevelUIUseCase levelUIUseCase)
+            ILevelUIUseCase levelUIUseCase,
+            BaseHealth baseHealth)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
             _levelUIUseCase = levelUIUseCase;
+            _baseHealth = baseHealth;
         }
 
         public override void Initialize()
@@ -30,6 +34,8 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
             _layoutView.ADButtonClicked += OnADButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
+            _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
+            _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
             
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
@@ -69,10 +75,24 @@ namespace Project.Scripts.UI.LevelUI
             UpdateTowerIcon();
         }
 
+        private void OnMaxHealthChanged(int health)
+        {
+            _layoutView.SetMaxBaseHealth(health);
+        }
+
+        private void OnCurrentHealthChanged(int health)
+        {
+            _layoutView.SetCurrentBaseHealth(health);
+        }
+        
         private void UpdateTowerIcon()
         {
-            var icon = _levelUIUseCase.GetSelectedTowerIcon();
-            _layoutView.SetTowerIcon(icon);
+            var towerConfig = _levelUIUseCase.GetSelectedTowerConfig();
+            var towerSprite = towerConfig.Icon;
+            var towerLevel = towerConfig.TowerLevel;
+
+            _layoutView.SetTowerLevel(towerLevel);
+            _layoutView.SetTowerIcon(towerSprite);
         }
         
         public override void Dispose()

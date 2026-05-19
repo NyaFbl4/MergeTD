@@ -14,5 +14,8 @@ namespace Project.Scripts.UI.LevelUI
         void SetPriceTower(int price);
         void SetMoney(int money);
         void SetTowerIcon(Sprite towerIcon);
+        void SetCurrentBaseHealth(int baseHealth);
+        void SetMaxBaseHealth(int baseMaxHealth);
+        void SetTowerLevel(int towerLevel);
     }
 }

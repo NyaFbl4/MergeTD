@@ -1,7 +1,6 @@
 ﻿using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
-using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
 
@@ -33,10 +32,10 @@ namespace Project.Scripts.UI.LevelUI
             slot.TryPlaceTower(currentTower);
         }
         
-        public Sprite GetSelectedTowerIcon()
+        public TowerConfig GetSelectedTowerConfig()
         {
             var towerConfig = _unitsCatalog.GetTowerConfigByLevel(_playerStats.SelectedTowerLevel);
-            return towerConfig != null ? towerConfig.Icon : null;
+            return towerConfig;
         }
 
         public void OpenShop()

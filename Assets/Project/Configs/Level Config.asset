@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380d6a9a7ec7400b962d861ecf6dcd52, type: 3}
   m_Name: Level Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.LevelConfig
-  _startGold: 300
+  _startBaseHealth: 10
+  _startGold: 30000000
   _towerPriceIncreaseOnBuy: 10
+  _levelTowerSelected: 5
