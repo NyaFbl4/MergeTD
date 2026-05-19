@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Tower Config 5
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.TowerConfig
   _icon: {fileID: -1676200258026193708, guid: a63dd89fbdbd45448a8617c9094a7040, type: 3}
+  _towerLevel: 5
   _startPrice: 10
   _startDamage: 200
   _startAttackSpeed: 1
