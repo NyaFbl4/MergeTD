@@ -33,6 +33,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
             _layoutView.ADButtonClicked += OnADButtonClicked;
+            _layoutView.ADButtonClicked += OnQuestsButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
@@ -63,6 +64,11 @@ namespace Project.Scripts.UI.LevelUI
         private void OnADButtonClicked()
         {
             Debug.Log("OnADButtonClicked");
+        }
+        
+        private void OnQuestsButtonClicked()
+        {
+            Debug.Log("OnQuestsButtonClicked");
         }
         
         private void OnGoldChanged(int gold)
@@ -101,6 +107,7 @@ namespace Project.Scripts.UI.LevelUI
             _playerStatsUseCase.SelectedTowerLevelChanged -= OnSelectedTowerLevelChanged;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
             _layoutView.ADButtonClicked -= OnADButtonClicked;
+            _layoutView.ADButtonClicked -= OnQuestsButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             

@@ -11,6 +11,7 @@ namespace Project.Scripts.UI.LevelUI
         private Button _payTowerButton;
         private Button _shopButton;
         private Button _adButton;
+        private Button _questsButton;
         private Label _payTowerLabel;
         private Label _moneyLabel;
         private Label _currentBaseHealthLabel;
@@ -21,6 +22,7 @@ namespace Project.Scripts.UI.LevelUI
         public event Action BuyTowerButtonClicked;
         public event Action ShopButtonClicked;
         public event Action ADButtonClicked;
+        public event Action QuestsButtonClicked;
 
         public override void Awake()
         {
@@ -30,6 +32,7 @@ namespace Project.Scripts.UI.LevelUI
             _payButtonTowerIcon = _payTowerButton.Q<VisualElement>("TowerIcon");
             _shopButton = _root.Q<Button>("ShopButton");
             _adButton = _root.Q<Button>("ADButton");
+            _questsButton =  _root.Q<Button>("QuestsButton");
             _adButtonTowerIcon = _adButton.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("MoneyLabel");
@@ -42,6 +45,8 @@ namespace Project.Scripts.UI.LevelUI
                 _shopButton.clicked += OnShopButtonClicked;
             if( _adButton != null)
                 _adButton.clicked += OnADButtonClicked;
+            if (_questsButton != null)
+                _questsButton.clicked += OnQuestsButtonClicked;
         }
         
         public void SetPriceTower(int price)
@@ -81,6 +86,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnShopButtonClicked() => ShopButtonClicked?.Invoke();
         private void OnADButtonClicked() => ADButtonClicked?.Invoke();
+        private void OnQuestsButtonClicked() => QuestsButtonClicked?.Invoke();
 
         private void OnDestroy()
         {
@@ -90,6 +96,8 @@ namespace Project.Scripts.UI.LevelUI
                 _shopButton.clicked -= OnShopButtonClicked;
             if (_adButton != null)
                 _adButton.clicked -= OnADButtonClicked;
+            if (_questsButton != null)
+                _questsButton.clicked -= OnQuestsButtonClicked;
         }
     }
 }
