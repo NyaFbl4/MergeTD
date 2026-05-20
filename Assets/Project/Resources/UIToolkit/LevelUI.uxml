@@ -1,9 +1,13 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="Layout" picking-mode="Ignore" style="flex-grow: 1; left: auto;">
-        <ui:VisualElement name="TopPanel" style="flex-grow: 1; height: 300px; min-height: 300px; max-height: 300px;">
+        <ui:VisualElement name="TopPanel" style="flex-grow: 1; height: 300px; min-height: 300px; max-height: 300px; flex-direction: row;">
             <ui:VisualElement name="MoneyBar" style="flex-grow: 1; background-image: resource(&apos;UI/game play area Ui/money bar&apos;); -unity-background-scale-mode: scale-to-fit; height: 100px; min-height: 100px; max-height: 100px; width: 300px; min-width: 300px; max-width: 300px; top: 20px; left: 20px;">
                 <ui:Label text="400000" name="MoneyLabel" style="height: 71px; width: 206px; left: 76px; top: 8px; -unity-text-align: middle-left; font-size: 50px;" />
             </ui:VisualElement>
+            <ui:VisualElement name="WevePanel" style="flex-grow: 1;">
+                <ui:Label text="WAVE 5" name="WaveLabel" style="-unity-text-align: middle-center; font-size: 50px; height: 119px;" />
+            </ui:VisualElement>
+            <ui:Button name="SettingsButton" style="background-image: resource(&apos;UI/game play area Ui/settings&apos;); background-color: rgba(255, 255, 255, 0); width: 100px; height: 100px; -unity-background-scale-mode: stretch-to-fill; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; min-height: 100px; max-height: 100px; top: 20px; left: -23px; min-width: 100px; max-width: 100px; background-position-x: left 0; background-position-y: center;" />
         </ui:VisualElement>
         <ui:VisualElement name="HealthBar" style="flex-grow: 1; flex-direction: row; height: 100px; min-height: 100px; max-height: 100px; -unity-text-align: upper-left; justify-content: center; top: 788px;">
             <ui:Label text="50" name="CurrentBaseHealthLabel" style="font-size: 50px; -unity-text-align: upper-right; width: 200px;" />

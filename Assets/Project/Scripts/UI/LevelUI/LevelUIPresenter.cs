@@ -33,7 +33,8 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
             _layoutView.ADButtonClicked += OnADButtonClicked;
-            _layoutView.ADButtonClicked += OnQuestsButtonClicked;
+            _layoutView.QuestsButtonClicked += OnQuestsButtonClicked;
+            _layoutView.SettingsButtonClicked += OnSettingsButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
@@ -71,6 +72,11 @@ namespace Project.Scripts.UI.LevelUI
             Debug.Log("OnQuestsButtonClicked");
         }
         
+        private void OnSettingsButtonClicked()
+        {
+            Debug.Log("OnSettingsButtonClicked");    
+        }
+        
         private void OnGoldChanged(int gold)
         {
             _layoutView.SetMoney(gold);
@@ -90,6 +96,11 @@ namespace Project.Scripts.UI.LevelUI
         {
             _layoutView.SetCurrentBaseHealth(health);
         }
+
+        private void OnCurrentWaveChanged(int wave)
+        {
+            _layoutView.SetCurrentWave(wave);
+        }
         
         private void UpdateTowerIcon()
         {
@@ -107,7 +118,8 @@ namespace Project.Scripts.UI.LevelUI
             _playerStatsUseCase.SelectedTowerLevelChanged -= OnSelectedTowerLevelChanged;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
             _layoutView.ADButtonClicked -= OnADButtonClicked;
-            _layoutView.ADButtonClicked -= OnQuestsButtonClicked;
+            _layoutView.QuestsButtonClicked -= OnQuestsButtonClicked;
+            _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             

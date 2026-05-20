@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9026730627792103833}
   - component: {fileID: 8319070672697281119}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: ProjectileRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -855298285791758126, guid: a6fb6f08e5cfdd8448db0a0640111cea, type: 3}
+  m_Sprite: {fileID: -6470460504253458178, guid: 928724d6f0d8f054881489b508841278, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -153,4 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bacd9850cc2e4cdab808d5cd57fb66ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Towers.Projectile
-  _damage: 1
+  _speed: 10
+  _lifeTime: 3
+  _defaultDamage: 1
+  _angleOffset: -90

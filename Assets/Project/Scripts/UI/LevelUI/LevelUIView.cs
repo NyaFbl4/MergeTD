@@ -12,10 +12,12 @@ namespace Project.Scripts.UI.LevelUI
         private Button _shopButton;
         private Button _adButton;
         private Button _questsButton;
+        private Button _settingsButton;
         private Label _payTowerLabel;
         private Label _moneyLabel;
         private Label _currentBaseHealthLabel;
         private Label _maxBaseHealthLabel;
+        private Label _currentWaveLabel;
         private VisualElement _payButtonTowerIcon;
         private VisualElement _adButtonTowerIcon;
         
@@ -23,6 +25,7 @@ namespace Project.Scripts.UI.LevelUI
         public event Action ShopButtonClicked;
         public event Action ADButtonClicked;
         public event Action QuestsButtonClicked;
+        public event Action SettingsButtonClicked;
 
         public override void Awake()
         {
@@ -33,11 +36,13 @@ namespace Project.Scripts.UI.LevelUI
             _shopButton = _root.Q<Button>("ShopButton");
             _adButton = _root.Q<Button>("ADButton");
             _questsButton =  _root.Q<Button>("QuestsButton");
+            _settingsButton = _root.Q<Button>("SettingsButton");
             _adButtonTowerIcon = _adButton.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("MoneyLabel");
             _currentBaseHealthLabel =  _root.Q<Label>("CurrentBaseHealthLabel");
             _maxBaseHealthLabel = _root.Q<Label>("MaxBaseHealthLabel");
+            _currentWaveLabel =  _root.Q<Label>("WaveLabel");
             
             if (_payTowerButton != null)
                 _payTowerButton.clicked += OnBuyTowerButtonClicked;
@@ -47,6 +52,8 @@ namespace Project.Scripts.UI.LevelUI
                 _adButton.clicked += OnADButtonClicked;
             if (_questsButton != null)
                 _questsButton.clicked += OnQuestsButtonClicked;
+            if (_settingsButton != null)
+                _settingsButton.clicked -= OnSettingsButtonClicked;
         }
         
         public void SetPriceTower(int price)
@@ -83,10 +90,16 @@ namespace Project.Scripts.UI.LevelUI
             _maxBaseHealthLabel.text = baseMaxHealth.ToString();
         }
 
+        public void SetCurrentWave(int currentWave)
+        {
+            _currentWaveLabel.text = "WAVE " + currentWave.ToString();
+        }
+
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnShopButtonClicked() => ShopButtonClicked?.Invoke();
         private void OnADButtonClicked() => ADButtonClicked?.Invoke();
         private void OnQuestsButtonClicked() => QuestsButtonClicked?.Invoke();
+        private void OnSettingsButtonClicked() => SettingsButtonClicked?.Invoke();
 
         private void OnDestroy()
         {
@@ -98,6 +111,8 @@ namespace Project.Scripts.UI.LevelUI
                 _adButton.clicked -= OnADButtonClicked;
             if (_questsButton != null)
                 _questsButton.clicked -= OnQuestsButtonClicked;
+            if (_settingsButton != null)
+                _settingsButton.clicked -= OnSettingsButtonClicked;
         }
     }
 }
