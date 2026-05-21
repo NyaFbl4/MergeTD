@@ -30,14 +30,21 @@ namespace Project.Scripts.Gameplay.Towers
         
         public void OnBeginDrag(PointerEventData eventData)
         {
+            Debug.Log($"Begin drag: {name}");
+
             if (_sourceSlot == null)
                 _sourceSlot = GetComponentInParent<TowerSlot>();
+
             if (_sourceSlot == null)
+            {
+                Debug.LogWarning($"TowerDragHandler: source slot is null for {name}");
                 return;
-            
+            }
+
             _startPos = transform.position;
             _sourceSlot.DetachTower();
             _towerUnit?.SetCanFire(false);
+
             if (_towerCollider != null)
                 _towerCollider.enabled = false;
         }

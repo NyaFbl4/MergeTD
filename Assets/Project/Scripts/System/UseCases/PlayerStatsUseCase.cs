@@ -21,23 +21,20 @@ namespace Project.Scripts.System.UseCases
         public event Action<int> WaveChanged;
         public event Action<int> SelectedTowerLevelChanged;
 
-        public void Initialize()
-        {
-            _gold = _levelConfig.StartGold;
-            OnGoldChanged?.Invoke(_gold);
-            
-            _selectedTowerLevel = _levelConfig.LevelTowerSelected;
-            SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
-            
-            _currentWave = 1;
-            WaveChanged?.Invoke(_currentWave);
-        }
-        
         public PlayerStatsUseCase(LevelConfig levelConfig)
         {
             _levelConfig = levelConfig;
-            
-            //IGameListener.Register(this);
+
+            _gold = _levelConfig.StartGold;
+            _selectedTowerLevel = Math.Max(1, _levelConfig.LevelTowerSelected);
+            _currentWave = 1;
+        }
+
+        public void Initialize()
+        {
+            OnGoldChanged?.Invoke(_gold);
+            SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
+            WaveChanged?.Invoke(_currentWave);
         }
         
         public void SetSelectedTowerLevel(int level)

@@ -16,3 +16,5 @@ MonoBehaviour:
   _startGold: 30000000
   _towerPriceIncreaseOnBuy: 10
   _levelTowerSelected: 5
+  _waves:
+  - {fileID: 11400000, guid: 7350c3ffcc8b4db4385699f33dd98fb4, type: 2}

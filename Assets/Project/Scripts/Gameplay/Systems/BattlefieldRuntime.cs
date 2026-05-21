@@ -4,29 +4,48 @@ using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Wave;
+using Project.Scripts.System.UseCases;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using VContainer.Unity;
+using Object = UnityEngine.Object;
 
 namespace Project.Scripts.Gameplay.Systems
 {
     public class BattlefieldRuntime : IStartable, IDisposable, IGameStartListener, IGameFinishListener, IGameUpdateListener
     {
         private readonly BattlefieldContext _context;
-        private readonly EnemyConfig _enemyConfig;
+        //private readonly EnemyConfig _enemyConfig;
+        private readonly LevelConfig _levelConfig;
+        private readonly IPlayerStatsUseCase _playerStatsUseCase;
         
         private bool _isRunning;
         private bool _isSpawningWave;
         private float _spawnTimer;
         private float _waveDelayTimer;
+        private bool _isWaitingWaveStart;
+        private float _waveStartTimer;
         private int _currentWave;
         private int _spawnedInWave;
         private int _targetEnemiesInWave;
+        
+        private int _currentWaveIndex;
+        private readonly List<EnemySpawnSequenceRuntime> _sequenceRuntimes = new();
+        private int _aliveEnemies;
 
-        public BattlefieldRuntime(BattlefieldContext context, EnemyConfig enemyConfig)
+        private bool _isWaveRunning;
+        private bool _isWaitingNextWave;
+        private bool _isGameRunning;
+
+        public BattlefieldRuntime(
+            BattlefieldContext context,
+            LevelConfig levelConfig,
+            IPlayerStatsUseCase playerStatsUseCase)
         {
             _context = context;
-            _enemyConfig = enemyConfig;
+            _levelConfig = levelConfig;
+            _playerStatsUseCase = playerStatsUseCase;
             IGameListener.Register(this);
         }
 
@@ -45,82 +64,192 @@ namespace Project.Scripts.Gameplay.Systems
             if (_context == null || !_context.IsReady())
             {
                 Debug.LogWarning("BattlefieldRuntime: BattlefieldContext is not ready. Check lanes, base, and enemy prefab.");
-                _isRunning = false;
+                //_isRunning = false;
                 return;
             }
+            
+            _sequenceRuntimes.Clear();
+            _currentWaveIndex = 0;
+            _aliveEnemies = 0;
+            
+            _spawnTimer = 0f;
+            _waveDelayTimer = 0f;
+            _isWaitingWaveStart = false;
+            _waveStartTimer = 0f;
+
+            _isGameRunning = true;
+            _isWaitingNextWave = false;
+
+            StartWave();
 
             _isRunning = true;
             _currentWave = 1;
-            BeginWave();
         }
 
         public void OnFinishGame()
         {
-            _isRunning = false;
-            _isSpawningWave = false;
+            _isGameRunning = false;
+            _isWaveRunning = false;
+            _isWaitingNextWave = false;
+            _sequenceRuntimes.Clear();
         }
 
         public void OnUpdate(float deltaTime)
         {
-            if (!_isRunning)
+            if (!_isGameRunning)
                 return;
 
-            if (_isSpawningWave)
+            if (_isWaitingWaveStart)
             {
-                _spawnTimer += deltaTime;
-                if (_spawnTimer >= _context.SpawnInterval)
-                {
-                    _spawnTimer = 0f;
-                    SpawnEnemy();
-                    _spawnedInWave++;
-
-                    if (_spawnedInWave >= _targetEnemiesInWave)
-                    {
-                        _isSpawningWave = false;
-                        _waveDelayTimer = 0f;
-                    }
-                }
-
+                UpdateWaveStartDelay(deltaTime);
                 return;
             }
 
-            _waveDelayTimer += deltaTime;
-            if (_waveDelayTimer < _context.WaveDelay)
+            if (_isWaveRunning)
+            {
+                UpdateWaveSpawn(deltaTime);
+                return;
+            }
+
+            if (_isWaitingNextWave)
+            {
+                UpdateNextWaveDelay(deltaTime);
+            }
+        }
+        
+        private void StartWave()
+        {
+            if (_levelConfig.Waves == null || _currentWaveIndex >= _levelConfig.Waves.Count)
+            {
+                FinishAllWaves();
+                return;
+            }
+
+            _sequenceRuntimes.Clear();
+
+            var wave = _levelConfig.Waves[_currentWaveIndex];
+
+            for (var i = 0; i < wave.Sequence.Count; i++)
+            {
+                var sequence = wave.Sequence[i];
+
+                if (sequence == null)
+                    continue;
+
+                _sequenceRuntimes.Add(new EnemySpawnSequenceRuntime(sequence));
+            }
+
+            _isWaveRunning = true;
+            _isWaitingNextWave = false;
+
+            _playerStatsUseCase.SetWave(_currentWaveIndex + 1);
+        }
+        
+        private void UpdateWaveStartDelay(float deltaTime)
+        {
+            _waveStartTimer -= deltaTime;
+
+            if (_waveStartTimer > 0f)
                 return;
 
-            _currentWave++;
-            BeginWave();
+            BeginWaveSpawn();
+        }
+        
+        private void BeginWaveSpawn()
+        {
+            _isWaitingWaveStart = false;
+            _isWaveRunning = true;
+            _spawnTimer = 0f;
         }
 
+        private void UpdateWaveSpawn(float deltaTime)
+        {
+            for (var i = 0; i < _sequenceRuntimes.Count; i++)
+            {
+                var sequenceRuntime = _sequenceRuntimes[i];
+
+                if (!sequenceRuntime.CanSpawn(deltaTime))
+                    continue;
+
+                SpawnEnemy(sequenceRuntime.Config);
+                sequenceRuntime.MarkSpawned();
+            }
+
+            TryCompleteWave();
+        }
+        
+        private void SpawnEnemy(EnemySpawnSequenceConfig sequence)
+        {
+            var lane = _context.GetRandomLane();
+
+            if (lane == null || sequence.EnemyPrefab == null || sequence.EnemyConfig == null)
+                return;
+
+            var enemy = Object.Instantiate(
+                sequence.EnemyPrefab,
+                lane.GetSpawnPosition(),
+                Quaternion.identity,
+                _context.EnemiesRoot);
+
+            enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig);
+            enemy.Finished += OnEnemyFinished;
+
+            _aliveEnemies++;
+        }
+        
+        private void OnEnemyFinished(EnemyUnit enemy)
+        {
+            enemy.Finished -= OnEnemyFinished;
+
+            _aliveEnemies = Mathf.Max(0, _aliveEnemies - 1);
+
+            TryCompleteWave();
+        }
+        
+        private void FinishAllWaves()
+        {
+            _isGameRunning = false;
+
+            // Потом можно будет вызвать победу:
+            // _gameManagerService.FinishGame();
+            // или отдельный WinGame(), когда добавим состояние победы.
+        }
+        
+        private void UpdateNextWaveDelay(float deltaTime)
+        {
+            _waveDelayTimer -= deltaTime;
+
+            if (_waveDelayTimer > 0f)
+                return;
+
+            _currentWaveIndex++;
+            StartWave();
+        }
+        
+        private void TryCompleteWave()
+        {
+            for (var i = 0; i < _sequenceRuntimes.Count; i++)
+            {
+                if (!_sequenceRuntimes[i].IsComplete)
+                    return;
+            }
+
+            if (_aliveEnemies > 0)
+                return;
+
+            var wave = _levelConfig.Waves[_currentWaveIndex];
+
+            _isWaveRunning = false;
+            _isWaitingNextWave = true;
+            _waveDelayTimer = wave.DelayAfterWave;
+        }
+        
         private void BeginWave()
         {
             _spawnedInWave = 0;
             _spawnTimer = 0f;
             _targetEnemiesInWave = _context.EnemiesPerWave + (_currentWave - 1);
             _isSpawningWave = true;
-        }
-
-        private void SpawnEnemy()
-        {
-            var lanes = _context.Lanes;
-            if (lanes == null || lanes.Length == 0 || _context.UnitsConfig == null)
-                return;
-
-            var enemyPrefab = GetRandomEnemy(_context.UnitsConfig.Enemies);
-            if (enemyPrefab == null)
-                return;
-
-            var lane = lanes[Random.Range(0, lanes.Length)];
-            if (lane == null)
-                return;
-
-            var enemy = UnityEngine.Object.Instantiate(
-                enemyPrefab,
-                lane.GetSpawnPosition(),
-                Quaternion.identity,
-                _context.EnemiesRoot);
-
-            enemy.Initialize(lane, _context.BaseHealth, _enemyConfig);
         }
         
         private EnemyUnit GetRandomEnemy(List<EnemyUnit> enemies)

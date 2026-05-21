@@ -20,8 +20,10 @@ namespace Project.Scripts.Gameplay.Enemies
         private bool _isInitialized;
         private int _killRewardGold;
         private bool _isDead;
+        private bool _isFinished;
 
-        public static event Action<EnemyUnit, int> DieEnemy; 
+        public static event Action<EnemyUnit, int> DieEnemy;
+        public event Action<EnemyUnit> Finished;
 
         public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config)
         {
@@ -30,6 +32,7 @@ namespace Project.Scripts.Gameplay.Enemies
             _targetWaypointIndex = 0;
             _isInitialized = _lanePath != null;
             _isDead = false;
+            _isFinished = false;
 
             _moveSpeed = config.StartMoveSpeed;
             _damageToBase = config.StartDamage;
@@ -41,6 +44,15 @@ namespace Project.Scripts.Gameplay.Enemies
             transform.position = _lanePath != null ? _lanePath.GetSpawnPosition() : transform.position;
         }
 
+        private void Finish()
+        {
+            if (_isFinished)
+                return;
+
+            _isFinished = true;
+            Finished?.Invoke(this);
+        }
+        
         private void OnEnable()
         {
             IGameListener.Register(this);
@@ -81,6 +93,7 @@ namespace Project.Scripts.Gameplay.Enemies
                 _animator.SetTrigger("IsDie");
             
             DieEnemy?.Invoke(this, _killRewardGold);
+            Finish();
         }
 
         public void DestroyEnemy()
@@ -92,6 +105,7 @@ namespace Project.Scripts.Gameplay.Enemies
         {
             _isDead = true;
             _baseHealth?.ApplyDamage(_damageToBase);
+            Finish();
             Destroy(gameObject);
         }
     }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Project.Scripts.Gameplay.Wave;
+using UnityEngine;
 
 namespace Project.Scripts.Configs
 {
@@ -9,11 +11,13 @@ namespace Project.Scripts.Configs
         [SerializeField] private int _startGold;
         [SerializeField] private int _towerPriceIncreaseOnBuy;
         [SerializeField] private int _levelTowerSelected;
+        [SerializeField] private List<EnemyWaveConfig> _waves;
         
         public int StartBaseHealth => _startBaseHealth;
         public int StartGold => _startGold;
         public int TowerPriceIncreaseOnBuy => _towerPriceIncreaseOnBuy;
         public int LevelTowerSelected => _levelTowerSelected;
+        public IReadOnlyList<EnemyWaveConfig> Waves => _waves;
     }
     
 }

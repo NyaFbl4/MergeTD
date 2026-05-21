@@ -89,5 +89,37 @@ namespace Project.Scripts.Gameplay.Field
 
             return null;
         }
+        
+        public LanePath GetRandomLane()
+        {
+            if (_lanes == null || _lanes.Length == 0)
+                return null;
+
+            var validCount = 0;
+
+            for (var i = 0; i < _lanes.Length; i++)
+            {
+                if (_lanes[i] != null)
+                    validCount++;
+            }
+
+            if (validCount == 0)
+                return null;
+
+            var randomIndex = Random.Range(0, validCount);
+
+            for (var i = 0; i < _lanes.Length; i++)
+            {
+                if (_lanes[i] == null)
+                    continue;
+
+                if (randomIndex == 0)
+                    return _lanes[i];
+
+                randomIndex--;
+            }
+
+            return null;
+        }
     }
 }

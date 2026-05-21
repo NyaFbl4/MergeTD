@@ -105,11 +105,14 @@ namespace Project.Scripts.UI.LevelUI
         private void UpdateTowerIcon()
         {
             var towerConfig = _levelUIUseCase.GetSelectedTowerConfig();
-            var towerSprite = towerConfig.Icon;
-            var towerLevel = towerConfig.TowerLevel;
+            if (towerConfig == null)
+            {
+                Debug.LogWarning($"LevelUIPresenter: Tower config not found for level {_playerStatsUseCase.SelectedTowerLevel}.");
+                return;
+            }
 
-            _layoutView.SetTowerLevel(towerLevel);
-            _layoutView.SetTowerIcon(towerSprite);
+            _layoutView.SetTowerLevel(towerConfig.TowerLevel);
+            _layoutView.SetTowerIcon(towerConfig.Icon);
         }
         
         public override void Dispose()
