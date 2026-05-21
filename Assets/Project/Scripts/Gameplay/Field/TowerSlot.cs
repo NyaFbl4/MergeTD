@@ -10,6 +10,7 @@ namespace Project.Scripts.Gameplay.Field
 
         private TowerUnit _currentTower;
         private IUnitsCatalog _unitsCatalog;
+        private Collider2D _dropCollider;
 
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
@@ -18,6 +19,22 @@ namespace Project.Scripts.Gameplay.Field
         public bool IsActiveOnly => _slotType == ETowerSlotType.ActiveOnly;
         public ETowerSlotType SlotType => _slotType;
         public void SetSlotType(ETowerSlotType slotType) => _slotType = slotType;
+        
+        private void Awake()
+        {
+            _dropCollider = GetComponent<Collider2D>();
+            RefreshDropCollider();
+        }
+
+        private void RefreshDropCollider()
+        {
+            if (_dropCollider == null)
+                return;
+
+            // Когда слот занят, клик должен получать collider башни, а не collider слота.
+            // Когда слот пустой, collider слота нужен как drop-zone.
+            _dropCollider.enabled = _currentTower == null;
+        }
         
         public void Construct(IUnitsCatalog unitsCatalog)
         {
@@ -33,6 +50,7 @@ namespace Project.Scripts.Gameplay.Field
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
+            RefreshDropCollider();
 
             return true;
         }
@@ -45,6 +63,7 @@ namespace Project.Scripts.Gameplay.Field
             var tower = _currentTower;
             _currentTower = null;
             tower.transform.SetParent(null);
+            RefreshDropCollider();
             return tower;
         }
 
@@ -62,7 +81,8 @@ namespace Project.Scripts.Gameplay.Field
 
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
-
+            RefreshDropCollider();
+            
             return true;
         }
         
@@ -94,7 +114,8 @@ namespace Project.Scripts.Gameplay.Field
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
-
+            RefreshDropCollider();
+            
             return true;
         }
         
@@ -110,14 +131,16 @@ namespace Project.Scripts.Gameplay.Field
             _currentTower = towerInstance;
             if (_currentTower != null)
                 ApplyFireState(_currentTower);
+            RefreshDropCollider();
         }
 
         public void ClearTower()
         {
             if (_currentTower != null)
-                Destroy(_currentTower);
+                Destroy(_currentTower.gameObject);
 
             _currentTower = null;
+            RefreshDropCollider();
         }
 
         private void ApplyFireState(TowerUnit towerObject)

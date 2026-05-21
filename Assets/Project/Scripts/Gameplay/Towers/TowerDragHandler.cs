@@ -51,15 +51,12 @@ namespace Project.Scripts.Gameplay.Towers
 
         public void OnDrag(PointerEventData eventData)
         {
-            var world = _camera.ScreenToWorldPoint(eventData.position);
-            world.z = _z;
-            transform.position = world;
+            transform.position = GetPointerWorldPosition(eventData);
         } 
         
         public void OnEndDrag(PointerEventData eventData)
         {
-             var world = _camera.ScreenToWorldPoint(eventData.position);
-             world.z = _z;
+            var world = GetPointerWorldPosition(eventData);
 
              var targetSlot = FindSlotUnderPointer(world);
              if (targetSlot != null && targetSlot.TryAttachExistingTower(_towerUnit))
@@ -80,6 +77,20 @@ namespace Project.Scripts.Gameplay.Towers
              transform.position = _startPos;
              if (_towerCollider != null)
                  _towerCollider.enabled = true;
+        } 
+        private Vector3 GetPointerWorldPosition(PointerEventData eventData)
+        {
+            if (_camera == null)
+                _camera = Camera.main;
+
+            var screen = new Vector3(
+                eventData.position.x,
+                eventData.position.y,
+                Mathf.Abs(_camera.transform.position.z - transform.position.z));
+
+            var world = _camera.ScreenToWorldPoint(screen);
+            world.z = _z;
+            return world;
         }
 
         private TowerSlot FindSlotUnderPointer(Vector3 worldPosition)
