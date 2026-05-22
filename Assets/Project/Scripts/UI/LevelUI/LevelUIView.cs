@@ -92,7 +92,7 @@ namespace Project.Scripts.UI.LevelUI
 
         public void SetCurrentWave(int currentWave)
         {
-            _currentWaveLabel.text = "WAVE " + currentWave.ToString();
+            _currentWaveLabel.text = $"Волна {currentWave}";
         }
 
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();

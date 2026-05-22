@@ -37,6 +37,8 @@ namespace Project.Scripts.Gameplay.Systems
         private bool _isWaveRunning;
         private bool _isWaitingNextWave;
         private bool _isGameRunning;
+        
+        private int CurrentWaveNumber => _currentWaveIndex + 1;
 
         public BattlefieldRuntime(
             BattlefieldContext context,
@@ -67,6 +69,8 @@ namespace Project.Scripts.Gameplay.Systems
                 //_isRunning = false;
                 return;
             }
+            
+            Debug.Log("BattlefieldRuntime: Battlefield Start");
             
             _sequenceRuntimes.Clear();
             _currentWaveIndex = 0;
@@ -121,6 +125,7 @@ namespace Project.Scripts.Gameplay.Systems
         {
             if (_levelConfig.Waves == null || _currentWaveIndex >= _levelConfig.Waves.Count)
             {
+                Debug.Log("All waves completed");
                 FinishAllWaves();
                 return;
             }
@@ -128,7 +133,7 @@ namespace Project.Scripts.Gameplay.Systems
             _sequenceRuntimes.Clear();
 
             var wave = _levelConfig.Waves[_currentWaveIndex];
-
+            Debug.Log($"Wave started: #{CurrentWaveNumber}");
             for (var i = 0; i < wave.Sequence.Count; i++)
             {
                 var sequence = wave.Sequence[i];
@@ -142,7 +147,7 @@ namespace Project.Scripts.Gameplay.Systems
             _isWaveRunning = true;
             _isWaitingNextWave = false;
 
-            _playerStatsUseCase.SetWave(_currentWaveIndex + 1);
+            _playerStatsUseCase.SetWave(CurrentWaveNumber);
         }
         
         private void UpdateWaveStartDelay(float deltaTime)
@@ -237,7 +242,9 @@ namespace Project.Scripts.Gameplay.Systems
             if (_aliveEnemies > 0)
                 return;
 
+            var completedWaveNumber = CurrentWaveNumber;
             var wave = _levelConfig.Waves[_currentWaveIndex];
+            Debug.Log($"Wave started: #{CurrentWaveNumber}, sequences: {wave.Sequence.Count}");
 
             _isWaveRunning = false;
             _isWaitingNextWave = true;

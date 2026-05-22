@@ -30,6 +30,7 @@ namespace Project.Scripts.UI.LevelUI
 
             _buyTowerUseCase.TowerCostChanged += OnTowerCostChanged;
             _playerStatsUseCase.SelectedTowerLevelChanged += OnSelectedTowerLevelChanged;
+            _playerStatsUseCase.WaveChanged += OnCurrentWaveChanged;
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
             _layoutView.ADButtonClicked += OnADButtonClicked;
@@ -41,6 +42,7 @@ namespace Project.Scripts.UI.LevelUI
             
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
+            _layoutView.SetCurrentWave(_playerStatsUseCase.Wave);
             
             UpdateTowerIcon();
         }
@@ -119,12 +121,15 @@ namespace Project.Scripts.UI.LevelUI
         {
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
             _playerStatsUseCase.SelectedTowerLevelChanged -= OnSelectedTowerLevelChanged;
+            _playerStatsUseCase.WaveChanged += OnCurrentWaveChanged;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
             _layoutView.ADButtonClicked -= OnADButtonClicked;
             _layoutView.QuestsButtonClicked -= OnQuestsButtonClicked;
             _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
+            _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
+            _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
             
             base.Dispose();
         }
