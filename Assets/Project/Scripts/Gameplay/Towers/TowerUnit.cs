@@ -52,11 +52,6 @@ namespace Project.Scripts.Gameplay.Towers
             _fireRate = _towerConfig.StartAttackSpeed;
             _animationSpeed = _towerConfig.AnimationSpeed;
         }
-
-        public void UpdateLevelTower()
-        {
-            
-        }
         
         public bool CanMergeWith(TowerUnit other)
         {

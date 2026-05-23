@@ -22,16 +22,6 @@ namespace Project.Scripts.UI.LevelUI
             _unitsCatalog = unitsCatalog;
         }
         
-        public void TryBuyTower()
-        {
-            Debug.Log("TryBuyTower");
-            
-            var slot = _battlefieldContext.FindFirstFreeSlot(ETowerSlotType.SpawnOnly);
-            var currentTower = _unitsConfig.Towers[0];
-            
-            slot.TryPlaceTower(currentTower);
-        }
-        
         public TowerConfig GetSelectedTowerConfig()
         {
             var towerConfig = _unitsCatalog.GetTowerConfigByLevel(_playerStats.SelectedTowerLevel);

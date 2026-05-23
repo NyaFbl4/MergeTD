@@ -3,7 +3,6 @@ using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.System.Enums;
-using NotImplementedException = System.NotImplementedException;
 
 namespace Project.Scripts.System.UseCases
 {

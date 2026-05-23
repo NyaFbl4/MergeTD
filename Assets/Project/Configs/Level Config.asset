@@ -18,3 +18,6 @@ MonoBehaviour:
   _levelTowerSelected: 5
   _waves:
   - {fileID: 11400000, guid: 7350c3ffcc8b4db4385699f33dd98fb4, type: 2}
+  - {fileID: 11400000, guid: e6d2ce8e4a4b39b4daeb099813825d78, type: 2}
+  - {fileID: 11400000, guid: ea241d86d43e42f44b207d726dd28e9e, type: 2}
+  - {fileID: 11400000, guid: 8372af58de57a83469bbce6221d54535, type: 2}
