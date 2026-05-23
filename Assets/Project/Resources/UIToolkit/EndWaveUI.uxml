@@ -1,0 +1,22 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Layout" style="flex-grow: 1; align-self: auto; align-items: center; justify-content: center;">
+        <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&apos;UI/wave cleared popup/dark background&apos;);" />
+        <ui:VisualElement name="EndWavePanel" style="flex-grow: 1; background-image: resource(&apos;UI/wave cleared popup/wave cleared box&apos;); width: 800px; height: 1000px; align-items: stretch; justify-content: space-evenly; align-self: center; -unity-background-scale-mode: stretch-to-fill; min-height: 1000px; max-height: 1000px; align-content: auto;">
+            <ui:Label text="Label" name="EndWavePanelTitleLabel" style="position: absolute; height: 115px; width: 382px; top: 124px; left: 197px; -unity-text-align: middle-center; font-size: 50px;" />
+            <ui:VisualElement name="MainPanel" style="flex-grow: 1;">
+                <ui:VisualElement name="WaveRewardPanel" style="flex-grow: 1; width: 600px; top: 321px; left: 212px; min-width: 400px; max-width: 400px; height: 150px; min-height: 150px; max-height: 150px;">
+                    <ui:Label text="Wave reward" name="WaveRewardLabel" style="font-size: 40px; -unity-text-align: upper-center;" />
+                    <ui:VisualElement name="Background" style="flex-grow: 1; background-image: resource(&apos;UI/wave cleared popup/wave cleared coin box 01&apos;); -unity-background-scale-mode: stretch-to-fill; width: 400px; height: 100px; min-height: 100px; max-height: 100px; min-width: 400px; max-width: 400px;">
+                        <ui:Label text="5555555" name="CountRewardLabel" style="height: 95px; width: 256px; -unity-text-align: middle-left; left: 125px; font-size: 50px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Button name="ADButton" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-image: resource(&apos;UI/wave cleared popup/video btn&apos;); -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); width: 400px; height: 180px; top: 380px; left: 205px;">
+                    <ui:Label text="Label" name="ADButtonLabel" style="height: 82px; width: 199px; top: 21px; left: 133px; -unity-text-align: middle-left; font-size: 30px;" />
+                </ui:Button>
+                <ui:Button name="CloseButton" style="background-image: resource(&apos;UI/wave cleared popup/btn05&apos;); background-color: rgba(188, 188, 188, 0); -unity-background-image-tint-color: rgb(255, 255, 255); width: 350px; height: 150px; top: 450px; left: 231px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
+                    <ui:Label text="Label" name="CloseButtonLabel" style="height: 74px; top: 12px; left: 15px; width: 290px; font-size: 50px;" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

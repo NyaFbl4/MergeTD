@@ -11,7 +11,7 @@ namespace Project.Scripts.UI.LevelUI
         event Action ShopButtonClicked;
         event Action ADButtonClicked;
         event Action QuestsButtonClicked;
-        public event Action SettingsButtonClicked;
+        event Action SettingsButtonClicked;
         
         void SetPriceTower(int price);
         void SetMoney(int money);
