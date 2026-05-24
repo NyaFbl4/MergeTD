@@ -7,6 +7,7 @@ using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.LevelUI;
 using UnityEngine;
 using VContainer;
@@ -47,7 +48,7 @@ namespace Installers
             // Game loop
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();;
 
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
@@ -84,6 +85,7 @@ namespace Installers
         private void RegisterPresenters(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<LevelUIPresenter>(Lifetime.Singleton).As<ILevelUIPresenter>();
+            builder.RegisterEntryPoint<EndWaveUIPresenter>(Lifetime.Singleton).As<IEndWaveUIPresenter>();
         }
 
         private void RegisterUseCases(IContainerBuilder builder)
@@ -94,6 +96,7 @@ namespace Installers
             builder.RegisterEntryPoint<BuyTowerUseCase>().As<IBuyTowerUseCase>();
             builder.RegisterEntryPoint<EnemyDeathUseCase>(Lifetime.Singleton);
             builder.RegisterEntryPoint<LevelUIUseCase>(Lifetime.Singleton).As<ILevelUIUseCase>();
+            builder.RegisterEntryPoint<EndWaveUseCase>(Lifetime.Singleton);
             
             builder.Register<UnitsCatalog>(Lifetime.Singleton).As<IUnitsCatalog>();
         }

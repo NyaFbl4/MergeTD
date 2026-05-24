@@ -37,8 +37,10 @@ namespace Project.Scripts.Gameplay.Systems
         private bool _isWaveRunning;
         private bool _isWaitingNextWave;
         private bool _isGameRunning;
+        private bool _isWaitingEndWavePopup;
         
         private int CurrentWaveNumber => _currentWaveIndex + 1;
+        public event Action<int, int, bool> WaveCompleted;
 
         public BattlefieldRuntime(
             BattlefieldContext context,
@@ -95,6 +97,7 @@ namespace Project.Scripts.Gameplay.Systems
             _isGameRunning = false;
             _isWaveRunning = false;
             _isWaitingNextWave = false;
+            _isWaitingEndWavePopup = false;
             _sequenceRuntimes.Clear();
         }
 
@@ -119,6 +122,18 @@ namespace Project.Scripts.Gameplay.Systems
             {
                 UpdateNextWaveDelay(deltaTime);
             }
+        }
+        
+        public void ContinueAfterEndWavePopup()
+        {
+            if (!_isWaitingEndWavePopup)
+                return;
+
+            _isWaitingEndWavePopup = false;
+
+            var wave = _levelConfig.Waves[_currentWaveIndex];
+            _waveDelayTimer = wave.DelayAfterWave;
+            _isWaitingNextWave = true;
         }
         
         private void StartWave()
@@ -245,10 +260,12 @@ namespace Project.Scripts.Gameplay.Systems
             var completedWaveNumber = CurrentWaveNumber;
             var wave = _levelConfig.Waves[_currentWaveIndex];
             Debug.Log($"Wave started: #{CurrentWaveNumber}, sequences: {wave.Sequence.Count}");
-
+            var isLastWave = _currentWaveIndex >= _levelConfig.Waves.Count - 1;
+            
             _isWaveRunning = false;
-            _isWaitingNextWave = true;
-            _waveDelayTimer = wave.DelayAfterWave;
+            _isWaitingNextWave = false;
+            _isWaitingEndWavePopup = true;
+            WaveCompleted?.Invoke(completedWaveNumber, wave.CountGoldReward, isLastWave);
         }
         
         private void BeginWave()

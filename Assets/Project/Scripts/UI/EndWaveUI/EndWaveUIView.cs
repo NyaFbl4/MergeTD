@@ -26,33 +26,33 @@ namespace Project.Scripts.UI.EndWaveUI
             _adButton = _root.Q<Button>("ADButton");
             _closeButton = _root.Q<Button>("CloseButton");
             _titleLabel = _root.Q<Label>("EndWavePanelTitleLabel");
-            _rewardLabel = _root.Q<Label>(" WaveRewardLabel");
-            _rewardCountLabel = _root.Q<Label>(" CountRewardLabel");
-            _adButtonLabel = _root.Q<Label>(" ADButtonLabel");
-            _closeButtonLabel = _root.Q<Label>(" CloseButtonLabel");
+            _rewardLabel = _root.Q<Label>("WaveRewardLabel");
+            _rewardCountLabel = _root.Q<Label>("CountRewardLabel");
+            _adButtonLabel = _root.Q<Label>("ADButtonLabel");
+            _closeButtonLabel = _root.Q<Label>("CloseButtonLabel");
             
             if (_adButton != null)
-                _adButton.clicked += OnCloseButtonClicked;
+                _adButton.clicked += OnADButtonClicked;
             if (_closeButton != null)
-                _closeButton.clicked += OnADButtonClicked;
+                _closeButton.clicked += OnCloseButtonClicked;
         }
 
         public void SetTitle(string title)
         {
-            throw new NotImplementedException();
+            _titleLabel.text = title;
         }
 
         public void SetRewardCount(int rewardCount)
         {
-            throw new NotImplementedException();
+            _rewardCountLabel.text = rewardCount.ToString();
         }
 
         private void OnDestroy()
         {
             if (_adButton != null)
-                _adButton.clicked -= OnCloseButtonClicked;
+                _adButton.clicked -= OnADButtonClicked;
             if (_closeButton != null)
-                _closeButton.clicked -= OnADButtonClicked;
+                _closeButton.clicked -= OnCloseButtonClicked;
         }
         
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();

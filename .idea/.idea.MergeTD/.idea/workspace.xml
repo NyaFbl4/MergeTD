@@ -11,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="13" />
+    <option name="cachedIndexableFilesCount" value="14" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Project/Prefabs/UI/LevelUI.prefab" root0="FORCE_HIGHLIGHTING" />
@@ -35,6 +35,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/System/UseCases/PlayerStatsUseCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/EndWaveUI/EndWaveUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/EndWaveUI/EndWaveUIView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/EndWaveUI/EndWaveUseCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/EndWaveUI/IEndWaveUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/EndWaveUI/IEndWaveUIView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/LevelUI/ILevelUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
