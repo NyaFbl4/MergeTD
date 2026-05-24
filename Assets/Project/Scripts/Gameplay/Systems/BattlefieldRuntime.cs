@@ -211,7 +211,9 @@ namespace Project.Scripts.Gameplay.Systems
                 Quaternion.identity,
                 _context.EnemiesRoot);
 
-            enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig);
+            var wave = _levelConfig.Waves[_currentWaveIndex];
+            
+            enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig, wave.KillRewardGold);
             enemy.Finished += OnEnemyFinished;
 
             _aliveEnemies++;

@@ -25,7 +25,7 @@ namespace Project.Scripts.Gameplay.Enemies
         public static event Action<EnemyUnit, int> DieEnemy;
         public event Action<EnemyUnit> Finished;
 
-        public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config)
+        public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config, int killRewardGold)
         {
             _lanePath = lanePath;
             _baseHealth = baseHealth;
@@ -36,7 +36,7 @@ namespace Project.Scripts.Gameplay.Enemies
 
             _moveSpeed = config.StartMoveSpeed;
             _damageToBase = config.StartDamage;
-            _killRewardGold = config.KillRewardGold;
+            _killRewardGold = killRewardGold;
 
             var enemyHP = gameObject.GetComponent<IEnemyHealth>();
             enemyHP?.SetHealth(config.StartHealth);
