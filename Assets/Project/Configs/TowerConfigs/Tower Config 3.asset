@@ -16,8 +16,8 @@ MonoBehaviour:
   _towerLevel: 3
   _startPrice: 10
   _startDamage: 150
-  _startAttackSpeed: 4
-  _animationSpeed: 4
+  _startAttackSpeed: 1
+  _animationSpeed: 1
   _updatePrice: 10
   _updateDamage: 100
   _updateAttackSpeed: 1
