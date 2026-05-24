@@ -379,7 +379,7 @@ MonoBehaviour:
   _firePoints:
   - {fileID: 2502189378863360425}
   - {fileID: 6809864961463101401}
-  _fireMode: 0
+  _fireMode: 1
   _range: 6
   _towerLevel: 9
   _angleOffset: -90
