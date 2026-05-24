@@ -1,4 +1,5 @@
-﻿using Project.Scripts.Configs;
+﻿using System.Collections.Generic;
+using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
 using TMPro;
@@ -10,11 +11,14 @@ namespace Project.Scripts.Gameplay.Towers
     {
         [SerializeField] private TowerConfig _towerConfig;
         [SerializeField] private Transform _turretPivot;
-        [SerializeField] private Transform _firePoint;
         [SerializeField] private TMP_Text _currentLevelText;
         [SerializeField] private Animator _animator;
         [SerializeField] private Projectile _projectilePrefab;
 
+        [SerializeField] private Transform _firePoint;
+        [SerializeField] private List<Transform> _firePoints;
+        [SerializeField] private EFireMode _fireMode = EFireMode.Single;
+        
         [Header("Fire parametrs")]
         [SerializeField] private float _range = 3f;
         private int _damage;
@@ -33,6 +37,7 @@ namespace Project.Scripts.Gameplay.Towers
         private EnemyHealth _currentTarget;
         private bool _canFire;
         private bool _isFire;
+        private int _nextFirePointIndex;
 
         public void SetCanFire(bool canFire)
         {
@@ -51,6 +56,7 @@ namespace Project.Scripts.Gameplay.Towers
             _damage = _towerConfig.StartTowerDamage;
             _fireRate = _towerConfig.StartAttackSpeed;
             _animationSpeed = _towerConfig.AnimationSpeed;
+            _nextFirePointIndex = 0;
         }
         
         public bool CanMergeWith(TowerUnit other)
@@ -70,7 +76,7 @@ namespace Project.Scripts.Gameplay.Towers
         public void OnAttackFireEvent()
         {
             if (_currentTarget == null) return;
-            Shoot(_currentTarget);
+            Fire(_currentTarget);
         }
         
         public void OnAttackFinishedEvent()
@@ -118,10 +124,47 @@ namespace Project.Scripts.Gameplay.Towers
 
             pivot.rotation = Quaternion.Euler(0f, 0f, nextAngle);
         }
-
-        private void Shoot(EnemyHealth target)
+        private void Fire(EnemyHealth target)
         {
-            var origin = _firePoint != null ? _firePoint.position : transform.position;
+            var firePoints = GetAvailableFirePoints();
+
+            switch (_fireMode)
+            {
+                case EFireMode.All:
+                    for (var i = 0; i < firePoints.Length; i++)
+                    {
+                        Shoot(target, firePoints[i].position);
+                    }
+                    break;
+
+                case EFireMode.Alternate:
+                    var point = firePoints[_nextFirePointIndex];
+                    Shoot(target, point.position);
+
+                    _nextFirePointIndex++; 
+                    if (_nextFirePointIndex >= firePoints.Length)
+                        _nextFirePointIndex = 0;
+                    break;
+
+                default:
+                    Shoot(target, firePoints[0].position);
+                    break;
+            }
+        }
+
+        private Transform[] GetAvailableFirePoints()
+        {
+            if (_firePoints != null && _firePoints.Count > 0)
+                return _firePoints.ToArray();
+
+            if (_firePoint != null)
+                return new[] { _firePoint };
+
+            return new[] { transform };
+        }
+        
+        private void Shoot(EnemyHealth target, Vector3 origin)
+        {
             var targetPosition = target.transform.position;
             var projectile = Instantiate(_projectilePrefab, origin, Quaternion.identity);
             projectile.Launch(origin, targetPosition, _damage);
