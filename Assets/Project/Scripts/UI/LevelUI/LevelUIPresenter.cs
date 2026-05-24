@@ -1,4 +1,5 @@
 ﻿using Project.Scripts.Gameplay.Base;
+using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using UnityEngine;
@@ -11,17 +12,20 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IBuyTowerUseCase _buyTowerUseCase;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly BaseHealth _baseHealth;
+        private readonly ILocalizationService _localizationService;
 
         public LevelUIPresenter(
             IBuyTowerUseCase buyTowerUseCase,
             IPlayerStatsUseCase playerStatsUseCase,
             ILevelUIUseCase levelUIUseCase,
-            BaseHealth baseHealth)
+            BaseHealth baseHealth,
+            ILocalizationService localizationService)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
             _levelUIUseCase = levelUIUseCase;
             _baseHealth = baseHealth;
+            _localizationService = localizationService;
         }
 
         public override void Initialize()
@@ -42,7 +46,7 @@ namespace Project.Scripts.UI.LevelUI
             
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
-            _layoutView.SetCurrentWave(_playerStatsUseCase.Wave);
+            _layoutView.SetCurrentWaveText(_localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
             
             UpdateTowerIcon();
         }
@@ -101,7 +105,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnCurrentWaveChanged(int wave)
         {
-            _layoutView.SetCurrentWave(wave);
+            _layoutView.SetCurrentWaveText(_localizationService.Format(LocalizationKeys.LevelWaveFormat, wave));
         }
         
         private void UpdateTowerIcon()

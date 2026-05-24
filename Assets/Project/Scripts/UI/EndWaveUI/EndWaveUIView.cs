@@ -47,6 +47,21 @@ namespace Project.Scripts.UI.EndWaveUI
             _rewardCountLabel.text = rewardCount.ToString();
         }
 
+        public void SetRewardLabel(string text)
+        {
+            _rewardLabel.text = text;
+        }
+
+        public void SetAdButtonText(string text)
+        {
+            _adButtonLabel.text = text;
+        }
+
+        public void SetCloseButtonText(string text)
+        {
+            _closeButtonLabel.text = text;
+        }
+
         private void OnDestroy()
         {
             if (_adButton != null)

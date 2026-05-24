@@ -90,9 +90,9 @@ namespace Project.Scripts.UI.LevelUI
             _maxBaseHealthLabel.text = baseMaxHealth.ToString();
         }
 
-        public void SetCurrentWave(int currentWave)
+        public void SetCurrentWaveText(string text)
         {
-            _currentWaveLabel.text = $"Волна {currentWave}";
+            _currentWaveLabel.text = text;
         }
 
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();

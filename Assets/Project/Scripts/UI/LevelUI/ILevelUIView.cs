@@ -19,6 +19,6 @@ namespace Project.Scripts.UI.LevelUI
         void SetCurrentBaseHealth(int baseHealth);
         void SetMaxBaseHealth(int baseMaxHealth);
         void SetTowerLevel(int towerLevel);
-        void SetCurrentWave(int currentWave);
+        void SetCurrentWaveText(string text);
     }
 }

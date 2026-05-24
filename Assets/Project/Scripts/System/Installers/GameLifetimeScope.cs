@@ -5,6 +5,7 @@ using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.EndWaveUI;
@@ -49,7 +50,8 @@ namespace Installers
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();;
-
+            builder.Register<LocalizationService>(Lifetime.Singleton).As<ILocalizationService>();
+            
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
             builder.RegisterEntryPoint<UIMessageHandler>(Lifetime.Singleton);

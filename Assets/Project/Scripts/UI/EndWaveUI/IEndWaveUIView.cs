@@ -10,5 +10,8 @@ namespace Project.Scripts.UI.EndWaveUI
         
         void SetTitle(string title);
         void SetRewardCount(int rewardCount);
+        void SetRewardLabel(string text);
+        void SetAdButtonText(string text);
+        void SetCloseButtonText(string text);
     }
 }

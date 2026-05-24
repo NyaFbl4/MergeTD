@@ -1,0 +1,29 @@
+﻿{
+    "entries": [
+    {
+      "key": "level.wave_format",
+      "ru": "Волна {0}",
+      "en": "Wave {0}"
+    },
+    {
+      "key": "end_wave.title_format",
+      "ru": "Волна {0} пройдена",
+      "en": "Wave {0} cleared"
+    },
+    {
+      "key": "end_wave.reward_label",
+      "ru": "Награда за волну",
+      "en": "Wave reward"
+    },
+    {
+      "key": "end_wave.close_button",
+      "ru": "Продолжить",
+      "en": "Continue"
+    },
+    {
+      "key": "end_wave.ad_button",
+      "ru": "x2 за рекламу",
+      "en": "x2 for ad"
+    }
+  ]
+}

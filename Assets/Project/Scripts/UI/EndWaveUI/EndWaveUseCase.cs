@@ -2,6 +2,7 @@
 using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
 using VContainer.Unity;
@@ -16,6 +17,7 @@ namespace Project.Scripts.UI.EndWaveUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly IGameManagerService _gameManagerService;
+        private readonly ILocalizationService _localizationService;
 
         private bool _isLastWave;
 
@@ -25,7 +27,8 @@ namespace Project.Scripts.UI.EndWaveUI
             IPlayerStatsUseCase playerStatsUseCase,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            IGameManagerService gameManagerService)
+            IGameManagerService gameManagerService,
+            ILocalizationService localizationService)
         {
             _battlefieldRuntime = battlefieldRuntime;
             _endWaveUIPresenter = endWaveUIPresenter;
@@ -33,6 +36,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
             _gameManagerService = gameManagerService;
+            _localizationService = localizationService;
         }
 
         public void Initialize()
@@ -47,7 +51,8 @@ namespace Project.Scripts.UI.EndWaveUI
             _isLastWave = isLastWave;
 
             _playerStatsUseCase.AddGold(rewardCount);
-            _endWaveUIPresenter.SetData($"Wave {waveNumber} cleared", rewardCount);
+            _endWaveUIPresenter.SetData(_localizationService.Format(LocalizationKeys.EndWaveTitleFormat, 
+                                        waveNumber), rewardCount);
 
             _showPopupPublisher.Publish(new ShowPopupDto
             {
