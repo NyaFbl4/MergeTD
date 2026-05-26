@@ -2,6 +2,7 @@
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
+using Project.Scripts.System.UseCases;
 using TMPro;
 using UnityEngine;
 
@@ -32,13 +33,23 @@ namespace Project.Scripts.Gameplay.Towers
         
         public int CurrentLevel => _towerLevel;
         public TowerConfig TowerConfig => _towerConfig;
+        public IPlayerStatsUseCase PlayerStats => _playerStats;
         
         private float _cooldown;
         private EnemyHealth _currentTarget;
         private bool _canFire;
         private bool _isFire;
         private int _nextFirePointIndex;
+        private IPlayerStatsUseCase _playerStats;
 
+        public void Initialize(IPlayerStatsUseCase playerStats)
+        {
+            _playerStats = playerStats;
+
+            if (_playerStats != null)
+                _playerStats.UpgradesChanged += OnUpgradesChanged;
+        }
+        
         public void SetCanFire(bool canFire)
         {
             _canFire = canFire;
@@ -52,10 +63,7 @@ namespace Project.Scripts.Gameplay.Towers
         public void CreateTower()
         {
             _currentLevelText.text = _towerLevel.ToString();
-
-            _damage = _towerConfig.StartTowerDamage;
-            _fireRate = _towerConfig.StartAttackSpeed;
-            _animationSpeed = _towerConfig.AnimationSpeed;
+            RecalculateStats();
             _nextFirePointIndex = 0;
         }
         
@@ -100,6 +108,21 @@ namespace Project.Scripts.Gameplay.Towers
 
             TryAttack(_currentTarget);
             _cooldown = 1f / Mathf.Max(0.01f, _fireRate);
+        }
+        
+        private void RecalculateStats()
+        {
+            var damageBonus = _playerStats?.TowerDamageBonus ?? 0f;
+            var attackSpeedBonus = _playerStats?.TowerAttackSpeedBonus ?? 0f;
+
+            _damage = Mathf.RoundToInt(_towerConfig.StartTowerDamage + damageBonus);
+            _fireRate = _towerConfig.StartAttackSpeed + attackSpeedBonus;
+            _animationSpeed = _towerConfig.AnimationSpeed;
+        }
+        
+        private void OnUpgradesChanged()
+        {
+            RecalculateStats();
         }
 
         private void TryAttack(EnemyHealth target)
@@ -187,6 +210,12 @@ namespace Project.Scripts.Gameplay.Towers
             }
 
             return best;
+        }
+        
+        private void OnDestroy()
+        {
+            if (_playerStats != null)
+                _playerStats.UpgradesChanged -= OnUpgradesChanged;
         }
     }
 }

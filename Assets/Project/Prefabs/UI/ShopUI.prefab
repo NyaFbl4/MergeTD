@@ -69,3 +69,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.UI.ShopUI.ShopUIView
   _shopItemTemplate: {fileID: 9197481963319205126, guid: dd6c192b898b622479b350ca8ec3dd60, type: 3}
+  _damageUpgradeConfig: {fileID: 11400000, guid: 6ca19e92c5bf8234c81150384652ef98, type: 2}
+  _attackSpeedUpgradeConfig: {fileID: 11400000, guid: 01ad8e8c8bf10fb44b021540c6a50e8c, type: 2}
+  _healthUpgradeConfig: {fileID: 11400000, guid: b62c6f1a303dd4f4ba57930dbc3384c5, type: 2}

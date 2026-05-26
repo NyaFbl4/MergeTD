@@ -99,9 +99,6 @@ namespace Project.Scripts.GameManager
                 Debug.Log("GameManagerHelper: No free SpawnOnly slot.");
                 return;
             }
-
-            if (!slot.TryPlaceTower(_towerPrefab))
-                Debug.LogWarning($"GameManagerHelper: Failed to place tower in slot '{slot.name}'.");
         }
 
         [Button]

@@ -1,4 +1,5 @@
 ﻿using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.System.UseCases;
 using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Field
@@ -8,6 +9,7 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private Transform _towerAnchor;
         [SerializeField] private ETowerSlotType _slotType = ETowerSlotType.SpawnOnly;
 
+        private IPlayerStatsUseCase _playerStats;
         private TowerUnit _currentTower;
         private IUnitsCatalog _unitsCatalog;
         private Collider2D _dropCollider;
@@ -41,12 +43,14 @@ namespace Project.Scripts.Gameplay.Field
             _unitsCatalog = unitsCatalog;
         }
         
-        public bool TryPlaceTower(TowerUnit towerPrefab)
+        public bool TryPlaceTower(TowerUnit towerPrefab, IPlayerStatsUseCase playerStats)
         {
             if (IsOccupied || towerPrefab == null)
                 return false;
 
             _currentTower = Instantiate(towerPrefab, TowerAnchor.position, TowerAnchor.rotation, TowerAnchor);
+            _playerStats = playerStats;
+            _currentTower.Initialize(playerStats);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
@@ -76,6 +80,7 @@ namespace Project.Scripts.Gameplay.Field
                 return TryMergeTower(tower);
 
             _currentTower = tower;
+            _playerStats = tower.PlayerStats;
             _currentTower.transform.SetParent(TowerAnchor);
             _currentTower.transform.SetPositionAndRotation(TowerAnchor.position, TowerAnchor.rotation);
 
@@ -110,7 +115,8 @@ namespace Project.Scripts.Gameplay.Field
                 TowerAnchor.rotation,
                 TowerAnchor
             );
-
+            
+            _currentTower.Initialize(_playerStats);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);

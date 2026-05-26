@@ -29,7 +29,10 @@ namespace Project.Scripts.Gameplay.Base
         public void AddMaxHealth(int health)
         {
             _maxHealth += health;
+            _currentHealth += health;
+
             OnMaxHealthChanged?.Invoke(_maxHealth);
+            OnCurrentHealthChanged?.Invoke(_currentHealth);
         }
 
         public void AddCurrentHealth(int health)

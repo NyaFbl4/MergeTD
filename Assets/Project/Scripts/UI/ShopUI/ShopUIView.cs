@@ -1,4 +1,6 @@
 ﻿using System;
+using Project.Scripts.Configs;
+using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.Systems.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,13 +10,20 @@ namespace Project.Scripts.UI.ShopUI
     public class ShopUIView : LayoutViewBase, IShopUIView
     {
         [SerializeField] private VisualTreeAsset _shopItemTemplate;
+        [SerializeField] private UpgradeItemConfig _damageUpgradeConfig;
+        [SerializeField] private UpgradeItemConfig _attackSpeedUpgradeConfig;
+        [SerializeField] private UpgradeItemConfig _healthUpgradeConfig;
 
         private Label _titleLabel;
         private Button _closeButton;
         private ScrollView _scrollView;
-        
+
+        public UpgradeItemConfig DamageUpgradeConfig => _damageUpgradeConfig;
+        public UpgradeItemConfig AttackSpeedUpgradeConfig => _attackSpeedUpgradeConfig;
+        public UpgradeItemConfig HealthUpgradeConfig => _healthUpgradeConfig;
+
         public event Action CloseButtonClicked;
-        
+
         public override void Awake()
         {
             base.Awake();
@@ -22,7 +31,7 @@ namespace Project.Scripts.UI.ShopUI
             _closeButton = _root.Q<Button>("CloseButton");
             _scrollView = _root.Q<ScrollView>("ScrollView");
             _titleLabel = _root.Q<Label>("TitleLabel");
-            
+
             if (_closeButton != null)
                 _closeButton.clicked += OnCloseButtonClicked;
         }
@@ -32,19 +41,26 @@ namespace Project.Scripts.UI.ShopUI
             _titleLabel.text = title;
         }
 
-        public void AddItem()
+        public void ClearItems()
         {
-            TemplateContainer newItem = _shopItemTemplate.Instantiate();
-            
-            _scrollView.Add(newItem);
+            _scrollView.Clear();
         }
-        
+
+        public void AddItem(IUpgradeItem item, Action onBuy)
+        {
+            var itemRoot = _shopItemTemplate.Instantiate();
+            var itemView = new UpgradeItemView(itemRoot);
+            itemView.Bind(item, onBuy);
+            _scrollView.Add(itemRoot);
+        }
+
         private void OnDestroy()
         {
             if (_closeButton != null)
                 _closeButton.clicked -= OnCloseButtonClicked;
         }
-        
+
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();
+
     }
 }

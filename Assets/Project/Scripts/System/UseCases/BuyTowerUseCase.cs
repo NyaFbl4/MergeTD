@@ -45,7 +45,7 @@ namespace Project.Scripts.System.UseCases
             if (towerPrefab == null)
                 return EBuyTowerResult.PlaceFailed;
 
-            if (!slot.TryPlaceTower(towerPrefab))
+            if (!slot.TryPlaceTower(towerPrefab, _playerStats))
                 return EBuyTowerResult.PlaceFailed;
 
             _playerStats.TrySpend(TowerCost);
