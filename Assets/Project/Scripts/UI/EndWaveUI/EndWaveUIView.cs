@@ -1,6 +1,5 @@
 ﻿using System;
 using Project.Scripts.Systems.UI;
-using Project.Scripts.UI.LevelUI;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.EndWaveUI

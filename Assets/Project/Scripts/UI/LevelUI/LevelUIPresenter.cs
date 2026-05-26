@@ -1,7 +1,12 @@
-﻿using Project.Scripts.Gameplay.Base;
+﻿using MessagePipe;
+using Project.Scripts.GameManager;
+using Project.Scripts.Gameplay.Base;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.Systems.UI.Dtos;
+using Project.Scripts.UI.EndWaveUI;
+using Project.Scripts.UI.ShopUI;
 using UnityEngine;
 
 namespace Project.Scripts.UI.LevelUI
@@ -13,19 +18,25 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly BaseHealth _baseHealth;
         private readonly ILocalizationService _localizationService;
+        private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
+        private readonly IGameManagerService _gameManagerService;
 
         public LevelUIPresenter(
             IBuyTowerUseCase buyTowerUseCase,
             IPlayerStatsUseCase playerStatsUseCase,
             ILevelUIUseCase levelUIUseCase,
             BaseHealth baseHealth,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            IPublisher<ShowPopupDto> showPopupPublisher,
+            IGameManagerService gameManagerService)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
             _levelUIUseCase = levelUIUseCase;
             _baseHealth = baseHealth;
             _localizationService = localizationService;
+            _showPopupPublisher = showPopupPublisher;
+            _gameManagerService = gameManagerService;
         }
 
         public override void Initialize()
@@ -65,7 +76,11 @@ namespace Project.Scripts.UI.LevelUI
         private void OnShopButtonClicked()
         {
             Debug.Log("OnShopButtonClicked");
-            //_levelUIUseCase.OpenShop();
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(IShopUIPresenter)
+            });
+            _gameManagerService.PauseGame();
         }
 
         private void OnADButtonClicked()

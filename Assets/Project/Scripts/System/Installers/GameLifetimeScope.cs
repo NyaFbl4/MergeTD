@@ -10,6 +10,7 @@ using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.LevelUI;
+using Project.Scripts.UI.ShopUI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -86,19 +87,20 @@ namespace Installers
 
         private void RegisterPresenters(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<LevelUIPresenter>(Lifetime.Singleton).As<ILevelUIPresenter>();
-            builder.RegisterEntryPoint<EndWaveUIPresenter>(Lifetime.Singleton).As<IEndWaveUIPresenter>();
+            builder.RegisterEntryPoint<LevelUIPresenter>().As<ILevelUIPresenter>();
+            builder.RegisterEntryPoint<EndWaveUIPresenter>().As<IEndWaveUIPresenter>();
+            builder.RegisterEntryPoint<ShopUIPresenter>().As<IShopUIPresenter>();
         }
 
         private void RegisterUseCases(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<ShowPopUpUseCase>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<HidePopUpUseCase>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<ShowPopUpUseCase>();
+            builder.RegisterEntryPoint<HidePopUpUseCase>();
             builder.RegisterEntryPoint<PlayerStatsUseCase>().As<IPlayerStatsUseCase>();
             builder.RegisterEntryPoint<BuyTowerUseCase>().As<IBuyTowerUseCase>();
-            builder.RegisterEntryPoint<EnemyDeathUseCase>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<LevelUIUseCase>(Lifetime.Singleton).As<ILevelUIUseCase>();
-            builder.RegisterEntryPoint<EndWaveUseCase>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<EnemyDeathUseCase>();
+            builder.RegisterEntryPoint<LevelUIUseCase>().As<ILevelUIUseCase>();
+            builder.RegisterEntryPoint<EndWaveUseCase>();
             
             builder.Register<UnitsCatalog>(Lifetime.Singleton).As<IUnitsCatalog>();
         }
