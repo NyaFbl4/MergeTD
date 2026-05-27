@@ -3,6 +3,6 @@
     public interface IEnemyHealth
     {
         void SetHealth(int health);
-        void TakeDamage(int damage);
+        void TakeDamage(int damage, bool isCritical);
     }
 }

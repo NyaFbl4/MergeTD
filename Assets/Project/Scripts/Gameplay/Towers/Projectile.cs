@@ -14,6 +14,7 @@ namespace Project.Scripts.Gameplay.Towers
         private Vector3 _direction;
         private int _damage;
         private bool _isLaunched;
+        private bool _isCritical = false;
 
         private Rigidbody2D _rigidbody2D;
         private Collider2D _collider2D;
@@ -34,10 +35,11 @@ namespace Project.Scripts.Gameplay.Towers
             _rigidbody2D.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
 
-        public void Launch(Vector3 origin, Vector3 targetPosition, int damage)
+        public void Launch(Vector3 origin, Vector3 targetPosition, int damage, bool isCritical)
         {
             transform.position = origin;
 
+            _isCritical = isCritical;
             _direction = (targetPosition - origin).normalized;
             if (_direction.sqrMagnitude <= 0.000001f)
                 _direction = Vector3.right;
@@ -68,7 +70,7 @@ namespace Project.Scripts.Gameplay.Towers
             if (enemy == null)
                 return;
 
-            enemy.TakeDamage(_damage);
+            enemy.TakeDamage(_damage, _isCritical);
             Destroy(gameObject);
         }
     }

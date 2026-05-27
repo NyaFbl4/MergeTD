@@ -30,6 +30,9 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private float _angleOffset = -90f;
         [SerializeField] private float _rotationSpeed = 360f;
         [SerializeField] private float _animationSpeed;
+        [SerializeField] private float _criticalDamageMultiplier = 2f;
+        
+        private float _criticalChance;
         
         public int CurrentLevel => _towerLevel;
         public TowerConfig TowerConfig => _towerConfig;
@@ -41,6 +44,7 @@ namespace Project.Scripts.Gameplay.Towers
         private bool _isFire;
         private int _nextFirePointIndex;
         private IPlayerStatsUseCase _playerStats;
+        private float _currentCriticalDamageMultiplier;
 
         public void Initialize(IPlayerStatsUseCase playerStats)
         {
@@ -114,10 +118,18 @@ namespace Project.Scripts.Gameplay.Towers
         {
             var damageBonus = _playerStats?.TowerDamageBonus ?? 0f;
             var attackSpeedBonus = _playerStats?.TowerAttackSpeedBonus ?? 0f;
-
+            var critDamageBonus = _playerStats?.TowerCritDamageBonus ?? 0f;
+            
+            _currentCriticalDamageMultiplier = _criticalDamageMultiplier + critDamageBonus;
             _damage = Mathf.RoundToInt(_towerConfig.StartTowerDamage + damageBonus);
-            _fireRate = _towerConfig.StartAttackSpeed + attackSpeedBonus;
-            _animationSpeed = _towerConfig.AnimationSpeed;
+            _fireRate = _towerConfig.StartAttackSpeed * (1f + attackSpeedBonus);
+            _criticalChance = _playerStats?.TowerCritChanceBonus ?? 0f;
+            
+            var attackSpeedRatio = _towerConfig.StartAttackSpeed <= 0f
+                ? 1f
+                : _fireRate / _towerConfig.StartAttackSpeed;
+
+            _animationSpeed = _towerConfig.AnimationSpeed * attackSpeedRatio;
         }
         
         private void OnUpgradesChanged()
@@ -190,7 +202,12 @@ namespace Project.Scripts.Gameplay.Towers
         {
             var targetPosition = target.transform.position;
             var projectile = Instantiate(_projectilePrefab, origin, Quaternion.identity);
-            projectile.Launch(origin, targetPosition, _damage);
+            
+            var isCritical = Random.value < _criticalChance;
+            var finalDamage = isCritical
+                ? Mathf.RoundToInt(_damage * _currentCriticalDamageMultiplier)
+                : _damage;
+            projectile.Launch(origin, targetPosition, finalDamage, isCritical);
         }
 
         private EnemyHealth FindNearestEnemyInRange()

@@ -7,9 +7,10 @@ namespace Project.Scripts.System.UseCases
         int Gold { get; }
         int Wave  { get; }
         int SelectedTowerLevel { get; }
-
+        float TowerCritChanceBonus { get; }
         float TowerDamageBonus { get; }
         float TowerAttackSpeedBonus { get; }
+        float TowerCritDamageBonus { get; }
         
         event Action<int> OnGoldChanged;
         event Action<int> WaveChanged;
@@ -24,8 +25,9 @@ namespace Project.Scripts.System.UseCases
         
         int GetUpgradeLevel(string upgradeId);
         void SetUpgradeLevel(string upgradeId, int level);
-
+        void AddTowerCritChanceBonus(float value);
         void AddTowerDamageBonus(float value);
         void AddTowerAttackSpeedBonus(float value);
+        void AddTowerCritDamageBonus(float value);
     }
 }

@@ -43,7 +43,9 @@ namespace Project.Scripts.UI.ShopUI
             {
                 new TowerDamageUpgradeItem(_layoutView.DamageUpgradeConfig, _playerStats),
                 new TowerAttackSpeedUpgradeItem(_layoutView.AttackSpeedUpgradeConfig, _playerStats),
-                new BaseHealthUpgradeItem(_layoutView.HealthUpgradeConfig, _playerStats, _baseHealth)
+                new BaseHealthUpgradeItem(_layoutView.HealthUpgradeConfig, _playerStats, _baseHealth),
+                new TowerCritChanceUpgradeItem(_layoutView.CritChanceUpgradeConfig, _playerStats),
+                new TowerCritDamageUpgradeItem(_layoutView.CritDamageUpgradeConfig, _playerStats),
             };
 
             _layoutView.CloseButtonClicked += OnCloseButtonClicked;

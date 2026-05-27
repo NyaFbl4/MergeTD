@@ -12,6 +12,8 @@ namespace Project.Scripts.UI.ShopUI
         UpgradeItemConfig DamageUpgradeConfig { get; }
         UpgradeItemConfig AttackSpeedUpgradeConfig { get; }
         UpgradeItemConfig HealthUpgradeConfig { get; }
+        UpgradeItemConfig CritChanceUpgradeConfig { get; }
+        UpgradeItemConfig CritDamageUpgradeConfig { get; }
 
         void SetTitle(string title);
         void ClearItems();

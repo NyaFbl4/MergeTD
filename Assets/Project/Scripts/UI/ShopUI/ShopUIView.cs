@@ -13,6 +13,8 @@ namespace Project.Scripts.UI.ShopUI
         [SerializeField] private UpgradeItemConfig _damageUpgradeConfig;
         [SerializeField] private UpgradeItemConfig _attackSpeedUpgradeConfig;
         [SerializeField] private UpgradeItemConfig _healthUpgradeConfig;
+        [SerializeField] private UpgradeItemConfig _critChanceUpgradeConfig;
+        [SerializeField] private UpgradeItemConfig _critDamageUpgradeConfig;
 
         private Label _titleLabel;
         private Button _closeButton;
@@ -21,6 +23,8 @@ namespace Project.Scripts.UI.ShopUI
         public UpgradeItemConfig DamageUpgradeConfig => _damageUpgradeConfig;
         public UpgradeItemConfig AttackSpeedUpgradeConfig => _attackSpeedUpgradeConfig;
         public UpgradeItemConfig HealthUpgradeConfig => _healthUpgradeConfig;
+        public UpgradeItemConfig CritChanceUpgradeConfig => _critChanceUpgradeConfig;
+        public UpgradeItemConfig CritDamageUpgradeConfig => _critDamageUpgradeConfig;
 
         public event Action CloseButtonClicked;
 

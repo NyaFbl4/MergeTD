@@ -5,7 +5,7 @@
                 <ui:Label text="222.22k" name="MoneyLabel" style="height: 71px; width: 206px; left: 76px; top: 8px; -unity-text-align: middle-left; font-size: 50px; -unity-font-definition: resource(&apos;Fonts/Alfa_Slab_One/AlfaSlabOne-Regular&apos;);" />
             </ui:VisualElement>
             <ui:VisualElement name="WevePanel" style="flex-grow: 1;">
-                <ui:Label text="WAVE 5" name="WaveLabel" style="-unity-text-align: middle-center; font-size: 50px; height: 119px; -unity-font-definition: resource(&apos;Fonts/Alfa_Slab_One/AlfaSlabOne-Regular&apos;);" />
+                <ui:Label text="WAVE 5" name="WaveLabel" style="-unity-text-align: middle-center; font-size: 50px; height: 119px; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Roboto-Bold.ttf?fileID=12800000&amp;guid=4beb055f07aaff244873dec698d0363e&amp;type=3#Roboto-Bold&quot;);" />
             </ui:VisualElement>
             <ui:Button name="SettingsButton" style="background-image: resource(&apos;UI/game play area Ui/settings&apos;); background-color: rgba(255, 255, 255, 0); width: 100px; height: 100px; -unity-background-scale-mode: stretch-to-fill; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; min-height: 100px; max-height: 100px; top: 20px; left: -23px; min-width: 100px; max-width: 100px; background-position-x: left 0; background-position-y: center;" />
         </ui:VisualElement>

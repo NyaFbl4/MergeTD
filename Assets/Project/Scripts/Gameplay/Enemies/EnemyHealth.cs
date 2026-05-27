@@ -28,14 +28,14 @@ namespace Project.Scripts.Gameplay.Enemies
             UpdateHpBar();
         }
         
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage,  bool isCritical)
         {
             if (_isDead || damage <= 0)
                 return;
 
             _currentHealth -= damage;
             if (_damageUI != null)
-                _damageUI.ShowDamage(damage);
+                _damageUI.ShowDamage(damage, isCritical);
 
             if (_currentHealth <= 0)
             {

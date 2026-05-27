@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6e0e025eea949e490e0373448538692, type: 3}
   m_Name: Upgrade base heath Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
-  _id: 
+  _id: 3
   _description: "\u0423\u0432\u043B\u0438\u0447\u0435\u043D\u0438\u0435 \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u044F
     \u0431\u0430\u0437\u044B"
   _icon: {fileID: -5806125809501813694, guid: bffa08cd2ba7b5b4281ebd7b91f59d33, type: 3}

@@ -72,3 +72,5 @@ MonoBehaviour:
   _damageUpgradeConfig: {fileID: 11400000, guid: 6ca19e92c5bf8234c81150384652ef98, type: 2}
   _attackSpeedUpgradeConfig: {fileID: 11400000, guid: 01ad8e8c8bf10fb44b021540c6a50e8c, type: 2}
   _healthUpgradeConfig: {fileID: 11400000, guid: b62c6f1a303dd4f4ba57930dbc3384c5, type: 2}
+  _critChanceUpgradeConfig: {fileID: 11400000, guid: e2036fac8558dff4ead6ae6c4794bf00, type: 2}
+  _critDamageUpgradeConfig: {fileID: 11400000, guid: 5a67f66a77663b041a9588aedec39fae, type: 2}

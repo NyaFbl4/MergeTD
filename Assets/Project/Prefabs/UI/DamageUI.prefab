@@ -50,6 +50,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyDamageUI
   _damegeUI: {fileID: 8179649749774196466}
+  _spawnPoint: {fileID: 0}
+  _popupsRoot: {fileID: 0}
+  _randomOffset: {x: 0.15, y: 0.1}
+  _hideTemplateOnAwake: 1
 --- !u!1 &3718291558671330595
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,17 +121,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f629c6e43dba4bf38cb74d8860150664, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280164095
-  m_fontColor: {r: 1, g: 0.11792451, b: 0.11792451, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -200,9 +204,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c609e1da37d432b9594bc6d6c7fe667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.DamageUI
+  _normalColor: {r: 1, g: 1, b: 1, a: 1}
+  _criticalColor: {r: 1, g: 0, b: 0, a: 1}
   _damageText: {fileID: 4686637992267102116}
   _animator: {fileID: 4230302548030684478}
   _stateName: DamageFly
+  _lifeTime: 0.8
+  _destroyAfterPlay: 1
 --- !u!95 &4230302548030684478
 Animator:
   serializedVersion: 7

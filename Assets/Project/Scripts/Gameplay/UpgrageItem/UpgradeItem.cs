@@ -1,5 +1,6 @@
 ﻿using Project.Scripts.Configs;
 using Project.Scripts.System.UseCases;
+using UnityEngine;
 using NotImplementedException = System.NotImplementedException;
 
 namespace Project.Scripts.Gameplay.UpgradeItem
@@ -31,8 +32,17 @@ namespace Project.Scripts.Gameplay.UpgradeItem
             if (!_playerStats.TrySpend(levelData.Price))
                 return false;
 
+            var oldLevel = CurrentLevel;
+            var newLevel = oldLevel + 1;
+            
             ApplyUpgrade(levelData.Value);
             _playerStats.SetUpgradeLevel(_config.Id, CurrentLevel + 1);
+            
+            Debug.Log(
+                $"[Upgrade] Purchased '{_config.Id}' " +
+                $"(id: {_config.Id}) | Level: {oldLevel} -> {newLevel} | " +
+                $"Price: {levelData.Price} | Value: {levelData.Value}");
+            
             return true;
         }
 

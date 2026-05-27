@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &2482161413360137212
 GameObject:
@@ -427,6 +427,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DamageUI
       objectReference: {fileID: 0}
+    - target: {fileID: 4686637992267102116, guid: bff07a4c2e9c9c245b5caff8f3af3cd5, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6198644133145104317, guid: bff07a4c2e9c9c245b5caff8f3af3cd5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -528,4 +532,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5196065c2e424852b571bc474d70ff21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyDamageUI
-

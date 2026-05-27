@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
+using UnityEngine;
 using VContainer.Unity;
 
 namespace Project.Scripts.System.UseCases
@@ -15,15 +16,18 @@ namespace Project.Scripts.System.UseCases
 
         private float _towerDamageBonus;
         private float _towerAttackSpeedBonus;
+        private float _towerCritChanceBonus;
+        private float _towerCritDamageBonus;
 
         private readonly Dictionary<string, int> _upgradeLevels = new();
 
         public int Gold => _gold;
         public int Wave => _currentWave;
         public int SelectedTowerLevel => _selectedTowerLevel;
-
+        public float TowerCritChanceBonus => _towerCritChanceBonus;
         public float TowerDamageBonus => _towerDamageBonus;
         public float TowerAttackSpeedBonus => _towerAttackSpeedBonus;
+        public float TowerCritDamageBonus => _towerCritDamageBonus;
 
         public event Action<int> OnGoldChanged;
         public event Action<int> WaveChanged;
@@ -57,6 +61,16 @@ namespace Project.Scripts.System.UseCases
             UpgradesChanged?.Invoke();
         }
 
+        public void AddTowerCritDamageBonus(float value)
+        {
+            _towerCritDamageBonus += value;
+        }
+        
+        public void AddTowerCritChanceBonus(float value)
+        {
+            _towerCritChanceBonus = Mathf.Clamp01(_towerCritChanceBonus + value);
+        }
+        
         public void AddTowerDamageBonus(float value)
         {
             _towerDamageBonus += value;

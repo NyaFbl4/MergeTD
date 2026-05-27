@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6e0e025eea949e490e0373448538692, type: 3}
-  m_Name: Upgrade tower attack speed Config
+  m_Name: Upgrade tower crit chance Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
-  _id: 2
-  _description: "\u0423\u0432\u043B\u0435\u0438\u0447\u0435\u043D\u0438\u0435 \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438
-    \u0430\u0442\u0430\u043A\u0438 \u0431\u0430\u0448\u0435\u043D"
-  _icon: {fileID: -3853391641956729443, guid: 5f5e166f691cd2a4d91868fd7f8ec515, type: 3}
+  _id: 4
+  _description: "\u0423\u0432\u0435\u043B\u0438\u0447\u0435\u043D\u0438\u0435 \u0448\u0430\u043D\u0441\u0430
+    \u043A\u0440\u0438\u0442\u0430 \u0431\u0430\u0448\u043D\u0438"
+  _icon: {fileID: -256424976936875793, guid: 9638360e7a5b33647911c8239fcc2e0c, type: 3}
   _levels:
   - _price: 10
     _value: 0.1

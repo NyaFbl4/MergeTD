@@ -16,7 +16,7 @@ namespace Project.Scripts.Gameplay.Enemies
                 _damegeUI.gameObject.SetActive(false);
         }
 
-        public void ShowDamage(int damage)
+        public void ShowDamage(int damage, bool isCritical)
         {
             if (_damegeUI == null)
                 return;
@@ -30,7 +30,7 @@ namespace Project.Scripts.Gameplay.Enemies
             var parent = _popupsRoot != null ? _popupsRoot : _damegeUI.transform.parent;
             var damageUI = Instantiate(_damegeUI, spawnPoint.position + offset, spawnPoint.rotation, parent);
             damageUI.gameObject.SetActive(true);
-            damageUI.Play(damage);
+            damageUI.Play(damage, isCritical);
         }
     }
 }
