@@ -13,6 +13,17 @@ MonoBehaviour:
   m_Name: Upgrade base heath Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
   _id: 
-  _description: 
-  _icon: {fileID: 0}
-  _levels: []
+  _description: "\u0423\u0432\u043B\u0438\u0447\u0435\u043D\u0438\u0435 \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u044F
+    \u0431\u0430\u0437\u044B"
+  _icon: {fileID: -5806125809501813694, guid: bffa08cd2ba7b5b4281ebd7b91f59d33, type: 3}
+  _levels:
+  - _price: 10
+    _value: 10
+  - _price: 20
+    _value: 10
+  - _price: 30
+    _value: 10
+  - _price: 40
+    _value: 10
+  - _price: 50
+    _value: 10

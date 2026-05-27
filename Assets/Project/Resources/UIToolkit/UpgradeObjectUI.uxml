@@ -12,11 +12,11 @@
                 <ui:VisualElement name="Level_4" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
                 <ui:VisualElement name="Level_5" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
             </ui:VisualElement>
-            <ui:Label text="Label Label Label Label Label Label Label Label " name="DescriptionUpgradeLabel" style="height: 77px; white-space: normal; font-size: 25px; -unity-text-align: upper-center;" />
+            <ui:Label text="Label Label Label Label Label Label Label Label " name="DescriptionUpgradeLabel" style="height: 77px; white-space: normal; font-size: 30px; -unity-text-align: upper-center; -unity-font-definition: resource(&apos;Fonts/Passion_One/PassionOne-Bold&apos;); color: rgb(0, 0, 0);" />
         </ui:VisualElement>
         <ui:Button name="BuyUpgradeButton" style="background-image: resource(&apos;UI/Shopping popup/btn store pressed&apos;); width: 150px; min-width: 150px; max-width: 150px; height: 90px; min-height: 90px; max-height: 90px; top: 25px; left: 37px; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; overflow: visible;">
             <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/upgrade arrow&apos;); width: 30px; min-width: 30px; max-width: 30px; height: 50px; min-height: 50px; max-height: 50px; left: 115px; top: -15px;" />
-            <ui:Label text="999" name="PriceLabel" style="height: 51px; font-size: 25px; width: 89px; left: 25px; top: -50px;" />
+            <ui:Label text="252.1k" name="PriceLabel" style="height: 51px; font-size: 25px; width: 89px; left: 25px; top: -50px; -unity-font-definition: resource(&apos;Fonts/Alfa_Slab_One/AlfaSlabOne-Regular&apos;);" />
         </ui:Button>
     </ui:VisualElement>
 </ui:UXML>

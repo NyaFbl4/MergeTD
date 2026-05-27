@@ -3,10 +3,10 @@
     <ui:VisualElement name="Layout" style="flex-grow: 1; justify-content: center;">
         <ui:VisualElement name="Backgound" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&apos;UI/Shopping popup/dark background&apos;);" />
         <ui:VisualElement name="ShopPanel" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/store box bg&apos;); -unity-background-scale-mode: stretch-to-fill; width: 800px; min-width: 800px; max-width: 800px; align-self: center; justify-content: flex-start; height: 1200px; min-height: 1200px; max-height: 1200px; align-items: center;">
-            <ui:Label text="TitleLabel" name="TitleLabel" style="width: 431px; height: 105px; top: 6px; left: -16px; -unity-text-align: middle-center; font-size: 40px;" />
+            <ui:Label text="SHOP" name="TitleLabel" style="width: 431px; height: 105px; top: 6px; left: -16px; -unity-text-align: middle-center; font-size: 50px; -unity-font-definition: resource(&apos;Fonts/Alfa_Slab_One/AlfaSlabOne-Regular&apos;); color: rgb(255, 255, 255);" />
             <ui:Button name="CloseButton" style="background-color: rgba(188, 188, 188, 0); background-image: resource(&apos;UI/Shopping popup/close btn pressed&apos;); -unity-background-image-tint-color: rgb(183, 255, 255); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; width: 120px; min-width: 120px; max-width: 120px; height: 120px; min-height: 120px; max-height: 120px; top: -113px; left: 385px;" />
             <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" name="ScrollView" style="width: 700px; height: 950px; top: -70px;">
-                <ui:Instance template="UpgradeObjectUI" style="display: none;" />
+                <ui:Instance template="UpgradeObjectUI" name="TemplateContainer" style="display: flex;" />
             </ui:ScrollView>
         </ui:VisualElement>
     </ui:VisualElement>

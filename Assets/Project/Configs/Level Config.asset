@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.LevelConfig
   _startBaseHealth: 10
-  _startGold: 100
+  _startGold: 1000
   _towerPriceIncreaseOnBuy: 10
   _levelTowerSelected: 1
   _waves:

@@ -19,11 +19,11 @@ MonoBehaviour:
   _levels:
   - _price: 10
     _value: 10
-  - _price: 10
+  - _price: 20
     _value: 15
-  - _price: 10
+  - _price: 30
     _value: 25
-  - _price: 10
+  - _price: 40
     _value: 25
-  - _price: 10
+  - _price: 50
     _value: 25
