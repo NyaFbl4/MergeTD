@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Project.Scripts.Configs;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Project.Scripts.Gameplay.Enemies
@@ -20,6 +22,8 @@ namespace Project.Scripts.Gameplay.Enemies
 
         private bool _isDead;
 
+        public static event Action<EnemyConfig, int, bool> DamageTaken;
+        
         public void SetHealth(int health)
         {
             _isDead = false;
@@ -34,6 +38,7 @@ namespace Project.Scripts.Gameplay.Enemies
                 return;
 
             _currentHealth -= damage;
+            DamageTaken?.Invoke(_enemy != null ? _enemy.Config : null, damage, isCritical);
             if (_damageUI != null)
                 _damageUI.ShowDamage(damage, isCritical);
 
@@ -50,6 +55,7 @@ namespace Project.Scripts.Gameplay.Enemies
                     _enemy.IsDie();
                 return;
             }
+            
             UpdateHpBar();
         }
         

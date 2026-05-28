@@ -21,7 +21,9 @@ namespace Project.Scripts.Gameplay.Enemies
         private int _killRewardGold;
         private bool _isDead;
         private bool _isFinished;
-
+        private EnemyConfig _config;
+        
+        public EnemyConfig Config => _config;
         public static event Action<EnemyUnit, int> DieEnemy;
         public event Action<EnemyUnit> Finished;
 
@@ -33,13 +35,14 @@ namespace Project.Scripts.Gameplay.Enemies
             _isInitialized = _lanePath != null;
             _isDead = false;
             _isFinished = false;
+            _config = config;
 
-            _moveSpeed = config.StartMoveSpeed;
-            _damageToBase = config.StartDamage;
+            _moveSpeed = _config.StartMoveSpeed;
+            _damageToBase = _config.StartDamage;
             _killRewardGold = killRewardGold;
 
             var enemyHP = gameObject.GetComponent<IEnemyHealth>();
-            enemyHP?.SetHealth(config.StartHealth);
+            enemyHP?.SetHealth(_config.StartHealth);
 
             transform.position = _lanePath != null ? _lanePath.GetSpawnPosition() : transform.position;
         }

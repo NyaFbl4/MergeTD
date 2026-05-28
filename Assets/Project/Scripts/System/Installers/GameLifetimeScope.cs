@@ -4,6 +4,7 @@ using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
@@ -31,6 +32,7 @@ namespace Installers
         [SerializeField] private TowerConfig _towerConfig;
         [SerializeField] private LevelConfig _levelConfig;
         [SerializeField] private EnemyConfig _enemyConfig;
+        [SerializeField] private QuestCatalog _questCatalog;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -56,6 +58,7 @@ namespace Installers
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
             builder.RegisterEntryPoint<UIMessageHandler>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<QuestService>();
         }
 
         private void RegisterSceneComponents(IContainerBuilder builder)
@@ -101,6 +104,8 @@ namespace Installers
             builder.RegisterEntryPoint<EnemyDeathUseCase>();
             builder.RegisterEntryPoint<LevelUIUseCase>().As<ILevelUIUseCase>();
             builder.RegisterEntryPoint<EndWaveUseCase>();
+            builder.RegisterEntryPoint<QuestDamageEventsUseCase>();
+            builder.RegisterEntryPoint<QuestWaveEventsUseCase>();
             
             builder.Register<UnitsCatalog>(Lifetime.Singleton).As<IUnitsCatalog>();
         }
@@ -137,6 +142,7 @@ namespace Installers
             builder.RegisterInstance(_towerConfig);
             builder.RegisterInstance(_levelConfig);
             builder.RegisterInstance(_enemyConfig);
+            builder.RegisterInstance(_questCatalog);
         }
     }
 

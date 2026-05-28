@@ -1,7 +1,9 @@
 ﻿using System;
+using MessagePipe;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.System.Enums;
 
 namespace Project.Scripts.System.UseCases
@@ -13,6 +15,7 @@ namespace Project.Scripts.System.UseCases
         private readonly BattlefieldContext _battlefieldContext;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IPlayerStatsUseCase _playerStats;
+        private readonly IPublisher<TowerBoughtQuestEventDTO> _publisherBoughtQuestEventDTO;
         
         private int _currentTowerCost;
 
@@ -20,13 +23,15 @@ namespace Project.Scripts.System.UseCases
         public event Action<int> TowerCostChanged;
 
         public BuyTowerUseCase(BattlefieldContext battlefieldContext, IPlayerStatsUseCase playerStatsUseCase,
-            TowerConfig towerConfig, IUnitsCatalog unitsCatalog, LevelConfig levelConfig)
+            TowerConfig towerConfig, IUnitsCatalog unitsCatalog, LevelConfig levelConfig, 
+            IPublisher<TowerBoughtQuestEventDTO> publisherBoughtQuestEventDTO)
         {
             _battlefieldContext = battlefieldContext;
             _playerStats = playerStatsUseCase;
             _towerConfig = towerConfig;
             _unitsCatalog = unitsCatalog;
             _levelConfig = levelConfig;
+            _publisherBoughtQuestEventDTO = publisherBoughtQuestEventDTO;
             
             _currentTowerCost = _towerConfig.StartTowerPrice;
         }
@@ -48,8 +53,13 @@ namespace Project.Scripts.System.UseCases
             if (!slot.TryPlaceTower(towerPrefab, _playerStats))
                 return EBuyTowerResult.PlaceFailed;
 
-            _playerStats.TrySpend(TowerCost);
+            var purchasedCost = TowerCost;
+            
+            _playerStats.TrySpend(purchasedCost);
             IncreaseTowerCost();
+            _publisherBoughtQuestEventDTO.Publish(new TowerBoughtQuestEventDTO(
+                _playerStats.SelectedTowerLevel,
+                purchasedCost));
             return EBuyTowerResult.Success;
         }
         
