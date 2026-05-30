@@ -1,5 +1,6 @@
 ﻿using System;
 using Project.Scripts.System.UseCases;
+using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Quests
 {
@@ -12,7 +13,7 @@ namespace Project.Scripts.Gameplay.Quests
         private bool _isRewardClaimed;
 
         public string Id => _config.Id;
-        public string Title => _config.Title;
+        public Sprite Icon => _config.Icon;
         public string Description => _config.Description;
         public int RewardGold => _config.RewardGold;
         public int CurrentValue => _currentValue;

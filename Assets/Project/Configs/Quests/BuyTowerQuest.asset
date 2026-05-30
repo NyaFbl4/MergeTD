@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.BuyTowerQuestConfig
   _id: 
   _title: 
-  _description: 
-  _rewardGold: 0
-  _targetValue: 0
+  _description: "\u041A\u0443\u043F\u0438\u0442\u044C 10 \u0431\u0430\u0448\u0435\u043D"
+  _rewardGold: 100
+  _targetValue: 10
   _minTowerLevel: 1

@@ -11,6 +11,7 @@ using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.LevelUI;
+using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.ShopUI;
 using UnityEngine;
 using VContainer;
@@ -58,7 +59,7 @@ namespace Installers
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
             builder.RegisterEntryPoint<UIMessageHandler>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<QuestService>();
+            builder.RegisterEntryPoint<QuestService>().AsSelf();
         }
 
         private void RegisterSceneComponents(IContainerBuilder builder)
@@ -93,6 +94,7 @@ namespace Installers
             builder.RegisterEntryPoint<LevelUIPresenter>().As<ILevelUIPresenter>();
             builder.RegisterEntryPoint<EndWaveUIPresenter>().As<IEndWaveUIPresenter>();
             builder.RegisterEntryPoint<ShopUIPresenter>().As<IShopUIPresenter>();
+            builder.RegisterEntryPoint<QuestUIPresenter>().As<IQuestUIPresenter>();
         }
 
         private void RegisterUseCases(IContainerBuilder builder)

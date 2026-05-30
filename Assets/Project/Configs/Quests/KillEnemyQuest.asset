@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.KillEnemyQuestConfig
   _id: 
   _title: 
-  _description: 
-  _rewardGold: 0
-  _targetValue: 0
+  _description: "\u0423\u0431\u0438\u0442\u044C 10 \u043F\u0440\u043E\u0442\u0438\u0432\u043D\u0438\u043A\u043E\u0432"
+  _rewardGold: 50
+  _targetValue: 10
   _enemyType: 0

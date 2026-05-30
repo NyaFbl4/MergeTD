@@ -6,6 +6,7 @@ using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.UI.EndWaveUI;
+using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.ShopUI;
 using UnityEngine;
 
@@ -91,6 +92,10 @@ namespace Project.Scripts.UI.LevelUI
         private void OnQuestsButtonClicked()
         {
             Debug.Log("OnQuestsButtonClicked");
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(IQuestUIPresenter)
+            });
         }
         
         private void OnSettingsButtonClicked()
