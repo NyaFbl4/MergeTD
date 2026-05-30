@@ -6,6 +6,7 @@ using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
@@ -34,6 +35,7 @@ namespace Installers
         [SerializeField] private LevelConfig _levelConfig;
         [SerializeField] private EnemyConfig _enemyConfig;
         [SerializeField] private QuestCatalog _questCatalog;
+        [SerializeField] private SoundLibrary _soundLibrary;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -54,6 +56,7 @@ namespace Installers
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();;
+            builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>();
             builder.Register<LocalizationService>(Lifetime.Singleton).As<ILocalizationService>();
             
             // UI core
@@ -140,6 +143,7 @@ namespace Installers
 
         private void RegisterConfigs(IContainerBuilder builder)
         {
+            builder.RegisterInstance(_soundLibrary);
             builder.RegisterInstance(_unitsConfig);
             builder.RegisterInstance(_towerConfig);
             builder.RegisterInstance(_levelConfig);
