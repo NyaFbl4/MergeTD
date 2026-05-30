@@ -87,7 +87,13 @@ namespace Project.Scripts.Gameplay.Towers
 
         public void OnAttackFireEvent()
         {
-            if (_currentTarget == null) return;
+            if (!IsTargetValid(_currentTarget))
+            {
+                _isFire = false;
+                _currentTarget = null;
+                return;
+            }
+            
             Fire(_currentTarget);
         }
         
@@ -102,7 +108,9 @@ namespace Project.Scripts.Gameplay.Towers
             if (!_canFire) return;
             
             _cooldown -= deltaTime;
-            _currentTarget = FindNearestEnemyInRange();
+            
+            if (!IsTargetValid(_currentTarget))
+                _currentTarget = FindNearestEnemyInRange();
 
             if (_currentTarget != null)
                 RotateToTargetSmooth(_currentTarget.transform.position, deltaTime);
@@ -139,8 +147,7 @@ namespace Project.Scripts.Gameplay.Towers
 
         private void TryAttack(EnemyHealth target)
         {
-            if (_isFire || target == null) return;
-            
+            if (_isFire || !IsTargetValid(target)) return;
             //_animator.SetFloat("Shoot", _animationSpeed);
             _animator.SetFloat("ShootSpeedMultiplier", _animationSpeed);
             _currentTarget = target;
@@ -187,6 +194,18 @@ namespace Project.Scripts.Gameplay.Towers
             }
         }
 
+        private bool IsTargetValid(EnemyHealth target)
+        {
+            if (target == null)
+                return false;
+
+            if (target.IsDead)
+                return false;
+
+            var sqrDistance = (target.transform.position - transform.position).sqrMagnitude;
+            return sqrDistance <= _range * _range;
+        }
+        
         private Transform[] GetAvailableFirePoints()
         {
             if (_firePoints != null && _firePoints.Count > 0)
@@ -218,6 +237,9 @@ namespace Project.Scripts.Gameplay.Towers
 
             for (var i = 0; i < enemies.Length; i++)
             {
+                if (enemies[i] == null || enemies[i].IsDead)
+                    continue;
+                
                 var sqr = (enemies[i].transform.position - transform.position).sqrMagnitude;
                 if (sqr > bestSqr)
                     continue;

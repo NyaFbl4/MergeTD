@@ -23,6 +23,7 @@ namespace Project.Scripts.Gameplay.Enemies
         private bool _isDead;
 
         public static event Action<EnemyConfig, int, bool> DamageTaken;
+        public bool IsDead => _isDead;
         
         public void SetHealth(int health)
         {

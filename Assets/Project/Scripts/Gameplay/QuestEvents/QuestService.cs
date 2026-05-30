@@ -17,7 +17,12 @@ namespace Project.Scripts.Gameplay.Quests
         private readonly ISubscriber<WaveCompletedQuestEventDTO> _waveSubscriber;
 
         private readonly List<IQuestRuntime> _quests = new();
-
+        private readonly List<BaseQuestConfig> _availableConfigs = new();
+        private readonly List<BaseQuestConfig> _activeConfigs = new();
+        
+        private const int MaxActiveQuests = 4;
+        private readonly Random _random = new();
+        
         public IReadOnlyList<IQuestRuntime> Quests => _quests;
         public event Action QuestsChanged;
 
@@ -39,19 +44,95 @@ namespace Project.Scripts.Gameplay.Quests
 
         public void Initialize()
         {
+            _availableConfigs.Clear();
+            _activeConfigs.Clear();
+            _quests.Clear();
+
             foreach (var config in _questCatalog.Quests)
             {
-                var quest = CreateQuest(config);
-                if (quest == null)
+                if (config == null)
                     continue;
 
-                quest.ProgressChanged += OnQuestProgressChanged;
-                _quests.Add(quest);
+                _availableConfigs.Add(config);
             }
+
+            FillActiveQuests();
 
             QuestsChanged?.Invoke();
         }
+        
+        public bool TryClaimReward(IQuestRuntime quest)
+        {
+            if (quest == null)
+                return false;
 
+            if (!quest.TryClaimReward())
+                return false;
+
+            RemoveQuest(quest);
+            FillActiveQuests();
+            QuestsChanged?.Invoke();
+            return true;
+        }
+
+        private void FillActiveQuests()
+        {
+            while (_quests.Count < MaxActiveQuests)
+            {
+                var nextConfig = GetRandomAvailableConfig();
+                if (nextConfig == null)
+                    break;
+
+                AddQuestFromConfig(nextConfig);
+            }
+        }
+        
+        private void RemoveQuest(IQuestRuntime quest)
+        {
+            var index = _quests.IndexOf(quest);
+            if (index < 0)
+                return;
+
+            quest.ProgressChanged -= OnQuestProgressChanged;
+            quest.Dispose();
+
+            _quests.RemoveAt(index);
+            _activeConfigs.RemoveAt(index);
+        }
+        
+        private BaseQuestConfig GetRandomAvailableConfig()
+        {
+            var candidates = new List<BaseQuestConfig>();
+
+            foreach (var config in _availableConfigs)
+            {
+                if (config == null)
+                    continue;
+
+                if (_activeConfigs.Contains(config))
+                    continue;
+
+                candidates.Add(config);
+            }
+
+            if (candidates.Count == 0)
+                return null;
+
+            var index = _random.Next(0, candidates.Count);
+            return candidates[index];
+        }
+        
+        private void AddQuestFromConfig(BaseQuestConfig config)
+        {
+            var quest = CreateQuest(config);
+            if (quest == null)
+                return;
+
+            quest.ProgressChanged += OnQuestProgressChanged;
+            _quests.Add(quest);
+            _activeConfigs.Add(config);
+        }
+        
         private IQuestRuntime CreateQuest(BaseQuestConfig config)
         {
             if (config is KillEnemyQuestConfig killEnemyConfig)

@@ -67,8 +67,7 @@ namespace Project.Scripts.UI.QuestUI
             {
                 _layoutView.AddQuest(quest, () =>
                 {
-                    if (quest.TryClaimReward())
-                        Refresh();
+                    _questService.TryClaimReward(quest);
                 });
             }
         }
