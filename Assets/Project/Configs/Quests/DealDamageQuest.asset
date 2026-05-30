@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.DealDamageQuestConfig
   _id: 
   _title: 
-  _description: "\u041D\u0430\u043D\u0435\u0441\u0442\u0438 1000 \u0443\u0440\u043E\u043D\u0430"
+  _description: quest.deal_one_thousand_damage.description
   _rewardGold: 100
   _targetValue: 1000
   _onlyCritical: 0
   _filterByEnemyType: 0
   _enemyType: 0
+

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: DealDamageQuest 1
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.DealDamageQuestConfig
   _id: 
-  _icon: {fileID: 0}
-  _description: 
-  _rewardGold: 0
-  _targetValue: 0
-  _onlyCritical: 0
+  _icon: {fileID: -3090903425614839014, guid: 7dcc00c47aa0c4f4b8318cac27279bca, type: 3}
+  _description: "\u041D\u0430\u043D\u0435\u0441\u0442\u0438 1000 \u043A\u0440\u0438\u0442\u0438\u0447\u0435\u0441\u043A\u043E\u0433\u043E
+    \u0443\u0440\u043E\u043D\u0430"
+  _rewardGold: 100
+  _targetValue: 1000
+  _onlyCritical: 1
   _filterByEnemyType: 0
   _enemyType: 0

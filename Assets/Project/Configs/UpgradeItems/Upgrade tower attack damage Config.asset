@@ -13,17 +13,16 @@ MonoBehaviour:
   m_Name: Upgrade tower attack damage Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
   _id: 1
-  _description: "\u0423\u0432\u043B\u0435\u0438\u0447\u0435\u043D\u0438\u0435 \u0430\u0442\u0430\u043A\u0438
-    \u0431\u0430\u0448\u0435\u043D"
+  _description: upgrade.tower_attack_damage.description
   _icon: {fileID: -3090903425614839014, guid: 7dcc00c47aa0c4f4b8318cac27279bca, type: 3}
   _levels:
   - _price: 10
-    _value: 10
+    _value: 0.15
   - _price: 20
-    _value: 15
+    _value: 0.15
   - _price: 30
-    _value: 25
+    _value: 0.15
   - _price: 40
-    _value: 25
+    _value: 0.15
   - _price: 50
-    _value: 25
+    _value: 0.15

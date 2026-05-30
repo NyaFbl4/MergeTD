@@ -1,4 +1,4 @@
-﻿{
+{
   "entries": [
     {
       "key": "level.wave_format",
@@ -27,43 +27,43 @@
     },
     {
       "key": "quest.buy_ten_towers.description",
-      "ru": "Купить {0} башен",
-      "en": "Buy {0} towers"
+      "ru": "Купить 10 башен",
+      "en": "Buy 10 towers"
     },
     {
       "key": "quest.deal_one_thousand_damage.description",
-      "ru": "Нанести {0} урона",
-      "en": "Deal {0} damage"
+      "ru": "Нанести 1000 урона",
+      "en": "Deal 1000 damage"
     },
     {
       "key": "quest.kill_ten_enemies.description",
-      "ru": "Убить {0} противников",
-      "en": "Kill {0} enemies"
+      "ru": "Убить 10 противников",
+      "en": "Kill 10 enemies"
     },
     {
       "key": "upgrade.base_health.description",
-      "ru": "Увеличение здоровья базы на {0}",
-      "en": "Increase base health on {0}"
+      "ru": "Увеличить здоровье базы на {0}",
+      "en": "Increase base health by {0}"
     },
     {
       "key": "upgrade.tower_attack_damage.description",
-      "ru": "Увеличение атаки башен на  {0}%",
-      "en": "Increase tower attack damage on  {0}%"
+      "ru": "Увеличить атаку башен на {0}",
+      "en": "Increase tower attack damage by {0}"
     },
     {
       "key": "upgrade.tower_attack_speed.description",
-      "ru": "Увеличение скорости атаки башен на {0}%",
-      "en": "Increase tower attack speed on {0}%"
+      "ru": "Увеличить скорость атаки башен на {0}",
+      "en": "Increase tower attack speed by {0}"
     },
     {
       "key": "upgrade.tower_crit_chance.description",
-      "ru": "Увеличение шанса крита башни на {0}%",
-      "en": "Increase tower crit chance on {0}%"
+      "ru": "Увеличить шанс крита башни на {0}",
+      "en": "Increase tower crit chance by {0}"
     },
     {
       "key": "upgrade.tower_crit_damage.description",
-      "ru": "Увеличение силы крита башни на {0}%",
-      "en": "Increase tower crit damage on {0}%"
+      "ru": "Увеличить силу крита башни на {0}",
+      "en": "Increase tower crit damage by {0}"
     }
   ]
 }

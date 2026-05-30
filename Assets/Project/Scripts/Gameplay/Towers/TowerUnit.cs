@@ -129,7 +129,7 @@ namespace Project.Scripts.Gameplay.Towers
             var critDamageBonus = _playerStats?.TowerCritDamageBonus ?? 0f;
             
             _currentCriticalDamageMultiplier = _criticalDamageMultiplier + critDamageBonus;
-            _damage = Mathf.RoundToInt(_towerConfig.StartTowerDamage + damageBonus);
+            _damage = Mathf.RoundToInt(_towerConfig.StartTowerDamage * (1f + damageBonus));
             _fireRate = _towerConfig.StartAttackSpeed * (1f + attackSpeedBonus);
             _criticalChance = _playerStats?.TowerCritChanceBonus ?? 0f;
             

@@ -73,7 +73,7 @@ namespace Project.Scripts.System.UseCases
         
         public void AddTowerDamageBonus(float value)
         {
-            _towerDamageBonus += value;
+            _towerDamageBonus = Mathf.Clamp01(_towerDamageBonus  + value);
         }
 
         public void AddTowerAttackSpeedBonus(float value)

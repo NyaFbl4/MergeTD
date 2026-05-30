@@ -79,7 +79,7 @@ namespace Project.Scripts.UI.ShopUI
                 {
                     if (item.TryUpgrade())
                         Refresh();
-                });
+                }, _localizationService);
             }
         }
         

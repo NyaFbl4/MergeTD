@@ -1,5 +1,6 @@
 ﻿using System;
 using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Localization;
 using Project.Scripts.Systems.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -38,11 +39,11 @@ namespace Project.Scripts.UI.QuestUI
             _scrollView.Clear();
         }
 
-        public void AddQuest(IQuestRuntime quest, Action onClaimReward)
+        public void AddQuest(IQuestRuntime quest, Action onClaimReward, ILocalizationService localizationService)
         {
             var itemRoot = _questItemTemplate.Instantiate();
             var itemView = new QuestItemView(itemRoot);
-            itemView.Bind(quest, onClaimReward);
+            itemView.Bind(quest, onClaimReward, localizationService);
             _scrollView.Add(itemRoot);
         }
         

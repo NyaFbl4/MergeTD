@@ -1,6 +1,7 @@
 ﻿using System;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.UpgradeItem;
+using Project.Scripts.System.Localization;
 using Project.Scripts.Systems.UI;
 
 namespace Project.Scripts.UI.ShopUI
@@ -17,6 +18,6 @@ namespace Project.Scripts.UI.ShopUI
 
         void SetTitle(string title);
         void ClearItems();
-        void AddItem(IUpgradeItem item, Action onBuy);
+        void AddItem(IUpgradeItem item, Action onBuy, ILocalizationService localizationService);
     }
 }

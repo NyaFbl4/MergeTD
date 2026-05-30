@@ -1,6 +1,7 @@
 ﻿using System;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.UpgradeItem;
+using Project.Scripts.System.Localization;
 using Project.Scripts.Systems.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -50,11 +51,11 @@ namespace Project.Scripts.UI.ShopUI
             _scrollView.Clear();
         }
 
-        public void AddItem(IUpgradeItem item, Action onBuy)
+        public void AddItem(IUpgradeItem item, Action onBuy, ILocalizationService localizationService)
         {
             var itemRoot = _shopItemTemplate.Instantiate();
             var itemView = new UpgradeItemView(itemRoot);
-            itemView.Bind(item, onBuy);
+            itemView.Bind(item, onBuy, localizationService);
             _scrollView.Add(itemRoot);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Localization;
 using Project.Scripts.Systems.UI;
 
 namespace Project.Scripts.UI.QuestUI
@@ -10,6 +11,6 @@ namespace Project.Scripts.UI.QuestUI
         
         void SetTitle(string title);
         void ClearItems();
-        void AddQuest(IQuestRuntime quest, Action onClaimReward);
+        void AddQuest(IQuestRuntime quest, Action onClaimReward, ILocalizationService localizationService);
     }
 }
