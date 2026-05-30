@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &2482161413360137212
 GameObject:
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 8339742275230638339}
   - component: {fileID: 7818892730452348285}
   m_Layer: 0
-  m_Name: EnemyMonster06
+  m_Name: EnemyMonster02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,7 +188,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7178186787252119462, guid: 200e49ce9aa214548bc247d5e2e62d81, type: 3}
+  m_Sprite: {fileID: 3571680773333596369, guid: 51aa40d288bc78f4f8e7660225c441e0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -224,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyUnit
   _animator: {fileID: 8339742275230638339}
+  _enemyType: 3
 --- !u!114 &7042625966658443645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +255,7 @@ Animator:
   m_GameObject: {fileID: 4678525740623520173}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4ac23773236e485c9dafddb09ef95842, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9d3f263b0154b8e43b4b9a0d0e826f4b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -528,4 +529,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5196065c2e424852b571bc474d70ff21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Enemies.EnemyDamageUI
-

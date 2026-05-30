@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
   _id: 4
   _description: upgrade.tower_crit_chance.description
-  _icon: {fileID: -256424976936875793, guid: 9638360e7a5b33647911c8239fcc2e0c, type: 3}
+  _icon: {fileID: -3853391641956729443, guid: 7aa53b2809234302820775475720d7c2, type: 3}
   _levels:
   - _price: 10
     _value: 0.1
@@ -26,4 +26,5 @@ MonoBehaviour:
     _value: 0.1
   - _price: 50
     _value: 0.1
+
 

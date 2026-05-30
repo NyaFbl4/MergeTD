@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
   _id: 5
   _description: upgrade.tower_crit_damage.description
-  _icon: {fileID: -2978426038546145743, guid: 3766c56a98d97a7488dd1cffc7880a4b, type: 3}
+  _icon: {fileID: -3853391641956729443, guid: 7a4abf9aa82a42169df2dba3cd4938eb, type: 3}
   _levels:
   - _price: 10
     _value: 0.25
@@ -26,4 +26,5 @@ MonoBehaviour:
     _value: 0.25
   - _price: 50
     _value: 0.25
+
 

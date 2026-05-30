@@ -13,6 +13,7 @@ namespace Project.Scripts.Gameplay.Enemies
         private int _damageToBase = 1;
 
         [SerializeField] private Animator _animator;
+        [SerializeField] private EEnemyType _enemyType;
         
         private LanePath _lanePath;
         private BaseHealth _baseHealth;
@@ -26,7 +27,8 @@ namespace Project.Scripts.Gameplay.Enemies
         public EnemyConfig Config => _config;
         public static event Action<EnemyUnit, int> DieEnemy;
         public event Action<EnemyUnit> Finished;
-
+        public EEnemyType EnemyType => _enemyType;
+        
         public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config, int killRewardGold)
         {
             _lanePath = lanePath;
