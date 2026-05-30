@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -16,14 +16,13 @@ MonoBehaviour:
   _description: upgrade.base_health.description
   _icon: {fileID: -5806125809501813694, guid: bffa08cd2ba7b5b4281ebd7b91f59d33, type: 3}
   _levels:
-  - _price: 10
+  - _price: 250
     _value: 10
-  - _price: 20
+  - _price: 1000
     _value: 10
-  - _price: 30
+  - _price: 2500
     _value: 10
-  - _price: 40
+  - _price: 7000
     _value: 10
-  - _price: 50
+  - _price: 12000
     _value: 10
-
