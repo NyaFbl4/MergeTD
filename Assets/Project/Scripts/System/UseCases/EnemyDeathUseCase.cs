@@ -31,7 +31,7 @@ namespace Project.Scripts.System.UseCases
         {
             _playerStatsUseCase.AddGold(rewardGold);
             _publisherEnemyKilledDTO.Publish(new EnemyKilledQuestEventDTO(
-                enemy.Config.EnemyType, 
+                enemy.EnemyType, 
                 rewardGold));
         }
     }

@@ -213,7 +213,10 @@ namespace Project.Scripts.Gameplay.Systems
 
             var wave = _levelConfig.Waves[_currentWaveIndex];
             
-            enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig, wave.KillRewardGold);
+            var scaledHealth = Mathf.Max(1, Mathf.RoundToInt(
+                sequence.EnemyConfig.StartHealth * sequence.HealthMultiplier));
+            
+            enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig, wave.KillRewardGold, scaledHealth);
             enemy.Finished += OnEnemyFinished;
 
             _aliveEnemies++;

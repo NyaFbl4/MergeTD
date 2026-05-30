@@ -26,12 +26,12 @@ namespace Project.Scripts.System.UseCases
             EnemyHealth.DamageTaken -= OnDamageTaken;
         }
 
-        private void OnDamageTaken(EnemyConfig config, int damage, bool isCritical)
+        private void OnDamageTaken(EnemyUnit enemy, int damage, bool isCritical)
         {
             _damagePublisher.Publish(new DamageDealtQuestEventDTO(
                 damage,
                 isCritical,
-                config.EnemyType));
+                enemy.EnemyType));
         }
     }
 }

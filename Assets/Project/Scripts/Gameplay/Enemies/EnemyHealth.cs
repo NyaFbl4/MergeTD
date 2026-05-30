@@ -22,7 +22,7 @@ namespace Project.Scripts.Gameplay.Enemies
 
         private bool _isDead;
 
-        public static event Action<EnemyConfig, int, bool> DamageTaken;
+        public static event Action<EnemyUnit, int, bool> DamageTaken;
         public bool IsDead => _isDead;
         
         public void SetHealth(int health)
@@ -39,7 +39,7 @@ namespace Project.Scripts.Gameplay.Enemies
                 return;
 
             _currentHealth -= damage;
-            DamageTaken?.Invoke(_enemy != null ? _enemy.Config : null, damage, isCritical);
+            DamageTaken?.Invoke(_enemy, damage, isCritical);
             if (_damageUI != null)
                 _damageUI.ShowDamage(damage, isCritical);
 

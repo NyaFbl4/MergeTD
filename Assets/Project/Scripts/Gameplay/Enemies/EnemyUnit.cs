@@ -29,7 +29,7 @@ namespace Project.Scripts.Gameplay.Enemies
         public event Action<EnemyUnit> Finished;
         public EEnemyType EnemyType => _enemyType;
         
-        public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config, int killRewardGold)
+        public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config, int killRewardGold, int startHealth)
         {
             _lanePath = lanePath;
             _baseHealth = baseHealth;
@@ -44,7 +44,7 @@ namespace Project.Scripts.Gameplay.Enemies
             _killRewardGold = killRewardGold;
 
             var enemyHP = gameObject.GetComponent<IEnemyHealth>();
-            enemyHP?.SetHealth(_config.StartHealth);
+            enemyHP?.SetHealth(startHealth);
 
             transform.position = _lanePath != null ? _lanePath.GetSpawnPosition() : transform.position;
         }
