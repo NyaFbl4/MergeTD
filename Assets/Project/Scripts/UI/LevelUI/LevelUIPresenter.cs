@@ -1,6 +1,7 @@
-﻿using MessagePipe;
+using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
@@ -21,6 +22,7 @@ namespace Project.Scripts.UI.LevelUI
         private readonly ILocalizationService _localizationService;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IGameManagerService _gameManagerService;
+        private readonly IAudioManager _audioManager;
 
         public LevelUIPresenter(
             IBuyTowerUseCase buyTowerUseCase,
@@ -29,7 +31,8 @@ namespace Project.Scripts.UI.LevelUI
             BaseHealth baseHealth,
             ILocalizationService localizationService,
             IPublisher<ShowPopupDto> showPopupPublisher,
-            IGameManagerService gameManagerService)
+            IGameManagerService gameManagerService,
+            IAudioManager audioManager)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
@@ -38,6 +41,7 @@ namespace Project.Scripts.UI.LevelUI
             _localizationService = localizationService;
             _showPopupPublisher = showPopupPublisher;
             _gameManagerService = gameManagerService;
+            _audioManager = audioManager;
         }
 
         public override void Initialize()
@@ -55,11 +59,11 @@ namespace Project.Scripts.UI.LevelUI
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
-            
+
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
             _layoutView.SetCurrentWaveText(_localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
-            
+
             UpdateTowerIcon();
         }
 
@@ -67,15 +71,17 @@ namespace Project.Scripts.UI.LevelUI
         {
             _layoutView.SetPriceTower(price);
         }
-        
+
         private void OnPayTowerButtonClicked()
         {
+            _audioManager.PlaySfx(ESoundId.UiButtonClick);
             var result = _buyTowerUseCase.TryBuyTower();
             Debug.Log($"BuyTower result: {result}");
         }
-        
+
         private void OnShopButtonClicked()
         {
+            _audioManager.PlaySfx(ESoundId.UiButtonClick);
             Debug.Log("OnShopButtonClicked");
             _showPopupPublisher.Publish(new ShowPopupDto
             {
@@ -86,28 +92,31 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnADButtonClicked()
         {
+            _audioManager.PlaySfx(ESoundId.UiButtonClick);
             Debug.Log("OnADButtonClicked");
         }
-        
+
         private void OnQuestsButtonClicked()
         {
+            _audioManager.PlaySfx(ESoundId.UiButtonClick);
             Debug.Log("OnQuestsButtonClicked");
             _showPopupPublisher.Publish(new ShowPopupDto
             {
                 TargetPopUpType = typeof(IQuestUIPresenter)
             });
         }
-        
+
         private void OnSettingsButtonClicked()
         {
-            Debug.Log("OnSettingsButtonClicked");    
+            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            Debug.Log("OnSettingsButtonClicked");
         }
-        
+
         private void OnGoldChanged(int gold)
         {
             _layoutView.SetMoney(gold);
         }
-        
+
         private void OnSelectedTowerLevelChanged(int level)
         {
             UpdateTowerIcon();
@@ -127,7 +136,7 @@ namespace Project.Scripts.UI.LevelUI
         {
             _layoutView.SetCurrentWaveText(_localizationService.Format(LocalizationKeys.LevelWaveFormat, wave));
         }
-        
+
         private void UpdateTowerIcon()
         {
             var towerConfig = _levelUIUseCase.GetSelectedTowerConfig();
@@ -140,12 +149,12 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetTowerLevel(towerConfig.TowerLevel);
             _layoutView.SetTowerIcon(towerConfig.Icon);
         }
-        
+
         public override void Dispose()
         {
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
             _playerStatsUseCase.SelectedTowerLevelChanged -= OnSelectedTowerLevelChanged;
-            _playerStatsUseCase.WaveChanged += OnCurrentWaveChanged;
+            _playerStatsUseCase.WaveChanged -= OnCurrentWaveChanged;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;
             _layoutView.ADButtonClicked -= OnADButtonClicked;
             _layoutView.QuestsButtonClicked -= OnQuestsButtonClicked;
@@ -154,7 +163,7 @@ namespace Project.Scripts.UI.LevelUI
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
-            
+
             base.Dispose();
         }
     }

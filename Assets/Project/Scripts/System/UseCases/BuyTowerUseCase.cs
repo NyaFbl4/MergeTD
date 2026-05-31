@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using MessagePipe;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.QuestEvents;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Enums;
 
 namespace Project.Scripts.System.UseCases
@@ -16,15 +17,21 @@ namespace Project.Scripts.System.UseCases
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly IPublisher<TowerBoughtQuestEventDTO> _publisherBoughtQuestEventDTO;
-        
+        private readonly IAudioManager _audioManager;
+
         private int _currentTowerCost;
 
         public int TowerCost => _currentTowerCost;
         public event Action<int> TowerCostChanged;
 
-        public BuyTowerUseCase(BattlefieldContext battlefieldContext, IPlayerStatsUseCase playerStatsUseCase,
-            TowerConfig towerConfig, IUnitsCatalog unitsCatalog, LevelConfig levelConfig, 
-            IPublisher<TowerBoughtQuestEventDTO> publisherBoughtQuestEventDTO)
+        public BuyTowerUseCase(
+            BattlefieldContext battlefieldContext,
+            IPlayerStatsUseCase playerStatsUseCase,
+            TowerConfig towerConfig,
+            IUnitsCatalog unitsCatalog,
+            LevelConfig levelConfig,
+            IPublisher<TowerBoughtQuestEventDTO> publisherBoughtQuestEventDTO,
+            IAudioManager audioManager)
         {
             _battlefieldContext = battlefieldContext;
             _playerStats = playerStatsUseCase;
@@ -32,7 +39,8 @@ namespace Project.Scripts.System.UseCases
             _unitsCatalog = unitsCatalog;
             _levelConfig = levelConfig;
             _publisherBoughtQuestEventDTO = publisherBoughtQuestEventDTO;
-            
+            _audioManager = audioManager;
+
             _currentTowerCost = _towerConfig.StartTowerPrice;
         }
 
@@ -46,15 +54,15 @@ namespace Project.Scripts.System.UseCases
                 return EBuyTowerResult.NotEnoughGold;
 
             var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(_playerStats.SelectedTowerLevel);
-            
+
             if (towerPrefab == null)
                 return EBuyTowerResult.PlaceFailed;
 
-            if (!slot.TryPlaceTower(towerPrefab, _playerStats))
+            if (!slot.TryPlaceTower(towerPrefab, _playerStats, _audioManager))
                 return EBuyTowerResult.PlaceFailed;
 
             var purchasedCost = TowerCost;
-            
+
             _playerStats.TrySpend(purchasedCost);
             IncreaseTowerCost();
             _publisherBoughtQuestEventDTO.Publish(new TowerBoughtQuestEventDTO(
@@ -62,7 +70,7 @@ namespace Project.Scripts.System.UseCases
                 purchasedCost));
             return EBuyTowerResult.Success;
         }
-        
+
         private void IncreaseTowerCost()
         {
             _currentTowerCost += _levelConfig.TowerPriceIncreaseOnBuy;

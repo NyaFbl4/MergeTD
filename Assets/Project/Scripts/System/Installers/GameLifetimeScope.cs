@@ -56,7 +56,7 @@ namespace Installers
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();;
-            builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>();
+            builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>().AsSelf();
             builder.Register<LocalizationService>(Lifetime.Singleton).As<ILocalizationService>();
             
             // UI core
@@ -143,7 +143,7 @@ namespace Installers
 
         private void RegisterConfigs(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_soundLibrary);
+            builder.RegisterInstance(_soundLibrary != null ? _soundLibrary : ScriptableObject.CreateInstance<SoundLibrary>());
             builder.RegisterInstance(_unitsConfig);
             builder.RegisterInstance(_towerConfig);
             builder.RegisterInstance(_levelConfig);

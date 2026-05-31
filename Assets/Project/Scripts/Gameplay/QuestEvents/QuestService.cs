@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MessagePipe;
 using Project.Scripts.Gameplay.QuestEvents;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using VContainer.Unity;
 
@@ -15,6 +16,7 @@ namespace Project.Scripts.Gameplay.Quests
         private readonly ISubscriber<TowerBoughtQuestEventDTO> _towerBoughtSubscriber;
         private readonly ISubscriber<DamageDealtQuestEventDTO> _damageSubscriber;
         private readonly ISubscriber<WaveCompletedQuestEventDTO> _waveSubscriber;
+        private readonly IAudioManager _audioManager;
 
         private readonly List<IQuestRuntime> _quests = new();
         private readonly List<BaseQuestConfig> _availableConfigs = new();
@@ -32,7 +34,8 @@ namespace Project.Scripts.Gameplay.Quests
             ISubscriber<EnemyKilledQuestEventDTO> enemyKilledSubscriber,
             ISubscriber<TowerBoughtQuestEventDTO> towerBoughtSubscriber,
             ISubscriber<DamageDealtQuestEventDTO> damageSubscriber,
-            ISubscriber<WaveCompletedQuestEventDTO> waveSubscriber)
+            ISubscriber<WaveCompletedQuestEventDTO> waveSubscriber,
+            IAudioManager audioManager)
         {
             _questCatalog = questCatalog;
             _playerStats = playerStats;
@@ -40,6 +43,7 @@ namespace Project.Scripts.Gameplay.Quests
             _towerBoughtSubscriber = towerBoughtSubscriber;
             _damageSubscriber = damageSubscriber;
             _waveSubscriber = waveSubscriber;
+            _audioManager = audioManager;
         }
 
         public void Initialize()
@@ -69,6 +73,7 @@ namespace Project.Scripts.Gameplay.Quests
             if (!quest.TryClaimReward())
                 return false;
 
+            _audioManager.PlaySfx(ESoundId.TakeQuest);
             RemoveQuest(quest);
             FillActiveQuests();
             QuestsChanged?.Invoke();

@@ -10,8 +10,8 @@ namespace Project.Scripts.System.Audio
         [SerializeField] private AudioClip _clip;
         [SerializeField] private float _volume = 1f;
 
-        public ESoundId SoundId => _soundId;
-        public AudioClip Clip => _clip;
-        public float Volume => _volume;
+        public virtual ESoundId SoundId => _soundId;
+        public virtual AudioClip Clip => _clip;
+        public virtual float Volume => _volume;
     }
 }

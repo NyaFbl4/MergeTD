@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using TMPro;
 using UnityEngine;
@@ -19,41 +20,47 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private Transform _firePoint;
         [SerializeField] private List<Transform> _firePoints;
         [SerializeField] private EFireMode _fireMode = EFireMode.Single;
-        
+
         [Header("Fire parametrs")]
         [SerializeField] private float _range = 3f;
         private int _damage;
         private float _fireRate;
-        
+
         [Header("Tower parametrs")]
         [SerializeField] private int _towerLevel = 1;
         [SerializeField] private float _angleOffset = -90f;
         [SerializeField] private float _rotationSpeed = 360f;
         [SerializeField] private float _animationSpeed;
         [SerializeField] private float _criticalDamageMultiplier = 2f;
-        
+
         private float _criticalChance;
-        
+
         public int CurrentLevel => _towerLevel;
         public TowerConfig TowerConfig => _towerConfig;
         public IPlayerStatsUseCase PlayerStats => _playerStats;
-        
+        public IAudioManager AudioManager => _audioManager;
+
         private float _cooldown;
         private EnemyHealth _currentTarget;
         private bool _canFire;
         private bool _isFire;
         private int _nextFirePointIndex;
         private IPlayerStatsUseCase _playerStats;
+        private IAudioManager _audioManager;
         private float _currentCriticalDamageMultiplier;
 
-        public void Initialize(IPlayerStatsUseCase playerStats)
+        public void Initialize(IPlayerStatsUseCase playerStats, IAudioManager audioManager)
         {
+            if (_playerStats != null)
+                _playerStats.UpgradesChanged -= OnUpgradesChanged;
+
             _playerStats = playerStats;
+            _audioManager = audioManager;
 
             if (_playerStats != null)
                 _playerStats.UpgradesChanged += OnUpgradesChanged;
         }
-        
+
         public void SetCanFire(bool canFire)
         {
             _canFire = canFire;
@@ -70,7 +77,7 @@ namespace Project.Scripts.Gameplay.Towers
             RecalculateStats();
             _nextFirePointIndex = 0;
         }
-        
+
         public bool CanMergeWith(TowerUnit other)
         {
             if (other == null)
@@ -93,22 +100,24 @@ namespace Project.Scripts.Gameplay.Towers
                 _currentTarget = null;
                 return;
             }
-            
+
+            _audioManager?.PlaySfx(ESoundId.TowerShoot);
             Fire(_currentTarget);
         }
-        
+
         public void OnAttackFinishedEvent()
         {
             _isFire = false;
             _currentTarget = null;
         }
-        
+
         public void OnUpdate(float deltaTime)
         {
-            if (!_canFire) return;
-            
+            if (!_canFire)
+                return;
+
             _cooldown -= deltaTime;
-            
+
             if (!IsTargetValid(_currentTarget))
                 _currentTarget = FindNearestEnemyInRange();
 
@@ -121,25 +130,25 @@ namespace Project.Scripts.Gameplay.Towers
             TryAttack(_currentTarget);
             _cooldown = 1f / Mathf.Max(0.01f, _fireRate);
         }
-        
+
         private void RecalculateStats()
         {
             var damageBonus = _playerStats?.TowerDamageBonus ?? 0f;
             var attackSpeedBonus = _playerStats?.TowerAttackSpeedBonus ?? 0f;
             var critDamageBonus = _playerStats?.TowerCritDamageBonus ?? 0f;
-            
+
             _currentCriticalDamageMultiplier = _criticalDamageMultiplier + critDamageBonus;
             _damage = Mathf.RoundToInt(_towerConfig.StartTowerDamage * (1f + damageBonus));
             _fireRate = _towerConfig.StartAttackSpeed * (1f + attackSpeedBonus);
             _criticalChance = _playerStats?.TowerCritChanceBonus ?? 0f;
-            
+
             var attackSpeedRatio = _towerConfig.StartAttackSpeed <= 0f
                 ? 1f
                 : _fireRate / _towerConfig.StartAttackSpeed;
 
             _animationSpeed = _towerConfig.AnimationSpeed * attackSpeedRatio;
         }
-        
+
         private void OnUpgradesChanged()
         {
             RecalculateStats();
@@ -147,14 +156,15 @@ namespace Project.Scripts.Gameplay.Towers
 
         private void TryAttack(EnemyHealth target)
         {
-            if (_isFire || !IsTargetValid(target)) return;
-            //_animator.SetFloat("Shoot", _animationSpeed);
+            if (_isFire || !IsTargetValid(target))
+                return;
+
             _animator.SetFloat("ShootSpeedMultiplier", _animationSpeed);
             _currentTarget = target;
             _isFire = true;
             _animator.SetTrigger("Shoot");
         }
-        
+
         private void RotateToTargetSmooth(Vector3 targetPosition, float deltaTime)
         {
             var pivot = _turretPivot != null ? _turretPivot : transform;
@@ -166,6 +176,7 @@ namespace Project.Scripts.Gameplay.Towers
 
             pivot.rotation = Quaternion.Euler(0f, 0f, nextAngle);
         }
+
         private void Fire(EnemyHealth target)
         {
             var firePoints = GetAvailableFirePoints();
@@ -183,7 +194,7 @@ namespace Project.Scripts.Gameplay.Towers
                     var point = firePoints[_nextFirePointIndex];
                     Shoot(target, point.position);
 
-                    _nextFirePointIndex++; 
+                    _nextFirePointIndex++;
                     if (_nextFirePointIndex >= firePoints.Length)
                         _nextFirePointIndex = 0;
                     break;
@@ -205,7 +216,7 @@ namespace Project.Scripts.Gameplay.Towers
             var sqrDistance = (target.transform.position - transform.position).sqrMagnitude;
             return sqrDistance <= _range * _range;
         }
-        
+
         private Transform[] GetAvailableFirePoints()
         {
             if (_firePoints != null && _firePoints.Count > 0)
@@ -216,12 +227,12 @@ namespace Project.Scripts.Gameplay.Towers
 
             return new[] { transform };
         }
-        
+
         private void Shoot(EnemyHealth target, Vector3 origin)
         {
             var targetPosition = target.transform.position;
             var projectile = Instantiate(_projectilePrefab, origin, Quaternion.identity);
-            
+
             var isCritical = Random.value < _criticalChance;
             var finalDamage = isCritical
                 ? Mathf.RoundToInt(_damage * _currentCriticalDamageMultiplier)
@@ -239,7 +250,7 @@ namespace Project.Scripts.Gameplay.Towers
             {
                 if (enemies[i] == null || enemies[i].IsDead)
                     continue;
-                
+
                 var sqr = (enemies[i].transform.position - transform.position).sqrMagnitude;
                 if (sqr > bestSqr)
                     continue;
@@ -250,7 +261,7 @@ namespace Project.Scripts.Gameplay.Towers
 
             return best;
         }
-        
+
         private void OnDestroy()
         {
             if (_playerStats != null)

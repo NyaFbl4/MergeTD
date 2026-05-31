@@ -6,6 +6,24 @@ namespace Project.Scripts.System.Audio
 {
     public class AudioManager : IInitializable, IAudioManager
     {
+        private sealed class FallbackSoundEntry : SoundEntry
+        {
+            private readonly ESoundId _soundId;
+            private readonly AudioClip _clip;
+            private readonly float _volume;
+
+            public FallbackSoundEntry(ESoundId soundId, AudioClip clip, float volume)
+            {
+                _soundId = soundId;
+                _clip = clip;
+                _volume = volume;
+            }
+
+            public override ESoundId SoundId => _soundId;
+            public override AudioClip Clip => _clip;
+            public override float Volume => _volume;
+        }
+
         private readonly SoundLibrary _soundLibrary;
 
         private readonly Dictionary<ESoundId, SoundEntry> _soundMap = new();
@@ -33,17 +51,35 @@ namespace Project.Scripts.System.Audio
         {
             _soundMap.Clear();
 
-            if (_soundLibrary == null || _soundLibrary.Sounds == null)
+            if (_soundLibrary != null && _soundLibrary.Sounds != null)
+            {
+                for (var i = 0; i < _soundLibrary.Sounds.Count; i++)
+                {
+                    var entry = _soundLibrary.Sounds[i];
+                    if (entry == null)
+                        continue;
+
+                    _soundMap[entry.SoundId] = entry;
+                }
+            }
+
+            AddFallbackResource(ESoundId.UiButtonClick, "Audio/ui-button-click");
+            AddFallbackResource(ESoundId.TowerShoot, "Audio/TowerShoot");
+            AddFallbackResource(ESoundId.EndWave, "Audio/end-wave");
+            AddFallbackResource(ESoundId.TakeQuest, "Audio/TakeQuest-AddUpgrade");
+            AddFallbackResource(ESoundId.AddUpgrade, "Audio/TakeQuest-AddUpgrade");
+        }
+
+        private void AddFallbackResource(ESoundId soundId, string resourcePath, float volume = 1f)
+        {
+            if (_soundMap.ContainsKey(soundId))
                 return;
 
-            for (var i = 0; i < _soundLibrary.Sounds.Count; i++)
-            {
-                var entry = _soundLibrary.Sounds[i];
-                if (entry == null)
-                    continue;
+            var clip = Resources.Load<AudioClip>(resourcePath);
+            if (clip == null)
+                return;
 
-                _soundMap[entry.SoundId] = entry;
-            }
+            _soundMap[soundId] = new FallbackSoundEntry(soundId, clip, volume);
         }
 
         private void CreateAudioSources()

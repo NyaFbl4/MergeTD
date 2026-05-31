@@ -1042,6 +1042,7 @@ MonoBehaviour:
   _levelConfig: {fileID: 11400000, guid: e7d968fed011a32449ff24c15a417b59, type: 2}
   _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
   _questCatalog: {fileID: 11400000, guid: 085bb2c4d3b630846a32b675c7f80e33, type: 2}
+  _soundLibrary: {fileID: 11400000, guid: 9fc0967e7d4a40e4a46f8fb25e6743f5, type: 2}
 --- !u!1 &392971864
 GameObject:
   m_ObjectHideFlags: 0

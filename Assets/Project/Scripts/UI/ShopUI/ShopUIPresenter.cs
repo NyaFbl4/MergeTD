@@ -4,6 +4,7 @@ using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.UpgradeItem;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
@@ -18,6 +19,7 @@ namespace Project.Scripts.UI.ShopUI
         private readonly ILocalizationService _localizationService;
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly BaseHealth _baseHealth;
+        private readonly IAudioManager _audioManager;
 
         private List<IUpgradeItem> _items;
 
@@ -26,13 +28,15 @@ namespace Project.Scripts.UI.ShopUI
             IGameManagerService gameManagerService,
             ILocalizationService localizationService,
             IPlayerStatsUseCase playerStats,
-            BaseHealth baseHealth)
+            BaseHealth baseHealth,
+            IAudioManager audioManager)
         {
             _hidePopupPublisher = hidePopupPublisher;
             _gameManagerService = gameManagerService;
             _localizationService = localizationService;
             _playerStats = playerStats;
             _baseHealth = baseHealth;
+            _audioManager = audioManager;
         }
         
         public override void Initialize()
@@ -78,13 +82,17 @@ namespace Project.Scripts.UI.ShopUI
                 _layoutView.AddItem(item, () =>
                 {
                     if (item.TryUpgrade())
+                    {
+                        _audioManager.PlaySfx(ESoundId.AddUpgrade);
                         Refresh();
+                    }
                 }, _localizationService);
             }
         }
         
         private void OnCloseButtonClicked()
         {
+            _audioManager.PlaySfx(ESoundId.UiButtonClick);
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(IShopUIPresenter)

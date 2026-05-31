@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
@@ -16,19 +17,22 @@ namespace Project.Scripts.UI.QuestUI
         private readonly ILocalizationService _localizationService;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly QuestService _questService;
+        private readonly IAudioManager _audioManager;
         
         public QuestUIPresenter(
             IPublisher<HidePopupDto> hidePopupPublisher, 
             IGameManagerService gameManagerService, 
             ILocalizationService localizationService, 
             IPlayerStatsUseCase playerStatsUseCase,
-            QuestService questService)
+            QuestService questService,
+            IAudioManager audioManager)
         {
             _hidePopupPublisher = hidePopupPublisher;
             _gameManagerService = gameManagerService;
             _localizationService = localizationService;
             _playerStatsUseCase = playerStatsUseCase;
             _questService = questService;
+            _audioManager = audioManager;
         }
         
         public override void Initialize()
@@ -74,6 +78,7 @@ namespace Project.Scripts.UI.QuestUI
         
         private void OnCloseButtonClicked()
         {
+            _audioManager.PlaySfx(ESoundId.UiButtonClick);
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(IQuestUIPresenter),

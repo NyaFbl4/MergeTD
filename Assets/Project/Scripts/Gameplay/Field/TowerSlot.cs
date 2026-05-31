@@ -1,4 +1,5 @@
-﻿using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private ETowerSlotType _slotType = ETowerSlotType.SpawnOnly;
 
         private IPlayerStatsUseCase _playerStats;
+        private IAudioManager _audioManager;
         private TowerUnit _currentTower;
         private IUnitsCatalog _unitsCatalog;
         private Collider2D _dropCollider;
@@ -21,7 +23,7 @@ namespace Project.Scripts.Gameplay.Field
         public bool IsActiveOnly => _slotType == ETowerSlotType.ActiveOnly;
         public ETowerSlotType SlotType => _slotType;
         public void SetSlotType(ETowerSlotType slotType) => _slotType = slotType;
-        
+
         private void Awake()
         {
             _dropCollider = GetComponent<Collider2D>();
@@ -33,24 +35,23 @@ namespace Project.Scripts.Gameplay.Field
             if (_dropCollider == null)
                 return;
 
-            // Когда слот занят, клик должен получать collider башни, а не collider слота.
-            // Когда слот пустой, collider слота нужен как drop-zone.
             _dropCollider.enabled = _currentTower == null;
         }
-        
+
         public void Construct(IUnitsCatalog unitsCatalog)
         {
             _unitsCatalog = unitsCatalog;
         }
-        
-        public bool TryPlaceTower(TowerUnit towerPrefab, IPlayerStatsUseCase playerStats)
+
+        public bool TryPlaceTower(TowerUnit towerPrefab, IPlayerStatsUseCase playerStats, IAudioManager audioManager)
         {
             if (IsOccupied || towerPrefab == null)
                 return false;
 
             _currentTower = Instantiate(towerPrefab, TowerAnchor.position, TowerAnchor.rotation, TowerAnchor);
             _playerStats = playerStats;
-            _currentTower.Initialize(playerStats);
+            _audioManager = audioManager;
+            _currentTower.Initialize(playerStats, audioManager);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
@@ -81,16 +82,17 @@ namespace Project.Scripts.Gameplay.Field
 
             _currentTower = tower;
             _playerStats = tower.PlayerStats;
+            _audioManager = tower.AudioManager;
             _currentTower.transform.SetParent(TowerAnchor);
             _currentTower.transform.SetPositionAndRotation(TowerAnchor.position, TowerAnchor.rotation);
 
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
             RefreshDropCollider();
-            
+
             return true;
         }
-        
+
         private bool TryMergeTower(TowerUnit incomingTower)
         {
             if (_currentTower == null)
@@ -105,7 +107,6 @@ namespace Project.Scripts.Gameplay.Field
             if (nextPrefab == null)
                 return false;
 
-            
             Destroy(_currentTower.gameObject);
             Destroy(incomingTower.gameObject);
 
@@ -115,16 +116,16 @@ namespace Project.Scripts.Gameplay.Field
                 TowerAnchor.rotation,
                 TowerAnchor
             );
-            
-            _currentTower.Initialize(_playerStats);
+
+            _currentTower.Initialize(_playerStats, _audioManager);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
             RefreshDropCollider();
-            
+
             return true;
         }
-        
+
         private void BindDragHandler(TowerUnit towerObject)
         {
             var drag = towerObject.GetComponent<Project.Scripts.Gameplay.Towers.TowerDragHandler>();
