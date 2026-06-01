@@ -78,7 +78,7 @@ namespace Project.Scripts.UI.QuestUI
         
         private void OnCloseButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(IQuestUIPresenter),

@@ -73,7 +73,7 @@ namespace Project.Scripts.Gameplay.Quests
             if (!quest.TryClaimReward())
                 return false;
 
-            _audioManager.PlaySfx(ESoundId.TakeQuest);
+            _audioManager.PlaySound(ESoundId.TakeQuest);
             RemoveQuest(quest);
             FillActiveQuests();
             QuestsChanged?.Invoke();

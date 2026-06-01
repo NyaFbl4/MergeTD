@@ -83,7 +83,7 @@ namespace Project.Scripts.UI.ShopUI
                 {
                     if (item.TryUpgrade())
                     {
-                        _audioManager.PlaySfx(ESoundId.AddUpgrade);
+                        _audioManager.PlaySound(ESoundId.AddUpgrade);
                         Refresh();
                     }
                 }, _localizationService);
@@ -92,7 +92,7 @@ namespace Project.Scripts.UI.ShopUI
         
         private void OnCloseButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(IShopUIPresenter)

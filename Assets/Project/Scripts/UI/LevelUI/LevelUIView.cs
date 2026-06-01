@@ -53,7 +53,7 @@ namespace Project.Scripts.UI.LevelUI
             if (_questsButton != null)
                 _questsButton.clicked += OnQuestsButtonClicked;
             if (_settingsButton != null)
-                _settingsButton.clicked -= OnSettingsButtonClicked;
+                _settingsButton.clicked += OnSettingsButtonClicked;
         }
         
         public void SetPriceTower(int price)

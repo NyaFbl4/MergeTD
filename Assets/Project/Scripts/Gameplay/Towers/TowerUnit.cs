@@ -101,7 +101,7 @@ namespace Project.Scripts.Gameplay.Towers
                 return;
             }
 
-            _audioManager?.PlaySfx(ESoundId.TowerShoot);
+            _audioManager?.PlaySound(ESoundId.TowerShoot);
             Fire(_currentTarget);
         }
 

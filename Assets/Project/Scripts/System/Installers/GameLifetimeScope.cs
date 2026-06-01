@@ -13,6 +13,7 @@ using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.LevelUI;
 using Project.Scripts.UI.QuestUI;
+using Project.Scripts.UI.SettingsUI;
 using Project.Scripts.UI.ShopUI;
 using UnityEngine;
 using VContainer;
@@ -98,6 +99,7 @@ namespace Installers
             builder.RegisterEntryPoint<EndWaveUIPresenter>().As<IEndWaveUIPresenter>();
             builder.RegisterEntryPoint<ShopUIPresenter>().As<IShopUIPresenter>();
             builder.RegisterEntryPoint<QuestUIPresenter>().As<IQuestUIPresenter>();
+            builder.RegisterEntryPoint<SettingsUIPresenter>().As<ISettingsUIPresenter>();
         }
 
         private void RegisterUseCases(IContainerBuilder builder)

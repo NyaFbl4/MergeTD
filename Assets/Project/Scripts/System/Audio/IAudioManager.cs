@@ -2,10 +2,13 @@
 {
     public interface IAudioManager
     {
-        void PlaySfx(ESoundId soundId);
+        bool IsMusicEnabled { get; }
+        bool IsSoundEnabled { get; }
+        
+        void PlaySound(ESoundId soundId);
         void PlayMusic();
         void StopMusic();
         void SetMusicEnabled(bool enabled);
-        void SetSfxEnabled(bool enabled);
+        void SetSoundEnabled(bool enabled);
     }
 }

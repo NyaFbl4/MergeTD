@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e1c77a9ca2cc08e47bc96392d3663673
+guid: 824d2d5e8dedf104a9152c02cb6f7756
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5375531994627544839
-    second: store box bg_0
+      213: -3422513951733268478
+    second: flag_en_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,23 +139,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: store box bg_0
+      name: flag_en_0
       rect:
         serializedVersion: 2
-        x: 25
-        y: 39
-        width: 900
-        height: 1334
+        x: 9
+        y: 17
+        width: 431
+        height: 449
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 200, y: 63, z: 237, w: 138}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 707958a4ed9b99a40800000000000000
-      internalID: 5375531994627544839
+      spriteID: 200ce14b1b9c080d0800000000000000
+      internalID: -3422513951733268478
       vertices: []
       indices: 
       edges: []
@@ -164,7 +164,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: da28aac713d29ca4fba7a3aba06f0baf
+    spriteID: d79b61c56d1737f42828f530b456cc59
     internalID: 0
     vertices: []
     indices: 
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      store box bg_0: 5375531994627544839
+      flag_en_0: -3422513951733268478
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

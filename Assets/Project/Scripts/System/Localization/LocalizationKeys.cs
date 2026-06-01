@@ -8,6 +8,11 @@
         public const string EndWaveRewardLabel = "end_wave.reward_label";
         public const string EndWaveCloseButton = "end_wave.close_button";
         public const string EndWaveAdButton = "end_wave.ad_button";
+        
+        public const string SettingsTitle = "settings.title";
+        public const string SettingsMusic = "settings.music";
+        public const string SettingsSound = "settings.sound";
+        public const string SettingsLanguage = "settings.language";
 
         public const string QuestBuyTenTowersDescription = "quest.buy_ten_towers.description";
         public const string QuestDealOneThousandDamageDescription = "quest.deal_one_thousand_damage.description";

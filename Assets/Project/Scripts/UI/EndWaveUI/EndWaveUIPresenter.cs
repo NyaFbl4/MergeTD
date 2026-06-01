@@ -35,18 +35,18 @@ namespace Project.Scripts.UI.EndWaveUI
         {
             _layoutView.SetTitle(title);
             _layoutView.SetRewardCount(rewardCount);
-            _audioManager.PlaySfx(ESoundId.EndWave);
+            _audioManager.PlaySound(ESoundId.EndWave);
         }
 
         private void OnCloseButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             CloseRequested?.Invoke();
         }
 
         private void OnAdButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             AdRequested?.Invoke();
         }
 

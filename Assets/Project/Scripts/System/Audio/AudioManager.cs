@@ -23,6 +23,9 @@ namespace Project.Scripts.System.Audio
             public override AudioClip Clip => _clip;
             public override float Volume => _volume;
         }
+        
+        private const string MusicPrefsKey = "project.audio.music_enabled";
+        private const string SoundPrefsKey = "project.audio.sfx_enabled";
 
         private readonly SoundLibrary _soundLibrary;
 
@@ -33,7 +36,10 @@ namespace Project.Scripts.System.Audio
         private AudioSource _sfxSource;
 
         private bool _musicEnabled = true;
-        private bool _sfxEnabled = true;
+        private bool _soundEnabled = true;
+        
+        public bool IsMusicEnabled => _musicEnabled;
+        public bool IsSoundEnabled => _soundEnabled;
 
         public AudioManager(SoundLibrary soundLibrary)
         {
@@ -42,6 +48,9 @@ namespace Project.Scripts.System.Audio
 
         public void Initialize()
         {
+            _musicEnabled = PlayerPrefs.GetInt(MusicPrefsKey, 1) == 1;
+            _soundEnabled = PlayerPrefs.GetInt(SoundPrefsKey, 1) == 1;
+            
             BuildMap();
             CreateAudioSources();
             PlayMusic();
@@ -96,9 +105,9 @@ namespace Project.Scripts.System.Audio
             _sfxSource.playOnAwake = false;
         }
 
-        public void PlaySfx(ESoundId soundId)
+        public void PlaySound(ESoundId soundId)
         {
-            if (!_sfxEnabled)
+            if (!_soundEnabled)
                 return;
 
             if (!_soundMap.TryGetValue(soundId, out var entry))
@@ -114,7 +123,7 @@ namespace Project.Scripts.System.Audio
         {
             if (!_musicEnabled)
                 return;
-
+            
             if (_soundLibrary == null || _soundLibrary.BackgroundMusic == null)
                 return;
 
@@ -135,6 +144,7 @@ namespace Project.Scripts.System.Audio
         public void SetMusicEnabled(bool enabled)
         {
             _musicEnabled = enabled;
+            PlayerPrefs.SetInt(MusicPrefsKey, enabled ? 1 : 0);
 
             if (_musicEnabled)
                 PlayMusic();
@@ -142,9 +152,10 @@ namespace Project.Scripts.System.Audio
                 StopMusic();
         }
 
-        public void SetSfxEnabled(bool enabled)
+        public void SetSoundEnabled(bool enabled)
         {
-            _sfxEnabled = enabled;
+            _soundEnabled = enabled;
+            PlayerPrefs.SetInt(SoundPrefsKey, enabled ? 1 : 0);
         }
     }
 }

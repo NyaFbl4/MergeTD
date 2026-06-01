@@ -8,6 +8,7 @@ using Project.Scripts.Systems.UI;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.QuestUI;
+using Project.Scripts.UI.SettingsUI;
 using Project.Scripts.UI.ShopUI;
 using UnityEngine;
 
@@ -74,14 +75,14 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnPayTowerButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             var result = _buyTowerUseCase.TryBuyTower();
             Debug.Log($"BuyTower result: {result}");
         }
 
         private void OnShopButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             Debug.Log("OnShopButtonClicked");
             _showPopupPublisher.Publish(new ShowPopupDto
             {
@@ -92,13 +93,13 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnADButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             Debug.Log("OnADButtonClicked");
         }
 
         private void OnQuestsButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             Debug.Log("OnQuestsButtonClicked");
             _showPopupPublisher.Publish(new ShowPopupDto
             {
@@ -108,8 +109,12 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnSettingsButtonClicked()
         {
-            _audioManager.PlaySfx(ESoundId.UiButtonClick);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             Debug.Log("OnSettingsButtonClicked");
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(ISettingsUIPresenter)
+            });
         }
 
         private void OnGoldChanged(int gold)
