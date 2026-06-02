@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6c96d600d24fe2afe19edfaf548b81, type: 3}
   m_Name: Sound Library
   m_EditorClassIdentifier: 
-  _backgroundMusic: {fileID: 0}
+  _backgroundMusic: {fileID: 8300000, guid: e060bccd3f072d04299abb5598154fd8, type: 3}
   _sounds:
   - _soundId: 1
     _clip: {fileID: 8300000, guid: 5bd8c16aaebf22d4dbcb38e35b9ea77c, type: 3}
