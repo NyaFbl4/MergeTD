@@ -34,7 +34,9 @@ namespace Project.Scripts.Gameplay.UpgradeItem
         public void Bind(IUpgradeItem item, Action onBuy, ILocalizationService localizationService)
         {
             _descriptionLabel.text = BuildDescription(item, localizationService);
-            _priceLabel.text = item.IsMaxLevel ? "MAX" : item.NextPrice.ToString();
+            _priceLabel.text = item.IsMaxLevel 
+                ? localizationService.Get(LocalizationKeys.UpgradeMax) 
+                : item.NextPrice.ToString();
             _buyButton.SetEnabled(!item.IsMaxLevel);
 
             if (_icon != null)

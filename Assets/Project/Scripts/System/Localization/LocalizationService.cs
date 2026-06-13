@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using NotImplementedException = System.NotImplementedException;
+using YG;
 
 namespace Project.Scripts.System.Localization
 {
@@ -11,11 +12,14 @@ namespace Project.Scripts.System.Localization
         private const string DefaultLanguage = "ru";
         private const string EnglishLanguage = "en";
         private const string LanguagePrefsKey = "project.localization.language";
+
         private readonly Dictionary<string, LocalizationEntryData> _entries = new(StringComparer.Ordinal);
-        
+
+        private string _defaultLanguageCode = DefaultLanguage;
         private string _currentLanguageCode = DefaultLanguage;
-        
+
         public string CurrentLanguageCode => _currentLanguageCode;
+        public event Action<string> OnChangeLanguage;
 
         public LocalizationService()
         {
@@ -23,37 +27,59 @@ namespace Project.Scripts.System.Localization
 
             var savedLanguage = PlayerPrefs.GetString(LanguagePrefsKey, string.Empty);
             if (!string.IsNullOrWhiteSpace(savedLanguage))
-                SetLanguage(savedLanguage);
+            {
+                SetLanguage(savedLanguage, persist: false, syncPlatform: true);
+                return;
+            }
+            
+            YG2.onCorrectLang += OnPlatformLanguageChanged;
         }
 
         public bool SetLanguage(string languageCode)
+            => SetLanguage(languageCode, persist: true, syncPlatform: true);
+        
+        private bool SetLanguage(string languageCode, bool persist, bool syncPlatform)
         {
             if (string.IsNullOrWhiteSpace(languageCode))
                 return false;
 
             var normalized = NormalizeLanguageCode(languageCode);
-            if (normalized != DefaultLanguage && normalized != EnglishLanguage)
-                return false;
+            if (_currentLanguageCode == normalized) 
+                return true;
 
             _currentLanguageCode = normalized;
-            PlayerPrefs.SetString(LanguagePrefsKey, _currentLanguageCode);
+            if (persist)
+            {
+                PlayerPrefs.SetString(LanguagePrefsKey, _currentLanguageCode);
+                PlayerPrefs.Save();
+            }
+
+            if (syncPlatform && YG2.lang != _currentLanguageCode)
+                YG2.SwitchLanguage(_currentLanguageCode);
+
+            OnChangeLanguage?.Invoke(_currentLanguageCode);
             return true;
         }
-        
+
+        public void OnPlatformLanguageChanged(string language)
+        {
+            SetLanguage(language, persist: true, syncPlatform: false);
+        }
+
         private static string NormalizeLanguageCode(string languageCode)
         {
             if (string.IsNullOrWhiteSpace(languageCode))
                 return DefaultLanguage;
 
-            var normalized = languageCode.Trim().ToLowerInvariant();
+            var normalized = languageCode.Trim().ToLowerInvariant().Replace('_', '-');
 
-            if (normalized.StartsWith("ru"))
+            if (normalized.StartsWith("ru", StringComparison.Ordinal))
                 return DefaultLanguage;
 
-            if (normalized.StartsWith("en"))
+            if (normalized.StartsWith("en", StringComparison.Ordinal))
                 return EnglishLanguage;
 
-            return DefaultLanguage;
+            return EnglishLanguage;
         }
 
         public string Get(string key)
@@ -89,6 +115,29 @@ namespace Project.Scripts.System.Localization
             }
         }
 
+        private static string TryDetectStartupLanguage()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            try
+            {
+                var languageFromWeb = ProjectLanguageBridge.GetAutoLanguageCode();
+                if (!string.IsNullOrWhiteSpace(languageFromWeb))
+                    return languageFromWeb;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"LocalizationService: failed to read language from WebGL bridge. {ex.Message}");
+            }
+#endif
+
+            return Application.systemLanguage switch
+            {
+                SystemLanguage.Russian => DefaultLanguage,
+                SystemLanguage.English => EnglishLanguage,
+                _ => EnglishLanguage
+            };
+        }
+
         private void LoadEntries()
         {
             _entries.Clear();
@@ -96,6 +145,7 @@ namespace Project.Scripts.System.Localization
             var tableAsset = Resources.Load<TextAsset>(ResourcePath);
             if (tableAsset == null)
             {
+                Debug.LogWarning("LocalizationService: localization table not found in Resources, using fallback values.");
                 LoadFallbackEntries();
                 return;
             }
@@ -103,9 +153,13 @@ namespace Project.Scripts.System.Localization
             var tableData = JsonUtility.FromJson<LocalizationTableData>(tableAsset.text);
             if (tableData == null || tableData.entries == null || tableData.entries.Length == 0)
             {
+                Debug.LogWarning("LocalizationService: localization table is empty, using fallback values.");
                 LoadFallbackEntries();
                 return;
             }
+
+            _defaultLanguageCode = NormalizeLanguageCode(tableData.defaultLanguage);
+            _currentLanguageCode = _defaultLanguageCode;
 
             for (var i = 0; i < tableData.entries.Length; ++i)
             {
@@ -115,10 +169,20 @@ namespace Project.Scripts.System.Localization
 
                 _entries[entry.key] = new LocalizationEntryData(entry.ru, entry.en);
             }
+
+            if (_entries.Count == 0)
+            {
+                Debug.LogWarning("LocalizationService: localization table has no valid entries, using fallback values.");
+                LoadFallbackEntries();
+            }
         }
 
         private void LoadFallbackEntries()
         {
+            _defaultLanguageCode = DefaultLanguage;
+            _currentLanguageCode = DefaultLanguage;
+            _entries.Clear();
+
             AddEntry(LocalizationKeys.LevelWaveFormat, "Волна {0}", "Wave {0}");
             AddEntry(LocalizationKeys.EndWaveTitleFormat, "Волна {0} пройдена", "Wave {0} cleared");
             AddEntry(LocalizationKeys.EndWaveRewardLabel, "Награда за волну", "Wave reward");
@@ -130,5 +194,28 @@ namespace Project.Scripts.System.Localization
         {
             _entries[key] = new LocalizationEntryData(ru, en);
         }
+
+        private static class ProjectLanguageBridge
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            [DllImport("__Internal")]
+            private static extern string Project_GetAutoLanguage();
+#endif
+
+            public static string GetAutoLanguageCode()
+            {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                return Project_GetAutoLanguage();
+#else
+                return string.Empty;
+#endif
+            }
+        }
+        
+        public void Dispose()
+        {
+            YG2.onCorrectLang -= OnPlatformLanguageChanged;
+        }
     }
 }
+

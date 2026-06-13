@@ -60,6 +60,7 @@ namespace Project.Scripts.UI.LevelUI
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
+            _playerStatsUseCase.WaveChanged += OnCurrentWaveChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
@@ -154,6 +155,12 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetTowerLevel(towerConfig.TowerLevel);
             _layoutView.SetTowerIcon(towerConfig.Icon);
         }
+        
+        private void OnLanguageChanged(string _)
+        {
+            _layoutView.SetCurrentWaveText(
+                _localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
+        }
 
         public override void Dispose()
         {
@@ -168,6 +175,7 @@ namespace Project.Scripts.UI.LevelUI
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
 
             base.Dispose();
         }

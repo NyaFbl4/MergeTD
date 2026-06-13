@@ -55,8 +55,15 @@ namespace Project.Scripts.UI.ShopUI
             _layoutView.CloseButtonClicked += OnCloseButtonClicked;
             _playerStats.OnGoldChanged += OnGoldChanged;
             _playerStats.UpgradesChanged += OnUpgradesChanged;
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
 
-            _layoutView.SetTitle("Shop");
+            _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.ShopTitle));
+            Refresh();
+        }
+        
+        private void OnLanguageChanged(string _)
+        { 
+            _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.ShopTitle));
             Refresh();
         }
         
@@ -114,6 +121,7 @@ namespace Project.Scripts.UI.ShopUI
             _layoutView.CloseButtonClicked -= OnCloseButtonClicked;
             _playerStats.OnGoldChanged -= OnGoldChanged;
             _playerStats.UpgradesChanged -= OnUpgradesChanged;
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
             
             base.Dispose();
         }

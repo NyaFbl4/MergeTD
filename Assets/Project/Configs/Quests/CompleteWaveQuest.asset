@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.CompleteWaveQuestConfig
   _id: 2
   _icon: {fileID: 6937817954938267909, guid: 2c1a0b0e50b92bc4683266650f4d0c74, type: 3}
-  _description: "\u041F\u0440\u043E\u0439\u0442\u0438 3 \u0432\u043E\u043B\u043D\u044B"
+  _description: quest.complete_waves.description
   _rewardGold: 100
   _targetValue: 3
   _onlyLastWave: 0

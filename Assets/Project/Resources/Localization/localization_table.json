@@ -1,4 +1,5 @@
 {
+  "defaultLanguage": "ru",
   "entries": [
     {
       "key": "level.wave_format",
@@ -64,6 +65,56 @@
       "key": "upgrade.tower_crit_damage.description",
       "ru": "Увеличить силу крита башни на {0}",
       "en": "Increase tower crit damage by {0}"
+    },
+        {
+          "key": "settings.title",
+          "ru": "Настройки",
+          "en": "Settings"
+        },
+        {
+          "key": "settings.music",
+          "ru": "Музыка",
+          "en": "Music"
+        },
+        {
+          "key": "settings.sound",
+          "ru": "Звуки",
+          "en": "Sound"
+        },
+        {
+          "key": "settings.language",
+          "ru": "Выберите язык",
+          "en": "Choose language"
+        },
+        {
+          "key": "shop.title",
+          "ru": "Магазин",
+          "en": "Shop"
+        },
+        {
+          "key": "quests.title",
+          "ru": "Задания",
+          "en": "Quests"
+        },
+        {
+          "key": "quest.done",
+          "ru": "Готово",
+          "en": "Done"
+        },
+        {
+          "key": "upgrade.max",
+          "ru": "МАКС",
+          "en": "MAX"
+        },
+        {
+          "key": "quest.complete_waves.description",
+          "ru": "Пройти {0} волны",
+          "en": "Complete {0} waves"
+        },
+    {
+      "key": "quest.complete_waves.description",
+      "ru": "Пройти {0} волны",
+      "en": "Complete {0} waves"
     }
   ]
 }

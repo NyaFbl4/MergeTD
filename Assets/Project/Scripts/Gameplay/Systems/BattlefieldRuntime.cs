@@ -20,15 +20,9 @@ namespace Project.Scripts.Gameplay.Systems
         private readonly LevelConfig _levelConfig;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         
-        private bool _isRunning;
-        private bool _isSpawningWave;
-        private float _spawnTimer;
         private float _waveDelayTimer;
         private bool _isWaitingWaveStart;
         private float _waveStartTimer;
-        private int _currentWave;
-        private int _spawnedInWave;
-        private int _targetEnemiesInWave;
         
         private int _currentWaveIndex;
         private readonly List<EnemySpawnSequenceRuntime> _sequenceRuntimes = new();
@@ -68,7 +62,6 @@ namespace Project.Scripts.Gameplay.Systems
             if (_context == null || !_context.IsReady())
             {
                 Debug.LogWarning("BattlefieldRuntime: BattlefieldContext is not ready. Check lanes, base, and enemy prefab.");
-                //_isRunning = false;
                 return;
             }
             
@@ -78,7 +71,6 @@ namespace Project.Scripts.Gameplay.Systems
             _currentWaveIndex = 0;
             _aliveEnemies = 0;
             
-            _spawnTimer = 0f;
             _waveDelayTimer = 0f;
             _isWaitingWaveStart = false;
             _waveStartTimer = 0f;
@@ -87,9 +79,6 @@ namespace Project.Scripts.Gameplay.Systems
             _isWaitingNextWave = false;
 
             StartWave();
-
-            _isRunning = true;
-            _currentWave = 1;
         }
 
         public void OnFinishGame()
@@ -179,7 +168,6 @@ namespace Project.Scripts.Gameplay.Systems
         {
             _isWaitingWaveStart = false;
             _isWaveRunning = true;
-            _spawnTimer = 0f;
         }
 
         private void UpdateWaveSpawn(float deltaTime)
@@ -271,14 +259,6 @@ namespace Project.Scripts.Gameplay.Systems
             _isWaitingNextWave = false;
             _isWaitingEndWavePopup = true;
             WaveCompleted?.Invoke(completedWaveNumber, wave.CountGoldReward, isLastWave);
-        }
-        
-        private void BeginWave()
-        {
-            _spawnedInWave = 0;
-            _spawnTimer = 0f;
-            _targetEnemiesInWave = _context.EnemiesPerWave + (_currentWave - 1);
-            _isSpawningWave = true;
         }
         
         private EnemyUnit GetRandomEnemy(List<EnemyUnit> enemies)

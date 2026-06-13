@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.KillEnemyQuestConfig
   _id: 5
   _icon: {fileID: 3571680773333596369, guid: 51aa40d288bc78f4f8e7660225c441e0, type: 3}
-  _description: "\u0423\u0431\u0438\u0442\u044C 10 \u043F\u0440\u043E\u0442\u0438\u0432\u043D\u0438\u043A\u043E\u0432"
+  _description: quest.kill_ten_enemies.description
   _rewardGold: 100
   _targetValue: 10
   _enemyType: 0

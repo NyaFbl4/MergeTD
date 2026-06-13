@@ -25,6 +25,8 @@ namespace Project.Scripts.UI.SettingsUI
             _audioManager = audioManager;
             _localizationService = localizationService;
             _gameManagerService = gameManagerService;
+            
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
         }
 
         public override void Initialize()
@@ -38,12 +40,14 @@ namespace Project.Scripts.UI.SettingsUI
             _layoutView.EnButtonClicked += OnEnLanguageButtonClicked;
             
             RefreshAudioButtons();
+            RefreshLocalizedTexts();
         }
         
         public override async UniTask ActivateAsync()
         {
             _gameManagerService.PauseGame();
             RefreshAudioButtons();
+            RefreshLocalizedTexts();
             await base.ActivateAsync();
         }
 
@@ -52,6 +56,8 @@ namespace Project.Scripts.UI.SettingsUI
             await base.DeactivateAsync();
             _gameManagerService.ResumeGame();
         }
+        
+        private void OnLanguageChanged(string _) => RefreshLocalizedTexts();
         
         private void OnCloseButtonClicked()
         {
@@ -88,19 +94,29 @@ namespace Project.Scripts.UI.SettingsUI
         private void OnRuLanguageButtonClicked()
         {
              _audioManager.PlaySound(ESoundId.UiButtonClick);
-            _localizationService.SetLanguage("ru");           
+             if (_localizationService.SetLanguage("ru"))     
+                RefreshLocalizedTexts();
         }
         
         private void OnEnLanguageButtonClicked()
         {
             _audioManager.PlaySound(ESoundId.UiButtonClick);
-            _localizationService.SetLanguage("en");
+            if (_localizationService.SetLanguage("en"))
+                RefreshLocalizedTexts();
         }
         
         private void RefreshAudioButtons()
         {
             _layoutView.SetMusicEnabled(_audioManager.IsMusicEnabled);
             _layoutView.SetSoundEnabled(_audioManager.IsSoundEnabled);
+        }
+        
+        private void RefreshLocalizedTexts()
+        {
+            _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.SettingsTitle));
+            _layoutView.SetMusicLabel(_localizationService.Get(LocalizationKeys.SettingsMusic));
+            _layoutView.SetSoundLabel(_localizationService.Get(LocalizationKeys.SettingsSound));
+            _layoutView.SetLanguageLabel(_localizationService.Get(LocalizationKeys.SettingsLanguage));
         }
         
         public override void Dispose()
@@ -110,6 +126,7 @@ namespace Project.Scripts.UI.SettingsUI
             _layoutView.MusicButtonClicked -= OnMusicButtonClicked;
             _layoutView.RuButtonClicked -= OnRuLanguageButtonClicked;
             _layoutView.EnButtonClicked -= OnEnLanguageButtonClicked;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
             
             base.Dispose();
         }

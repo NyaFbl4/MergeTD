@@ -41,9 +41,10 @@ namespace Project.Scripts.UI.QuestUI
             
             _layoutView.CloseButtonClicked += OnCloseButtonClicked;
             _questService.QuestsChanged += OnQuestsChanged;
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
             
             Refresh();
-            _layoutView.SetTitle("Quests");
+            _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.QuestsTitle));
         }
 
         public override async UniTask ActivateAsync()
@@ -56,6 +57,12 @@ namespace Project.Scripts.UI.QuestUI
         {
             await base.DeactivateAsync();
             _gameManagerService.ResumeGame();
+        }
+        
+        private void OnLanguageChanged(string _)
+        {
+            _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.QuestsTitle));
+            Refresh();
         }
         
         private void OnQuestsChanged()
@@ -89,6 +96,7 @@ namespace Project.Scripts.UI.QuestUI
         {
             _layoutView.CloseButtonClicked -= OnCloseButtonClicked;
             _questService.QuestsChanged -= OnQuestsChanged;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
             
             base.Dispose();
         }

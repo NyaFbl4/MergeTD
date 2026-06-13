@@ -38,7 +38,7 @@ namespace Project.Scripts.UI.QuestUI
             _takeRewardButton.SetEnabled(quest.IsCompleted && !quest.IsRewardClaimed);
 
             if (quest.IsRewardClaimed)
-                _takeRewardButton.text = "Done";
+                _takeRewardButton.text = localizationService.Get(LocalizationKeys.QuestDone);
 
             _takeRewardButton.clicked += onClaimReward;
         }

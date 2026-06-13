@@ -23,5 +23,11 @@
         public const string UpgradeTowerAttackSpeedDescription = "upgrade.tower_attack_speed.description";
         public const string UpgradeTowerCritChanceDescription = "upgrade.tower_crit_chance.description";
         public const string UpgradeTowerCritDamageDescription = "upgrade.tower_crit_damage.description";
+        
+        public const string ShopTitle = "shop.title";
+        public const string QuestsTitle = "quests.title";
+        public const string QuestDone = "quest.done";
+        public const string UpgradeMax = "upgrade.max";
+        public const string QuestCompleteWavesDescription = "quest.complete_waves.description";
     }
 }
