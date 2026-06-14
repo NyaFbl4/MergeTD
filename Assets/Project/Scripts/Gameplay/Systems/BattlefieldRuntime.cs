@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
@@ -68,6 +68,7 @@ namespace Project.Scripts.Gameplay.Systems
             Debug.Log("BattlefieldRuntime: Battlefield Start");
             
             _sequenceRuntimes.Clear();
+            ClearEnemiesRoot();
             _currentWaveIndex = 0;
             _aliveEnemies = 0;
             
@@ -81,6 +82,22 @@ namespace Project.Scripts.Gameplay.Systems
             StartWave();
         }
 
+        private void ClearEnemiesRoot()
+        {
+            var enemiesRoot = _context.EnemiesRoot;
+            if (enemiesRoot == null)
+                return;
+
+            for (var i = enemiesRoot.childCount - 1; i >= 0; i--)
+            {
+                var enemy = enemiesRoot.GetChild(i);
+                if (enemy == null)
+                    continue;
+
+                enemy.gameObject.SetActive(false);
+                Object.Destroy(enemy.gameObject);
+            }
+        }
         public void OnFinishGame()
         {
             _isGameRunning = false;

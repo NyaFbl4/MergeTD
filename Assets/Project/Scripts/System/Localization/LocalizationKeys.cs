@@ -1,4 +1,4 @@
-﻿namespace Project.Scripts.System.Localization
+namespace Project.Scripts.System.Localization
 {
     public static class LocalizationKeys
     {
@@ -8,6 +8,10 @@
         public const string EndWaveRewardLabel = "end_wave.reward_label";
         public const string EndWaveCloseButton = "end_wave.close_button";
         public const string EndWaveAdButton = "end_wave.ad_button";
+        public const string EndWaveLoseTitle = "end_wave_lose.title";
+        public const string EndWaveLoseDescriptionFormat = "end_wave_lose.description_format";
+        public const string EndWaveLoseCloseButton = "end_wave_lose.close_button";
+        public const string EndWaveLoseAdButton = "end_wave_lose.ad_button";
         
         public const string SettingsTitle = "settings.title";
         public const string SettingsMusic = "settings.music";

@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Layout" style="flex-grow: 1; align-self: auto; align-items: center; justify-content: center;">
+        <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&apos;UI/wave cleared popup/dark background&apos;); background-color: rgba(0, 0, 0, 0);" />
+        <ui:VisualElement name="EndWavePanel" style="flex-grow: 1; background-image: resource(&apos;UI/wave cleared popup/wave cleared box&apos;); width: 800px; height: 1000px; align-items: stretch; justify-content: space-evenly; align-self: center; -unity-background-scale-mode: stretch-to-fill; min-height: 1000px; max-height: 1000px; align-content: auto;">
+            <ui:Label text="Поражение" name="EndWaveTitleLabel" style="position: absolute; height: 115px; width: 382px; top: 124px; left: 197px; -unity-text-align: middle-center; font-size: 50px; white-space: normal; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Roboto-Bold.ttf?fileID=12800000&amp;guid=4beb055f07aaff244873dec698d0363e&amp;type=3#Roboto-Bold&quot;);" />
+            <ui:VisualElement name="MainPanel" style="flex-grow: 1;">
+                <ui:Label text="Волна {o} не пройдена" name="EndWaveDescription" style="top: 299px; left: 62px; height: 218px; width: 674px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Roboto-Bold.ttf?fileID=12800000&amp;guid=4beb055f07aaff244873dec698d0363e&amp;type=3#Roboto-Bold&quot;); font-size: 75px; white-space: normal;" />
+                <ui:Button name="ADButton" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-image: resource(&apos;UI/wave cleared popup/video btn&apos;); -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); width: 400px; height: 180px; top: 313px; left: 205px;">
+                    <ui:Label text="Label" name="ADButtonLabel" style="height: 82px; width: 199px; top: 21px; left: 133px; -unity-text-align: middle-center; font-size: 30px; white-space: normal; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Roboto-Bold.ttf?fileID=12800000&amp;guid=4beb055f07aaff244873dec698d0363e&amp;type=3#Roboto-Bold&quot;);" />
+                </ui:Button>
+                <ui:Button name="CloseButton" style="background-image: resource(&apos;UI/wave cleared popup/btn05&apos;); background-color: rgba(188, 188, 188, 0); -unity-background-image-tint-color: rgb(255, 255, 255); width: 350px; height: 150px; top: 365px; left: 231px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
+                    <ui:Label text="Label" name="CloseButtonLabel" style="height: 74px; top: 12px; left: 15px; width: 290px; font-size: 40px; white-space: normal; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Roboto-Bold.ttf?fileID=12800000&amp;guid=4beb055f07aaff244873dec698d0363e&amp;type=3#Roboto-Bold&quot;);" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

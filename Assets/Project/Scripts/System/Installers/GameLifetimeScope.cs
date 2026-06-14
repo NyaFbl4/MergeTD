@@ -11,6 +11,7 @@ using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.EndWaveUI;
+using Project.Scripts.UI.EndWaveLoseUI;
 using Project.Scripts.UI.LevelUI;
 using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.SettingsUI;
@@ -97,6 +98,7 @@ namespace Installers
         {
             builder.RegisterEntryPoint<LevelUIPresenter>().As<ILevelUIPresenter>();
             builder.RegisterEntryPoint<EndWaveUIPresenter>().As<IEndWaveUIPresenter>();
+            builder.RegisterEntryPoint<EndWaveLoseUIPresenter>().As<IEndWaveLoseUIPresenter>();
             builder.RegisterEntryPoint<ShopUIPresenter>().As<IShopUIPresenter>();
             builder.RegisterEntryPoint<QuestUIPresenter>().As<IQuestUIPresenter>();
             builder.RegisterEntryPoint<SettingsUIPresenter>().As<ISettingsUIPresenter>();
@@ -111,6 +113,7 @@ namespace Installers
             builder.RegisterEntryPoint<EnemyDeathUseCase>();
             builder.RegisterEntryPoint<LevelUIUseCase>().As<ILevelUIUseCase>();
             builder.RegisterEntryPoint<EndWaveUseCase>();
+            builder.RegisterEntryPoint<EndWaveLoseUseCase>();
             builder.RegisterEntryPoint<QuestDamageEventsUseCase>();
             builder.RegisterEntryPoint<QuestWaveEventsUseCase>();
             

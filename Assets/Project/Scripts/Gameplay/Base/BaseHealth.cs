@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using UnityEngine;
@@ -18,6 +18,7 @@ namespace Project.Scripts.Gameplay.Base
         
         public event Action<int> OnCurrentHealthChanged;
         public event Action<int> OnMaxHealthChanged;
+        public event Action Destroyed;
 
         [Inject]
         public void Construct(IGameManagerService gameManagerService, LevelConfig levelConfig)
@@ -69,6 +70,7 @@ namespace Project.Scripts.Gameplay.Base
             if (_currentHealth > 0)
                 return;
 
+            Destroyed?.Invoke();
             _gameManagerService?.FinishGame();
         }
 
