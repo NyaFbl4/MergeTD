@@ -10,27 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 814177a1db754a24b96b922f3b265e0b, type: 3}
-  m_Name: Enemy wave config
+  m_Name: Enemy wave config 4
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Wave.EnemyWaveConfig
-  _countGoldReward: 250
+  _countGoldReward: 1100
   _sequence:
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1
-    _count: 10
-    _spawnInterval: 1.8
-    _startDelay: 0
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.05
+    _healthMultiplier: 1.45
+    _count: 16
+    _spawnInterval: 1.45
+    _startDelay: 0
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.35
+    _count: 12
+    _spawnInterval: 1.6
+    _startDelay: 7
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: f4af696a7db87734d8cb4eb5e26b89f5, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.6
     _count: 6
     _spawnInterval: 2.2
-    _startDelay: 8
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: f5b18ca34c8242bdb8318581ce413941, type: 3}
+    _startDelay: 16
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 8539123cb73147b29f563eaad73eeca6, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 2
+    _healthMultiplier: 4
     _count: 1
     _spawnInterval: 1
-    _startDelay: 21.5
+    _startDelay: 32.5
   _delayAfterWave: 0
-  _killRewardGold: 10
+  _killRewardGold: 18

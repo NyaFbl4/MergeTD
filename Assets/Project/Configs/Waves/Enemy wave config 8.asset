@@ -10,27 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 814177a1db754a24b96b922f3b265e0b, type: 3}
-  m_Name: Enemy wave config 3
+  m_Name: Enemy wave config 8
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Wave.EnemyWaveConfig
-  _countGoldReward: 850
+  _countGoldReward: 2900
   _sequence:
   - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.3
-    _count: 14
-    _spawnInterval: 1.5
+    _healthMultiplier: 2.25
+    _count: 22
+    _spawnInterval: 1.25
     _startDelay: 0
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.25
-    _count: 12
+    _healthMultiplier: 2.15
+    _count: 20
+    _spawnInterval: 1.35
+    _startDelay: 6
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.05
+    _count: 18
+    _spawnInterval: 1.45
+    _startDelay: 12
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.6
+    _count: 10
     _spawnInterval: 1.8
-    _startDelay: 7
+    _startDelay: 22
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 4fc337759d3b4d8f94ae5601483e87a3, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 3.4
+    _healthMultiplier: 7.2
     _count: 1
     _spawnInterval: 1
-    _startDelay: 30.4
+    _startDelay: 46.1
   _delayAfterWave: 0
-  _killRewardGold: 16
+  _killRewardGold: 26

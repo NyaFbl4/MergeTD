@@ -10,27 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 814177a1db754a24b96b922f3b265e0b, type: 3}
-  m_Name: Enemy wave config
+  m_Name: Enemy wave config 9
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Wave.EnemyWaveConfig
-  _countGoldReward: 250
+  _countGoldReward: 4500
   _sequence:
   - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1
-    _count: 10
-    _spawnInterval: 1.8
+    _healthMultiplier: 2.9
+    _count: 26
+    _spawnInterval: 1.15
     _startDelay: 0
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.05
-    _count: 6
-    _spawnInterval: 2.2
-    _startDelay: 8
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: f5b18ca34c8242bdb8318581ce413941, type: 3}
+    _healthMultiplier: 2.8
+    _count: 24
+    _spawnInterval: 1.25
+    _startDelay: 6
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 2
+    _healthMultiplier: 2.7
+    _count: 22
+    _spawnInterval: 1.35
+    _startDelay: 12
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 3.4
+    _count: 14
+    _spawnInterval: 1.6
+    _startDelay: 24
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 8539123cb73147b29f563eaad73eeca6, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 10
     _count: 1
     _spawnInterval: 1
-    _startDelay: 21.5
+    _startDelay: 54.9
   _delayAfterWave: 0
-  _killRewardGold: 10
+  _killRewardGold: 30
