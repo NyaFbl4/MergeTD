@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BuyTowerQuest
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.BuyTowerQuestConfig
   _id: 
+  _icon: {fileID: -6010000000000000001, guid: d34399509b5644acbd064192ad9a9252, type: 3}
   _title: 
   _description: quest.buy_ten_towers.description
   _rewardGold: 100

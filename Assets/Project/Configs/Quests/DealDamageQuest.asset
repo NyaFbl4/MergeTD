@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DealDamageQuest
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.DealDamageQuestConfig
   _id: 
+  _icon: {fileID: -6010000000000000002, guid: 49ba1cb86ddd4311a99d7be6cfcc516b, type: 3}
   _title: 
   _description: quest.deal_one_thousand_damage.description
   _rewardGold: 100

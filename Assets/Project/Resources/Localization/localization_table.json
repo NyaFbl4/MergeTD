@@ -112,6 +112,11 @@
           "en": "Complete {0} waves"
         },
     {
+      "key": "quest.deal_critical_damage.description",
+      "ru": "Нанести {0} критического урона",
+      "en": "Deal {0} critical damage"
+    },
+    {
       "key": "quest.complete_waves.description",
       "ru": "Пройти {0} волны",
       "en": "Complete {0} waves"
