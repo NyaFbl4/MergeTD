@@ -8,6 +8,7 @@ using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.EndWaveUI;
@@ -60,6 +61,8 @@ namespace Installers
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();;
             builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>().AsSelf();
             builder.Register<LocalizationService>(Lifetime.Singleton).As<ILocalizationService>();
+            builder.Register<ProgressSaveService>(Lifetime.Singleton).AsSelf();
+            builder.Register<ProgressCheckpointUseCase>(Lifetime.Singleton).AsSelf();
             
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();

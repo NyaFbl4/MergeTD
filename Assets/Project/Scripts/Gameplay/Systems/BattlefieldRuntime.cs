@@ -5,6 +5,7 @@ using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Wave;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -19,6 +20,7 @@ namespace Project.Scripts.Gameplay.Systems
         //private readonly EnemyConfig _enemyConfig;
         private readonly LevelConfig _levelConfig;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
+        private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
         
         private float _waveDelayTimer;
         private bool _isWaitingWaveStart;
@@ -39,11 +41,13 @@ namespace Project.Scripts.Gameplay.Systems
         public BattlefieldRuntime(
             BattlefieldContext context,
             LevelConfig levelConfig,
-            IPlayerStatsUseCase playerStatsUseCase)
+            IPlayerStatsUseCase playerStatsUseCase,
+            ProgressCheckpointUseCase progressCheckpointUseCase)
         {
             _context = context;
             _levelConfig = levelConfig;
             _playerStatsUseCase = playerStatsUseCase;
+            _progressCheckpointUseCase = progressCheckpointUseCase;
             IGameListener.Register(this);
         }
 
@@ -69,7 +73,9 @@ namespace Project.Scripts.Gameplay.Systems
             
             _sequenceRuntimes.Clear();
             ClearEnemiesRoot();
-            _currentWaveIndex = 0;
+            var startWave = _progressCheckpointUseCase.RestoreCheckpointOrDefaults();
+            var wavesCount = _levelConfig.Waves == null ? 1 : Mathf.Max(1, _levelConfig.Waves.Count);
+            _currentWaveIndex = Mathf.Clamp(startWave, 1, wavesCount) - 1;
             _aliveEnemies = 0;
             
             _waveDelayTimer = 0f;

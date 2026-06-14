@@ -71,6 +71,17 @@ namespace Project.Scripts.System.UseCases
             return EBuyTowerResult.Success;
         }
 
+        public void SetTowerCost(int cost)
+        {
+            _currentTowerCost = Math.Max(_towerConfig.StartTowerPrice, cost);
+            TowerCostChanged?.Invoke(_currentTowerCost);
+        }
+
+        public void ResetTowerCost()
+        {
+            SetTowerCost(_towerConfig.StartTowerPrice);
+        }
+
         private void IncreaseTowerCost()
         {
             _currentTowerCost += _levelConfig.TowerPriceIncreaseOnBuy;

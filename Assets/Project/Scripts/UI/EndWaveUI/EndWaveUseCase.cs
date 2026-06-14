@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Localization;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
 using VContainer.Unity;
@@ -18,6 +19,7 @@ namespace Project.Scripts.UI.EndWaveUI
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly IGameManagerService _gameManagerService;
         private readonly ILocalizationService _localizationService;
+        private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
 
         private bool _isLastWave;
 
@@ -28,7 +30,8 @@ namespace Project.Scripts.UI.EndWaveUI
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
             IGameManagerService gameManagerService,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            ProgressCheckpointUseCase progressCheckpointUseCase)
         {
             _battlefieldRuntime = battlefieldRuntime;
             _endWaveUIPresenter = endWaveUIPresenter;
@@ -37,6 +40,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _hidePopupPublisher = hidePopupPublisher;
             _gameManagerService = gameManagerService;
             _localizationService = localizationService;
+            _progressCheckpointUseCase = progressCheckpointUseCase;
         }
 
         public void Initialize()
@@ -51,6 +55,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _isLastWave = isLastWave;
 
             _playerStatsUseCase.AddGold(rewardCount);
+            _progressCheckpointUseCase.SaveCheckpoint(waveNumber + 1);
             _endWaveUIPresenter.SetData(_localizationService.Format(LocalizationKeys.EndWaveTitleFormat, 
                                         waveNumber), rewardCount);
 

@@ -43,6 +43,20 @@ namespace Project.Scripts.Gameplay.Base
             OnCurrentHealthChanged?.Invoke(_currentHealth);
         }
 
+        public void SetHealthState(int currentHealth, int maxHealth)
+        {
+            _maxHealth = Mathf.Max(1, maxHealth);
+            _currentHealth = Mathf.Clamp(currentHealth, 0, _maxHealth);
+
+            OnMaxHealthChanged?.Invoke(_maxHealth);
+            OnCurrentHealthChanged?.Invoke(_currentHealth);
+        }
+
+        public void ResetToStartHealth()
+        {
+            SetHealthState(_levelConfig.StartBaseHealth, _levelConfig.StartBaseHealth);
+        }
+
         private void OnEnable()
         {
             IGameListener.Register(this);
@@ -76,10 +90,7 @@ namespace Project.Scripts.Gameplay.Base
 
         private void ResetHealth()
         {
-            _maxHealth = _levelConfig.StartBaseHealth;
-            OnMaxHealthChanged?.Invoke(_currentHealth);
-            _currentHealth = _maxHealth;
-            OnCurrentHealthChanged?.Invoke(_currentHealth);
+            ResetToStartHealth();
         }
     }
 }

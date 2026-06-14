@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
+using Project.Scripts.System.Save;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -28,6 +29,7 @@ namespace Project.Scripts.System.UseCases
         public float TowerDamageBonus => _towerDamageBonus;
         public float TowerAttackSpeedBonus => _towerAttackSpeedBonus;
         public float TowerCritDamageBonus => _towerCritDamageBonus;
+        public IReadOnlyDictionary<string, int> UpgradeLevels => _upgradeLevels;
 
         public event Action<int> OnGoldChanged;
         public event Action<int> WaveChanged;
@@ -37,17 +39,52 @@ namespace Project.Scripts.System.UseCases
         public PlayerStatsUseCase(LevelConfig levelConfig)
         {
             _levelConfig = levelConfig;
-            _gold = _levelConfig.StartGold;
-            _selectedTowerLevel = Math.Max(1, _levelConfig.LevelTowerSelected);
-            _currentWave = 1;
+            ResetValues();
         }
 
         public void Initialize()
         {
-            OnGoldChanged?.Invoke(_gold);
-            SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
-            WaveChanged?.Invoke(_currentWave);
-            UpgradesChanged?.Invoke();
+            NotifyStateChanged();
+        }
+
+        public void ResetState()
+        {
+            ResetValues();
+            NotifyStateChanged();
+        }
+
+        public void ApplyState(
+            int gold,
+            int wave,
+            int selectedTowerLevel,
+            float towerDamageBonus,
+            float towerAttackSpeedBonus,
+            float towerCritChanceBonus,
+            float towerCritDamageBonus,
+            IReadOnlyList<UpgradeLevelSaveData> upgradeLevels)
+        {
+            _gold = Math.Max(0, gold);
+            _currentWave = Math.Max(1, wave);
+            _selectedTowerLevel = Math.Max(1, selectedTowerLevel);
+            _towerDamageBonus = Mathf.Max(0f, towerDamageBonus);
+            _towerAttackSpeedBonus = Mathf.Max(0f, towerAttackSpeedBonus);
+            _towerCritChanceBonus = Mathf.Clamp01(towerCritChanceBonus);
+            _towerCritDamageBonus = Mathf.Max(0f, towerCritDamageBonus);
+
+            _upgradeLevels.Clear();
+            if (upgradeLevels != null)
+            {
+                for (var i = 0; i < upgradeLevels.Count; i++)
+                {
+                    var upgrade = upgradeLevels[i];
+                    if (upgrade == null || string.IsNullOrWhiteSpace(upgrade.id) || upgrade.level <= 0)
+                        continue;
+
+                    _upgradeLevels[upgrade.id] = upgrade.level;
+                }
+            }
+
+            NotifyStateChanged();
         }
 
         public int GetUpgradeLevel(string upgradeId)
@@ -57,7 +94,14 @@ namespace Project.Scripts.System.UseCases
 
         public void SetUpgradeLevel(string upgradeId, int level)
         {
-            _upgradeLevels[upgradeId] = level;
+            if (string.IsNullOrWhiteSpace(upgradeId))
+                return;
+
+            if (level <= 0)
+                _upgradeLevels.Remove(upgradeId);
+            else
+                _upgradeLevels[upgradeId] = level;
+
             UpgradesChanged?.Invoke();
         }
 
@@ -120,6 +164,26 @@ namespace Project.Scripts.System.UseCases
 
             _currentWave = safeWave;
             WaveChanged?.Invoke(_currentWave);
+        }
+
+        private void ResetValues()
+        {
+            _gold = _levelConfig.StartGold;
+            _selectedTowerLevel = Math.Max(1, _levelConfig.LevelTowerSelected);
+            _currentWave = 1;
+            _towerDamageBonus = 0f;
+            _towerAttackSpeedBonus = 0f;
+            _towerCritChanceBonus = 0f;
+            _towerCritDamageBonus = 0f;
+            _upgradeLevels.Clear();
+        }
+
+        private void NotifyStateChanged()
+        {
+            OnGoldChanged?.Invoke(_gold);
+            SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
+            WaveChanged?.Invoke(_currentWave);
+            UpgradesChanged?.Invoke();
         }
 
         public void Dispose()
