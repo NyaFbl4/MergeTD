@@ -1,4 +1,5 @@
-﻿using Project.Scripts.Configs;
+﻿
+using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Enemies;
 using UnityEngine;
