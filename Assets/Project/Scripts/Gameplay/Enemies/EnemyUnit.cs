@@ -29,7 +29,9 @@ namespace Project.Scripts.Gameplay.Enemies
         public event Action<EnemyUnit> Finished;
         public EEnemyType EnemyType => _enemyType;
         
-        public void Initialize(LanePath lanePath, BaseHealth baseHealth, EnemyConfig config, int killRewardGold, int startHealth)
+        public void Initialize(LanePath lanePath, 
+            BaseHealth baseHealth, EnemyConfig config, 
+            int killRewardGold, int startHealth)
         {
             _lanePath = lanePath;
             _baseHealth = baseHealth;

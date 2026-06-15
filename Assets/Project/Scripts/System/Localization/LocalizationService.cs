@@ -191,7 +191,7 @@ namespace Project.Scripts.System.Localization
             AddEntry(LocalizationKeys.EndWaveLoseTitle, "\u041f\u043e\u0440\u0430\u0436\u0435\u043d\u0438\u0435", "Defeat");
             AddEntry(LocalizationKeys.EndWaveLoseDescriptionFormat, "\u0412\u043e\u043b\u043d\u0430 {0} \u043d\u0435 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u0430", "Wave {0} failed");
             AddEntry(LocalizationKeys.EndWaveLoseCloseButton, "\u041f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c", "Restart");
-            AddEntry(LocalizationKeys.EndWaveLoseAdButton, "\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c \u0437\u0430 \u0440\u0435\u043a\u043b\u0430\u043c\u0443", "Continue for ad");
+            AddEntry(LocalizationKeys.EndWaveLoseAdButton, "\u041f\u043e\u043b\u0443\u0447\u0438 {0}", "Get {0}");
         }
 
         private void AddEntry(string key, string ru, string en)

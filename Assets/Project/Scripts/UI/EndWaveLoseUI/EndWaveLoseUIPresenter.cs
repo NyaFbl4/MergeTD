@@ -26,14 +26,14 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _layoutView.CloseButtonClicked += OnCloseButtonClicked;
             _layoutView.ADButtonClicked += OnAdButtonClicked;
 
-            _layoutView.SetAdButtonText(_localizationService.Get(LocalizationKeys.EndWaveLoseAdButton));
             _layoutView.SetCloseButtonText(_localizationService.Get(LocalizationKeys.EndWaveLoseCloseButton));
         }
 
-        public void SetData(int waveNumber)
+        public void SetData(int waveNumber, int rewardCount)
         {
             _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.EndWaveLoseTitle));
             _layoutView.SetDescription(_localizationService.Format(LocalizationKeys.EndWaveLoseDescriptionFormat, waveNumber));
+            _layoutView.SetAdButtonText(_localizationService.Format(LocalizationKeys.EndWaveLoseAdButton, rewardCount));
         }
 
         private void OnCloseButtonClicked()

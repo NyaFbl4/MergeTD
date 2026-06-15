@@ -1,5 +1,6 @@
 using System;
 using MessagePipe;
+using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.System.UseCases;
@@ -16,6 +17,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         private readonly IGameManagerService _gameManagerService;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
+        private readonly LevelConfig _levelConfig;
 
         private bool _isShown;
 
@@ -25,7 +27,8 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             IPlayerStatsUseCase playerStatsUseCase,
             IGameManagerService gameManagerService,
             IPublisher<ShowPopupDto> showPopupPublisher,
-            IPublisher<HidePopupDto> hidePopupPublisher)
+            IPublisher<HidePopupDto> hidePopupPublisher,
+            LevelConfig levelConfig)
         {
             _baseHealth = baseHealth;
             _endWaveLoseUIPresenter = endWaveLoseUIPresenter;
@@ -33,6 +36,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _gameManagerService = gameManagerService;
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
+            _levelConfig = levelConfig;
         }
 
         public void Initialize()
@@ -47,12 +51,26 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             if (_isShown)
                 return;
 
+            var waveNumber = _playerStatsUseCase.Wave;
+            var rewardCount = GetWaveReward(waveNumber);
+
             _isShown = true;
-            _endWaveLoseUIPresenter.SetData(_playerStatsUseCase.Wave);
+            _endWaveLoseUIPresenter.SetData(waveNumber, rewardCount);
             _showPopupPublisher.Publish(new ShowPopupDto
             {
                 TargetPopUpType = typeof(IEndWaveLoseUIPresenter)
             });
+        }
+
+        private int GetWaveReward(int waveNumber)
+        {
+            var waves = _levelConfig.Waves;
+            if (waves == null || waves.Count == 0)
+                return 0;
+
+            var index = Math.Max(0, Math.Min(waveNumber - 1, waves.Count - 1));
+            var wave = waves[index];
+            return wave != null ? wave.CountGoldReward : 0;
         }
 
         private void OnCloseRequested()

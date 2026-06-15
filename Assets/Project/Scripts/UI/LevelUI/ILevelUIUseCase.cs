@@ -1,5 +1,4 @@
-﻿using Project.Scripts.Configs;
-using UnityEngine;
+using Project.Scripts.Configs;
 
 namespace Project.Scripts.UI.LevelUI
 {
@@ -7,5 +6,7 @@ namespace Project.Scripts.UI.LevelUI
     {
         void OpenShop();
         TowerConfig GetSelectedTowerConfig();
+        bool HasUpgradeableTower();
+        bool TryUpgradeRandomLowestLevelTower();
     }
 }

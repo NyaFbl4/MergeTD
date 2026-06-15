@@ -1,3 +1,4 @@
+using YG;
 using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
@@ -16,6 +17,8 @@ namespace Project.Scripts.UI.LevelUI
 {
     public class LevelUIPresenter : LayoutPresenterBase<ILevelUIView>, ILevelUIPresenter
     {
+        private const string UpgradeLowestTowerRewardId = "level_ui_upgrade_lowest_tower";
+
         private readonly ILevelUIUseCase _levelUIUseCase;
         private readonly IBuyTowerUseCase _buyTowerUseCase;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
@@ -24,6 +27,8 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IGameManagerService _gameManagerService;
         private readonly IAudioManager _audioManager;
+
+        private bool _isWaitingAdReward;
 
         public LevelUIPresenter(
             IBuyTowerUseCase buyTowerUseCase,
@@ -95,7 +100,28 @@ namespace Project.Scripts.UI.LevelUI
         private void OnADButtonClicked()
         {
             _audioManager.PlaySound(ESoundId.UiButtonClick);
+
+            if (!_levelUIUseCase.HasUpgradeableTower())
+            {
+                Debug.LogWarning("LevelUIPresenter: no upgradeable towers for rewarded ad.");
+                return;
+            }
+
+            if (_isWaitingAdReward)
+                return;
+
             Debug.Log("OnADButtonClicked");
+
+#if RewardedAdv_yg
+            _isWaitingAdReward = true;
+            SubscribeRewardedAdEvents();
+            YG2.RewardedAdvShow(UpgradeLowestTowerRewardId);
+#elif UNITY_EDITOR
+            Debug.Log("LevelUIPresenter: RewardedAdv_yg is not enabled. Editor grants test reward immediately.");
+            TryGrantAdTowerUpgrade();
+#else
+            Debug.LogWarning("LevelUIPresenter: RewardedAdv_yg is not enabled. Rewarded ad cannot be shown.");
+#endif
         }
 
         private void OnQuestsButtonClicked()
@@ -162,6 +188,60 @@ namespace Project.Scripts.UI.LevelUI
                 _localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
         }
 
+        private void TryGrantAdTowerUpgrade()
+        {
+            var upgraded = _levelUIUseCase.TryUpgradeRandomLowestLevelTower();
+            Debug.Log(upgraded
+                ? "LevelUIPresenter: rewarded ad upgraded a tower."
+                : "LevelUIPresenter: rewarded ad reward could not upgrade a tower.");
+        }
+
+#if RewardedAdv_yg
+        private void SubscribeRewardedAdEvents()
+        {
+            YG2.onRewardAdv += OnRewardedAdReward;
+            YG2.onCloseRewardedAdv += OnRewardedAdClosed;
+            YG2.onErrorRewardedAdv += OnRewardedAdError;
+        }
+
+        private void UnsubscribeRewardedAdEvents()
+        {
+            YG2.onRewardAdv -= OnRewardedAdReward;
+            YG2.onCloseRewardedAdv -= OnRewardedAdClosed;
+            YG2.onErrorRewardedAdv -= OnRewardedAdError;
+        }
+
+        private void OnRewardedAdReward(string rewardId)
+        {
+            if (!_isWaitingAdReward || rewardId != UpgradeLowestTowerRewardId)
+                return;
+
+            _isWaitingAdReward = false;
+            UnsubscribeRewardedAdEvents();
+            TryGrantAdTowerUpgrade();
+        }
+
+        private void OnRewardedAdClosed()
+        {
+            if (!_isWaitingAdReward)
+                return;
+
+            _isWaitingAdReward = false;
+            UnsubscribeRewardedAdEvents();
+            Debug.Log("LevelUIPresenter: rewarded ad was closed without reward.");
+        }
+
+        private void OnRewardedAdError()
+        {
+            if (!_isWaitingAdReward)
+                return;
+
+            _isWaitingAdReward = false;
+            UnsubscribeRewardedAdEvents();
+            Debug.LogWarning("LevelUIPresenter: rewarded ad failed.");
+        }
+#endif
+
         public override void Dispose()
         {
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
@@ -176,6 +256,11 @@ namespace Project.Scripts.UI.LevelUI
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
+
+#if RewardedAdv_yg
+            if (_isWaitingAdReward)
+                UnsubscribeRewardedAdEvents();
+#endif
 
             base.Dispose();
         }

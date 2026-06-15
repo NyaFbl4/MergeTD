@@ -8,6 +8,6 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         event Action CloseRequested;
         event Action AdRequested;
 
-        void SetData(int waveNumber);
+        void SetData(int waveNumber, int rewardCount);
     }
 }

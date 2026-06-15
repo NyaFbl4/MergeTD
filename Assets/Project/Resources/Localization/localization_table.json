@@ -138,8 +138,8 @@
     },
     {
       "key": "end_wave_lose.ad_button",
-      "ru": "\u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c \u0437\u0430 \u0440\u0435\u043a\u043b\u0430\u043c\u0443",
-      "en": "Continue for ad"
+      "ru": "\u041f\u043e\u043b\u0443\u0447\u0438 {0}",
+      "en": "Get {0}"
     }
   ]
 }
