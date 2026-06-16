@@ -140,6 +140,11 @@
       "key": "end_wave_lose.ad_button",
       "ru": "\u041f\u043e\u043b\u0443\u0447\u0438 {0}",
       "en": "Get {0}"
+    },
+    {
+      "key": "settings.reset_progress",
+      "ru": "Сбросить прогресс",
+      "en": "Reset progress"
     }
   ]
 }

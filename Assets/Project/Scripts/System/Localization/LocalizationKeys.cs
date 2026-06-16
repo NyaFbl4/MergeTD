@@ -17,6 +17,7 @@ namespace Project.Scripts.System.Localization
         public const string SettingsMusic = "settings.music";
         public const string SettingsSound = "settings.sound";
         public const string SettingsLanguage = "settings.language";
+        public const string SettingsResetProgress = "settings.reset_progress";
 
         public const string QuestBuyTenTowersDescription = "quest.buy_ten_towers.description";
         public const string QuestDealOneThousandDamageDescription = "quest.deal_one_thousand_damage.description";

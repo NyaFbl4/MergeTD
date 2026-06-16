@@ -11,12 +11,14 @@ namespace Project.Scripts.UI.SettingsUI
         private Label _musicLabel;
         private Label _soundLabel;
         private Label _languageLabel;
+        private Label _resetButtonLabel;
         
         private Button _closeButton;
         private Button _musicButton;
         private Button _soundButton;
         private Button _ruLanguageButton;
         private Button _enLanguageButton;
+        private Button _resetProgressButton;
 
         [SerializeField] private Sprite _activeButton;
         [SerializeField] private Sprite _inactiveButton;
@@ -26,6 +28,7 @@ namespace Project.Scripts.UI.SettingsUI
         public event Action MusicButtonClicked;
         public event Action RuButtonClicked;
         public event Action EnButtonClicked;
+        public event Action ResetProgressButtonClicked;
 
         public override void Awake()
         {
@@ -51,10 +54,16 @@ namespace Project.Scripts.UI.SettingsUI
             if (_enLanguageButton != null)
                 _enLanguageButton.clicked += OnEnLanguageButtonClicked;
             
+            _resetProgressButton = _root.Q<Button>("ResetProgressButton");
+
+            if (_resetProgressButton != null)
+                _resetProgressButton.clicked += OnResetProgressButtonClicked;
+            
             _titleLabel = _root.Q<Label>("TitleLabel");
             _musicLabel = _root.Q<Label>("MusicLabel");
             _soundLabel = _root.Q<Label>("SoundLabel");
             _languageLabel = _root.Q<Label>("LanguageLabel");
+            _resetButtonLabel = _root.Q<Label>("ResetProgressButtonLabel");
         }
 
         public void SetMusicEnabled(bool enabled)
@@ -86,11 +95,17 @@ namespace Project.Scripts.UI.SettingsUI
         {
             _languageLabel.text = label;
         }
+
+        public void SetResetButtonLabel(string label)
+        {
+            _resetButtonLabel.text = label;
+        }
         
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();
         private void OnMusicButtonClicked() => MusicButtonClicked?.Invoke();
         private void OnSoundButtonClicked() => SoundButtonClicked?.Invoke();
         private void OnRuLanguageButtonClicked() => RuButtonClicked?.Invoke();
         private void OnEnLanguageButtonClicked() => EnButtonClicked?.Invoke();
+        private void OnResetProgressButtonClicked() => ResetProgressButtonClicked?.Invoke();
     }
 }
