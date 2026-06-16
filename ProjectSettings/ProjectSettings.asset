@@ -774,17 +774,17 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    LinuxHeadlessSimulation: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    Nintendo Switch: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    PS4: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    PS5: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    WebGL: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;RU_YG2
-    Windows Store Apps: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    XboxOne: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    iPhone: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
-    tvOS: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2
+    Android: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    LinuxHeadlessSimulation: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    Nintendo Switch: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    PS4: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    PS5: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    WebGL: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    Windows Store Apps: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    XboxOne: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    iPhone: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
+    tvOS: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;Localization_yg;RU_YG2;RewardedAdv_yg;InterstitialAdv_yg
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

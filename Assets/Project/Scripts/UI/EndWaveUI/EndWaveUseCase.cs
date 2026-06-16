@@ -1,6 +1,4 @@
-#if RewardedAdv_yg
 using YG;
-#endif
 using System;
 using MessagePipe;
 using Project.Scripts.GameManager;
@@ -97,17 +95,11 @@ namespace Project.Scripts.UI.EndWaveUI
                 Debug.LogWarning("EndWaveUseCase: reward count is empty, rewarded ad reward was skipped.");
                 return;
             }
-
-#if RewardedAdv_yg
+            
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
             YG2.RewardedAdvShow(DoubleWaveRewardAdId);
-#elif UNITY_EDITOR
-            Debug.Log("EndWaveUseCase: RewardedAdv_yg is not enabled. Editor grants test wave reward immediately.");
             GrantAdRewardAndContinue();
-#else
-            Debug.LogWarning("EndWaveUseCase: RewardedAdv_yg is not enabled. Rewarded ad cannot be shown.");
-#endif
         }
 
         private void GrantAdRewardAndContinue()

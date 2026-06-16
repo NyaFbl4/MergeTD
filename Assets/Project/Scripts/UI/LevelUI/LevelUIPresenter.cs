@@ -111,17 +111,11 @@ namespace Project.Scripts.UI.LevelUI
                 return;
 
             Debug.Log("OnADButtonClicked");
-
-#if RewardedAdv_yg
+            
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
             YG2.RewardedAdvShow(UpgradeLowestTowerRewardId);
-#elif UNITY_EDITOR
-            Debug.Log("LevelUIPresenter: RewardedAdv_yg is not enabled. Editor grants test reward immediately.");
             TryGrantAdTowerUpgrade();
-#else
-            Debug.LogWarning("LevelUIPresenter: RewardedAdv_yg is not enabled. Rewarded ad cannot be shown.");
-#endif
         }
 
         private void OnQuestsButtonClicked()
