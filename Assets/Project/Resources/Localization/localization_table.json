@@ -145,6 +145,11 @@
       "key": "settings.reset_progress",
       "ru": "Сбросить прогресс",
       "en": "Reset progress"
+    },
+    {
+      "key": "end_wave.review_button_format",
+      "ru": "Оцени игру за {0}",
+      "en": "Rate game for {0}"
     }
   ]
 }

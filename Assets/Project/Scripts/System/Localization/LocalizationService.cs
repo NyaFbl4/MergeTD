@@ -117,7 +117,6 @@ namespace Project.Scripts.System.Localization
 
         private static string TryDetectStartupLanguage()
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
             try
             {
                 var languageFromWeb = ProjectLanguageBridge.GetAutoLanguageCode();
@@ -128,7 +127,6 @@ namespace Project.Scripts.System.Localization
             {
                 Debug.LogWarning($"LocalizationService: failed to read language from WebGL bridge. {ex.Message}");
             }
-#endif
 
             return Application.systemLanguage switch
             {

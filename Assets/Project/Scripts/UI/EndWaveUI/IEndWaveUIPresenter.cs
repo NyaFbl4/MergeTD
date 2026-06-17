@@ -9,5 +9,7 @@ namespace Project.Scripts.UI.EndWaveUI
         event Action AdRequested;
 
         void SetData(string title, int rewardCount);
+        void SetAdButtonAdMode();
+        void SetAdButtonReviewMode(int rewardCount);
     }
 }

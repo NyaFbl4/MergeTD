@@ -15,6 +15,8 @@ namespace Project.Scripts.UI.EndWaveUI
     public class EndWaveUseCase : IInitializable, IDisposable
     {
         private const string DoubleWaveRewardAdId = "end_wave_double_reward";
+        private const int ReviewAvailableAfterWave = 3;
+        private const string PlayerRatedKey = "player_rated_game";
 
         private readonly BattlefieldRuntime _battlefieldRuntime;
         private readonly IEndWaveUIPresenter _endWaveUIPresenter;
@@ -66,6 +68,15 @@ namespace Project.Scripts.UI.EndWaveUI
             _currentWaveNumber = waveNumber;
             _currentRewardCount = rewardCount;
 
+            if (ShouldShowReviewButton())
+            {
+                _endWaveUIPresenter.SetAdButtonReviewMode(rewardCount);
+            }
+            else
+            {
+                _endWaveUIPresenter.SetAdButtonAdMode();
+            }
+            
             _playerStatsUseCase.AddGold(rewardCount);
             _progressCheckpointUseCase.SaveCheckpoint(waveNumber + 1);
             _endWaveUIPresenter.SetData(_localizationService.Format(LocalizationKeys.EndWaveTitleFormat, 
@@ -75,6 +86,13 @@ namespace Project.Scripts.UI.EndWaveUI
             {
                 TargetPopUpType = typeof(IEndWaveUIPresenter)
             });
+        }
+        
+        private bool ShouldShowReviewButton()
+        {
+            return _currentWaveNumber >= ReviewAvailableAfterWave
+                   && PlayerPrefs.GetInt(PlayerRatedKey, 0) == 0
+                   && YG2.reviewCanShow;
         }
 
         private void OnCloseRequested()
@@ -91,15 +109,46 @@ namespace Project.Scripts.UI.EndWaveUI
                 return;
 
             if (_currentRewardCount <= 0)
+                return;
+
+            if (ShouldShowReviewButton())
             {
-                Debug.LogWarning("EndWaveUseCase: reward count is empty, rewarded ad reward was skipped.");
+                ShowReviewForReward();
                 return;
             }
-            
+
+            ShowRewardedAdForWaveReward();
+        }
+        
+        private void ShowRewardedAdForWaveReward()
+        {
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
             YG2.RewardedAdvShow(DoubleWaveRewardAdId);
-            GrantAdRewardAndContinue();
+        }
+        
+        private void ShowReviewForReward()
+        {
+            YG2.onReviewSent += OnReviewSent;
+            YG2.ReviewShow();
+        }
+        
+        private void OnReviewSent(bool feedbackSent)
+        {
+            YG2.onReviewSent -= OnReviewSent;
+
+            if (!feedbackSent)
+                return;
+
+            PlayerPrefs.SetInt(PlayerRatedKey, 1);
+            PlayerPrefs.Save();
+
+            _playerStatsUseCase.AddGold(_currentRewardCount);
+            _progressCheckpointUseCase.SaveCheckpoint(_currentWaveNumber + 1);
+
+            _endWaveUIPresenter.SetAdButtonAdMode();
+
+            ClosePopupAndContinue();
         }
 
         private void GrantAdRewardAndContinue()
@@ -114,8 +163,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _progressCheckpointUseCase.SaveCheckpoint(_currentWaveNumber + 1);
             ClosePopupAndContinue();
         }
-
-#if RewardedAdv_yg
+        
         private void SubscribeRewardedAdEvents()
         {
             YG2.onRewardAdv += OnRewardedAdReward;
@@ -158,7 +206,6 @@ namespace Project.Scripts.UI.EndWaveUI
             UnsubscribeRewardedAdEvents();
             Debug.LogWarning("EndWaveUseCase: rewarded ad failed.");
         }
-#endif
 
         private void ClosePopupAndContinue()
         {
@@ -181,11 +228,9 @@ namespace Project.Scripts.UI.EndWaveUI
             _battlefieldRuntime.WaveCompleted -= OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested -= OnCloseRequested;
             _endWaveUIPresenter.AdRequested -= OnAdRequested;
-
-#if RewardedAdv_yg
+            
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();
-#endif
         }        
     }
 }

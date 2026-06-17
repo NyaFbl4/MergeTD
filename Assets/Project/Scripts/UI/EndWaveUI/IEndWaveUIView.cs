@@ -13,5 +13,7 @@ namespace Project.Scripts.UI.EndWaveUI
         void SetRewardLabel(string text);
         void SetAdButtonText(string text);
         void SetCloseButtonText(string text);
+        void SetAdButtonAdMode();
+        void SetAdButtonReviewMode();
     }
 }

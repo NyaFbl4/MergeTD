@@ -1,11 +1,15 @@
 ﻿using System;
 using Project.Scripts.Systems.UI;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.EndWaveUI
 {
     public class EndWaveUIView : LayoutViewBase, IEndWaveUIView
     {
+        [SerializeField] private Sprite _adButtonSprite;
+        [SerializeField] private Sprite _reviewButtonSprite;
+        
         private Button _adButton;
         private Button _closeButton;
         
@@ -59,6 +63,16 @@ namespace Project.Scripts.UI.EndWaveUI
         public void SetCloseButtonText(string text)
         {
             _closeButtonLabel.text = text;
+        }
+        
+        public void SetAdButtonAdMode()
+        {
+            _adButton.style.backgroundImage = new StyleBackground(_adButtonSprite);
+        }
+
+        public void SetAdButtonReviewMode()
+        {
+            _adButton.style.backgroundImage = new StyleBackground(_reviewButtonSprite);
         }
 
         private void OnDestroy()

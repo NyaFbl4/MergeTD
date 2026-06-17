@@ -37,6 +37,24 @@ namespace Project.Scripts.UI.EndWaveUI
             _layoutView.SetRewardCount(rewardCount);
             _audioManager.PlaySound(ESoundId.EndWave);
         }
+        
+        public void SetAdButtonAdMode()
+        {
+            _layoutView.SetAdButtonText(
+                _localizationService.Get(LocalizationKeys.EndWaveAdButton));
+
+            _layoutView.SetAdButtonAdMode();
+        }
+
+        public void SetAdButtonReviewMode(int rewardCount)
+        {
+            _layoutView.SetAdButtonText(
+                _localizationService.Format(
+                    LocalizationKeys.EndWaveReviewButtonFormat,
+                    rewardCount));
+
+            _layoutView.SetAdButtonReviewMode();
+        }
 
         private void OnCloseButtonClicked()
         {

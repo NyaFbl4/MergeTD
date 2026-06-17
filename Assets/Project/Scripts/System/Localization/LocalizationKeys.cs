@@ -34,5 +34,6 @@ namespace Project.Scripts.System.Localization
         public const string QuestDone = "quest.done";
         public const string UpgradeMax = "upgrade.max";
         public const string QuestCompleteWavesDescription = "quest.complete_waves.description";
+        public const string EndWaveReviewButtonFormat = "end_wave.review_button_format";
     }
 }

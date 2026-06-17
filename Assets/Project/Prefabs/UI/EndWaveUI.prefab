@@ -68,3 +68,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a20489d1e74c899427b52015674999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.UI.EndWaveUI.EndWaveUIView
+  _adButtonSprite: {fileID: -4614560448437920579, guid: 431a46382b80dc345918f36aa7e9f8ce, type: 3}
+  _reviewButtonSprite: {fileID: 3793781107737361745, guid: 750f7908bcf221b4481eb7f1a8f839e7, type: 3}
