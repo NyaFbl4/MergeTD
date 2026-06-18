@@ -186,6 +186,7 @@ namespace Project.Scripts.System.Localization
             AddEntry(LocalizationKeys.EndWaveRewardLabel, "Награда за волну", "Wave reward");
             AddEntry(LocalizationKeys.EndWaveCloseButton, "Продолжить", "Continue");
             AddEntry(LocalizationKeys.EndWaveAdButton, "x2 за рекламу", "x2 for ad");
+            AddEntry(LocalizationKeys.EndWaveReviewButtonFormat, "РћС†РµРЅРё РёРіСЂСѓ Р·Р° {0}", "Rate game for {0}");
             AddEntry(LocalizationKeys.EndWaveLoseTitle, "\u041f\u043e\u0440\u0430\u0436\u0435\u043d\u0438\u0435", "Defeat");
             AddEntry(LocalizationKeys.EndWaveLoseDescriptionFormat, "\u0412\u043e\u043b\u043d\u0430 {0} \u043d\u0435 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u0430", "Wave {0} failed");
             AddEntry(LocalizationKeys.EndWaveLoseCloseButton, "\u041f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c", "Restart");

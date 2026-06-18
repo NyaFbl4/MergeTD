@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Project.Scripts.Systems.UI;
 
 namespace Project.Scripts.UI.EndWaveUI
@@ -7,13 +7,15 @@ namespace Project.Scripts.UI.EndWaveUI
     {
         event Action CloseButtonClicked;
         event Action ADButtonClicked;
+        event Action ReviewButtonClicked;
         
         void SetTitle(string title);
         void SetRewardCount(int rewardCount);
         void SetRewardLabel(string text);
         void SetAdButtonText(string text);
+        void SetReviewButtonText(string text);
         void SetCloseButtonText(string text);
-        void SetAdButtonAdMode();
-        void SetAdButtonReviewMode();
+        void ShowAdButtonOnly();
+        void ShowReviewButtonOnly();
     }
 }

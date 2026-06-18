@@ -5,6 +5,7 @@ namespace Project.Scripts.System.Save
     public class ProgressSaveService
     {
         private const string SaveKey = "merge_td_progress_checkpoint_v1";
+        private const string PlayerRatedKey = "player_rated_game";
 
         public bool TryLoad(out ProgressSaveData data)
         {
@@ -42,6 +43,7 @@ namespace Project.Scripts.System.Save
         public void Clear()
         {
             PlayerPrefs.DeleteKey(SaveKey);
+            PlayerPrefs.DeleteKey(PlayerRatedKey);
             PlayerPrefs.Save();
         }
     }

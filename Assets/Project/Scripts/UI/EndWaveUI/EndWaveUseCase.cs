@@ -1,4 +1,3 @@
-using YG;
 using System;
 using MessagePipe;
 using Project.Scripts.GameManager;
@@ -9,6 +8,7 @@ using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
 using UnityEngine;
 using VContainer.Unity;
+using YG;
 
 namespace Project.Scripts.UI.EndWaveUI
 {
@@ -29,6 +29,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private bool _isLastWave;
         private bool _isWaitingAdReward;
+        private bool _isWaitingReview;
         private bool _isAdRewardClaimed;
         private int _currentWaveNumber;
         private int _currentRewardCount;
@@ -58,29 +59,28 @@ namespace Project.Scripts.UI.EndWaveUI
             _battlefieldRuntime.WaveCompleted += OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested += OnCloseRequested;
             _endWaveUIPresenter.AdRequested += OnAdRequested;
+            _endWaveUIPresenter.ReviewRequested += OnReviewRequested;
         }
 
         private void OnWaveCompleted(int waveNumber, int rewardCount, bool isLastWave)
         {
             _isLastWave = isLastWave;
             _isWaitingAdReward = false;
+            _isWaitingReview = false;
             _isAdRewardClaimed = false;
             _currentWaveNumber = waveNumber;
             _currentRewardCount = rewardCount;
 
             if (ShouldShowReviewButton())
-            {
                 _endWaveUIPresenter.SetAdButtonReviewMode(rewardCount);
-            }
             else
-            {
                 _endWaveUIPresenter.SetAdButtonAdMode();
-            }
             
             _playerStatsUseCase.AddGold(rewardCount);
             _progressCheckpointUseCase.SaveCheckpoint(waveNumber + 1);
-            _endWaveUIPresenter.SetData(_localizationService.Format(LocalizationKeys.EndWaveTitleFormat, 
-                                        waveNumber), rewardCount);
+            _endWaveUIPresenter.SetData(
+                _localizationService.Format(LocalizationKeys.EndWaveTitleFormat, waveNumber),
+                rewardCount);
 
             _showPopupPublisher.Publish(new ShowPopupDto
             {
@@ -97,7 +97,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private void OnCloseRequested()
         {
-            if (_isWaitingAdReward)
+            if (_isWaitingAdReward || _isWaitingReview)
                 return;
 
             ClosePopupAndContinue();
@@ -105,19 +105,30 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private void OnAdRequested()
         {
-            if (_isWaitingAdReward || _isAdRewardClaimed)
+            if (_isWaitingAdReward || _isWaitingReview || _isAdRewardClaimed)
                 return;
 
             if (_currentRewardCount <= 0)
                 return;
 
-            if (ShouldShowReviewButton())
+            ShowRewardedAdForWaveReward();
+        }
+
+        private void OnReviewRequested()
+        {
+            if (_isWaitingAdReward || _isWaitingReview || _isAdRewardClaimed)
+                return;
+
+            if (_currentRewardCount <= 0)
+                return;
+
+            if (!ShouldShowReviewButton())
             {
-                ShowReviewForReward();
+                _endWaveUIPresenter.SetAdButtonAdMode();
                 return;
             }
 
-            ShowRewardedAdForWaveReward();
+            ShowReviewForReward();
         }
         
         private void ShowRewardedAdForWaveReward()
@@ -129,16 +140,21 @@ namespace Project.Scripts.UI.EndWaveUI
         
         private void ShowReviewForReward()
         {
+            _isWaitingReview = true;
             YG2.onReviewSent += OnReviewSent;
             YG2.ReviewShow();
         }
         
         private void OnReviewSent(bool feedbackSent)
         {
+            _isWaitingReview = false;
             YG2.onReviewSent -= OnReviewSent;
 
             if (!feedbackSent)
+            {
+                _endWaveUIPresenter.SetAdButtonAdMode();
                 return;
+            }
 
             PlayerPrefs.SetInt(PlayerRatedKey, 1);
             PlayerPrefs.Save();
@@ -147,7 +163,6 @@ namespace Project.Scripts.UI.EndWaveUI
             _progressCheckpointUseCase.SaveCheckpoint(_currentWaveNumber + 1);
 
             _endWaveUIPresenter.SetAdButtonAdMode();
-
             ClosePopupAndContinue();
         }
 
@@ -228,9 +243,13 @@ namespace Project.Scripts.UI.EndWaveUI
             _battlefieldRuntime.WaveCompleted -= OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested -= OnCloseRequested;
             _endWaveUIPresenter.AdRequested -= OnAdRequested;
+            _endWaveUIPresenter.ReviewRequested -= OnReviewRequested;
             
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();
+
+            if (_isWaitingReview)
+                YG2.onReviewSent -= OnReviewSent;
         }        
     }
 }
