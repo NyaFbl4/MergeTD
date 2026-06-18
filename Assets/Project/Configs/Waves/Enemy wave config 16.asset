@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814177a1db754a24b96b922f3b265e0b, type: 3}
+  m_Name: Enemy wave config 16
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Wave.EnemyWaveConfig
+  _countGoldReward: 15800
+  _sequence:
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 6.1
+    _count: 40
+    _spawnInterval: 0.8
+    _startDelay: 0
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 5.8
+    _count: 38
+    _spawnInterval: 0.9
+    _startDelay: 6
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 5.55
+    _count: 36
+    _spawnInterval: 1
+    _startDelay: 12
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 7.4
+    _count: 28
+    _spawnInterval: 1.22
+    _startDelay: 24
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 4fc337759d3b4d8f94ae5601483e87a3, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 32
+    _count: 1
+    _spawnInterval: 1
+    _startDelay: 67
+  _delayAfterWave: 0
+  _killRewardGold: 46
