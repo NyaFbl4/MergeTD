@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.Localization;
@@ -16,6 +16,7 @@ namespace Project.Scripts.UI.ShopUI
         [SerializeField] private UpgradeItemConfig _healthUpgradeConfig;
         [SerializeField] private UpgradeItemConfig _critChanceUpgradeConfig;
         [SerializeField] private UpgradeItemConfig _critDamageUpgradeConfig;
+        [SerializeField] private UpgradeItemConfig _towerLevelUpgradeConfig;
 
         private Label _titleLabel;
         private Button _closeButton;
@@ -26,6 +27,7 @@ namespace Project.Scripts.UI.ShopUI
         public UpgradeItemConfig HealthUpgradeConfig => _healthUpgradeConfig;
         public UpgradeItemConfig CritChanceUpgradeConfig => _critChanceUpgradeConfig;
         public UpgradeItemConfig CritDamageUpgradeConfig => _critDamageUpgradeConfig;
+        public UpgradeItemConfig TowerLevelUpgradeConfig => _towerLevelUpgradeConfig;
 
         public event Action CloseButtonClicked;
 
@@ -66,6 +68,5 @@ namespace Project.Scripts.UI.ShopUI
         }
 
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();
-
     }
 }

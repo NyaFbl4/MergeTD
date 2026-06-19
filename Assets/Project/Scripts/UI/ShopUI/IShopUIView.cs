@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.Localization;
@@ -15,6 +15,7 @@ namespace Project.Scripts.UI.ShopUI
         UpgradeItemConfig HealthUpgradeConfig { get; }
         UpgradeItemConfig CritChanceUpgradeConfig { get; }
         UpgradeItemConfig CritDamageUpgradeConfig { get; }
+        UpgradeItemConfig TowerLevelUpgradeConfig { get; }
 
         void SetTitle(string title);
         void ClearItems();

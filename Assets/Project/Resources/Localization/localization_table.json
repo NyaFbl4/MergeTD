@@ -1,4 +1,4 @@
-﻿{
+{
   "defaultLanguage": "ru",
   "entries": [
     {
@@ -65,6 +65,11 @@
       "key": "upgrade.tower_crit_damage.description",
       "ru": "Увеличить силу крита башни на {0}",
       "en": "Increase tower crit damage by {0}"
+    },
+    {
+      "key": "upgrade.tower_level.description",
+      "ru": "Башни появляются {0} уровня",
+      "en": "Spawn towers at level {0}"
     },
         {
           "key": "settings.title",

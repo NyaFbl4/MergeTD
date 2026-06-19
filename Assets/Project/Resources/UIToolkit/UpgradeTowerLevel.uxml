@@ -11,6 +11,10 @@
                 <ui:VisualElement name="Level_3" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
                 <ui:VisualElement name="Level_4" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
                 <ui:VisualElement name="Level_5" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
+                <ui:VisualElement name="Level_6" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
+                <ui:VisualElement name="Level_7" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
+                <ui:VisualElement name="Level_8" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
+                <ui:VisualElement name="Level_9" style="flex-grow: 1; background-image: resource(&apos;UI/Shopping popup/star off&apos;); width: 35px; height: 35px; min-height: 35px; max-height: 35px; min-width: 35px; max-width: 35px;" />
             </ui:VisualElement>
             <ui:Label text="Label Label Label Label Label Label Label Label " name="DescriptionUpgradeLabel" style="height: 77px; white-space: normal; font-size: 30px; -unity-text-align: upper-center; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Roboto-Bold.ttf?fileID=12800000&amp;guid=4beb055f07aaff244873dec698d0363e&amp;type=3#Roboto-Bold&quot;); color: rgb(0, 0, 0);" />
         </ui:VisualElement>

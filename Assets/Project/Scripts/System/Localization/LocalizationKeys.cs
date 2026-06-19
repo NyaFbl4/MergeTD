@@ -28,6 +28,7 @@ namespace Project.Scripts.System.Localization
         public const string UpgradeTowerAttackSpeedDescription = "upgrade.tower_attack_speed.description";
         public const string UpgradeTowerCritChanceDescription = "upgrade.tower_crit_chance.description";
         public const string UpgradeTowerCritDamageDescription = "upgrade.tower_crit_damage.description";
+        public const string UpgradeTowerLevelDescription = "upgrade.tower_level.description";
         
         public const string ShopTitle = "shop.title";
         public const string QuestsTitle = "quests.title";

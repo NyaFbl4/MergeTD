@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using Project.Scripts.GameManager;
@@ -50,6 +50,7 @@ namespace Project.Scripts.UI.ShopUI
                 new BaseHealthUpgradeItem(_layoutView.HealthUpgradeConfig, _playerStats, _baseHealth),
                 new TowerCritChanceUpgradeItem(_layoutView.CritChanceUpgradeConfig, _playerStats),
                 new TowerCritDamageUpgradeItem(_layoutView.CritDamageUpgradeConfig, _playerStats),
+                new TowerLevelUpgradeItem(_layoutView.TowerLevelUpgradeConfig, _playerStats),
             };
 
             _layoutView.CloseButtonClicked += OnCloseButtonClicked;
@@ -121,7 +122,7 @@ namespace Project.Scripts.UI.ShopUI
             _layoutView.CloseButtonClicked -= OnCloseButtonClicked;
             _playerStats.OnGoldChanged -= OnGoldChanged;
             _playerStats.UpgradesChanged -= OnUpgradesChanged;
-            _localizationService.OnChangeLanguage += OnLanguageChanged;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
             
             base.Dispose();
         }

@@ -191,6 +191,7 @@ namespace Project.Scripts.System.Localization
             AddEntry(LocalizationKeys.EndWaveLoseDescriptionFormat, "\u0412\u043e\u043b\u043d\u0430 {0} \u043d\u0435 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u0430", "Wave {0} failed");
             AddEntry(LocalizationKeys.EndWaveLoseCloseButton, "\u041f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c", "Restart");
             AddEntry(LocalizationKeys.EndWaveLoseAdButton, "\u041f\u043e\u043b\u0443\u0447\u0438 {0}", "Get {0}");
+            AddEntry(LocalizationKeys.UpgradeTowerLevelDescription, "\u0411\u0430\u0448\u043d\u0438 \u043f\u043e\u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f {0} \u0443\u0440\u043e\u0432\u043d\u044f", "Spawn towers at level {0}");
         }
 
         private void AddEntry(string key, string ru, string en)

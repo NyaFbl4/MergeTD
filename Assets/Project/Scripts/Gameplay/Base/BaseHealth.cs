@@ -70,7 +70,7 @@ namespace Project.Scripts.Gameplay.Base
 
         public void OnStartGame()
         {
-            ResetHealth();
+            // ProgressCheckpointUseCase restores saved/default health on game start.
         }
 
         public void ApplyDamage(int damage)

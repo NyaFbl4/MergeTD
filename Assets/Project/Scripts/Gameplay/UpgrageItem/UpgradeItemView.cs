@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Project.Scripts.Configs;
 using Project.Scripts.System.Localization;
 using UnityEngine.UIElements;
 
@@ -21,14 +20,9 @@ namespace Project.Scripts.Gameplay.UpgradeItem
             _buyButton = root.Q<Button>("BuyUpgradeButton");
             _icon = root.Q<VisualElement>("UpgradeIcon");
 
-            _stars = new List<VisualElement>
-            {
-                root.Q<VisualElement>("Level_1"),
-                root.Q<VisualElement>("Level_2"),
-                root.Q<VisualElement>("Level_3"),
-                root.Q<VisualElement>("Level_4"),
-                root.Q<VisualElement>("Level_5")
-            };
+            _stars = new List<VisualElement>();
+            for (var i = 1; i <= 9; i++)
+                _stars.Add(root.Q<VisualElement>($"Level_{i}"));
         }
 
         public void Bind(IUpgradeItem item, Action onBuy, ILocalizationService localizationService)
@@ -47,6 +41,7 @@ namespace Project.Scripts.Gameplay.UpgradeItem
                 if (_stars[i] == null)
                     continue;
 
+                _stars[i].style.display = i < item.MaxLevel ? DisplayStyle.Flex : DisplayStyle.None;
                 _stars[i].style.opacity = i < item.CurrentLevel ? 1f : 0.35f;
             }
 

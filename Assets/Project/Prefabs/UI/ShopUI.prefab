@@ -74,3 +74,4 @@ MonoBehaviour:
   _healthUpgradeConfig: {fileID: 11400000, guid: b62c6f1a303dd4f4ba57930dbc3384c5, type: 2}
   _critChanceUpgradeConfig: {fileID: 11400000, guid: e2036fac8558dff4ead6ae6c4794bf00, type: 2}
   _critDamageUpgradeConfig: {fileID: 11400000, guid: 5a67f66a77663b041a9588aedec39fae, type: 2}
+  _towerLevelUpgradeConfig: {fileID: 11400000, guid: 1a9e9eaa3c624bd49f09bde513c901ef, type: 2}
