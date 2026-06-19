@@ -1,4 +1,4 @@
-{
+﻿{
   "defaultLanguage": "ru",
   "entries": [
     {
@@ -28,18 +28,18 @@
     },
     {
       "key": "quest.buy_ten_towers.description",
-      "ru": "Купить 10 башен",
-      "en": "Buy 10 towers"
+      "ru": "\u041a\u0443\u043f\u0438\u0442\u044c {0} \u0431\u0430\u0448\u0435\u043d",
+      "en": "Buy {0} towers"
     },
     {
       "key": "quest.deal_one_thousand_damage.description",
-      "ru": "Нанести 1000 урона",
-      "en": "Deal 1000 damage"
+      "ru": "\u041d\u0430\u043d\u0435\u0441\u0442\u0438 {0} \u0443\u0440\u043e\u043d\u0430",
+      "en": "Deal {0} damage"
     },
     {
       "key": "quest.kill_ten_enemies.description",
-      "ru": "Убить 10 противников",
-      "en": "Kill 10 enemies"
+      "ru": "\u0423\u0431\u0438\u0442\u044c {0} \u043f\u0440\u043e\u0442\u0438\u0432\u043d\u0438\u043a\u043e\u0432",
+      "en": "Kill {0} enemies"
     },
     {
       "key": "upgrade.base_health.description",

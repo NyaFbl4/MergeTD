@@ -17,4 +17,6 @@ MonoBehaviour:
   _description: quest.kill_ten_enemies.description
   _rewardGold: 100
   _targetValue: 10
+  _targetScalePerWave: 0.15
+  _rewardScalePerWave: 0.1
   _enemyType: 0

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MessagePipe;
 using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.System.UseCases;
@@ -12,7 +12,9 @@ namespace Project.Scripts.Gameplay.Quests
         public CompleteWaveQuest(
             CompleteWaveQuestConfig config,
             IPlayerStatsUseCase playerStats,
-            ISubscriber<WaveCompletedQuestEventDTO> subscriber) : base(config, playerStats)
+            ISubscriber<WaveCompletedQuestEventDTO> subscriber,
+            int targetValue,
+            int rewardGold) : base(config, playerStats, targetValue, rewardGold)
         {
             _subscription = subscriber.Subscribe(OnWaveCompleted);
         }

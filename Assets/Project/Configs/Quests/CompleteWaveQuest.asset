@@ -17,4 +17,6 @@ MonoBehaviour:
   _description: quest.complete_waves.description
   _rewardGold: 100
   _targetValue: 3
+  _targetScalePerWave: 0.08
+  _rewardScalePerWave: 0.1
   _onlyLastWave: 0

@@ -17,6 +17,8 @@ MonoBehaviour:
   _description: quest.deal_critical_damage.description
   _rewardGold: 100
   _targetValue: 1000
+  _targetScalePerWave: 0.2
+  _rewardScalePerWave: 0.12
   _onlyCritical: 1
   _filterByEnemyType: 0
   _enemyType: 0

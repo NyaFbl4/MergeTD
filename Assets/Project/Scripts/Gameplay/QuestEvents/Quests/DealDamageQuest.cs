@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MessagePipe;
 using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.System.UseCases;
@@ -12,7 +12,9 @@ namespace Project.Scripts.Gameplay.Quests
         public DealDamageQuest(
             DealDamageQuestConfig config,
             IPlayerStatsUseCase playerStats,
-            ISubscriber<DamageDealtQuestEventDTO> subscriber) : base(config, playerStats)
+            ISubscriber<DamageDealtQuestEventDTO> subscriber,
+            int targetValue,
+            int rewardGold) : base(config, playerStats, targetValue, rewardGold)
         {
             _subscription = subscriber.Subscribe(OnDamageDealt);
         }

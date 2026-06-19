@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -18,5 +18,7 @@ MonoBehaviour:
   _description: quest.kill_ten_enemies.description
   _rewardGold: 50
   _targetValue: 10
+  _targetScalePerWave: 0.15
+  _rewardScalePerWave: 0.1
   _enemyType: 0
 

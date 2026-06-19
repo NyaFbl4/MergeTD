@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -18,6 +18,8 @@ MonoBehaviour:
   _description: quest.deal_one_thousand_damage.description
   _rewardGold: 100
   _targetValue: 1000
+  _targetScalePerWave: 0.2
+  _rewardScalePerWave: 0.12
   _onlyCritical: 0
   _filterByEnemyType: 0
   _enemyType: 0

@@ -1,4 +1,4 @@
-﻿using MessagePipe;
+using MessagePipe;
 using Cysharp.Threading.Tasks;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Quests;
@@ -49,6 +49,8 @@ namespace Project.Scripts.UI.QuestUI
 
         public override async UniTask ActivateAsync()
         {
+            _questService.EnsureActiveQuests();
+            Refresh();
             _gameManagerService.PauseGame();
             await base.ActivateAsync();
         }
