@@ -19,12 +19,16 @@ namespace Project.Scripts.Gameplay.Systems
         private readonly BattlefieldContext _context;
         //private readonly EnemyConfig _enemyConfig;
         private readonly LevelConfig _levelConfig;
+        private const float MinSpawnInterval = 0.22f;
+
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
         
         private float _waveDelayTimer;
         private bool _isWaitingWaveStart;
         private float _waveStartTimer;
+        private float _spawnCooldown;
+        private int _nextSequenceRuntimeIndex;
         
         private int _currentWaveIndex;
         private readonly List<EnemySpawnSequenceRuntime> _sequenceRuntimes = new();
@@ -81,6 +85,8 @@ namespace Project.Scripts.Gameplay.Systems
             _waveDelayTimer = 0f;
             _isWaitingWaveStart = false;
             _waveStartTimer = 0f;
+            _spawnCooldown = 0f;
+            _nextSequenceRuntimeIndex = 0;
 
             _isGameRunning = true;
             _isWaitingNextWave = false;
@@ -158,6 +164,8 @@ namespace Project.Scripts.Gameplay.Systems
             }
 
             _sequenceRuntimes.Clear();
+            _spawnCooldown = 0f;
+            _nextSequenceRuntimeIndex = 0;
 
             var wave = _levelConfig.Waves[_currentWaveIndex];
             Debug.Log($"Wave started: #{CurrentWaveNumber}");
@@ -195,15 +203,33 @@ namespace Project.Scripts.Gameplay.Systems
 
         private void UpdateWaveSpawn(float deltaTime)
         {
-            for (var i = 0; i < _sequenceRuntimes.Count; i++)
+            if (_spawnCooldown > 0f)
             {
-                var sequenceRuntime = _sequenceRuntimes[i];
+                _spawnCooldown -= deltaTime;
+                TryCompleteWave();
+                return;
+            }
+
+            if (_sequenceRuntimes.Count == 0)
+            {
+                TryCompleteWave();
+                return;
+            }
+
+            var checksCount = _sequenceRuntimes.Count;
+            for (var offset = 0; offset < checksCount; offset++)
+            {
+                var index = (_nextSequenceRuntimeIndex + offset) % _sequenceRuntimes.Count;
+                var sequenceRuntime = _sequenceRuntimes[index];
 
                 if (!sequenceRuntime.CanSpawn(deltaTime))
                     continue;
 
                 SpawnEnemy(sequenceRuntime.Config);
                 sequenceRuntime.MarkSpawned();
+                _spawnCooldown = MinSpawnInterval;
+                _nextSequenceRuntimeIndex = (index + 1) % _sequenceRuntimes.Count;
+                break;
             }
 
             TryCompleteWave();
@@ -224,8 +250,9 @@ namespace Project.Scripts.Gameplay.Systems
 
             var wave = _levelConfig.Waves[_currentWaveIndex];
             
+            var typeHealthMultiplier = sequence.EnemyConfig.GetHealthMultiplier(enemy.EnemyType);
             var scaledHealth = Mathf.Max(1, Mathf.RoundToInt(
-                sequence.EnemyConfig.StartHealth * sequence.HealthMultiplier));
+                sequence.EnemyConfig.StartHealth * sequence.HealthMultiplier * typeHealthMultiplier));
             
             enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig, wave.KillRewardGold, scaledHealth);
             enemy.Finished += OnEnemyFinished;

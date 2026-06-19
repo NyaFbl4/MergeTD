@@ -3,6 +3,7 @@ using MessagePipe;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
 using VContainer.Unity;
@@ -18,6 +19,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly LevelConfig _levelConfig;
+        private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
 
         private bool _isShown;
 
@@ -28,7 +30,8 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             IGameManagerService gameManagerService,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            LevelConfig levelConfig)
+            LevelConfig levelConfig,
+            ProgressCheckpointUseCase progressCheckpointUseCase)
         {
             _baseHealth = baseHealth;
             _endWaveLoseUIPresenter = endWaveLoseUIPresenter;
@@ -37,6 +40,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
             _levelConfig = levelConfig;
+            _progressCheckpointUseCase = progressCheckpointUseCase;
         }
 
         public void Initialize()
@@ -53,6 +57,8 @@ namespace Project.Scripts.UI.EndWaveLoseUI
 
             var waveNumber = _playerStatsUseCase.Wave;
             var rewardCount = GetWaveReward(waveNumber);
+
+            _progressCheckpointUseCase.SaveRetryCheckpoint(waveNumber);
 
             _isShown = true;
             _endWaveLoseUIPresenter.SetData(waveNumber, rewardCount);

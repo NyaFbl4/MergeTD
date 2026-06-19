@@ -16,3 +16,19 @@ MonoBehaviour:
   _startDamage: 1
   _startMoveSpeed: 0.5
   _killRewardGold: 10
+  _typeStats:
+  - _enemyType: 0
+    _healthMultiplier: 1
+    _moveSpeedMultiplier: 1
+  - _enemyType: 1
+    _healthMultiplier: 2
+    _moveSpeedMultiplier: 0.75
+  - _enemyType: 2
+    _healthMultiplier: 0.75
+    _moveSpeedMultiplier: 1.45
+  - _enemyType: 3
+    _healthMultiplier: 1.8
+    _moveSpeedMultiplier: 0.65
+  - _enemyType: 4
+    _healthMultiplier: 1.2
+    _moveSpeedMultiplier: 1.1

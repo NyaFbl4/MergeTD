@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
@@ -41,7 +41,7 @@ namespace Project.Scripts.Gameplay.Enemies
             _isFinished = false;
             _config = config;
 
-            _moveSpeed = _config.StartMoveSpeed;
+            _moveSpeed = _config.StartMoveSpeed * _config.GetMoveSpeedMultiplier(_enemyType);
             _damageToBase = _config.StartDamage;
             _killRewardGold = killRewardGold;
 

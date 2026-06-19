@@ -69,14 +69,25 @@ namespace Project.Scripts.System.Save
 
         public void SaveCheckpoint(int nextWave)
         {
+            SaveCheckpointInternal(nextWave, _baseHealth.CurrentHealth);
+        }
+
+        public void SaveRetryCheckpoint(int wave)
+        {
+            SaveCheckpointInternal(wave, _baseHealth.MaxHealth);
+        }
+
+        private void SaveCheckpointInternal(int nextWave, int currentBaseHealth)
+        {
+            var maxBaseHealth = Mathf.Max(1, _baseHealth.MaxHealth);
             var data = new ProgressSaveData
             {
                 nextWave = ClampWave(nextWave),
                 gold = _playerStatsUseCase.Gold,
                 selectedTowerLevel = _playerStatsUseCase.SelectedTowerLevel,
                 towerCost = _buyTowerUseCase.TowerCost,
-                currentBaseHealth = _baseHealth.CurrentHealth,
-                maxBaseHealth = _baseHealth.MaxHealth,
+                currentBaseHealth = Mathf.Clamp(currentBaseHealth, 1, maxBaseHealth),
+                maxBaseHealth = maxBaseHealth,
                 towerDamageBonus = _playerStatsUseCase.TowerDamageBonus,
                 towerAttackSpeedBonus = _playerStatsUseCase.TowerAttackSpeedBonus,
                 towerCritChanceBonus = _playerStatsUseCase.TowerCritChanceBonus,
