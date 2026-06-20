@@ -1570,7 +1570,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 210
   m_SortAtRoot: 1
 --- !u!1 &688097474
 GameObject:
@@ -2758,7 +2758,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 200
   m_SortAtRoot: 0
 --- !u!212 &1101122224
 SpriteRenderer:

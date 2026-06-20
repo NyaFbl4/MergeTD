@@ -14,6 +14,7 @@ namespace Project.Scripts.Gameplay.Enemies
         private const int SortingOrderPerProgress = 100;
         private const int CanvasSortingOffset = 10;
         private const int BossDamageToBase = 5;
+        private const float MinBaseReachDistance = 0.25f;
 
         private float _moveSpeed;
         private int _damageToBase = 1;
@@ -25,6 +26,7 @@ namespace Project.Scripts.Gameplay.Enemies
         private LanePath _lanePath;
         private BaseHealth _baseHealth;
         private Canvas[] _canvases;
+        private Collider2D[] _colliders;
         private int _targetWaypointIndex;
         private bool _isInitialized;
         private int _killRewardGold;
@@ -101,6 +103,12 @@ namespace Project.Scripts.Gameplay.Enemies
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, _moveSpeed * deltaTime);
             UpdateRenderOrder();
 
+            if (IsCloseEnoughToBase(targetPosition))
+            {
+                ReachBase();
+                return;
+            }
+
             if (Vector3.SqrMagnitude(transform.position - targetPosition) <= 0.0001f)
                 _targetWaypointIndex++;
         }
@@ -111,6 +119,7 @@ namespace Project.Scripts.Gameplay.Enemies
                 _sortingGroup = GetComponent<SortingGroup>();
 
             _canvases ??= GetComponentsInChildren<Canvas>(true);
+            _colliders ??= GetComponentsInChildren<Collider2D>(true);
         }
 
         private void UpdateRenderOrder()
@@ -137,6 +146,35 @@ namespace Project.Scripts.Gameplay.Enemies
 
             var progress = Mathf.Clamp01(_lanePath.GetProgressToEnd(transform.position, _targetWaypointIndex));
             return SortingOrderBase + Mathf.RoundToInt(progress * SortingOrderPerProgress);
+        }
+
+        private bool IsCloseEnoughToBase(Vector3 targetPosition)
+        {
+            if (_lanePath == null || _targetWaypointIndex < _lanePath.WaypointCount - 1)
+                return false;
+
+            var reachDistance = GetBaseReachDistance();
+            return Vector3.SqrMagnitude(transform.position - targetPosition) <= reachDistance * reachDistance;
+        }
+
+        private float GetBaseReachDistance()
+        {
+            var reachDistance = MinBaseReachDistance;
+
+            if (_colliders == null)
+                return reachDistance;
+
+            for (var i = 0; i < _colliders.Length; i++)
+            {
+                var enemyCollider = _colliders[i];
+                if (enemyCollider == null || !enemyCollider.enabled)
+                    continue;
+
+                var extents = enemyCollider.bounds.extents;
+                reachDistance = Mathf.Max(reachDistance, extents.x, extents.y);
+            }
+
+            return reachDistance;
         }
 
         public void IsDie()

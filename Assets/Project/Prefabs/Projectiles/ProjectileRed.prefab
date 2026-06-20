@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &1237786341390160718
 GameObject:
@@ -103,7 +103,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 260
   m_SortAtRoot: 0
 --- !u!58 &9026730627792103833
 CircleCollider2D:

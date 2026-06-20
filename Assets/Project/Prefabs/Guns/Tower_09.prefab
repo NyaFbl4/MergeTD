@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &1830318065701484586
 GameObject:
@@ -356,7 +356,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 250
   m_SortAtRoot: 0
 --- !u!114 &2084401357731635588
 MonoBehaviour:
