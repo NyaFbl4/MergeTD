@@ -57,6 +57,7 @@ namespace Installers
 
             // Game loop
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
+            builder.RegisterEntryPoint<QuestService>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();;
             builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>().AsSelf();
@@ -67,7 +68,6 @@ namespace Installers
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
             builder.RegisterEntryPoint<UIMessageHandler>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<QuestService>().AsSelf();
         }
 
         private void RegisterSceneComponents(IContainerBuilder builder)

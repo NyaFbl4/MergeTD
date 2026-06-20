@@ -55,7 +55,8 @@ namespace Project.Scripts.Gameplay.Quests
 
         public void Initialize()
         {
-            LoadAvailableConfigs();
+            // Progress events can happen before the quest window is opened, so runtimes must exist at startup.
+            EnsureActiveQuests();
         }
 
         public void OnStartGame()

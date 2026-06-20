@@ -2,7 +2,7 @@
 
 namespace Project.Scripts.Gameplay.Field
 {
-    public class LanePath : MonoBehaviour
+    public partial class LanePath : MonoBehaviour
     {
         [SerializeField] private Transform[] _waypoints;
 

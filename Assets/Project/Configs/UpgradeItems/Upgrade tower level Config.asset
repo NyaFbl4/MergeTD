@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
   _id: 6
   _description: upgrade.tower_level.description
-  _icon: {fileID: -3853391641956729443, guid: bd61a9f9318d4a2b9a66aa43c6d38bb4, type: 3}
+  _icon: {fileID: -6020000000000000001, guid: 680dce493c9f49359bf8d6db31b15e1a, type: 3}
   _levels:
   - _price: 250
     _value: 2
