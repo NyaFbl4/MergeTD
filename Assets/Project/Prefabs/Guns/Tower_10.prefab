@@ -173,7 +173,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8026381761087349250, guid: c2c688d9df8d94b4eb04aff3c907184f, type: 3}
+  m_Sprite: {fileID: 6648719631037923154, guid: 90748c5e227c0054a9eee055248b4d8f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -194,7 +194,7 @@ Animator:
   m_GameObject: {fileID: 3884059583719198704}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f2431d0973a24b30b13b0ded6fce10da, type: 2}
+  m_Controller: {fileID: 9100000, guid: ef52f28bd5584345aded96b2da26f193, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -280,11 +280,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a0507468c945d6aae00ffe675975ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Towers.TowerUnit
-  _towerConfig: {fileID: 11400000, guid: 8884a1b633c98c74fab74cd22897fbec, type: 2}
+  _towerConfig: {fileID: 11400000, guid: 46787b1946365ab4f96201a59a5bda2c, type: 2}
   _turretPivot: {fileID: 9002335383536459500}
   _currentLevelText: {fileID: 7537546963133529158}
   _animator: {fileID: 6705187990689304865}
-  _projectilePrefab: {fileID: 8319070672697281119, guid: b4ec778c492363a48b066d747911908f, type: 3}
+  _projectilePrefab: {fileID: 8319070672697281119, guid: 0a474e985e5d2ba469135a8e0078b37d, type: 3}
   _firePoint: {fileID: 2502189378863360425}
   _firePoints:
   - {fileID: 2502189378863360425}

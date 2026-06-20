@@ -283,7 +283,7 @@ MonoBehaviour:
   _turretPivot: {fileID: 9002335383536459500}
   _currentLevelText: {fileID: 7537546963133529158}
   _animator: {fileID: 6705187990689304865}
-  _projectilePrefab: {fileID: 8319070672697281119, guid: 9453c4c6997d6db4aadf2163a404ccb5, type: 3}
+  _projectilePrefab: {fileID: 8319070672697281119, guid: 0a474e985e5d2ba469135a8e0078b37d, type: 3}
   _firePoint: {fileID: 2502189378863360425}
   _firePoints: []
   _fireMode: 0

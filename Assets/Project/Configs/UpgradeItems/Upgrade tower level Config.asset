@@ -34,3 +34,21 @@ MonoBehaviour:
     _value: 9
   - _price: 240000
     _value: 10
+  - _price: 480000
+    _value: 11
+  - _price: 960000
+    _value: 12
+  - _price: 1920000
+    _value: 13
+  - _price: 3840000
+    _value: 14
+  - _price: 7680000
+    _value: 15
+  - _price: 15360000
+    _value: 16
+  - _price: 30720000
+    _value: 17
+  - _price: 61440000
+    _value: 18
+  - _price: 122880000
+    _value: 19

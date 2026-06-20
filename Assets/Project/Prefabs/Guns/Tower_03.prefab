@@ -284,7 +284,7 @@ MonoBehaviour:
   _firePoint: {fileID: 2502189378863360425}
   _currentLevelText: {fileID: 7537546963133529158}
   _animator: {fileID: 6705187990689304865}
-  _projectilePrefab: {fileID: 8319070672697281119, guid: 8118189810209a54b8b80f1390418189, type: 3}
+  _projectilePrefab: {fileID: 8319070672697281119, guid: 9453c4c6997d6db4aadf2163a404ccb5, type: 3}
   _range: 6
   _towerLevel: 3
   _angleOffset: -90

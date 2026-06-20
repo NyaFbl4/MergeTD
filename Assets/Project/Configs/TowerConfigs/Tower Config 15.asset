@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd9736acdde14150880b63f2c624e44b, type: 3}
+  m_Name: Tower Config 15
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.TowerConfig
+  _icon: {fileID: -5226889055005543415, guid: d3c8a4537ba00c94c8ec1e4a524209d9, type: 3}
+  _towerLevel: 15
+  _startPrice: 10
+  _startDamage: 350
+  _startAttackSpeed: 1
+  _animationSpeed: 1
+  _updatePrice: 10
+  _updateDamage: 100
+  _updateAttackSpeed: 1
