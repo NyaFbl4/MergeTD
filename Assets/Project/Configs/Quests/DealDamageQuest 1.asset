@@ -15,8 +15,8 @@ MonoBehaviour:
   _id: 
   _icon: {fileID: -6010000000000000003, guid: 37013a9c86184c13a23cb9d52e30195a, type: 3}
   _description: quest.deal_critical_damage.description
-  _rewardGold: 100
-  _targetValue: 1000
+  _rewardGold: 150
+  _targetValue: 1500
   _targetScalePerWave: 0.2
   _rewardScalePerWave: 0.12
   _onlyCritical: 1

@@ -14,11 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Quests.BuyTowerQuestConfig
   _id: 
   _icon: {fileID: -6010000000000000001, guid: d34399509b5644acbd064192ad9a9252, type: 3}
-  _title: 
   _description: quest.buy_ten_towers.description
   _rewardGold: 100
   _targetValue: 10
   _targetScalePerWave: 0.1
   _rewardScalePerWave: 0.1
   _minTowerLevel: 1
-

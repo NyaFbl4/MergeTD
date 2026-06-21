@@ -16,7 +16,7 @@ MonoBehaviour:
   _icon: {fileID: -6010000000000000005, guid: 9fcccf6305a84de1a1e8a744c1003386, type: 3}
   _description: quest.complete_waves.description
   _rewardGold: 100
-  _targetValue: 3
+  _targetValue: 1
   _targetScalePerWave: 0.08
   _rewardScalePerWave: 0.1
   _onlyLastWave: 0
