@@ -222,50 +222,50 @@ MonoBehaviour:
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1
     _count: 2
-    _spawnInterval: 1.35
-    _startDelay: 15.606
+    _spawnInterval: 1.5
+    _startDelay: 15.7
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.72
     _count: 1
     _spawnInterval: 1
-    _startDelay: 15.75
+    _startDelay: 16.1
   - _enemyPrefab: {fileID: 7203089955899784126, guid: f4af696a7db87734d8cb4eb5e26b89f5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.8
     _count: 1
     _spawnInterval: 1
-    _startDelay: 16.2
+    _startDelay: 16.5
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.72
     _count: 1
     _spawnInterval: 1
-    _startDelay: 16.65
+    _startDelay: 16.9
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.8
     _count: 1
     _spawnInterval: 1
-    _startDelay: 17.1
+    _startDelay: 17.3
   - _enemyPrefab: {fileID: 7203089955899784126, guid: eab08f06b0084326a933933dbff048d0, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.72
     _count: 1
     _spawnInterval: 1
-    _startDelay: 17.55
+    _startDelay: 17.7
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 03ee6aec3342488d9c2254e6c1164726, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.8
     _count: 1
     _spawnInterval: 1
-    _startDelay: 18
+    _startDelay: 18.1
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.72
     _count: 1
     _spawnInterval: 1
-    _startDelay: 18.45
+    _startDelay: 18.5
   - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
     _healthMultiplier: 1.8

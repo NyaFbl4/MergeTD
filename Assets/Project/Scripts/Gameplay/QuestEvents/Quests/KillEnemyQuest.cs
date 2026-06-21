@@ -21,8 +21,8 @@ namespace Project.Scripts.Gameplay.Quests
 
         private void OnEnemyKilled(EnemyKilledQuestEventDTO dto)
         {
-            if (dto.EnemyType != _config.EnemyType)
-                return;
+            /*if (dto.EnemyType != _config.EnemyType)
+                return;*/
 
             AddProgress(1);
         }

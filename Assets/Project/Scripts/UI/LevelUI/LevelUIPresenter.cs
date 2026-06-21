@@ -115,7 +115,6 @@ namespace Project.Scripts.UI.LevelUI
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
             YG2.RewardedAdvShow(UpgradeLowestTowerRewardId);
-            TryGrantAdTowerUpgrade();
         }
 
         private void OnQuestsButtonClicked()

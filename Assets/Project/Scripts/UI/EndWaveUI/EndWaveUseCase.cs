@@ -12,11 +12,12 @@ using YG;
 
 namespace Project.Scripts.UI.EndWaveUI
 {
-    public class EndWaveUseCase : IInitializable, IDisposable
+    public class EndWaveUseCase : IInitializable, IDisposable, IGameUpdateListener
     {
         private const string DoubleWaveRewardAdId = "end_wave_double_reward";
         private const int ReviewAvailableAfterWave = 3;
         private const string PlayerRatedKey = "player_rated_game";
+        private const float ReviewRequestTimeout = 30f;
 
         private readonly BattlefieldRuntime _battlefieldRuntime;
         private readonly IEndWaveUIPresenter _endWaveUIPresenter;
@@ -31,6 +32,7 @@ namespace Project.Scripts.UI.EndWaveUI
         private bool _isWaitingAdReward;
         private bool _isWaitingReview;
         private bool _isAdRewardClaimed;
+        private float _reviewRequestTimer;
         private int _currentWaveNumber;
         private int _currentRewardCount;
 
@@ -56,6 +58,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
         public void Initialize()
         {
+            IGameListener.Register(this);
             _battlefieldRuntime.WaveCompleted += OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested += OnCloseRequested;
             _endWaveUIPresenter.AdRequested += OnAdRequested;
@@ -67,6 +70,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _isLastWave = isLastWave;
             _isWaitingAdReward = false;
             _isWaitingReview = false;
+            _reviewRequestTimer = 0f;
             _isAdRewardClaimed = false;
             _currentWaveNumber = waveNumber;
             _currentRewardCount = rewardCount;
@@ -141,6 +145,8 @@ namespace Project.Scripts.UI.EndWaveUI
         private void ShowReviewForReward()
         {
             _isWaitingReview = true;
+            _reviewRequestTimer = ReviewRequestTimeout;
+            YG2.reviewCanShow = false;
             YG2.onReviewSent += OnReviewSent;
             YG2.ReviewShow();
         }
@@ -164,6 +170,28 @@ namespace Project.Scripts.UI.EndWaveUI
 
             _endWaveUIPresenter.SetAdButtonAdMode();
             ClosePopupAndContinue();
+        }
+
+        public void OnUpdate(float deltaTime)
+        {
+            if (!_isWaitingReview)
+                return;
+
+            _reviewRequestTimer -= deltaTime;
+
+            if (_reviewRequestTimer > 0f)
+                return;
+
+            CancelReviewRequest("EndWaveUseCase: review request timed out.");
+        }
+
+        private void CancelReviewRequest(string reason)
+        {
+            _isWaitingReview = false;
+            _reviewRequestTimer = 0f;
+            YG2.onReviewSent -= OnReviewSent;
+            _endWaveUIPresenter.SetAdButtonAdMode();
+            Debug.LogWarning(reason);
         }
 
         private void GrantAdRewardAndContinue()
@@ -244,6 +272,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _endWaveUIPresenter.CloseRequested -= OnCloseRequested;
             _endWaveUIPresenter.AdRequested -= OnAdRequested;
             _endWaveUIPresenter.ReviewRequested -= OnReviewRequested;
+            IGameListener.Unregister(this);
             
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();

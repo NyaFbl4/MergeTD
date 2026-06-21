@@ -14,6 +14,8 @@
     <option name="cachedIndexableFilesCount" value="35" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Configs/Quests/KillEnemyQuest 1.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Configs/Quests/KillEnemyQuest.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Configs/Waves/Enemy wave config.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Prefabs/UI/LevelUI.prefab" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Prefabs/UI/ShopUI.prefab" root0="FORCE_HIGHLIGHTING" />

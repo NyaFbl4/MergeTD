@@ -5,6 +5,7 @@ using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.System.Audio;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using VContainer.Unity;
 
@@ -55,8 +56,7 @@ namespace Project.Scripts.Gameplay.Quests
 
         public void Initialize()
         {
-            // Progress events can happen before the quest window is opened, so runtimes must exist at startup.
-            EnsureActiveQuests();
+
         }
 
         public void OnStartGame()
@@ -92,6 +92,51 @@ namespace Project.Scripts.Gameplay.Quests
             QuestsChanged?.Invoke();
             return true;
         }
+        
+        public List<QuestSaveData> CaptureState()
+        {
+            var result = new List<QuestSaveData>();
+
+            foreach (var quest in _quests)
+            {
+                result.Add(new QuestSaveData
+                {
+                    id = quest.Id,
+                    currentValue = quest.CurrentValue,
+                    targetValue = quest.TargetValue,
+                    rewardGold = quest.RewardGold,
+                    isRewardClaimed = quest.IsRewardClaimed
+                });
+            }
+
+            return result;
+        }  
+ 
+        public void RestoreQuests(IReadOnlyList<QuestSaveData> savedQuests)
+        {
+            LoadAvailableConfigs();
+            ClearActiveQuests();
+
+            if (savedQuests != null)
+            {
+                foreach (var saved in savedQuests)
+                {
+                    var config = FindConfigById(saved.id);
+                    if (config == null)
+                        continue;
+
+                    var quest = CreateQuest(config, saved.targetValue, saved.rewardGold);
+                    if (quest == null)
+                        continue;
+
+                    quest.RestoreState(saved.currentValue, saved.isRewardClaimed);
+                    AddQuestRuntime(config, quest);
+                }
+            }
+
+            FillActiveQuests(); // если в сохранении меньше 4, добираем уже по текущей волне
+            QuestsChanged?.Invoke();
+        }        
 
         private void LoadAvailableConfigs()
         {
@@ -156,10 +201,26 @@ namespace Project.Scripts.Gameplay.Quests
             return candidates[index];
         }
 
-        private void AddQuestFromConfig(BaseQuestConfig config)
+        private BaseQuestConfig FindConfigById(string id)
         {
-            var quest = CreateQuest(config);
-            if (quest == null)
+            if (string.IsNullOrWhiteSpace(id))
+                return null;
+
+            foreach (var config in _availableConfigs)
+            {
+                if (config == null)
+                    continue;
+
+                if (config.Id == id)
+                    return config;
+            }
+
+            return null;
+        }
+
+        private void AddQuestRuntime(BaseQuestConfig config, IQuestRuntime quest)
+        {
+            if (config == null || quest == null)
                 return;
 
             quest.ProgressChanged += OnQuestProgressChanged;
@@ -167,11 +228,25 @@ namespace Project.Scripts.Gameplay.Quests
             _activeConfigs.Add(config);
         }
 
+        private void AddQuestFromConfig(BaseQuestConfig config)
+        {
+            var quest = CreateQuest(config);
+            if (quest == null)
+                return;
+
+            AddQuestRuntime(config, quest);
+        }
+
         private IQuestRuntime CreateQuest(BaseQuestConfig config)
         {
             var targetValue = GetScaledTargetValue(config);
             var rewardGold = GetScaledRewardGold(config);
 
+            return CreateQuest(config, targetValue, rewardGold);
+        }
+
+        private IQuestRuntime CreateQuest(BaseQuestConfig config, int targetValue, int rewardGold)
+        {
             if (config is KillEnemyQuestConfig killEnemyConfig)
                 return new KillEnemyQuest(killEnemyConfig, _playerStats, _enemyKilledSubscriber, targetValue, rewardGold);
 

@@ -55,5 +55,13 @@ namespace Project.Scripts.Gameplay.Quests
         }
 
         public abstract void Dispose();
+        
+        
+        public void RestoreState(int currentValue, bool isRewardClaimed)
+        {
+            _currentValue = Math.Clamp(currentValue, 0, _targetValue);
+            _isRewardClaimed = isRewardClaimed;
+            ProgressChanged?.Invoke();
+        }
     }
 }

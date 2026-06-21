@@ -17,7 +17,6 @@ namespace Project.Scripts.Gameplay.Systems
     public class BattlefieldRuntime : IStartable, IDisposable, IGameStartListener, IGameFinishListener, IGameUpdateListener
     {
         private readonly BattlefieldContext _context;
-        //private readonly EnemyConfig _enemyConfig;
         private readonly LevelConfig _levelConfig;
         private const float MinSpawnInterval = 0.22f;
 

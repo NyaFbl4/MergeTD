@@ -26,6 +26,12 @@ function InitReview() {
 
 function Review() {
     try {
+        if (ysdk == null) {
+            YG2Instance('ReviewSent', 'false');
+            FocusGame();
+            return;
+        }
+
         ysdk.feedback.canReview()
             .then(({ value, reason }) => {
                 if (value) {
@@ -41,14 +47,26 @@ function Review() {
                         }
                         FocusGame();
                     })
+                    .catch((e) => {
+                        console.error('CRASH Request Review: ', e.message);
+                        YG2Instance('ReviewSent', 'false');
+                        FocusGame();
+                    });
                 }
                 else {
                     LogStyledMessage('Review can show = false', reason);
+                    YG2Instance('ReviewSent', 'false');
                     FocusGame();
                 }
             })
+            .catch((e) => {
+                console.error('CRASH Can Review: ', e.message);
+                YG2Instance('ReviewSent', 'false');
+                FocusGame();
+            });
     } catch (e) {
         console.error('CRASH Review: ', e.message);
+        YG2Instance('ReviewSent', 'false');
         FocusGame();
     }
 }

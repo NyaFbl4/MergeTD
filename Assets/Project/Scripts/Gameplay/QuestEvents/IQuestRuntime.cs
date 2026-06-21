@@ -14,6 +14,7 @@ namespace Project.Scripts.Gameplay.Quests
         bool IsCompleted { get; }
         bool IsRewardClaimed { get; }
         event Action ProgressChanged;
+        void RestoreState(int currentValue, bool isRewardClaimed);
         bool TryClaimReward();
     }
 }

@@ -2,6 +2,7 @@ using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Project.Scripts.System.Save
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IAudioManager _audioManager;
         private readonly LevelConfig _levelConfig;
+        private readonly QuestService _questService;
 
         public ProgressCheckpointUseCase(
             ProgressSaveService saveService,
@@ -27,7 +29,8 @@ namespace Project.Scripts.System.Save
             BaseHealth baseHealth,
             IUnitsCatalog unitsCatalog,
             IAudioManager audioManager,
-            LevelConfig levelConfig)
+            LevelConfig levelConfig,
+            QuestService  questServic)
         {
             _saveService = saveService;
             _playerStatsUseCase = playerStatsUseCase;
@@ -37,6 +40,7 @@ namespace Project.Scripts.System.Save
             _unitsCatalog = unitsCatalog;
             _audioManager = audioManager;
             _levelConfig = levelConfig;
+            _questService = questServic;
         }
 
         public int RestoreCheckpointOrDefaults()
@@ -60,6 +64,7 @@ namespace Project.Scripts.System.Save
                 data.towerCritDamageBonus,
                 data.upgrades);
 
+            _questService.RestoreQuests(data.quests);
             _buyTowerUseCase.SetTowerCost(data.towerCost);
             _baseHealth.SetHealthState(data.currentBaseHealth, data.maxBaseHealth);
             RestoreTowers(data);
@@ -94,6 +99,8 @@ namespace Project.Scripts.System.Save
                 towerCritDamageBonus = _playerStatsUseCase.TowerCritDamageBonus
             };
 
+            data.quests = _questService.CaptureState();
+            
             foreach (var upgrade in _playerStatsUseCase.UpgradeLevels)
                 data.upgrades.Add(new UpgradeLevelSaveData(upgrade.Key, upgrade.Value));
 

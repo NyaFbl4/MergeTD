@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa747916aa66674d96ea40ca8a480b2, type: 3}
   m_Name: SettingsYG2
   m_EditorClassIdentifier: Assembly-CSharp::YG.InfoYG
+  InterstitialAdv:
+    showFirstAdv: 0
+    interAdvInterval: 60
+    postponeCallByFail: 0
+    postponeCallTimer: 10
+    labelAdvSimLabel: 0
   Localization:
     setLanguageMod: 1
+  RewardedAdv:
+    skipInterAdvAfterReward: 0
+    labelAdvSimLabel: 0
   Basic:
     platform: {fileID: 11400000, guid: fabe82a4ab034324eb452cc7109f6d19, type: 2}
     autoApplySettings: 1
@@ -28,7 +37,7 @@ MonoBehaviour:
     loadSceneIfSDKLate: 0
     loadSceneIndex: 0
     initDelaySimulation: 0
-    buildNumber: 1
+    buildNumber: 6
   Simulation:
     device: 0
     language: ru
@@ -58,8 +67,8 @@ MonoBehaviour:
     aspectRatio: 9/16
     disableForMobile: 0
     fillBackground: 1
-    imageBackground: 0
-    imageName: background.jpg
+    imageBackground: 1
+    imageName: yandex_games_background_framed.png
     gradientBackgroundByAspectRatio:
       radial: 0
       angleInclination: 140
@@ -71,7 +80,11 @@ MonoBehaviour:
   platformInfo:
     ownHost: 0
   platformToggles:
+    showFirstAdv: 0
+    interAdvInterval: 0
+    postponeCallByFail: 0
     setLanguageMod: 0
+    skipInterAdvAfterReward: 0
     autoPauseGame: 0
     selectWebGLTemplate: 1
     runInBackground: 1

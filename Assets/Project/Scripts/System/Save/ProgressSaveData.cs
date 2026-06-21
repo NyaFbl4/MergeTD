@@ -18,6 +18,7 @@ namespace Project.Scripts.System.Save
         public float towerCritDamageBonus;
         public List<UpgradeLevelSaveData> upgrades = new();
         public List<TowerSlotSaveData> towers = new();
+        public List<QuestSaveData> quests = new();
     }
 
     [Serializable]
@@ -52,5 +53,15 @@ namespace Project.Scripts.System.Save
             this.slotIndex = slotIndex;
             this.towerLevel = towerLevel;
         }
+    }
+
+    [Serializable] 
+    public class QuestSaveData
+    { 
+        public string id;
+        public int currentValue;
+        public int targetValue; 
+        public int rewardGold;
+        public bool isRewardClaimed;
     }
 }
