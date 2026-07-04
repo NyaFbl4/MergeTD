@@ -65,18 +65,23 @@ namespace Project.Scripts.UI.LevelUI
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
-            _playerStatsUseCase.WaveChanged += OnCurrentWaveChanged;
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
-            _layoutView.SetCurrentWaveText(_localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
 
+            RefreshWaveText();
             UpdateTowerIcon();
         }
 
         private void OnTowerCostChanged(int price)
         {
             _layoutView.SetPriceTower(price);
+        }
+        private void RefreshWaveText()
+        {
+           _layoutView.SetCurrentWaveText(
+               _localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
         }
 
         private void OnPayTowerButtonClicked()
@@ -159,7 +164,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnCurrentWaveChanged(int wave)
         {
-            _layoutView.SetCurrentWaveText(_localizationService.Format(LocalizationKeys.LevelWaveFormat, wave));
+            RefreshWaveText();
         }
 
         private void UpdateTowerIcon()
@@ -177,8 +182,7 @@ namespace Project.Scripts.UI.LevelUI
         
         private void OnLanguageChanged(string _)
         {
-            _layoutView.SetCurrentWaveText(
-                _localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
+            RefreshWaveText();
         }
 
         private void TryGrantAdTowerUpgrade()

@@ -11,7 +11,6 @@ namespace Project.Scripts.System.Localization
         private const string ResourcePath = "Localization/localization_table";
         private const string DefaultLanguage = "ru";
         private const string EnglishLanguage = "en";
-        private const string LanguagePrefsKey = "project.localization.language";
 
         private readonly Dictionary<string, LocalizationEntryData> _entries = new(StringComparer.Ordinal);
 
@@ -24,49 +23,58 @@ namespace Project.Scripts.System.Localization
         public LocalizationService()
         {
             LoadEntries();
-
-            var savedLanguage = PlayerPrefs.GetString(LanguagePrefsKey, string.Empty);
-            if (!string.IsNullOrWhiteSpace(savedLanguage))
-            {
-                SetLanguage(savedLanguage, persist: false, syncPlatform: true);
-                return;
-            }
-            
-            YG2.onCorrectLang += OnPlatformLanguageChanged;
+            YG2.onCorrectLang += OnCorrectLanguage;
+            YG2.onSwitchLang += OnSwitchLanguage;
+            ApplyLanguage(YG2.lang);
         }
 
         public bool SetLanguage(string languageCode)
-            => SetLanguage(languageCode, persist: true, syncPlatform: true);
+        {
+   if (string.IsNullOrWhiteSpace(languageCode))
+       return false;
+
+   var normalized = NormalizeLanguageCode(languageCode);
+   ApplyNormalizedLanguage(normalized);
+
+   if (YG2.lang != normalized)
+       YG2.SwitchLanguage(normalized);
+
+   return true;
+}
         
-        private bool SetLanguage(string languageCode, bool persist, bool syncPlatform)
+        private void OnCorrectLanguage(string language)
         {
-            if (string.IsNullOrWhiteSpace(languageCode))
-                return false;
+            var normalized = NormalizeLanguageCode(language);
 
-            var normalized = NormalizeLanguageCode(languageCode);
-            if (_currentLanguageCode == normalized) 
-                return true;
+           if (YG2.lang != normalized)
+               YG2.lang = normalized;
 
-            _currentLanguageCode = normalized;
-            if (persist)
-            {
-                PlayerPrefs.SetString(LanguagePrefsKey, _currentLanguageCode);
-                PlayerPrefs.Save();
-            }
-
-            if (syncPlatform && YG2.lang != _currentLanguageCode)
-                YG2.SwitchLanguage(_currentLanguageCode);
-
-            OnChangeLanguage?.Invoke(_currentLanguageCode);
-            return true;
+           ApplyNormalizedLanguage(normalized);
         }
 
-        public void OnPlatformLanguageChanged(string language)
+        public void OnSwitchLanguage(string language)
         {
-            SetLanguage(language, persist: true, syncPlatform: false);
+            ApplyLanguage(language);
+        }
+        
+        private void ApplyLanguage(string languageCode)
+        {
+           if (string.IsNullOrWhiteSpace(languageCode))
+               return;
+
+           ApplyNormalizedLanguage(NormalizeLanguageCode(languageCode));
+        }
+        
+        private void ApplyNormalizedLanguage(string languageCode)
+        {
+           if (_currentLanguageCode == languageCode)
+               return;
+
+           _currentLanguageCode = languageCode;
+           OnChangeLanguage?.Invoke(_currentLanguageCode);
         }
 
-        private static string NormalizeLanguageCode(string languageCode)
+        private string NormalizeLanguageCode(string languageCode)
         {
             if (string.IsNullOrWhiteSpace(languageCode))
                 return DefaultLanguage;
@@ -113,27 +121,6 @@ namespace Project.Scripts.System.Localization
                 Debug.LogWarning($"LocalizationService: wrong format for key '{key}'.");
                 return template;
             }
-        }
-
-        private static string TryDetectStartupLanguage()
-        {
-            try
-            {
-                var languageFromWeb = ProjectLanguageBridge.GetAutoLanguageCode();
-                if (!string.IsNullOrWhiteSpace(languageFromWeb))
-                    return languageFromWeb;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning($"LocalizationService: failed to read language from WebGL bridge. {ex.Message}");
-            }
-
-            return Application.systemLanguage switch
-            {
-                SystemLanguage.Russian => DefaultLanguage,
-                SystemLanguage.English => EnglishLanguage,
-                _ => EnglishLanguage
-            };
         }
 
         private void LoadEntries()
@@ -198,27 +185,12 @@ namespace Project.Scripts.System.Localization
         {
             _entries[key] = new LocalizationEntryData(ru, en);
         }
-
-        private static class ProjectLanguageBridge
-        {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            [DllImport("__Internal")]
-            private static extern string Project_GetAutoLanguage();
-#endif
-
-            public static string GetAutoLanguageCode()
-            {
-#if UNITY_WEBGL && !UNITY_EDITOR
-                return Project_GetAutoLanguage();
-#else
-                return string.Empty;
-#endif
-            }
-        }
+        
         
         public void Dispose()
         {
-            YG2.onCorrectLang -= OnPlatformLanguageChanged;
+            YG2.onCorrectLang -= OnCorrectLanguage;
+            YG2.onSwitchLang -= OnSwitchLanguage;
         }
     }
 }
