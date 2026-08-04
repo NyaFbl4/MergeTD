@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
@@ -6,12 +7,16 @@ using Project.Scripts.Gameplay.Base;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
+using UnityEngine;
 using VContainer.Unity;
+using YG;
 
 namespace Project.Scripts.UI.EndWaveLoseUI
 {
     public class EndWaveLoseUseCase : IInitializable, IDisposable
     {
+        private const string RetryWaveRewardAdId = "end_wave_lose_reward";
+
         private readonly BaseHealth _baseHealth;
         private readonly IEndWaveLoseUIPresenter _endWaveLoseUIPresenter;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
@@ -22,6 +27,11 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
 
         private bool _isShown;
+        private bool _isWaitingAdReward;
+        private bool _isAdRewardClaimed;
+        private bool _isRewardedAdClosing;
+        private int _currentWaveNumber;
+        private int _currentRewardCount;
 
         public EndWaveLoseUseCase(
             BaseHealth baseHealth,
@@ -58,6 +68,12 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             var waveNumber = _playerStatsUseCase.Wave;
             var rewardCount = GetWaveReward(waveNumber);
 
+            _isWaitingAdReward = false;
+            _isAdRewardClaimed = false;
+            _isRewardedAdClosing = false;
+            _currentWaveNumber = waveNumber;
+            _currentRewardCount = rewardCount;
+
             _progressCheckpointUseCase.SaveRetryCheckpoint(waveNumber);
 
             _isShown = true;
@@ -81,13 +97,113 @@ namespace Project.Scripts.UI.EndWaveLoseUI
 
         private void OnCloseRequested()
         {
-            ClosePopup();
-            _gameManagerService.StartGame();
+            if (_isWaitingAdReward)
+                return;
+
+            ClosePopupAndRestart();
         }
 
         private void OnAdRequested()
         {
+            if (_isWaitingAdReward || _isAdRewardClaimed)
+                return;
+
+            if (_currentRewardCount <= 0)
+                return;
+
+            ShowRewardedAdForRetryReward();
+        }
+
+        private void ShowRewardedAdForRetryReward()
+        {
+            _isWaitingAdReward = true;
+            SubscribeRewardedAdEvents();
+            YG2.RewardedAdvShow(RetryWaveRewardAdId);
+        }
+
+        private void GrantAdReward()
+        {
+            if (_isAdRewardClaimed)
+                return;
+
+            _isAdRewardClaimed = true;
+
+            _playerStatsUseCase.AddGold(_currentRewardCount);
+            _progressCheckpointUseCase.SaveRetryCheckpoint(_currentWaveNumber);
+        }
+
+        private void SubscribeRewardedAdEvents()
+        {
+            YG2.onRewardAdv += OnRewardedAdReward;
+            YG2.onCloseRewardedAdv += OnRewardedAdClosed;
+            YG2.onErrorRewardedAdv += OnRewardedAdError;
+        }
+
+        private void UnsubscribeRewardedAdEvents()
+        {
+            YG2.onRewardAdv -= OnRewardedAdReward;
+            YG2.onCloseRewardedAdv -= OnRewardedAdClosed;
+            YG2.onErrorRewardedAdv -= OnRewardedAdError;
+        }
+
+        private void OnRewardedAdReward(string rewardId)
+        {
+            if (!_isWaitingAdReward || rewardId != RetryWaveRewardAdId)
+                return;
+
+            GrantAdReward();
+        }
+
+        private void OnRewardedAdClosed()
+        {
+            if (!_isWaitingAdReward)
+                return;
+
+            if (_isAdRewardClaimed)
+            {
+                ClosePopupAndRestartAfterAdPauseAsync().Forget();
+                return;
+            }
+
+            CancelRewardedAdWaiting();
+            Debug.Log("EndWaveLoseUseCase: rewarded ad was closed without reward.");
+        }
+
+        private void OnRewardedAdError()
+        {
+            if (!_isWaitingAdReward)
+                return;
+
+            CancelRewardedAdWaiting();
+            Debug.LogWarning("EndWaveLoseUseCase: rewarded ad failed.");
+        }
+
+        private void CancelRewardedAdWaiting()
+        {
+            _isWaitingAdReward = false;
+            _isRewardedAdClosing = false;
+            UnsubscribeRewardedAdEvents();
+        }
+
+        private async UniTaskVoid ClosePopupAndRestartAfterAdPauseAsync()
+        {
+            if (_isRewardedAdClosing)
+                return;
+
+            _isRewardedAdClosing = true;
+            UnsubscribeRewardedAdEvents();
+
+            await UniTask.NextFrame();
+
+            _isWaitingAdReward = false;
+            _isRewardedAdClosing = false;
+            ClosePopupAndRestart();
+        }
+
+        private void ClosePopupAndRestart()
+        {
             ClosePopup();
+            _gameManagerService.StartGame();
         }
 
         private void ClosePopup()
@@ -107,6 +223,9 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _baseHealth.Destroyed -= OnBaseDestroyed;
             _endWaveLoseUIPresenter.CloseRequested -= OnCloseRequested;
             _endWaveLoseUIPresenter.AdRequested -= OnAdRequested;
+
+            if (_isWaitingAdReward)
+                UnsubscribeRewardedAdEvents();
         }
     }
 }

@@ -192,8 +192,7 @@ namespace Project.Scripts.UI.LevelUI
                 ? "LevelUIPresenter: rewarded ad upgraded a tower."
                 : "LevelUIPresenter: rewarded ad reward could not upgrade a tower.");
         }
-
-#if RewardedAdv_yg
+        
         private void SubscribeRewardedAdEvents()
         {
             YG2.onRewardAdv += OnRewardedAdReward;
@@ -237,7 +236,6 @@ namespace Project.Scripts.UI.LevelUI
             UnsubscribeRewardedAdEvents();
             Debug.LogWarning("LevelUIPresenter: rewarded ad failed.");
         }
-#endif
 
         public override void Dispose()
         {
@@ -253,11 +251,9 @@ namespace Project.Scripts.UI.LevelUI
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
-
-#if RewardedAdv_yg
+            
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();
-#endif
 
             base.Dispose();
         }
