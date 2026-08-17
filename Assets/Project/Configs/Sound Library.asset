@@ -16,16 +16,16 @@ MonoBehaviour:
   _sounds:
   - _soundId: 1
     _clip: {fileID: 8300000, guid: 5bd8c16aaebf22d4dbcb38e35b9ea77c, type: 3}
-    _volume: 1
+    _volume: 0.25
   - _soundId: 2
     _clip: {fileID: 8300000, guid: a1577e50963986c498af689aa62072b5, type: 3}
-    _volume: 0.4
+    _volume: 0.25
   - _soundId: 3
     _clip: {fileID: 8300000, guid: bb8b683db1a458e4c9a4c5e0bfba1817, type: 3}
-    _volume: 1
+    _volume: 0.5
   - _soundId: 4
     _clip: {fileID: 8300000, guid: 40808801a9bc7d0418746e64a0fdc0c5, type: 3}
-    _volume: 1
+    _volume: 0.5
   - _soundId: 5
     _clip: {fileID: 8300000, guid: 40808801a9bc7d0418746e64a0fdc0c5, type: 3}
-    _volume: 1
+    _volume: 0.5
