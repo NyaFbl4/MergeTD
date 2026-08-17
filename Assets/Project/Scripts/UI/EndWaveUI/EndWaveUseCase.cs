@@ -257,6 +257,8 @@ namespace Project.Scripts.UI.EndWaveUI
                 TargetPopUpType = typeof(IEndWaveUIPresenter)
             });
 
+            TryShowInterstitialAd();
+
             if (_isLastWave)
             {
                 _gameManagerService.FinishGame();
@@ -264,6 +266,14 @@ namespace Project.Scripts.UI.EndWaveUI
             }
 
             _battlefieldRuntime.ContinueAfterEndWavePopup();
+        }
+
+        private void TryShowInterstitialAd()
+        {
+            if (YG2.nowAdsShow)
+                return;
+
+            YG2.InterstitialAdvShow();
         }
 
         public void Dispose()

@@ -203,7 +203,16 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         private void ClosePopupAndRestart()
         {
             ClosePopup();
+            TryShowInterstitialAd();
             _gameManagerService.StartGame();
+        }
+
+        private void TryShowInterstitialAd()
+        {
+            if (YG2.nowAdsShow)
+                return;
+
+            YG2.InterstitialAdvShow();
         }
 
         private void ClosePopup()

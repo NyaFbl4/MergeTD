@@ -292,6 +292,31 @@
             console.log('%c' + message, style);
         }
 
+        async function ShowStickyBannerAdv() {
+            try {
+                if (!ysdk || !ysdk.adv || typeof ysdk.adv.showBannerAdv !== 'function') {
+                    LogStyledMessage('Cancel Sticky Banner Adv: SDK is not initialized');
+                    return;
+                }
+
+                if (typeof ysdk.adv.getBannerAdvStatus === 'function') {
+                    const status = await ysdk.adv.getBannerAdvStatus();
+                    if (status && status.stickyAdvIsShowing) {
+                        return;
+                    }
+                }
+
+                const result = await ysdk.adv.showBannerAdv();
+                if (result && result.stickyAdvIsShowing) {
+                    LogStyledMessage('Show Sticky Banner Adv');
+                } else if (result && result.reason) {
+                    console.warn('Sticky Banner Adv was not shown:', result.reason);
+                }
+            } catch (e) {
+                console.error('CRASH Sticky Banner Adv Show: ', e);
+            }
+        }
+
         async function InitYSDK() {
             try {
                 if (IsLocalHost()) return;
@@ -309,6 +334,7 @@
                 // Additional init modules
 
                 initYSDK = true;
+                ShowStickyBannerAdv();
                 if (ygGameInstance != null)
                     ygGameInstance.SendMessage('YG2Instance', 'InitSDKComplete');
 

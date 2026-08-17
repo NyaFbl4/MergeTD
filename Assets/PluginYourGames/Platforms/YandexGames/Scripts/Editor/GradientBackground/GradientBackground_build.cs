@@ -30,7 +30,7 @@ namespace YG.EditorScr.BuildModify
                 if (infoYG.Templates.imageBackground)
                 {
                     string imageName = infoYG.Templates.imageName;
-                    string line = $"document.body.style.background = \"url('Images/{imageName}') center / cover no-repeat\";";
+                    string line = $"document.body.style.background = \"url('Images/{imageName}') center / max(100vw, 200vh) auto no-repeat\";";
                     indexFile = indexFile.Replace("// Fill Background [Build Modify]", line);
                 }
                 else
