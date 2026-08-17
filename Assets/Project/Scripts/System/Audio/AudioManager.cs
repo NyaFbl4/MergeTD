@@ -131,7 +131,7 @@ namespace Project.Scripts.System.Audio
                 return;
 
             _musicSource.clip = _soundLibrary.BackgroundMusic;
-            _musicSource.volume = 1f;
+            _musicSource.volume = 0.25f;
             _musicSource.Play();
         }
 

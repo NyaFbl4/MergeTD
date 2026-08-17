@@ -16,495 +16,495 @@ MonoBehaviour:
   _sequence:
   - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 0.45
+    _spawnInterval: 1.1
+    _startDelay: 0.495
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 0.9
+    _spawnInterval: 1.1
+    _startDelay: 0.99
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 1.35
+    _spawnInterval: 1.1
+    _startDelay: 1.485
   - _enemyPrefab: {fileID: 7203089955899784126, guid: f4af696a7db87734d8cb4eb5e26b89f5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 1.8
+    _spawnInterval: 1.1
+    _startDelay: 1.98
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 2.25
+    _spawnInterval: 1.1
+    _startDelay: 2.475
   - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 2.7
+    _spawnInterval: 1.1
+    _startDelay: 2.97
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 3.15
+    _spawnInterval: 1.1
+    _startDelay: 3.465
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 03ee6aec3342488d9c2254e6c1164726, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 3.6
+    _spawnInterval: 1.1
+    _startDelay: 3.96
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 4.05
+    _spawnInterval: 1.1
+    _startDelay: 4.455
   - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 4.5
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: eab08f06b0084326a933933dbff048d0, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
+    _spawnInterval: 1.1
     _startDelay: 4.95
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 5.4
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 5.85
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 6.3
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 6.75
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: da81918fc5224ab1baf9d627a3adfe38, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 7.2
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 7.65
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 8.1
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 8.55
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: f4af696a7db87734d8cb4eb5e26b89f5, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 9
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 9.45
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 9.9
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 10.35
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 03ee6aec3342488d9c2254e6c1164726, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 10.8
   - _enemyPrefab: {fileID: 7203089955899784126, guid: eab08f06b0084326a933933dbff048d0, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 11.25
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 11.7
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 12.15
+    _spawnInterval: 1.1
+    _startDelay: 5.445
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 12.6
+    _spawnInterval: 1.1
+    _startDelay: 5.94
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 6.435
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 6.93
   - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 13.05
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 13.5
-  - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
-    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
-    _count: 1
-    _spawnInterval: 1
-    _startDelay: 13.95
+    _spawnInterval: 1.1
+    _startDelay: 7.425
   - _enemyPrefab: {fileID: 7203089955899784126, guid: da81918fc5224ab1baf9d627a3adfe38, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 14.4
+    _spawnInterval: 1.1
+    _startDelay: 7.92
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 8.415
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 8.91
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 14.85
+    _spawnInterval: 1.1
+    _startDelay: 9.405
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: f4af696a7db87734d8cb4eb5e26b89f5, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 9.9
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 10.395
   - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 15.3
+    _spawnInterval: 1.1
+    _startDelay: 10.89
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 11.385
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 03ee6aec3342488d9c2254e6c1164726, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 11.88
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: eab08f06b0084326a933933dbff048d0, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 12.375
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 12.87
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 13.365
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 13.86
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 14.355
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 14.85
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 15.345
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: da81918fc5224ab1baf9d627a3adfe38, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 15.84
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 1.978
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 16.335
+  - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
+    _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
+    _healthMultiplier: 2.07
+    _count: 1
+    _spawnInterval: 1.1
+    _startDelay: 16.83
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 9b6a70ca8a2e4e2d920f24dd45685779, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1
+    _healthMultiplier: 1.15
     _count: 2
-    _spawnInterval: 1.5
-    _startDelay: 15.7
+    _spawnInterval: 1.65
+    _startDelay: 17.27
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 16.1
+    _spawnInterval: 1.1
+    _startDelay: 17.71
   - _enemyPrefab: {fileID: 7203089955899784126, guid: f4af696a7db87734d8cb4eb5e26b89f5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 16.5
+    _spawnInterval: 1.1
+    _startDelay: 18.15
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 16.9
+    _spawnInterval: 1.1
+    _startDelay: 18.59
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 17.3
+    _spawnInterval: 1.1
+    _startDelay: 19.03
   - _enemyPrefab: {fileID: 7203089955899784126, guid: eab08f06b0084326a933933dbff048d0, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 17.7
+    _spawnInterval: 1.1
+    _startDelay: 19.47
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 03ee6aec3342488d9c2254e6c1164726, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 18.1
+    _spawnInterval: 1.1
+    _startDelay: 19.91
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 18.5
+    _spawnInterval: 1.1
+    _startDelay: 20.35
   - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 18.9
+    _spawnInterval: 1.1
+    _startDelay: 20.79
   - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 19.35
+    _spawnInterval: 1.1
+    _startDelay: 21.285
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 19.8
+    _spawnInterval: 1.1
+    _startDelay: 21.78
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 20.25
+    _spawnInterval: 1.1
+    _startDelay: 22.275
   - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 20.7
+    _spawnInterval: 1.1
+    _startDelay: 22.77
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 21.15
+    _spawnInterval: 1.1
+    _startDelay: 23.265
   - _enemyPrefab: {fileID: 7203089955899784126, guid: da81918fc5224ab1baf9d627a3adfe38, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 21.6
+    _spawnInterval: 1.1
+    _startDelay: 23.76
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 22.05
+    _spawnInterval: 1.1
+    _startDelay: 24.255
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 22.5
+    _spawnInterval: 1.1
+    _startDelay: 24.75
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 22.95
+    _spawnInterval: 1.1
+    _startDelay: 25.245
   - _enemyPrefab: {fileID: 7203089955899784126, guid: f4af696a7db87734d8cb4eb5e26b89f5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 23.4
+    _spawnInterval: 1.1
+    _startDelay: 25.74
   - _enemyPrefab: {fileID: 7203089955899784126, guid: eab08f06b0084326a933933dbff048d0, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 23.85
+    _spawnInterval: 1.1
+    _startDelay: 26.235
   - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 24.3
+    _spawnInterval: 1.1
+    _startDelay: 26.73
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 24.75
+    _spawnInterval: 1.1
+    _startDelay: 27.225
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 03ee6aec3342488d9c2254e6c1164726, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 25.2
+    _spawnInterval: 1.1
+    _startDelay: 27.72
   - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 25.65
+    _spawnInterval: 1.1
+    _startDelay: 28.215
   - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 26.1
+    _spawnInterval: 1.1
+    _startDelay: 28.71
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 26.55
+    _spawnInterval: 1.1
+    _startDelay: 29.205
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 94e97364414c4e6c98b4b0add91b5a17, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 27
+    _spawnInterval: 1.1
+    _startDelay: 29.7
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 27.45
+    _spawnInterval: 1.1
+    _startDelay: 30.195
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 27.9
+    _spawnInterval: 1.1
+    _startDelay: 30.69
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 28.35
+    _spawnInterval: 1.1
+    _startDelay: 31.185
   - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 28.8
+    _spawnInterval: 1.1
+    _startDelay: 31.68
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 29.25
+    _spawnInterval: 1.1
+    _startDelay: 32.175
   - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 29.7
+    _spawnInterval: 1.1
+    _startDelay: 32.67
   - _enemyPrefab: {fileID: 7203089955899784126, guid: eab08f06b0084326a933933dbff048d0, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 30.15
+    _spawnInterval: 1.1
+    _startDelay: 33.165
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 30.6
+    _spawnInterval: 1.1
+    _startDelay: 33.66
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 1eab61d3c78949fa89c902050003f324, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 31.05
+    _spawnInterval: 1.1
+    _startDelay: 34.155
   - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 31.5
+    _spawnInterval: 1.1
+    _startDelay: 34.65
   - _enemyPrefab: {fileID: 7203089955899784126, guid: d8d572628e9c63a4b96fd88a94f75a03, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 31.95
+    _spawnInterval: 1.1
+    _startDelay: 35.145
   - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 32.4
+    _spawnInterval: 1.1
+    _startDelay: 35.64
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 2858b05f51045cd4bad5310cac63aced, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 32.85
+    _spawnInterval: 1.1
+    _startDelay: 36.135
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 33.3
+    _spawnInterval: 1.1
+    _startDelay: 36.63
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 7b539f1178a8b004287eb8f37aa31813, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 33.75
+    _spawnInterval: 1.1
+    _startDelay: 37.125
   - _enemyPrefab: {fileID: 7203089955899784126, guid: aba848c35a874d0eb6bc86481ad22821, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 34.2
+    _spawnInterval: 1.1
+    _startDelay: 37.62
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 8d86e2ad5dcd45d9a401cd369ff3fab9, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 34.65
+    _spawnInterval: 1.1
+    _startDelay: 38.115
   - _enemyPrefab: {fileID: 7203089955899784126, guid: ac8c5e7a958b4cf599dfffaffa937409, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 35.1
+    _spawnInterval: 1.1
+    _startDelay: 38.61
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 3afd7667167e4bd49cee6df0fca818d5, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.72
+    _healthMultiplier: 1.978
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 35.55
+    _spawnInterval: 1.1
+    _startDelay: 39.105
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 6573dbc775da462389709ad3b078ad6a, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 1.8
+    _healthMultiplier: 2.07
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 36
+    _spawnInterval: 1.1
+    _startDelay: 39.6
   - _enemyPrefab: {fileID: 7203089955899784126, guid: 8539123cb73147b29f563eaad73eeca6, type: 3}
     _enemyConfig: {fileID: 11400000, guid: ba137aedb28444b4bafcf02d65451c22, type: 2}
-    _healthMultiplier: 5.95
+    _healthMultiplier: 6.8425
     _count: 1
-    _spawnInterval: 1
-    _startDelay: 38.5
+    _spawnInterval: 1.1
+    _startDelay: 42.35
   _delayAfterWave: 0
   _killRewardGold: 18
