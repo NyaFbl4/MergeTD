@@ -1,0 +1,183 @@
+{
+  "source": "D:\\PROEKTbI\\!Unity\\MergeTD\\Assets\\Project\\Resources\\Gameplay Area\\game area.png",
+  "canvas_size": [
+    1337,
+    2583
+  ],
+  "main_layers": [
+    "01_background_vertical_stripes.png",
+    "02_middle_panel_bg.png",
+    "03_bottom_bg.png",
+    "04_upgrade_bar.png",
+    "05_grid.png"
+  ],
+  "slot_crops": [
+    {
+      "file": "Slots/upgrade_slot_01.png",
+      "source_rect": [
+        164,
+        1592,
+        317,
+        1746
+      ]
+    },
+    {
+      "file": "Slots/upgrade_slot_02.png",
+      "source_rect": [
+        335,
+        1592,
+        488,
+        1746
+      ]
+    },
+    {
+      "file": "Slots/upgrade_slot_03.png",
+      "source_rect": [
+        505,
+        1592,
+        659,
+        1746
+      ]
+    },
+    {
+      "file": "Slots/upgrade_slot_04.png",
+      "source_rect": [
+        676,
+        1592,
+        830,
+        1746
+      ]
+    },
+    {
+      "file": "Slots/upgrade_slot_05.png",
+      "source_rect": [
+        847,
+        1592,
+        1000,
+        1746
+      ]
+    },
+    {
+      "file": "Slots/upgrade_slot_06.png",
+      "source_rect": [
+        1018,
+        1592,
+        1171,
+        1746
+      ]
+    }
+  ],
+  "grid_cell_crops": [
+    {
+      "file": "GridCells/grid_cell_01.png",
+      "source_rect": [
+        146,
+        1820,
+        314,
+        1988
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_02.png",
+      "source_rect": [
+        321,
+        1820,
+        490,
+        1988
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_03.png",
+      "source_rect": [
+        496,
+        1820,
+        665,
+        1988
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_04.png",
+      "source_rect": [
+        672,
+        1820,
+        841,
+        1988
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_05.png",
+      "source_rect": [
+        847,
+        1820,
+        1016,
+        1988
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_06.png",
+      "source_rect": [
+        1023,
+        1820,
+        1191,
+        1988
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_07.png",
+      "source_rect": [
+        146,
+        1994,
+        314,
+        2162
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_08.png",
+      "source_rect": [
+        321,
+        1994,
+        490,
+        2162
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_09.png",
+      "source_rect": [
+        496,
+        1994,
+        665,
+        2162
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_10.png",
+      "source_rect": [
+        672,
+        1994,
+        841,
+        2162
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_11.png",
+      "source_rect": [
+        847,
+        1994,
+        1016,
+        2162
+      ]
+    },
+    {
+      "file": "GridCells/grid_cell_12.png",
+      "source_rect": [
+        1023,
+        1994,
+        1191,
+        2162
+      ]
+    }
+  ],
+  "combined_preview": "combined_preview.png",
+  "preview_strict_pixel_difference_from_source": 0,
+  "preview_visible_pixel_difference_from_source": 0
+}
