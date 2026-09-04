@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e2b0bd4dc7e642349a109186cd112a33
+guid: 5afb928ea5594dff85b1e0e7ac5556e7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8360398277941689789
-    second: Generator01-Idle_1_0
+      213: 3516122569232983898
+    second: Monster01-attack-example_03_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Generator01-Idle_1_0
+      name: Monster01-attack-example_03_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 5
-        width: 123
-        height: 110
+        x: 0
+        y: 0
+        width: 130
+        height: 159
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3428f7ebf06e9fb80800000000000000
-      internalID: -8360398277941689789
+      spriteID: 01f7cd906ced51760800000000000000
+      internalID: 3516122569232983898
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Generator01-Idle_1_0: -8360398277941689789
+      Monster01-attack-example_03_0: 3516122569232983898
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

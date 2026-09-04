@@ -5,6 +5,7 @@ using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
@@ -39,6 +40,7 @@ namespace Installers
         [SerializeField] private EnemyConfig _enemyConfig;
         [SerializeField] private QuestCatalog _questCatalog;
         [SerializeField] private SoundLibrary _soundLibrary;
+        [SerializeField] private RunConfig _runConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -151,6 +153,7 @@ namespace Installers
             builder.RegisterInstance(_levelConfig);
             builder.RegisterInstance(_enemyConfig);
             builder.RegisterInstance(_questCatalog);
+            builder.RegisterInstance(_runConfig);
         }
     }
 
