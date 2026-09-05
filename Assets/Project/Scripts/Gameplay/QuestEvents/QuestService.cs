@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using MessagePipe;
-using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.QuestEvents;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
@@ -15,7 +15,7 @@ namespace Project.Scripts.Gameplay.Quests
     {
         private readonly QuestCatalog _questCatalog;
         private readonly IPlayerStatsUseCase _playerStats;
-        private readonly LevelConfig _levelConfig;
+        private readonly RunConfig _runConfig;
         private readonly ISubscriber<EnemyKilledQuestEventDTO> _enemyKilledSubscriber;
         private readonly ISubscriber<TowerBoughtQuestEventDTO> _towerBoughtSubscriber;
         private readonly ISubscriber<DamageDealtQuestEventDTO> _damageSubscriber;
@@ -35,7 +35,7 @@ namespace Project.Scripts.Gameplay.Quests
         public QuestService(
             QuestCatalog questCatalog,
             IPlayerStatsUseCase playerStats,
-            LevelConfig levelConfig,
+            RunConfig runConfig,
             ISubscriber<EnemyKilledQuestEventDTO> enemyKilledSubscriber,
             ISubscriber<TowerBoughtQuestEventDTO> towerBoughtSubscriber,
             ISubscriber<DamageDealtQuestEventDTO> damageSubscriber,
@@ -44,7 +44,7 @@ namespace Project.Scripts.Gameplay.Quests
         {
             _questCatalog = questCatalog;
             _playerStats = playerStats;
-            _levelConfig = levelConfig;
+            _runConfig = runConfig;
             _enemyKilledSubscriber = enemyKilledSubscriber;
             _towerBoughtSubscriber = towerBoughtSubscriber;
             _damageSubscriber = damageSubscriber;
@@ -296,7 +296,7 @@ namespace Project.Scripts.Gameplay.Quests
 
         private int GetRemainingWavesCount(int currentWave)
         {
-            var wavesCount = _levelConfig?.Waves == null ? currentWave : Math.Max(1, _levelConfig.Waves.Count);
+            var wavesCount = Math.Max(1, _runConfig.Waves.Count);
             return Math.Max(1, wavesCount - currentWave + 1);
         }
 

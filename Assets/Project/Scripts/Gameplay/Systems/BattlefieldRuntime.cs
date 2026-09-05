@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Wave;
-using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -14,43 +13,36 @@ using Object = UnityEngine.Object;
 
 namespace Project.Scripts.Gameplay.Systems
 {
-    public class BattlefieldRuntime : IStartable, IDisposable, IGameStartListener, IGameFinishListener, IGameUpdateListener
+    public class BattlefieldRuntime : IStartable, IDisposable, IGameFinishListener, IGameUpdateListener
     {
         private readonly BattlefieldContext _context;
-        private readonly LevelConfig _levelConfig;
+        private readonly RunState _runState;
         private const float MinSpawnInterval = 0.22f;
 
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
-        private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
         
-        private float _waveDelayTimer;
         private bool _isWaitingWaveStart;
         private float _waveStartTimer;
         private float _spawnCooldown;
         private int _nextSequenceRuntimeIndex;
         
-        private int _currentWaveIndex;
         private readonly List<EnemySpawnSequenceRuntime> _sequenceRuntimes = new();
         private int _aliveEnemies;
 
         private bool _isWaveRunning;
-        private bool _isWaitingNextWave;
         private bool _isGameRunning;
-        private bool _isWaitingEndWavePopup;
         
-        private int CurrentWaveNumber => _currentWaveIndex + 1;
-        public event Action<int, int, bool> WaveCompleted;
+        private int CurrentWaveNumber => _runState.CurrentWave;
+        public event Action<int> WaveExecutionCompleted;
 
         public BattlefieldRuntime(
             BattlefieldContext context,
-            LevelConfig levelConfig,
-            IPlayerStatsUseCase playerStatsUseCase,
-            ProgressCheckpointUseCase progressCheckpointUseCase)
+            RunState runState,
+            IPlayerStatsUseCase playerStatsUseCase)
         {
             _context = context;
-            _levelConfig = levelConfig;
+            _runState = runState;
             _playerStatsUseCase = playerStatsUseCase;
-            _progressCheckpointUseCase = progressCheckpointUseCase;
             IGameListener.Register(this);
         }
 
@@ -64,33 +56,28 @@ namespace Project.Scripts.Gameplay.Systems
             IGameListener.Unregister(this);
         }
 
-        public void OnStartGame()
+        public bool PrepareForRun()
         {
             if (_context == null || !_context.IsReady())
             {
                 Debug.LogWarning("BattlefieldRuntime: BattlefieldContext is not ready. Check lanes, base, and enemy prefab.");
-                return;
+                return false;
             }
             
             Debug.Log("BattlefieldRuntime: Battlefield Start");
             
             _sequenceRuntimes.Clear();
             ClearEnemiesRoot();
-            var startWave = _progressCheckpointUseCase.RestoreCheckpointOrDefaults();
-            var wavesCount = _levelConfig.Waves == null ? 1 : Mathf.Max(1, _levelConfig.Waves.Count);
-            _currentWaveIndex = Mathf.Clamp(startWave, 1, wavesCount) - 1;
             _aliveEnemies = 0;
             
-            _waveDelayTimer = 0f;
             _isWaitingWaveStart = false;
             _waveStartTimer = 0f;
             _spawnCooldown = 0f;
             _nextSequenceRuntimeIndex = 0;
 
             _isGameRunning = true;
-            _isWaitingNextWave = false;
-
-            StartWave();
+            _isWaveRunning = false;
+            return true;
         }
 
         private void ClearEnemiesRoot()
@@ -113,8 +100,6 @@ namespace Project.Scripts.Gameplay.Systems
         {
             _isGameRunning = false;
             _isWaveRunning = false;
-            _isWaitingNextWave = false;
-            _isWaitingEndWavePopup = false;
             _sequenceRuntimes.Clear();
         }
 
@@ -135,30 +120,13 @@ namespace Project.Scripts.Gameplay.Systems
                 return;
             }
 
-            if (_isWaitingNextWave)
-            {
-                UpdateNextWaveDelay(deltaTime);
-            }
         }
         
-        public void ContinueAfterEndWavePopup()
+        public void StartCurrentWave()
         {
-            if (!_isWaitingEndWavePopup)
-                return;
-
-            _isWaitingEndWavePopup = false;
-
-            var wave = _levelConfig.Waves[_currentWaveIndex];
-            _waveDelayTimer = wave.DelayAfterWave;
-            _isWaitingNextWave = true;
-        }
-        
-        private void StartWave()
-        {
-            if (_levelConfig.Waves == null || _currentWaveIndex >= _levelConfig.Waves.Count)
+            if (_runState.CurrentWave > _runState.MaxWaves)
             {
                 Debug.Log("All waves completed");
-                FinishAllWaves();
                 return;
             }
 
@@ -166,7 +134,7 @@ namespace Project.Scripts.Gameplay.Systems
             _spawnCooldown = 0f;
             _nextSequenceRuntimeIndex = 0;
 
-            var wave = _levelConfig.Waves[_currentWaveIndex];
+            var wave = _runState.CurrentWaveConfig.WaveConfig;
             Debug.Log($"Wave started: #{CurrentWaveNumber}");
             for (var i = 0; i < wave.Sequence.Count; i++)
             {
@@ -179,7 +147,6 @@ namespace Project.Scripts.Gameplay.Systems
             }
 
             _isWaveRunning = true;
-            _isWaitingNextWave = false;
 
             _playerStatsUseCase.SetWave(CurrentWaveNumber);
         }
@@ -247,7 +214,7 @@ namespace Project.Scripts.Gameplay.Systems
                 Quaternion.identity,
                 _context.EnemiesRoot);
 
-            var wave = _levelConfig.Waves[_currentWaveIndex];
+            var wave = _runState.CurrentWaveConfig.WaveConfig;
             
             var typeHealthMultiplier = sequence.EnemyConfig.GetHealthMultiplier(enemy.EnemyType);
             var scaledHealth = Mathf.Max(1, Mathf.RoundToInt(
@@ -268,26 +235,6 @@ namespace Project.Scripts.Gameplay.Systems
             TryCompleteWave();
         }
         
-        private void FinishAllWaves()
-        {
-            _isGameRunning = false;
-
-            // Потом можно будет вызвать победу:
-            // _gameManagerService.FinishGame();
-            // или отдельный WinGame(), когда добавим состояние победы.
-        }
-        
-        private void UpdateNextWaveDelay(float deltaTime)
-        {
-            _waveDelayTimer -= deltaTime;
-
-            if (_waveDelayTimer > 0f)
-                return;
-
-            _currentWaveIndex++;
-            StartWave();
-        }
-        
         private void TryCompleteWave()
         {
             for (var i = 0; i < _sequenceRuntimes.Count; i++)
@@ -300,14 +247,11 @@ namespace Project.Scripts.Gameplay.Systems
                 return;
 
             var completedWaveNumber = CurrentWaveNumber;
-            var wave = _levelConfig.Waves[_currentWaveIndex];
-            Debug.Log($"Wave started: #{CurrentWaveNumber}, sequences: {wave.Sequence.Count}");
-            var isLastWave = _currentWaveIndex >= _levelConfig.Waves.Count - 1;
+            var wave = _runState.CurrentWaveConfig.WaveConfig;
+            Debug.Log($"Wave completed: #{completedWaveNumber}, sequences: {wave.Sequence.Count}");
             
             _isWaveRunning = false;
-            _isWaitingNextWave = false;
-            _isWaitingEndWavePopup = true;
-            WaveCompleted?.Invoke(completedWaveNumber, wave.CountGoldReward, isLastWave);
+            WaveExecutionCompleted?.Invoke(completedWaveNumber);
         }
         
         private EnemyUnit GetRandomEnemy(List<EnemyUnit> enemies)

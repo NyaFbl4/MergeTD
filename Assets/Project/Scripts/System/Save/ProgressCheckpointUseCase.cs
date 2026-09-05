@@ -3,6 +3,7 @@ using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace Project.Scripts.System.Save
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IAudioManager _audioManager;
         private readonly LevelConfig _levelConfig;
+        private readonly RunConfig _runConfig;
         private readonly QuestService _questService;
 
         public ProgressCheckpointUseCase(
@@ -30,7 +32,8 @@ namespace Project.Scripts.System.Save
             IUnitsCatalog unitsCatalog,
             IAudioManager audioManager,
             LevelConfig levelConfig,
-            QuestService  questServic)
+            RunConfig runConfig,
+            QuestService questService)
         {
             _saveService = saveService;
             _playerStatsUseCase = playerStatsUseCase;
@@ -40,7 +43,8 @@ namespace Project.Scripts.System.Save
             _unitsCatalog = unitsCatalog;
             _audioManager = audioManager;
             _levelConfig = levelConfig;
-            _questService = questServic;
+            _runConfig = runConfig;
+            _questService = questService;
         }
 
         public int RestoreCheckpointOrDefaults()
@@ -130,7 +134,7 @@ namespace Project.Scripts.System.Save
 
         private int ClampWave(int wave)
         {
-            var wavesCount = _levelConfig.Waves == null ? 1 : Mathf.Max(1, _levelConfig.Waves.Count);
+            var wavesCount = Mathf.Max(1, _runConfig.Waves.Count);
             return Mathf.Clamp(wave, 1, wavesCount);
         }
 

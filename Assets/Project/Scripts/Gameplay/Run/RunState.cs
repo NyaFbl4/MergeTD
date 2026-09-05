@@ -29,7 +29,12 @@ namespace Project.Scripts.Gameplay.Run
         
         public void Reset()
         {
-            _currentWave = 1;
+            MoveToWave(1);
+        }
+
+        public void MoveToWave(int waveNumber)
+        {
+            _currentWave = UnityEngine.Mathf.Clamp(waveNumber, 1, MaxWaves);
             _currentWaveConfig = _config.Waves[_currentWave - 1];
             _phase = ERunPhase.Preparation;
         }
@@ -52,9 +57,7 @@ namespace Project.Scripts.Gameplay.Run
         
         public void ContinueToNextPreparation()
         {
-            _currentWave++;
-            _currentWaveConfig = _config.Waves[_currentWave - 1];
-            _phase = ERunPhase.Preparation;
+            MoveToWave(_currentWave + 1);
         }
         
         public void Defeat()

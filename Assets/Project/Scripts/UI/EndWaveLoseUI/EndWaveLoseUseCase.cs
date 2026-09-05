@@ -1,9 +1,9 @@
 using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
-using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
@@ -23,7 +23,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         private readonly IGameManagerService _gameManagerService;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
-        private readonly LevelConfig _levelConfig;
+        private readonly RunState _runState;
         private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
 
         private bool _isShown;
@@ -40,7 +40,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             IGameManagerService gameManagerService,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            LevelConfig levelConfig,
+            RunState runState,
             ProgressCheckpointUseCase progressCheckpointUseCase)
         {
             _baseHealth = baseHealth;
@@ -49,7 +49,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _gameManagerService = gameManagerService;
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
-            _levelConfig = levelConfig;
+            _runState = runState;
             _progressCheckpointUseCase = progressCheckpointUseCase;
         }
 
@@ -66,7 +66,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
                 return;
 
             var waveNumber = _playerStatsUseCase.Wave;
-            var rewardCount = GetWaveReward(waveNumber);
+            var rewardCount = GetWaveReward();
 
             _isWaitingAdReward = false;
             _isAdRewardClaimed = false;
@@ -84,15 +84,9 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             });
         }
 
-        private int GetWaveReward(int waveNumber)
+        private int GetWaveReward()
         {
-            var waves = _levelConfig.Waves;
-            if (waves == null || waves.Count == 0)
-                return 0;
-
-            var index = Math.Max(0, Math.Min(waveNumber - 1, waves.Count - 1));
-            var wave = waves[index];
-            return wave != null ? wave.CountGoldReward : 0;
+            return _runState.CurrentWaveConfig.CompleteRewardGold;
         }
 
         private void OnCloseRequested()

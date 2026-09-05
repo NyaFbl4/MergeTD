@@ -1,6 +1,5 @@
 using System;
 using MessagePipe;
-using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.QuestEvents;
@@ -11,42 +10,34 @@ namespace Project.Scripts.System.UseCases
 {
     public class BuyTowerUseCase : IBuyTowerUseCase
     {
-        private readonly LevelConfig _levelConfig;
-        private readonly TowerConfig _towerConfig;
+        private const int FixedTowerCost = 100;
+
         private readonly BattlefieldContext _battlefieldContext;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly IPublisher<TowerBoughtQuestEventDTO> _publisherBoughtQuestEventDTO;
         private readonly IAudioManager _audioManager;
 
-        private int _currentTowerCost;
-
-        public int TowerCost => _currentTowerCost;
+        public int TowerCost => FixedTowerCost;
         public event Action<int> TowerCostChanged;
 
         public BuyTowerUseCase(
             BattlefieldContext battlefieldContext,
             IPlayerStatsUseCase playerStatsUseCase,
-            TowerConfig towerConfig,
             IUnitsCatalog unitsCatalog,
-            LevelConfig levelConfig,
             IPublisher<TowerBoughtQuestEventDTO> publisherBoughtQuestEventDTO,
             IAudioManager audioManager)
         {
             _battlefieldContext = battlefieldContext;
             _playerStats = playerStatsUseCase;
-            _towerConfig = towerConfig;
             _unitsCatalog = unitsCatalog;
-            _levelConfig = levelConfig;
             _publisherBoughtQuestEventDTO = publisherBoughtQuestEventDTO;
             _audioManager = audioManager;
-
-            _currentTowerCost = _towerConfig.StartTowerPrice;
         }
 
         public EBuyTowerResult TryBuyTower()
         {
-            var slot = _battlefieldContext.FindFirstFreeSlot(ETowerSlotType.SpawnOnly);
+            var slot = _battlefieldContext.FindFirstFreePlaceableSlot();
             if (slot == null)
                 return EBuyTowerResult.NoFreeSpawnSlot;
 
@@ -64,7 +55,6 @@ namespace Project.Scripts.System.UseCases
             var purchasedCost = TowerCost;
 
             _playerStats.TrySpend(purchasedCost);
-            IncreaseTowerCost();
             _publisherBoughtQuestEventDTO.Publish(new TowerBoughtQuestEventDTO(
                 _playerStats.SelectedTowerLevel,
                 purchasedCost));
@@ -73,19 +63,12 @@ namespace Project.Scripts.System.UseCases
 
         public void SetTowerCost(int cost)
         {
-            _currentTowerCost = Math.Max(_towerConfig.StartTowerPrice, cost);
-            TowerCostChanged?.Invoke(_currentTowerCost);
+            TowerCostChanged?.Invoke(TowerCost);
         }
 
         public void ResetTowerCost()
         {
-            SetTowerCost(_towerConfig.StartTowerPrice);
-        }
-
-        private void IncreaseTowerCost()
-        {
-            _currentTowerCost += _levelConfig.TowerPriceIncreaseOnBuy;
-            TowerCostChanged?.Invoke(_currentTowerCost);
+            TowerCostChanged?.Invoke(TowerCost);
         }
     }
 }

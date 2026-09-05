@@ -1,76 +1,115 @@
-﻿using System.Collections.Generic;
+using System;
+using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
-using UnityEngine;
-using VContainer;
+using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.System.Save;
+using Project.Scripts.System.UseCases;
 using VContainer.Unity;
-using NotImplementedException = System.NotImplementedException;
 
 namespace Project.Scripts.Gameplay.Run
 {
-    public class RunBattleRuntime : MonoBehaviour, IInitializable
+    public class RunBattleRuntime : IStartable, IDisposable, IGameStartListener, IGameFinishListener
     {
-        [SerializeField] private List<Transform> _enemySpawnPoints;
-        [SerializeField] private Transform _baseHitPoint;
-        [SerializeField] private Transform _enemyRoot;
-        [SerializeField] private Transform _defenseGridRoot;
-        [SerializeField] private BaseHealth _baseHealth;
+        private readonly RunState _state;
+        private readonly BattlefieldRuntime _battlefieldRuntime;
+        private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
+        private readonly IGameManagerService _gameManagerService;
+        private readonly IPlayerStatsUseCase _playerStatsUseCase;
+        private readonly BaseHealth _baseHealth;
 
-        private RunState _state;
+        private bool _isGameRunning;
 
-        [Inject]
-        public void Construct(RunState state)
+        public event Action<int, int, ERunPhase> WaveCompleted;
+
+        public RunBattleRuntime(
+            RunState state,
+            BattlefieldRuntime battlefieldRuntime,
+            ProgressCheckpointUseCase progressCheckpointUseCase,
+            IGameManagerService gameManagerService,
+            IPlayerStatsUseCase playerStatsUseCase,
+            BaseHealth baseHealth)
         {
             _state = state;
-        }
-        
-        public void Initialize()
-        {
-            OnStartsRun();
+            _battlefieldRuntime = battlefieldRuntime;
+            _progressCheckpointUseCase = progressCheckpointUseCase;
+            _gameManagerService = gameManagerService;
+            _playerStatsUseCase = playerStatsUseCase;
+            _baseHealth = baseHealth;
+
+            _battlefieldRuntime.WaveExecutionCompleted += OnWaveExecutionCompleted;
+            _baseHealth.Destroyed += OnBaseDestroyed;
+            IGameListener.Register(this);
         }
 
-        public void OnStartsRun()
+        public void Start()
         {
-            if (_state.MaxWaves != 10)
+            // Wait for GameManagerService.StartGame.
+        }
+
+        public void OnStartGame()
+        {
+            _isGameRunning = true;
+
+            if (!_battlefieldRuntime.PrepareForRun())
             {
+                _isGameRunning = false;
                 return;
             }
-            
-            _state.Reset();
-        }
 
-        public void SwitchPhase(ERunPhase phase)
-        {
-            
+            var startWave = _progressCheckpointUseCase.RestoreCheckpointOrDefaults();
+            _state.MoveToWave(startWave);
+            _playerStatsUseCase.SetWave(_state.CurrentWave);
         }
 
         public void StartWave()
         {
-            if (!_state.CanEditDefense)
+            if (!_isGameRunning || !_state.CanEditDefense)
+                return;
+
+            _state.StartWave();
+            _battlefieldRuntime.StartCurrentWave();
+        }
+
+        public void ContinueAfterEndWavePopup()
+        {
+            if (!_isGameRunning)
+                return;
+
+            if (_state.Phase == ERunPhase.Victory)
             {
+                _gameManagerService.FinishGame();
                 return;
             }
-            
-            _state.StartWave();
+
+            if (_state.Phase == ERunPhase.Defeat)
+                return;
+
+            _state.ContinueToNextPreparation();
+            _playerStatsUseCase.SetWave(_state.CurrentWave);
         }
 
-        public void EndWave()
+        public void OnFinishGame()
         {
-            
+            _isGameRunning = false;
         }
 
-        public void ClaimWaveReward()
+        private void OnWaveExecutionCompleted(int completedWaveNumber)
         {
-            
+            var runWave = _state.CurrentWaveConfig;
+            _state.CompleteWave();
+            WaveCompleted?.Invoke(completedWaveNumber, runWave.CompleteRewardGold, _state.Phase);
         }
 
-        public void OpenRewardsPanel()
+        private void OnBaseDestroyed()
         {
-            
+            _state.Defeat();
         }
 
-        public void OnEndRun()
+        public void Dispose()
         {
-            
+            _battlefieldRuntime.WaveExecutionCompleted -= OnWaveExecutionCompleted;
+            _baseHealth.Destroyed -= OnBaseDestroyed;
+            IGameListener.Unregister(this);
         }
     }
 }

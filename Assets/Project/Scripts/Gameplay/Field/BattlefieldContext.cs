@@ -74,6 +74,23 @@ namespace Project.Scripts.Gameplay.Field
             return null;
         }
 
+        public TowerSlot FindFirstFreePlaceableSlot()
+        {
+            if (_towerSlots == null)
+                return null;
+
+            for (var i = 0; i < _towerSlots.Length; i++)
+            {
+                var slot = _towerSlots[i];
+                if (slot == null || slot.IsOccupied || !slot.CanPlaceTower)
+                    continue;
+
+                return slot;
+            }
+
+            return null;
+        }
+
         public TowerSlot FindFirstOccupiedSlot(ETowerSlotType slotType)
         {
             if (_towerSlots == null)

@@ -21,8 +21,16 @@ namespace Project.Scripts.Gameplay.Field
         public TowerUnit CurrentTower => _currentTower;
         public bool IsSpawnOnly => _slotType == ETowerSlotType.SpawnOnly;
         public bool IsActiveOnly => _slotType == ETowerSlotType.ActiveOnly;
+        public bool CanPlaceTower => _slotType != ETowerSlotType.Locked;
         public ETowerSlotType SlotType => _slotType;
-        public void SetSlotType(ETowerSlotType slotType) => _slotType = slotType;
+
+        public void SetSlotType(ETowerSlotType slotType)
+        {
+            _slotType = slotType;
+            if (_currentTower != null)
+                ApplyFireState(_currentTower);
+            RefreshDropCollider();
+        }
 
         private void Awake()
         {
@@ -35,7 +43,7 @@ namespace Project.Scripts.Gameplay.Field
             if (_dropCollider == null)
                 return;
 
-            _dropCollider.enabled = _currentTower == null;
+            _dropCollider.enabled = _currentTower == null && CanPlaceTower;
         }
 
         public void Construct(IUnitsCatalog unitsCatalog)
@@ -45,7 +53,7 @@ namespace Project.Scripts.Gameplay.Field
 
         public bool TryPlaceTower(TowerUnit towerPrefab, IPlayerStatsUseCase playerStats, IAudioManager audioManager)
         {
-            if (IsOccupied || towerPrefab == null)
+            if (!CanPlaceTower || IsOccupied || towerPrefab == null)
                 return false;
 
             _currentTower = Instantiate(towerPrefab, TowerAnchor.position, TowerAnchor.rotation, TowerAnchor);
@@ -74,7 +82,7 @@ namespace Project.Scripts.Gameplay.Field
 
         public bool TryAttachExistingTower(TowerUnit tower)
         {
-            if (tower == null)
+            if (!CanPlaceTower || tower == null)
                 return false;
 
             if (IsOccupied)
@@ -154,7 +162,7 @@ namespace Project.Scripts.Gameplay.Field
         {
             var towerUnit = towerObject.GetComponent<TowerUnit>();
             if (towerUnit != null)
-                towerUnit.SetCanFire(IsActiveOnly);
+                towerUnit.SetCanFire(CanPlaceTower);
         }
     }
 }

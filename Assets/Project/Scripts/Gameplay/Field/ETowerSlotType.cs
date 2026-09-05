@@ -3,6 +3,7 @@
     public enum ETowerSlotType
     {
         SpawnOnly,
-        ActiveOnly
+        ActiveOnly,
+        Locked
     }
 }

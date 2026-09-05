@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 645fe2540a4f4dbc87face14ed327e24, type: 3}
+  m_Name: Run Config
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Run.Configs.RunConfig
+  _displayName: Default Run
+  _description: Default 20-wave run converted from Level Config.
+  _waves:
+  - _waveConfig: {fileID: 11400000, guid: 7350c3ffcc8b4db4385699f33dd98fb4, type: 2}
+    _completeRewardGold: 250
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: e6d2ce8e4a4b39b4daeb099813825d78, type: 2}
+    _completeRewardGold: 463
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: ea241d86d43e42f44b207d726dd28e9e, type: 2}
+    _completeRewardGold: 747
+    _isBossWave: 0
+    _phaseAfterComplete: 3
+  - _waveConfig: {fileID: 11400000, guid: 8372af58de57a83469bbce6221d54535, type: 2}
+    _completeRewardGold: 1065
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: d1c3eb7b1cb74f4fa964245d11875405, type: 2}
+    _completeRewardGold: 1408
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: a6f5414d671d4e6eb54399bfe6089ab1, type: 2}
+    _completeRewardGold: 1770
+    _isBossWave: 0
+    _phaseAfterComplete: 3
+  - _waveConfig: {fileID: 11400000, guid: f0434d4a6a3c43d193d8144ea1eb3b92, type: 2}
+    _completeRewardGold: 2149
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: 9d505db5551a4aa7924f7c532a14968a, type: 2}
+    _completeRewardGold: 2542
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: 5cef68cdb0cc433a9f870f3d2c4bc1d7, type: 2}
+    _completeRewardGold: 2948
+    _isBossWave: 0
+    _phaseAfterComplete: 3
+  - _waveConfig: {fileID: 11400000, guid: e56e62df3ce94e9a9d9d7a6989ac4b33, type: 2}
+    _completeRewardGold: 3365
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: e19b1cddd8464fab986e44420392511e, type: 2}
+    _completeRewardGold: 3792
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: d7870384d5994da3b39089c829ca5772, type: 2}
+    _completeRewardGold: 4229
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: e12962c2c007481ba4e02c851ffe13b0, type: 2}
+    _completeRewardGold: 4674
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: 48b1d3b1b54f4bb0be0cefe9d1a3f4e1, type: 2}
+    _completeRewardGold: 5128
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: ac82d395fa3647d38143b93e07275110, type: 2}
+    _completeRewardGold: 5589
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: 9ce5c44ab1af477d835b4c91f6a33fb6, type: 2}
+    _completeRewardGold: 6058
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: bf7d3180ab884bb4985607abf1c9be07, type: 2}
+    _completeRewardGold: 6534
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: 070807c8a82e4cc28973eea22b0b41e7, type: 2}
+    _completeRewardGold: 7017
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: a4e40fa49e254f3e9044696766029781, type: 2}
+    _completeRewardGold: 7505
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _waveConfig: {fileID: 11400000, guid: a2b9eec11d0c4f15b3425b532ccf43f5, type: 2}
+    _completeRewardGold: 8000
+    _isBossWave: 1
+    _phaseAfterComplete: 4

@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Towers;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -20,11 +21,13 @@ namespace Project.Scripts.GameManager
         [SerializeField] private TowerUnit _towerPrefab;
 
         private IGameManagerService _gameManagerService;
+        private RunBattleRuntime _runBattleRuntime;
 
         [Inject]
-        public void Construct(IGameManagerService gameManagerService)
+        public void Construct(IGameManagerService gameManagerService, RunBattleRuntime runBattleRuntime)
         {
             _gameManagerService = gameManagerService;
+            _runBattleRuntime = runBattleRuntime;
         }
 
         private void OnEnable()
@@ -43,6 +46,18 @@ namespace Project.Scripts.GameManager
             }
 
             _gameManagerService.StartGame();
+        }
+
+        [Button]
+        public void StartWave()
+        {
+            if (_runBattleRuntime == null)
+            {
+                Debug.LogError("RunBattleRuntime is null. Ensure RunBattleRuntime is registered in ProjectLifetimeScope.");
+                return;
+            }
+
+            _runBattleRuntime.StartWave();
         }
 
         [Button]
@@ -93,10 +108,10 @@ namespace Project.Scripts.GameManager
                 return;
             }
 
-            var slot = _battlefieldContext.FindFirstFreeSlot(ETowerSlotType.SpawnOnly);
+            var slot = _battlefieldContext.FindFirstFreePlaceableSlot();
             if (slot == null)
             {
-                Debug.Log("GameManagerHelper: No free SpawnOnly slot.");
+                Debug.Log("GameManagerHelper: No free placeable slot.");
                 return;
             }
         }
@@ -141,6 +156,9 @@ namespace Project.Scripts.GameManager
             {
                 var slot = slots[i];
                 if (slot == null)
+                    continue;
+
+                if (slot.SlotType == ETowerSlotType.Locked)
                     continue;
 
                 var isActive = slot.name.StartsWith("ActiveTowerSlot", StringComparison.OrdinalIgnoreCase);

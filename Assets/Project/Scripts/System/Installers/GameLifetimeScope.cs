@@ -5,6 +5,7 @@ using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Audio;
@@ -60,8 +61,9 @@ namespace Installers
             // Game loop
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();
             builder.RegisterEntryPoint<QuestService>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<RunBattleRuntime>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();;
             builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>().AsSelf();
             builder.Register<LocalizationService>(Lifetime.Singleton).As<ILocalizationService>();
             builder.Register<ProgressSaveService>(Lifetime.Singleton).AsSelf();
@@ -121,7 +123,7 @@ namespace Installers
         
         private void RegisterGameplay(IContainerBuilder builder)
         {
-            // Register gameplay services and systems here.
+            builder.Register<RunState>(Lifetime.Singleton);
         }
 
         private void RegisterViews(IContainerBuilder builder)

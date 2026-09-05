@@ -1,7 +1,7 @@
 using System;
 using MessagePipe;
 using Project.Scripts.GameManager;
-using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
@@ -19,16 +19,14 @@ namespace Project.Scripts.UI.EndWaveUI
         private const string PlayerRatedKey = "player_rated_game";
         private const float ReviewRequestTimeout = 30f;
 
-        private readonly BattlefieldRuntime _battlefieldRuntime;
+        private readonly RunBattleRuntime _runBattleRuntime;
         private readonly IEndWaveUIPresenter _endWaveUIPresenter;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
-        private readonly IGameManagerService _gameManagerService;
         private readonly ILocalizationService _localizationService;
         private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
 
-        private bool _isLastWave;
         private bool _isWaitingAdReward;
         private bool _isWaitingReview;
         private bool _isAdRewardClaimed;
@@ -37,21 +35,19 @@ namespace Project.Scripts.UI.EndWaveUI
         private int _currentRewardCount;
 
         public EndWaveUseCase(
-            BattlefieldRuntime battlefieldRuntime,
+            RunBattleRuntime runBattleRuntime,
             IEndWaveUIPresenter endWaveUIPresenter,
             IPlayerStatsUseCase playerStatsUseCase,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            IGameManagerService gameManagerService,
             ILocalizationService localizationService,
             ProgressCheckpointUseCase progressCheckpointUseCase)
         {
-            _battlefieldRuntime = battlefieldRuntime;
+            _runBattleRuntime = runBattleRuntime;
             _endWaveUIPresenter = endWaveUIPresenter;
             _playerStatsUseCase = playerStatsUseCase;
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
-            _gameManagerService = gameManagerService;
             _localizationService = localizationService;
             _progressCheckpointUseCase = progressCheckpointUseCase;
         }
@@ -59,15 +55,14 @@ namespace Project.Scripts.UI.EndWaveUI
         public void Initialize()
         {
             IGameListener.Register(this);
-            _battlefieldRuntime.WaveCompleted += OnWaveCompleted;
+            _runBattleRuntime.WaveCompleted += OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested += OnCloseRequested;
             _endWaveUIPresenter.AdRequested += OnAdRequested;
             _endWaveUIPresenter.ReviewRequested += OnReviewRequested;
         }
 
-        private void OnWaveCompleted(int waveNumber, int rewardCount, bool isLastWave)
+        private void OnWaveCompleted(int waveNumber, int rewardCount, ERunPhase phaseAfterComplete)
         {
-            _isLastWave = isLastWave;
             _isWaitingAdReward = false;
             _isWaitingReview = false;
             _reviewRequestTimer = 0f;
@@ -259,13 +254,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
             TryShowInterstitialAd();
 
-            if (_isLastWave)
-            {
-                _gameManagerService.FinishGame();
-                return;
-            }
-
-            _battlefieldRuntime.ContinueAfterEndWavePopup();
+            _runBattleRuntime.ContinueAfterEndWavePopup();
         }
 
         private void TryShowInterstitialAd()
@@ -278,7 +267,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
         public void Dispose()
         {
-            _battlefieldRuntime.WaveCompleted -= OnWaveCompleted;
+            _runBattleRuntime.WaveCompleted -= OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested -= OnCloseRequested;
             _endWaveUIPresenter.AdRequested -= OnAdRequested;
             _endWaveUIPresenter.ReviewRequested -= OnReviewRequested;
