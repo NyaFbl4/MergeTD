@@ -2,6 +2,7 @@
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Enemies;
+using Project.Scripts.Gameplay.Run;
 using UnityEngine;
 using VContainer;
 
@@ -26,7 +27,7 @@ namespace Project.Scripts.Gameplay.Field
         private IUnitsCatalog _unitsCatalog;
         
         [Inject]
-        public void Construct(UnitsConfig unitsConfig, IUnitsCatalog unitsCatalog)
+        public void Construct(UnitsConfig unitsConfig, IUnitsCatalog unitsCatalog, RunState runState)
         {
             _unitsConfig = unitsConfig;
             _unitsCatalog = unitsCatalog;
@@ -39,7 +40,7 @@ namespace Project.Scripts.Gameplay.Field
                 if (_towerSlots[i] == null)
                     continue;
 
-                _towerSlots[i].Construct(_unitsCatalog);
+                _towerSlots[i].Construct(_unitsCatalog, runState);
             }
         }
         

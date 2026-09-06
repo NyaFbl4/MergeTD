@@ -6,6 +6,7 @@
         NotEnoughGold,
         NoFreeSpawnSlot,
         ConfigError,
-        PlaceFailed
+        PlaceFailed,
+        RunPhaseLocked
     }
 }

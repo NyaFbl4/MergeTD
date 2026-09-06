@@ -46,5 +46,11 @@ namespace Project.Scripts.System.Save
             PlayerPrefs.DeleteKey(PlayerRatedKey);
             PlayerPrefs.Save();
         }
+
+        public void ClearCheckpoint()
+        {
+            PlayerPrefs.DeleteKey(SaveKey);
+            PlayerPrefs.Save();
+        }
     }
 }

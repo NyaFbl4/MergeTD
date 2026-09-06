@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Run.Configs.RunConfig
   _displayName: Default Run
   _description: Default 20-wave run converted from Level Config.
+  _startBaseHealth: 10
+  _startGold: 250
+  _startSelectedTowerLevel: 1
   _waves:
   - _waveConfig: {fileID: 11400000, guid: 7350c3ffcc8b4db4385699f33dd98fb4, type: 2}
     _completeRewardGold: 250

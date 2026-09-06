@@ -2,7 +2,6 @@ using System;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Towers;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using VContainer;
 #if UNITY_EDITOR
@@ -36,7 +35,6 @@ namespace Project.Scripts.GameManager
                 _gameManagerService.StartGame();
         }
 
-        [Button]
         public void StartGame()
         {
             if (_gameManagerService == null)
@@ -48,7 +46,6 @@ namespace Project.Scripts.GameManager
             _gameManagerService.StartGame();
         }
 
-        [Button]
         public void StartWave()
         {
             if (_runBattleRuntime == null)
@@ -60,7 +57,6 @@ namespace Project.Scripts.GameManager
             _runBattleRuntime.StartWave();
         }
 
-        [Button]
         public void FinishGame()
         {
             if (_gameManagerService == null)
@@ -72,7 +68,6 @@ namespace Project.Scripts.GameManager
             _gameManagerService.FinishGame();
         }
 
-        [Button]
         public void PauseGame()
         {
             if (_gameManagerService == null)
@@ -84,7 +79,6 @@ namespace Project.Scripts.GameManager
             _gameManagerService.PauseGame();
         }
 
-        [Button]
         public void ResumeGame()
         {
             if (_gameManagerService == null)
@@ -96,7 +90,6 @@ namespace Project.Scripts.GameManager
             _gameManagerService.ResumeGame();
         }
 
-        [Button]
         public void SpawnTowerToSpawnSlot()
         {
             if (!TryResolveBattlefieldContext())
@@ -116,7 +109,6 @@ namespace Project.Scripts.GameManager
             }
         }
 
-        [Button]
         public void MoveSpawnedTowerToActiveSlot()
         {
             if (!TryResolveBattlefieldContext())
@@ -142,7 +134,6 @@ namespace Project.Scripts.GameManager
             Debug.LogWarning("GameManagerHelper: Failed to move tower to active slot.");
         }
 
-        [Button]
         public void AutoDetectSlotTypesByName()
         {
             if (!TryResolveBattlefieldContext())

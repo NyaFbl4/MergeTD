@@ -2,6 +2,7 @@ using YG;
 using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
@@ -22,6 +23,8 @@ namespace Project.Scripts.UI.LevelUI
         private readonly ILevelUIUseCase _levelUIUseCase;
         private readonly IBuyTowerUseCase _buyTowerUseCase;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
+        private readonly RunBattleRuntime _runBattleRuntime;
+        private readonly RunState _runState;
         private readonly BaseHealth _baseHealth;
         private readonly ILocalizationService _localizationService;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
@@ -33,6 +36,8 @@ namespace Project.Scripts.UI.LevelUI
         public LevelUIPresenter(
             IBuyTowerUseCase buyTowerUseCase,
             IPlayerStatsUseCase playerStatsUseCase,
+            RunBattleRuntime runBattleRuntime,
+            RunState runState,
             ILevelUIUseCase levelUIUseCase,
             BaseHealth baseHealth,
             ILocalizationService localizationService,
@@ -42,6 +47,8 @@ namespace Project.Scripts.UI.LevelUI
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
+            _runBattleRuntime = runBattleRuntime;
+            _runState = runState;
             _levelUIUseCase = levelUIUseCase;
             _baseHealth = baseHealth;
             _localizationService = localizationService;
@@ -62,15 +69,18 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.ADButtonClicked += OnADButtonClicked;
             _layoutView.QuestsButtonClicked += OnQuestsButtonClicked;
             _layoutView.SettingsButtonClicked += OnSettingsButtonClicked;
+            _layoutView.NextWaveButtonClicked += OnNextWaveButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage += OnLanguageChanged;
+            _runState.PhaseChanged += OnRunPhaseChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
 
             RefreshWaveText();
+            RefreshRunPhaseControls();
             UpdateTowerIcon();
         }
 
@@ -89,6 +99,13 @@ namespace Project.Scripts.UI.LevelUI
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             var result = _buyTowerUseCase.TryBuyTower();
             Debug.Log($"BuyTower result: {result}");
+        }
+
+        private void OnNextWaveButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _runBattleRuntime.AdvanceFromLevelButton();
+            RefreshRunPhaseControls();
         }
 
         private void OnShopButtonClicked()
@@ -165,6 +182,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnCurrentWaveChanged(int wave)
         {
             RefreshWaveText();
+            RefreshRunPhaseControls();
         }
 
         private void UpdateTowerIcon()
@@ -183,6 +201,17 @@ namespace Project.Scripts.UI.LevelUI
         private void OnLanguageChanged(string _)
         {
             RefreshWaveText();
+        }
+
+        private void OnRunPhaseChanged(ERunPhase phase)
+        {
+            RefreshRunPhaseControls();
+        }
+
+        private void RefreshRunPhaseControls()
+        {
+            _layoutView.SetNextWaveButtonEnabled(_runBattleRuntime.CanUseNextWaveButton);
+            _layoutView.SetTowerActionsEnabled(_runState.CanEditDefense);
         }
 
         private void TryGrantAdTowerUpgrade()
@@ -246,11 +275,13 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.ADButtonClicked -= OnADButtonClicked;
             _layoutView.QuestsButtonClicked -= OnQuestsButtonClicked;
             _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;
+            _layoutView.NextWaveButtonClicked -= OnNextWaveButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
+            _runState.PhaseChanged -= OnRunPhaseChanged;
             
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();

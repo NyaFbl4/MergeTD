@@ -1,0 +1,34 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="TowerPanel" src="project://database/Assets/Project/Resources/UIToolkit/TowerPanel.uxml?fileID=9197481963319205126&amp;guid=ee0fda5c87458f243b2da57b2950f0b1&amp;type=3#TowerPanel"/>
+    <ui:VisualElement name="Layout" style="flex-grow: 1; width: 100%; height: 100%; align-items: center; justify-content: center; -unity-background-image-tint-color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0.588);">
+        <ui:VisualElement name="TowersPanel" style="flex-grow: 1; width: 600px; height: 1000px; min-height: 1000px; max-height: 1000px; min-width: 600px; max-width: 600px; background-image: resource(&quot;UI/new/CardFrame08_White&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; -unity-background-image-tint-color: rgb(61, 90, 226); -unity-slice-type: sliced;">
+            <ui:VisualElement name="HeaderPanel" style="flex-grow: 1; width: 100%; height: 200px; min-height: 200px; max-height: 200px; min-width: 100%; max-width: 100%; justify-content: center; align-items: center;">
+                <ui:VisualElement style="flex-grow: 1; width: 400px; min-width: 400px; max-width: 400px; height: 100%; min-height: 100%; max-height: 100%;">
+                    <ui:Label text="БАШНИ" name="HeaderLabel" style="-unity-text-align: lower-center; font-size: 50px; height: 100px; min-height: 100px; max-height: 100px; width: 100%; min-width: 100%; max-width: 100%;"/>
+                    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+                        <ui:VisualElement name="GoldBar" style="flex-grow: 1; flex-direction: row; align-items: center; width: 200px; height: 100px; min-height: 100px; max-height: 100px; min-width: 200px; max-width: 200px; margin-right: 25px;">
+                            <ui:VisualElement name="GoldIcon" style="flex-grow: 1; background-image: resource(&quot;UI/new/Icon_Gold&quot;); width: 50px; height: 50px; min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px;"/>
+                            <ui:Label text="222" name="GoldLabel" style="height: 71px; width: 144px; left: auto; top: auto; -unity-text-align: middle-left; font-size: 35px; -unity-font-definition: resource(&quot;Fonts/Alfa_Slab_One/AlfaSlabOne-Regular&quot;);"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="GemBar" style="flex-grow: 1; flex-direction: row; align-items: center; width: 200px; height: 100px; min-height: 100px; max-height: 100px; min-width: 200px; max-width: 200px;">
+                            <ui:VisualElement name="GemIcon" style="flex-grow: 1; background-image: resource(&quot;UI/new/Icon_Gem03_Diamond_Purple 1&quot;); width: 50px; height: 50px; min-height: 50px; max-height: 50px; min-width: 50px; max-width: 50px; -unity-background-scale-mode: scale-to-fit;"/>
+                            <ui:Label text="222" name="GemLabel" style="height: 71px; width: 206px; left: auto; top: auto; -unity-text-align: middle-left; font-size: 35px; -unity-font-definition: resource(&quot;Fonts/Alfa_Slab_One/AlfaSlabOne-Regular&quot;);"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Button text="" name="CloseButton" style="background-image: resource(&quot;UI/new/Button_Square03_White&quot;); background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-slice-left: 40; -unity-slice-top: 40; -unity-slice-right: 40; -unity-slice-bottom: 40; width: 100px; height: 100px; min-height: 100px; max-height: 100px; min-width: 100px; max-width: 100px; align-items: center; justify-content: center; -unity-background-image-tint-color: rgb(214, 70, 70); position: absolute; top: 9px; left: 483px;">
+                    <ui:VisualElement style="flex-grow: 1; width: 60px; height: 60px; min-height: 60px; max-height: 60px; min-width: 60px; max-width: 60px; background-image: resource(&quot;UI/new/Icon_PictoIcon_Close&quot;);"/>
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:VisualElement name="Body" style="flex-grow: 1;">
+                <ui:ScrollView name="ScrollView" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="width: 460px; height: 776px; min-width: 460px; max-width: 460px; min-height: 776px; max-height: 776px; align-self: center;">
+                    <ui:VisualElement name="TowersGrid" style="width: 100%; flex-direction: row; flex-wrap: wrap; align-content: flex-start; align-items: flex-start; justify-content: flex-start;">
+                        <ui:Instance template="TowerPanel" name="TowerPanel"/>
+                        <ui:Instance template="TowerPanel" name="TowerPanel"/>
+                        <ui:Instance template="TowerPanel" name="TowerPanel"/>
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

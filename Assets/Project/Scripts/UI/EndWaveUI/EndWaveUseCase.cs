@@ -63,6 +63,33 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private void OnWaveCompleted(int waveNumber, int rewardCount, ERunPhase phaseAfterComplete)
         {
+            switch (phaseAfterComplete)
+            {
+                case ERunPhase.Reward:
+                    GrantWaveRewardAndSaveCheckpoint(waveNumber, rewardCount);
+                    ShowRewardPopup(waveNumber, rewardCount);
+                    break;
+                case ERunPhase.CardChoice:
+                    // Card selection UI will be added later. Next Wave continues to preparation.
+                    GrantWaveRewardAndSaveCheckpoint(waveNumber, rewardCount);
+                    break;
+                case ERunPhase.Victory:
+                    _playerStatsUseCase.AddGold(rewardCount);
+                    _runBattleRuntime.FinishVictory();
+                    break;
+                case ERunPhase.Defeat:
+                    break;
+            }
+        }
+
+        private void GrantWaveRewardAndSaveCheckpoint(int waveNumber, int rewardCount)
+        {
+            _playerStatsUseCase.AddGold(rewardCount);
+            _progressCheckpointUseCase.SaveCheckpoint(waveNumber + 1);
+        }
+
+        private void ShowRewardPopup(int waveNumber, int rewardCount)
+        {
             _isWaitingAdReward = false;
             _isWaitingReview = false;
             _reviewRequestTimer = 0f;
@@ -75,8 +102,6 @@ namespace Project.Scripts.UI.EndWaveUI
             else
                 _endWaveUIPresenter.SetAdButtonAdMode();
             
-            _playerStatsUseCase.AddGold(rewardCount);
-            _progressCheckpointUseCase.SaveCheckpoint(waveNumber + 1);
             _endWaveUIPresenter.SetData(
                 _localizationService.Format(LocalizationKeys.EndWaveTitleFormat, waveNumber),
                 rewardCount);
@@ -254,7 +279,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
             TryShowInterstitialAd();
 
-            _runBattleRuntime.ContinueAfterEndWavePopup();
+            _runBattleRuntime.ContinueToNextPreparation();
         }
 
         private void TryShowInterstitialAd()

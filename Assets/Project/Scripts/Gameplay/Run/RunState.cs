@@ -1,5 +1,7 @@
 ﻿using Project.Scripts.Gameplay.Run.Configs;
 
+using System;
+
 namespace Project.Scripts.Gameplay.Run
 {
     public class RunState
@@ -21,6 +23,8 @@ namespace Project.Scripts.Gameplay.Run
         public bool CanUseAbilities => _canUseAbilities;
         public bool IsBossWave => _isBossWave;
         public RunWaveConfig CurrentWaveConfig => _currentWaveConfig;
+        
+        public event Action<ERunPhase> PhaseChanged;
 
         public RunState(RunConfig runConfig)
         {
@@ -36,33 +40,54 @@ namespace Project.Scripts.Gameplay.Run
         {
             _currentWave = UnityEngine.Mathf.Clamp(waveNumber, 1, MaxWaves);
             _currentWaveConfig = _config.Waves[_currentWave - 1];
-            _phase = ERunPhase.Preparation;
+            SetPhase(ERunPhase.Preparation);
         }
 
         public void StartWave()
         {
-            _phase = ERunPhase.Wave;
+            if (_phase != ERunPhase.Preparation)
+                return;
+
+            SetPhase(ERunPhase.Wave);
         }
         
         public void CompleteWave()
         {
+            if (_phase != ERunPhase.Wave)
+                return;
+
             if (_currentWave >= MaxWaves)
             {
-                _phase = ERunPhase.Victory;
+                SetPhase(ERunPhase.Victory);
                 return;
             }
             
-            _phase = CurrentWaveConfig.PhaseAfterComplete;
+            SetPhase(CurrentWaveConfig.PhaseAfterComplete);
         }
         
         public void ContinueToNextPreparation()
         {
+            if (_phase != ERunPhase.Reward && _phase != ERunPhase.CardChoice)
+                return;
+
             MoveToWave(_currentWave + 1);
         }
         
         public void Defeat()
         {
-            _phase = ERunPhase.Defeat;
+            if (_phase == ERunPhase.Victory)
+                return;
+
+            SetPhase(ERunPhase.Defeat);
+        }
+
+        private void SetPhase(ERunPhase phase)
+        {
+            if (_phase == phase)
+                return;
+
+            _phase = phase;
+            PhaseChanged?.Invoke(_phase);
         }
     }
 }

@@ -3,6 +3,7 @@ using MessagePipe;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.QuestEvents;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Enums;
 
@@ -17,6 +18,7 @@ namespace Project.Scripts.System.UseCases
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly IPublisher<TowerBoughtQuestEventDTO> _publisherBoughtQuestEventDTO;
         private readonly IAudioManager _audioManager;
+        private readonly RunState _runState;
 
         public int TowerCost => FixedTowerCost;
         public event Action<int> TowerCostChanged;
@@ -26,17 +28,22 @@ namespace Project.Scripts.System.UseCases
             IPlayerStatsUseCase playerStatsUseCase,
             IUnitsCatalog unitsCatalog,
             IPublisher<TowerBoughtQuestEventDTO> publisherBoughtQuestEventDTO,
-            IAudioManager audioManager)
+            IAudioManager audioManager,
+            RunState runState)
         {
             _battlefieldContext = battlefieldContext;
             _playerStats = playerStatsUseCase;
             _unitsCatalog = unitsCatalog;
             _publisherBoughtQuestEventDTO = publisherBoughtQuestEventDTO;
             _audioManager = audioManager;
+            _runState = runState;
         }
 
         public EBuyTowerResult TryBuyTower()
         {
+            if (!_runState.CanEditDefense)
+                return EBuyTowerResult.RunPhaseLocked;
+
             var slot = _battlefieldContext.FindFirstFreePlaceableSlot();
             if (slot == null)
                 return EBuyTowerResult.NoFreeSpawnSlot;

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
@@ -15,19 +16,22 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IAudioManager _audioManager;
+        private readonly RunState _runState;
 
         public LevelUIUseCase(
             BattlefieldContext battlefieldContext,
             UnitsConfig unitsConfig,
             IUnitsCatalog unitsCatalog,
             IPlayerStatsUseCase playerStats,
-            IAudioManager audioManager)
+            IAudioManager audioManager,
+            RunState runState)
         {
             _battlefieldContext = battlefieldContext;
             _unitsConfig = unitsConfig;
             _playerStats = playerStats;
             _unitsCatalog = unitsCatalog;
             _audioManager = audioManager;
+            _runState = runState;
         }
         
         public TowerConfig GetSelectedTowerConfig()
@@ -38,11 +42,17 @@ namespace Project.Scripts.UI.LevelUI
 
         public bool HasUpgradeableTower()
         {
+            if (!_runState.CanEditDefense)
+                return false;
+            
             return TryGetRandomLowestUpgradeableTower(out _);
         }
 
         public bool TryUpgradeRandomLowestLevelTower()
         {
+            if (!_runState.CanEditDefense)
+                return false;
+            
             if (!TryGetRandomLowestUpgradeableTower(out var slot))
                 return false;
 

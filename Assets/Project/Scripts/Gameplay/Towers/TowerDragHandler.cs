@@ -13,6 +13,8 @@ namespace Project.Scripts.Gameplay.Towers
         private Camera _camera;
         private Vector3 _startPos;
         private Collider2D _towerCollider;
+        private bool _isDragging;
+        
         private void Awake()
         {
             _towerUnit = GetComponent<TowerUnit>();
@@ -40,9 +42,15 @@ namespace Project.Scripts.Gameplay.Towers
                 Debug.LogWarning($"TowerDragHandler: source slot is null for {name}");
                 return;
             }
+            
+            if (!_sourceSlot.CanEditTower)
+                return;
 
             _startPos = transform.position;
-            _sourceSlot.DetachTower();
+            if (_sourceSlot.DetachTower() != _towerUnit)
+                return;
+            
+            _isDragging = true;
             _towerUnit?.SetCanFire(false);
 
             if (_towerCollider != null)
@@ -51,16 +59,23 @@ namespace Project.Scripts.Gameplay.Towers
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (!_isDragging)
+                return;
+            
             transform.position = GetPointerWorldPosition(eventData);
         } 
         
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (!_isDragging)
+                return;
+            
             var world = GetPointerWorldPosition(eventData);
 
              var targetSlot = FindSlotUnderPointer(world);
              if (targetSlot != null && targetSlot.TryAttachExistingTower(_towerUnit))
              {
+                 _isDragging = false;
                  if (_towerCollider != null)
                      _towerCollider.enabled = true;
                  return;
@@ -69,11 +84,13 @@ namespace Project.Scripts.Gameplay.Towers
              // rollback
              if (_sourceSlot != null && _sourceSlot.TryAttachExistingTower(_towerUnit))
              {
+                 _isDragging = false;
                  if (_towerCollider != null)
                      _towerCollider.enabled = true;
                  return;
              }
 
+             _isDragging = false;
              transform.position = _startPos;
              if (_towerCollider != null)
                  _towerCollider.enabled = true;

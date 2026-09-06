@@ -20,6 +20,9 @@ namespace Project.Scripts.Gameplay.Run
         private bool _isGameRunning;
 
         public event Action<int, int, ERunPhase> WaveCompleted;
+        public bool CanUseNextWaveButton => _isGameRunning
+                                           && (_state.Phase == ERunPhase.Preparation
+                                               || _state.Phase == ERunPhase.CardChoice);
 
         public RunBattleRuntime(
             RunState state,
@@ -70,22 +73,40 @@ namespace Project.Scripts.Gameplay.Run
             _battlefieldRuntime.StartCurrentWave();
         }
 
-        public void ContinueAfterEndWavePopup()
+        public void AdvanceFromLevelButton()
+        {
+            if (!CanUseNextWaveButton)
+                return;
+
+            if (_state.Phase == ERunPhase.Preparation)
+            {
+                StartWave();
+                return;
+            }
+
+            ContinueToNextPreparation();
+        }
+
+        public void ContinueToNextPreparation()
         {
             if (!_isGameRunning)
                 return;
 
-            if (_state.Phase == ERunPhase.Victory)
-            {
-                _gameManagerService.FinishGame();
-                return;
-            }
-
-            if (_state.Phase == ERunPhase.Defeat)
+            if (_state.Phase != ERunPhase.Reward && _state.Phase != ERunPhase.CardChoice)
                 return;
 
             _state.ContinueToNextPreparation();
             _playerStatsUseCase.SetWave(_state.CurrentWave);
+        }
+
+        public void FinishVictory()
+        {
+            if (!_isGameRunning || _state.Phase != ERunPhase.Victory)
+                return;
+
+            _isGameRunning = false;
+            _progressCheckpointUseCase.ClearCheckpoint();
+            _gameManagerService.FinishGame();
         }
 
         public void OnFinishGame()
@@ -95,6 +116,10 @@ namespace Project.Scripts.Gameplay.Run
 
         private void OnWaveExecutionCompleted(int completedWaveNumber)
         {
+            if (!_isGameRunning || _state.Phase != ERunPhase.Wave
+                                || completedWaveNumber != _state.CurrentWave)
+                return;
+
             var runWave = _state.CurrentWaveConfig;
             _state.CompleteWave();
             WaveCompleted?.Invoke(completedWaveNumber, runWave.CompleteRewardGold, _state.Phase);

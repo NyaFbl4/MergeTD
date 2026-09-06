@@ -43,12 +43,11 @@ namespace Project.Scripts.Gameplay.Systems
             _context = context;
             _runState = runState;
             _playerStatsUseCase = playerStatsUseCase;
-            IGameListener.Register(this);
         }
 
         public void Start()
         {
-            // Wait for GameManagerService.StartGame.
+            IGameListener.Register(this);
         }
 
         public void Dispose()
@@ -237,6 +236,9 @@ namespace Project.Scripts.Gameplay.Systems
         
         private void TryCompleteWave()
         {
+            if (!_isGameRunning || !_isWaveRunning || _runState.Phase != ERunPhase.Wave)
+                return;
+
             for (var i = 0; i < _sequenceRuntimes.Count; i++)
             {
                 if (!_sequenceRuntimes[i].IsComplete)

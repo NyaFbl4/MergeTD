@@ -1,4 +1,3 @@
-using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
@@ -19,7 +18,6 @@ namespace Project.Scripts.System.Save
         private readonly BaseHealth _baseHealth;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IAudioManager _audioManager;
-        private readonly LevelConfig _levelConfig;
         private readonly RunConfig _runConfig;
         private readonly QuestService _questService;
 
@@ -31,7 +29,6 @@ namespace Project.Scripts.System.Save
             BaseHealth baseHealth,
             IUnitsCatalog unitsCatalog,
             IAudioManager audioManager,
-            LevelConfig levelConfig,
             RunConfig runConfig,
             QuestService questService)
         {
@@ -42,7 +39,6 @@ namespace Project.Scripts.System.Save
             _baseHealth = baseHealth;
             _unitsCatalog = unitsCatalog;
             _audioManager = audioManager;
-            _levelConfig = levelConfig;
             _runConfig = runConfig;
             _questService = questService;
         }
@@ -79,6 +75,11 @@ namespace Project.Scripts.System.Save
         public void SaveCheckpoint(int nextWave)
         {
             SaveCheckpointInternal(nextWave, _baseHealth.CurrentHealth);
+        }
+
+        public void ClearCheckpoint()
+        {
+            _saveService.ClearCheckpoint();
         }
 
         public void SaveRetryCheckpoint(int wave)
@@ -129,7 +130,7 @@ namespace Project.Scripts.System.Save
             ClearTowers();
             _playerStatsUseCase.ResetState();
             _buyTowerUseCase.ResetTowerCost();
-            _baseHealth.SetHealthState(_levelConfig.StartBaseHealth, _levelConfig.StartBaseHealth);
+            _baseHealth.SetHealthState(_runConfig.StartBaseHealth, _runConfig.StartBaseHealth);
         }
 
         private int ClampWave(int wave)

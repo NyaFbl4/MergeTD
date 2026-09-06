@@ -1,4 +1,5 @@
 using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Project.Scripts.Gameplay.Field
         private TowerUnit _currentTower;
         private IUnitsCatalog _unitsCatalog;
         private Collider2D _dropCollider;
+        private RunState _runState;
 
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
@@ -22,6 +24,7 @@ namespace Project.Scripts.Gameplay.Field
         public bool IsSpawnOnly => _slotType == ETowerSlotType.SpawnOnly;
         public bool IsActiveOnly => _slotType == ETowerSlotType.ActiveOnly;
         public bool CanPlaceTower => _slotType != ETowerSlotType.Locked;
+        public bool CanEditTower => CanPlaceTower && (_runState == null || _runState.CanEditDefense);
         public ETowerSlotType SlotType => _slotType;
 
         public void SetSlotType(ETowerSlotType slotType)
@@ -43,17 +46,24 @@ namespace Project.Scripts.Gameplay.Field
             if (_dropCollider == null)
                 return;
 
-            _dropCollider.enabled = _currentTower == null && CanPlaceTower;
+            _dropCollider.enabled = _currentTower == null && CanEditTower;
         }
 
-        public void Construct(IUnitsCatalog unitsCatalog)
+        public void Construct(IUnitsCatalog unitsCatalog, RunState runState)
         {
             _unitsCatalog = unitsCatalog;
+            
+            if (_runState != null)
+                _runState.PhaseChanged -= OnRunPhaseChanged;
+
+            _runState = runState;
+            _runState.PhaseChanged += OnRunPhaseChanged;
+            RefreshDropCollider();
         }
 
         public bool TryPlaceTower(TowerUnit towerPrefab, IPlayerStatsUseCase playerStats, IAudioManager audioManager)
         {
-            if (!CanPlaceTower || IsOccupied || towerPrefab == null)
+            if (!CanEditTower || IsOccupied || towerPrefab == null)
                 return false;
 
             _currentTower = Instantiate(towerPrefab, TowerAnchor.position, TowerAnchor.rotation, TowerAnchor);
@@ -70,7 +80,7 @@ namespace Project.Scripts.Gameplay.Field
 
         public TowerUnit DetachTower()
         {
-            if (_currentTower == null)
+            if (!CanEditTower || _currentTower == null)
                 return null;
 
             var tower = _currentTower;
@@ -82,7 +92,7 @@ namespace Project.Scripts.Gameplay.Field
 
         public bool TryAttachExistingTower(TowerUnit tower)
         {
-            if (!CanPlaceTower || tower == null)
+            if (!CanEditTower || tower == null)
                 return false;
 
             if (IsOccupied)
@@ -163,6 +173,17 @@ namespace Project.Scripts.Gameplay.Field
             var towerUnit = towerObject.GetComponent<TowerUnit>();
             if (towerUnit != null)
                 towerUnit.SetCanFire(CanPlaceTower);
+        }
+
+        private void OnRunPhaseChanged(ERunPhase phase)
+        {
+            RefreshDropCollider();
+        }
+
+        private void OnDestroy()
+        {
+            if (_runState != null)
+                _runState.PhaseChanged -= OnRunPhaseChanged;
         }
     }
 }

@@ -1,0 +1,9 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Button name="SpellButton" style="background-image: resource(&quot;UI/new/ItemFrame01_Single_Red&quot;); background-color: rgba(255, 255, 255, 0); width: 200px; height: 120px; -unity-background-scale-mode: stretch-to-fill; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; min-height: 120px; max-height: 120px; top: 20px; left: 0; min-width: 200px; max-width: 200px; background-position-x: left 0; background-position-y: center; -unity-slice-left: 15; -unity-slice-top: 15; -unity-slice-right: 15; -unity-slice-bottom: 15; flex-direction: row; margin-right: 10px; margin-left: 10px; justify-content: flex-start; align-items: center;">
+        <ui:VisualElement name="TowerIcon" style="flex-grow: 1; background-image: resource(&quot;Guns/Gun01/Idle/Gun01-Idle_0&quot;); width: 80px; height: 80px; min-height: 80px; max-height: 80px; min-width: 80px; max-width: 80px; position: relative; top: auto; left: auto; -unity-slice-type: sliced; rotate: 0 1 1 0; -unity-background-scale-mode: scale-to-fit; background-position-y: center;"/>
+        <ui:VisualElement name="SpellDescription" style="flex-grow: 1;">
+            <ui:Label text="Огонь" name="SpellDamageTypeLabel" style="font-size: 25px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: middle-left;"/>
+            <ui:Label text="6 маны" name="SpellManaLabel" style="font-size: 25px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: middle-left;"/>
+        </ui:VisualElement>
+    </ui:Button>
+</ui:UXML>

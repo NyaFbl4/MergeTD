@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="CardChoicePanel" src="project://database/Assets/Project/Resources/UIToolkit/New/CardChoicePanel.uxml?fileID=9197481963319205126&amp;guid=a95a502351c35134697d054a773a5a74&amp;type=3#CardChoicePanel"/>
+    <ui:VisualElement name="Layout" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.353); justify-content: flex-start; align-self: center; align-items: center;">
+        <ui:VisualElement name="CardChoicePanel" style="flex-grow: 1; justify-content: center; align-items: center;">
+            <ui:Label text="Выбери награду" style="font-size: 50px; -unity-text-align: upper-center; -unity-font-style: bold;"/>
+            <ui:VisualElement name="CardPanel" style="flex-grow: 1; flex-direction: row; height: 400px; min-height: 400px; max-height: 400px; justify-content: center; margin-bottom: 25px; margin-top: 25px;">
+                <ui:Instance template="CardChoicePanel"/>
+                <ui:Instance template="CardChoicePanel"/>
+                <ui:Instance template="CardChoicePanel"/>
+            </ui:VisualElement>
+            <ui:Button text="" name="ADButton" style="width: 200px; min-width: 200px; max-width: 200px; height: 80px; min-height: 80px; max-height: 80px; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgba(188, 188, 188, 0); flex-direction: row;">
+                <ui:Label text="Обновить" name="ADLabel" style="width: 109px; -unity-text-auto-size: best-fit 10px 100px;"/>
+                <ui:VisualElement name="ADIcon" style="flex-grow: 1; width: 65px; height: 65px; min-height: 65px; max-height: 65px; min-width: 65px; max-width: 65px;"/>
+            </ui:Button>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

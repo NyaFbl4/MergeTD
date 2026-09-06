@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Layout" style="flex-grow: 1;">
+        <ui:VisualElement name="HeaderPanel" style="flex-grow: 1; width: 100%; min-width: 100%; max-width: 100%; height: 150px; min-height: 150px; max-height: 150px; justify-content: flex-end; flex-direction: row-reverse; align-self: center; align-items: center;">
+            <ui:VisualElement name="GoldPanel" style="flex-grow: 1; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); height: 80px; min-height: 80px; max-height: 80px; width: 250px; min-width: 250px; max-width: 250px; -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(120, 108, 108); margin-left: 50px; flex-direction: row;">
+                <ui:VisualElement name="IconGold" style="flex-grow: 1; background-image: resource(&quot;UI/new/Icon_Gold&quot;); width: 100px; height: 100px; min-height: 100px; max-height: 100px; min-width: 100px; max-width: 100px; top: -10px; left: -40px;"/>
+                <ui:Label text="500" name="GoldLabel" style="width: 177px; top: auto; left: -35px; -unity-text-align: middle-left; font-size: 50px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="GemPanel" style="flex-grow: 1; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); height: 80px; min-height: 80px; max-height: 80px; width: 250px; min-width: 250px; max-width: 250px; -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(120, 108, 108); margin-left: 50px; flex-direction: row;">
+                <ui:VisualElement name="IconGem" style="flex-grow: 1; background-image: resource(&quot;UI/new/Icon_Gem03_Diamond_Purple 1&quot;); width: 100px; height: 100px; min-height: 100px; max-height: 100px; min-width: 100px; max-width: 100px; top: -10px; left: -40px; -unity-background-scale-mode: scale-to-fit;"/>
+                <ui:Label text="500" name="GemLabel" style="width: 177px; top: auto; left: -35px; -unity-text-align: middle-left; font-size: 50px;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

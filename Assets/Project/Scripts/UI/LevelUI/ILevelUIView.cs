@@ -12,6 +12,7 @@ namespace Project.Scripts.UI.LevelUI
         event Action ADButtonClicked;
         event Action QuestsButtonClicked;
         event Action SettingsButtonClicked;
+        event Action NextWaveButtonClicked;
         
         void SetPriceTower(int price);
         void SetMoney(int money);
@@ -20,5 +21,7 @@ namespace Project.Scripts.UI.LevelUI
         void SetMaxBaseHealth(int baseMaxHealth);
         void SetTowerLevel(int towerLevel);
         void SetCurrentWaveText(string text);
+        void SetNextWaveButtonEnabled(bool isEnabled);
+        void SetTowerActionsEnabled(bool isEnabled);
     }
 }
