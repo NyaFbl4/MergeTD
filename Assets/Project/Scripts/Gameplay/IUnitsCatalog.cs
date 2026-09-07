@@ -5,8 +5,8 @@ namespace Project.Scripts.Gameplay
 {
     public interface IUnitsCatalog
     {
-        bool HasTowerLevel(int level);
-        TowerUnit GetTowerPrefabByLevel(int level);
-        TowerConfig GetTowerConfigByLevel(int level);
+        bool HasTowerLevel(int level, ETowerType towerType = ETowerType.Combat);
+        TowerUnit GetTowerPrefabByLevel(int level, ETowerType towerType = ETowerType.Combat);
+        TowerConfig GetTowerConfigByLevel(int level, ETowerType towerType = ETowerType.Combat);
     }
 }

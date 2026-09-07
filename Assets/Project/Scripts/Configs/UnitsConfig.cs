@@ -10,8 +10,10 @@ namespace Project.Scripts.Configs
     {
         [SerializeField] private List<EnemyUnit> _enemies = new();
         [SerializeField] private List<TowerUnit> _towers;
+        [SerializeField] private TowerUnit _generatorLevelOne;
 
         public List<EnemyUnit> Enemies => _enemies;
         public List<TowerUnit> Towers => _towers;
+        public TowerUnit GeneratorLevelOne => _generatorLevelOne;
     }
 }

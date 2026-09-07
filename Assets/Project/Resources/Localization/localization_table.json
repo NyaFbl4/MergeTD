@@ -2,6 +2,11 @@
   "defaultLanguage": "ru",
   "entries": [
     {
+      "key": "level.energy_format",
+      "ru": "Энергия: {0}",
+      "en": "Energy: {0}"
+    },
+    {
       "key": "level.wave_format",
       "ru": "Волна {0}",
       "en": "Wave {0}"

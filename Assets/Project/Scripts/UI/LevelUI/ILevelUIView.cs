@@ -9,6 +9,7 @@ namespace Project.Scripts.UI.LevelUI
     public interface ILevelUIView : ILayoutView
     {
         event Action BuyTowerButtonClicked;
+        event Action BuyGeneratorButtonClicked;
         event Action ShopButtonClicked;
         event Action ADButtonClicked;
         event Action QuestsButtonClicked;
@@ -16,6 +17,9 @@ namespace Project.Scripts.UI.LevelUI
         event Action NextWaveButtonClicked;
         
         void SetPriceTower(int price);
+        void SetGeneratorPrice(int price);
+        void SetGeneratorPurchaseEnabled(bool isEnabled);
+        void SetEnergy(int current, int maximum);
         void SetMoney(int money);
         void SetTowerIcon(Sprite towerIcon);
         void SetCurrentBaseHealth(int baseHealth);

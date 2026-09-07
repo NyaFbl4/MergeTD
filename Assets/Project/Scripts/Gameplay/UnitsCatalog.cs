@@ -12,14 +12,22 @@ namespace Project.Scripts.Gameplay
             _unitsConfig = unitsConfig;
         }
 
-        public bool HasTowerLevel(int level)
+        public bool HasTowerLevel(int level, ETowerType towerType = ETowerType.Combat)
         {
-            return level >= 1 && level <= _unitsConfig.Towers.Count;
+            switch (towerType)
+            {
+                case ETowerType.Combat:
+                    return level >= 1 && level <= _unitsConfig.Towers.Count;
+                case ETowerType.Generator:
+                    return level == 1;
+                default:
+                    return false;
+            }
         }
         
-        public TowerConfig GetTowerConfigByLevel(int level)
+        public TowerConfig GetTowerConfigByLevel(int level, ETowerType towerType = ETowerType.Combat)
         {
-            var towerPrefab = GetTowerPrefabByLevel(level);
+            var towerPrefab = GetTowerPrefabByLevel(level, towerType);
 
             if (towerPrefab == null)
                 return null;
@@ -27,12 +35,14 @@ namespace Project.Scripts.Gameplay
             return towerPrefab.TowerConfig;
         }
 
-        public TowerUnit GetTowerPrefabByLevel(int level)
+        public TowerUnit GetTowerPrefabByLevel(int level, ETowerType towerType = ETowerType.Combat)
         {
-            if (!HasTowerLevel(level))
+            if (!HasTowerLevel(level, towerType))
                 return null;
 
-            return _unitsConfig.Towers[level - 1];
+            return towerType == ETowerType.Generator
+                ? _unitsConfig.GeneratorLevelOne
+                : _unitsConfig.Towers[level - 1];
         }
     }
 }

@@ -3,6 +3,7 @@ using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace Project.Scripts.System.Save
         private readonly IAudioManager _audioManager;
         private readonly RunConfig _runConfig;
         private readonly QuestService _questService;
+        private readonly RunEnergyService _energy;
+        private readonly RunState _runState;
 
         public ProgressCheckpointUseCase(
             ProgressSaveService saveService,
@@ -30,7 +33,9 @@ namespace Project.Scripts.System.Save
             IUnitsCatalog unitsCatalog,
             IAudioManager audioManager,
             RunConfig runConfig,
-            QuestService questService)
+            QuestService questService,
+            RunEnergyService energy,
+            RunState runState)
         {
             _saveService = saveService;
             _playerStatsUseCase = playerStatsUseCase;
@@ -41,6 +46,8 @@ namespace Project.Scripts.System.Save
             _audioManager = audioManager;
             _runConfig = runConfig;
             _questService = questService;
+            _energy = energy;
+            _runState = runState;
         }
 
         public int RestoreCheckpointOrDefaults()
@@ -54,6 +61,8 @@ namespace Project.Scripts.System.Save
             ClearTowers();
 
             var wave = ClampWave(data.nextWave);
+            _runState.MoveToWave(wave);
+            _energy.Restore(data.energy);
             _playerStatsUseCase.ApplyState(
                 data.gold,
                 wave,
@@ -94,6 +103,7 @@ namespace Project.Scripts.System.Save
             {
                 nextWave = ClampWave(nextWave),
                 gold = _playerStatsUseCase.Gold,
+                energy = _energy.Current,
                 selectedTowerLevel = _playerStatsUseCase.SelectedTowerLevel,
                 towerCost = _buyTowerUseCase.TowerCost,
                 currentBaseHealth = Mathf.Clamp(currentBaseHealth, 1, maxBaseHealth),
@@ -118,7 +128,7 @@ namespace Project.Scripts.System.Save
                     if (slot == null || slot.CurrentTower == null)
                         continue;
 
-                    data.towers.Add(new TowerSlotSaveData(i, slot.CurrentTower.CurrentLevel));
+                    data.towers.Add(new TowerSlotSaveData(i, slot.CurrentTower.CurrentLevel, slot.CurrentTower.TowerType));
                 }
             }
 
@@ -128,6 +138,8 @@ namespace Project.Scripts.System.Save
         private void RestoreDefaults()
         {
             ClearTowers();
+            _runState.Reset();
+            _energy.Reset();
             _playerStatsUseCase.ResetState();
             _buyTowerUseCase.ResetTowerCost();
             _baseHealth.SetHealthState(_runConfig.StartBaseHealth, _runConfig.StartBaseHealth);
@@ -158,7 +170,7 @@ namespace Project.Scripts.System.Save
                 if (slot == null)
                     continue;
 
-                var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(towerData.towerLevel);
+                var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(towerData.towerLevel, towerData.towerType);
                 if (towerPrefab == null)
                     continue;
 

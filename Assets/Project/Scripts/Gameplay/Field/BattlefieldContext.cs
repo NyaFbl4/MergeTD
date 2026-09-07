@@ -27,7 +27,7 @@ namespace Project.Scripts.Gameplay.Field
         private IUnitsCatalog _unitsCatalog;
         
         [Inject]
-        public void Construct(UnitsConfig unitsConfig, IUnitsCatalog unitsCatalog, RunState runState)
+        public void Construct(UnitsConfig unitsConfig, IUnitsCatalog unitsCatalog, RunState runState, RunEnergyService energy)
         {
             _unitsConfig = unitsConfig;
             _unitsCatalog = unitsCatalog;
@@ -40,7 +40,7 @@ namespace Project.Scripts.Gameplay.Field
                 if (_towerSlots[i] == null)
                     continue;
 
-                _towerSlots[i].Construct(_unitsCatalog, runState);
+                _towerSlots[i].Construct(_unitsCatalog, runState, energy);
             }
         }
         

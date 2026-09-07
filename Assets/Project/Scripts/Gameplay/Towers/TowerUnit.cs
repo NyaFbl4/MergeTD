@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using TMPro;
@@ -36,6 +37,8 @@ namespace Project.Scripts.Gameplay.Towers
         private float _criticalChance;
 
         public int CurrentLevel => _towerLevel;
+        public ETowerType TowerType => _towerConfig.TowerType;
+        private GeneratorProduction _generatorProduction;
         public TowerConfig TowerConfig => _towerConfig;
         public IPlayerStatsUseCase PlayerStats => _playerStats;
         public IAudioManager AudioManager => _audioManager;
@@ -61,6 +64,14 @@ namespace Project.Scripts.Gameplay.Towers
                 _playerStats.UpgradesChanged += OnUpgradesChanged;
         }
 
+        public void InitializeRun(RunState runState, RunEnergyService energy)
+        {
+            _generatorProduction?.Dispose();
+            if (TowerType == ETowerType.Generator)
+                _generatorProduction = new GeneratorProduction(
+                    runState, energy, _towerConfig.GenerationInterval, _towerConfig.EnergyPerPulse);
+        }
+
         public void SetCanFire(bool canFire)
         {
             _canFire = canFire;
@@ -83,6 +94,9 @@ namespace Project.Scripts.Gameplay.Towers
             if (other == null)
                 return false;
 
+            if (TowerType == ETowerType.Generator || other.TowerType != TowerType)
+                return false;
+
             if (other == this)
                 return false;
 
@@ -94,6 +108,9 @@ namespace Project.Scripts.Gameplay.Towers
 
         public void OnAttackFireEvent()
         {
+            if (TowerType == ETowerType.Generator)
+                return;
+
             if (!IsTargetValid(_currentTarget))
             {
                 _isFire = false;
@@ -113,6 +130,12 @@ namespace Project.Scripts.Gameplay.Towers
 
         public void OnUpdate(float deltaTime)
         {
+            if (TowerType == ETowerType.Generator)
+            {
+                _generatorProduction.Tick(deltaTime, _canFire);
+                return;
+            }
+
             if (!_canFire)
                 return;
 
@@ -133,6 +156,9 @@ namespace Project.Scripts.Gameplay.Towers
 
         private void RecalculateStats()
         {
+            if (TowerType == ETowerType.Generator)
+                return;
+
             var damageBonus = _playerStats?.TowerDamageBonus ?? 0f;
             var attackSpeedBonus = _playerStats?.TowerAttackSpeedBonus ?? 0f;
             var critDamageBonus = _playerStats?.TowerCritDamageBonus ?? 0f;
@@ -264,6 +290,7 @@ namespace Project.Scripts.Gameplay.Towers
 
         private void OnDestroy()
         {
+            _generatorProduction?.Dispose();
             if (_playerStats != null)
                 _playerStats.UpgradesChanged -= OnUpgradesChanged;
         }

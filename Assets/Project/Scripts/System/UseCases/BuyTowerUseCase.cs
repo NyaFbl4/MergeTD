@@ -4,6 +4,7 @@ using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Enums;
 
@@ -21,6 +22,7 @@ namespace Project.Scripts.System.UseCases
         private readonly RunState _runState;
 
         public int TowerCost => FixedTowerCost;
+        public int GeneratorCost => _unitsCatalog.GetTowerConfigByLevel(1, ETowerType.Generator).StartTowerPrice;
         public event Action<int> TowerCostChanged;
 
         public BuyTowerUseCase(
@@ -39,7 +41,13 @@ namespace Project.Scripts.System.UseCases
             _runState = runState;
         }
 
-        public EBuyTowerResult TryBuyTower()
+        public EBuyTowerResult TryBuyTower() =>
+            TryBuy(ETowerType.Combat, _playerStats.SelectedTowerLevel, TowerCost);
+
+        public EBuyTowerResult TryBuyGenerator() =>
+            TryBuy(ETowerType.Generator, 1, GeneratorCost);
+
+        private EBuyTowerResult TryBuy(ETowerType towerType, int level, int cost)
         {
             if (!_runState.CanEditDefense)
                 return EBuyTowerResult.RunPhaseLocked;
@@ -48,10 +56,10 @@ namespace Project.Scripts.System.UseCases
             if (slot == null)
                 return EBuyTowerResult.NoFreeSpawnSlot;
 
-            if (!_playerStats.CanSpend(TowerCost))
+            if (!_playerStats.CanSpend(cost))
                 return EBuyTowerResult.NotEnoughGold;
 
-            var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(_playerStats.SelectedTowerLevel);
+            var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(level, towerType);
 
             if (towerPrefab == null)
                 return EBuyTowerResult.PlaceFailed;
@@ -59,11 +67,11 @@ namespace Project.Scripts.System.UseCases
             if (!slot.TryPlaceTower(towerPrefab, _playerStats, _audioManager))
                 return EBuyTowerResult.PlaceFailed;
 
-            var purchasedCost = TowerCost;
+            var purchasedCost = cost;
 
             _playerStats.TrySpend(purchasedCost);
             _publisherBoughtQuestEventDTO.Publish(new TowerBoughtQuestEventDTO(
-                _playerStats.SelectedTowerLevel,
+                level,
                 purchasedCost));
             return EBuyTowerResult.Success;
         }

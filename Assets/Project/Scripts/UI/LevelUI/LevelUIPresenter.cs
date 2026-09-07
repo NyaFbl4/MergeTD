@@ -25,6 +25,7 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly RunBattleRuntime _runBattleRuntime;
         private readonly RunState _runState;
+        private readonly RunEnergyService _energy;
         private readonly BaseHealth _baseHealth;
         private readonly ILocalizationService _localizationService;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
@@ -38,6 +39,7 @@ namespace Project.Scripts.UI.LevelUI
             IPlayerStatsUseCase playerStatsUseCase,
             RunBattleRuntime runBattleRuntime,
             RunState runState,
+            RunEnergyService energy,
             ILevelUIUseCase levelUIUseCase,
             BaseHealth baseHealth,
             ILocalizationService localizationService,
@@ -49,6 +51,7 @@ namespace Project.Scripts.UI.LevelUI
             _playerStatsUseCase = playerStatsUseCase;
             _runBattleRuntime = runBattleRuntime;
             _runState = runState;
+            _energy = energy;
             _levelUIUseCase = levelUIUseCase;
             _baseHealth = baseHealth;
             _localizationService = localizationService;
@@ -65,6 +68,8 @@ namespace Project.Scripts.UI.LevelUI
             _playerStatsUseCase.SelectedTowerLevelChanged += OnSelectedTowerLevelChanged;
             _playerStatsUseCase.WaveChanged += OnCurrentWaveChanged;
             _layoutView.BuyTowerButtonClicked += OnPayTowerButtonClicked;
+            _layoutView.BuyGeneratorButtonClicked += OnPayGeneratorButtonClicked;
+            _energy.Changed += OnEnergyChanged;
             _layoutView.ShopButtonClicked += OnShopButtonClicked;
             _layoutView.ADButtonClicked += OnADButtonClicked;
             _layoutView.QuestsButtonClicked += OnQuestsButtonClicked;
@@ -77,6 +82,8 @@ namespace Project.Scripts.UI.LevelUI
             _runState.PhaseChanged += OnRunPhaseChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
+            _layoutView.SetGeneratorPrice(_buyTowerUseCase.GeneratorCost);
+            RefreshEnergy();
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
 
             RefreshWaveText();
@@ -100,6 +107,20 @@ namespace Project.Scripts.UI.LevelUI
             var result = _buyTowerUseCase.TryBuyTower();
             Debug.Log($"BuyTower result: {result}");
         }
+
+        private void OnPayGeneratorButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            var result = _buyTowerUseCase.TryBuyGenerator();
+            Debug.Log($"BuyGenerator result: {result}");
+        }
+
+        private void OnEnergyChanged(int energy) => RefreshEnergy();
+
+        private void RefreshEnergy() => _layoutView.SetEnergy(_energy.Current, _energy.Max);
+
+        private void RefreshGeneratorPurchase() => _layoutView.SetGeneratorPurchaseEnabled(
+            _runState.CanEditDefense && _playerStatsUseCase.CanSpend(_buyTowerUseCase.GeneratorCost));
 
         private void OnNextWaveButtonClicked()
         {
@@ -162,6 +183,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnGoldChanged(int gold)
         {
             _layoutView.SetMoney(gold);
+            RefreshGeneratorPurchase();
         }
 
         private void OnSelectedTowerLevelChanged(int level)
@@ -201,6 +223,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnLanguageChanged(string _)
         {
             RefreshWaveText();
+            RefreshEnergy();
         }
 
         private void OnRunPhaseChanged(ERunPhase phase)
@@ -213,6 +236,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetRunPhase(_runState.Phase);
             _layoutView.SetNextWaveButtonEnabled(_runBattleRuntime.CanUseNextWaveButton);
             _layoutView.SetTowerActionsEnabled(_runState.CanEditDefense);
+            RefreshGeneratorPurchase();
         }
 
         private void TryGrantAdTowerUpgrade()
@@ -270,6 +294,8 @@ namespace Project.Scripts.UI.LevelUI
         public override void Dispose()
         {
             _layoutView.BuyTowerButtonClicked -= OnPayTowerButtonClicked;
+            _layoutView.BuyGeneratorButtonClicked -= OnPayGeneratorButtonClicked;
+            _energy.Changed -= OnEnergyChanged;
             _playerStatsUseCase.SelectedTowerLevelChanged -= OnSelectedTowerLevelChanged;
             _playerStatsUseCase.WaveChanged -= OnCurrentWaveChanged;
             _layoutView.ShopButtonClicked -= OnShopButtonClicked;

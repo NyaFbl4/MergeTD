@@ -10,6 +10,11 @@ namespace Project.Scripts.UI.LevelUI
     public class LevelUIView : LayoutViewBase, ILevelUIView
     {
         private Button _payTowerButton;
+        private Button _payGeneratorButton;
+        private Label _generatorPriceLabel;
+        private Label _currentEnergyLabel;
+        private Label _maxEnergyLabel;
+        private VisualElement _progressBarFill;
         private Button _shopButton;
         private Button _adButton;
         private Button _questsButton;
@@ -26,6 +31,7 @@ namespace Project.Scripts.UI.LevelUI
         private VisualElement _stateWave;
         
         public event Action BuyTowerButtonClicked;
+        public event Action BuyGeneratorButtonClicked;
         public event Action ShopButtonClicked;
         public event Action ADButtonClicked;
         public event Action QuestsButtonClicked;
@@ -40,6 +46,12 @@ namespace Project.Scripts.UI.LevelUI
             _stateWave = _root.Q<VisualElement>("StateWave");
 
             _payTowerButton = _root.Q<Button>("PayTowerButton");
+            _payGeneratorButton = _root.Q<Button>("PayElectricTowerButton");
+            _generatorPriceLabel = _payGeneratorButton.Q<Label>("GeneratorPriceLabel");
+            _currentEnergyLabel = _root.Q<Label>("CurrentEnergyLabel");
+            _maxEnergyLabel = _root.Q<Label>("MaxEnergyLabel");
+            _progressBarFill = _root.Q<VisualElement>("ProgressBarFill");
+            _payGeneratorButton.clicked += OnBuyGeneratorButtonClicked;
             _payButtonTowerIcon = _payTowerButton?.Q<VisualElement>("TowerIcon");
             _shopButton = _root.Q<Button>("ShopButton");
             _adButton = _root.Q<Button>("ADButton");
@@ -70,6 +82,21 @@ namespace Project.Scripts.UI.LevelUI
         public void SetPriceTower(int price)
         {
             _payTowerLabel.text = price.ToString();
+        }
+
+        public void SetGeneratorPrice(int price) => _generatorPriceLabel.text = price.ToString();
+
+        public void SetGeneratorPurchaseEnabled(bool isEnabled) => _payGeneratorButton.SetEnabled(isEnabled);
+
+        public void SetEnergy(int current, int maximum)
+        {
+            _currentEnergyLabel.text = current.ToString();
+            _maxEnergyLabel.text = maximum.ToString();
+
+            var fill = maximum > 0
+                ? Mathf.Clamp01((float)current / maximum)
+                : 0f;
+            _progressBarFill.style.width = new Length(fill * 100f, LengthUnit.Percent);
         }
 
         public void SetMoney(int money)
@@ -132,6 +159,7 @@ namespace Project.Scripts.UI.LevelUI
             _adButton?.SetEnabled(isEnabled);
         }
 
+        private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnShopButtonClicked() => ShopButtonClicked?.Invoke();
         private void OnADButtonClicked() => ADButtonClicked?.Invoke();
@@ -141,6 +169,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnDestroy()
         {
+            _payGeneratorButton.clicked -= OnBuyGeneratorButtonClicked;
             if (_payTowerButton != null)
                 _payTowerButton.clicked -= OnBuyTowerButtonClicked;
             if (_shopButton != null)

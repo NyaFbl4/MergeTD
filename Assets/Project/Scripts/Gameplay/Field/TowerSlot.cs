@@ -17,6 +17,7 @@ namespace Project.Scripts.Gameplay.Field
         private IUnitsCatalog _unitsCatalog;
         private Collider2D _dropCollider;
         private RunState _runState;
+        private RunEnergyService _energy;
 
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
@@ -49,9 +50,10 @@ namespace Project.Scripts.Gameplay.Field
             _dropCollider.enabled = _currentTower == null && CanEditTower;
         }
 
-        public void Construct(IUnitsCatalog unitsCatalog, RunState runState)
+        public void Construct(IUnitsCatalog unitsCatalog, RunState runState, RunEnergyService energy)
         {
             _unitsCatalog = unitsCatalog;
+            _energy = energy;
             
             if (_runState != null)
                 _runState.PhaseChanged -= OnRunPhaseChanged;
@@ -70,6 +72,7 @@ namespace Project.Scripts.Gameplay.Field
             _playerStats = playerStats;
             _audioManager = audioManager;
             _currentTower.Initialize(playerStats, audioManager);
+            _currentTower.InitializeRun(_runState, _energy);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
@@ -120,7 +123,7 @@ namespace Project.Scripts.Gameplay.Field
                 return false;
 
             var nextLevel = _currentTower.CurrentLevel + 1;
-            var nextPrefab = _unitsCatalog.GetTowerPrefabByLevel(nextLevel);
+            var nextPrefab = _unitsCatalog.GetTowerPrefabByLevel(nextLevel, _currentTower.TowerType);
 
             if (nextPrefab == null)
                 return false;
@@ -136,6 +139,7 @@ namespace Project.Scripts.Gameplay.Field
             );
 
             _currentTower.Initialize(_playerStats, _audioManager);
+            _currentTower.InitializeRun(_runState, _energy);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);

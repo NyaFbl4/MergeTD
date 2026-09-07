@@ -124,6 +124,7 @@ namespace Installers
         private void RegisterGameplay(IContainerBuilder builder)
         {
             builder.Register<RunState>(Lifetime.Singleton);
+            builder.Register<RunEnergyService>(Lifetime.Singleton);
         }
 
         private void RegisterViews(IContainerBuilder builder)

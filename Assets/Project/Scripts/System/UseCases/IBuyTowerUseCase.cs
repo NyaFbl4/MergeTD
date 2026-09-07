@@ -7,7 +7,9 @@ namespace Project.Scripts.System.UseCases
     {
         event Action<int> TowerCostChanged;
         int TowerCost { get; }
+        int GeneratorCost { get; }
         EBuyTowerResult TryBuyTower();
+        EBuyTowerResult TryBuyGenerator();
         void SetTowerCost(int cost);
         void ResetTowerCost();
     }

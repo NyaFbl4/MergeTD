@@ -60,7 +60,7 @@ namespace Project.Scripts.UI.LevelUI
             if (currentTower == null)
                 return false;
 
-            var nextPrefab = _unitsCatalog.GetTowerPrefabByLevel(currentTower.CurrentLevel + 1);
+            var nextPrefab = _unitsCatalog.GetTowerPrefabByLevel(currentTower.CurrentLevel + 1, currentTower.TowerType);
             if (nextPrefab == null)
                 return false;
 
@@ -92,7 +92,7 @@ namespace Project.Scripts.UI.LevelUI
                     continue;
 
                 var level = tower.CurrentLevel;
-                if (!_unitsCatalog.HasTowerLevel(level + 1))
+                if (!_unitsCatalog.HasTowerLevel(level + 1, tower.TowerType))
                     continue;
 
                 if (level < lowestLevel)

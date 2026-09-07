@@ -1,4 +1,5 @@
 using System;
+using Project.Scripts.Gameplay.Towers;
 using System.Collections.Generic;
 
 namespace Project.Scripts.System.Save
@@ -8,6 +9,7 @@ namespace Project.Scripts.System.Save
     {
         public int nextWave = 1;
         public int gold;
+        public int energy;
         public int selectedTowerLevel = 1;
         public int towerCost;
         public int currentBaseHealth;
@@ -43,15 +45,17 @@ namespace Project.Scripts.System.Save
     {
         public int slotIndex;
         public int towerLevel;
+        public ETowerType towerType;
 
         public TowerSlotSaveData()
         {
         }
 
-        public TowerSlotSaveData(int slotIndex, int towerLevel)
+        public TowerSlotSaveData(int slotIndex, int towerLevel, ETowerType towerType = ETowerType.Combat)
         {
             this.slotIndex = slotIndex;
             this.towerLevel = towerLevel;
+            this.towerType = towerType;
         }
     }
 
