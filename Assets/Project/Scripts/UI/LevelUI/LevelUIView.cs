@@ -1,4 +1,5 @@
 ﻿using System;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Systems.UI;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace Project.Scripts.UI.LevelUI
         private Label _currentWaveLabel;
         private VisualElement _payButtonTowerIcon;
         private VisualElement _adButtonTowerIcon;
+        private VisualElement _statePreparation;
+        private VisualElement _stateWave;
         
         public event Action BuyTowerButtonClicked;
         public event Action ShopButtonClicked;
@@ -32,7 +35,10 @@ namespace Project.Scripts.UI.LevelUI
         public override void Awake()
         {
             base.Awake();
-            
+
+            _statePreparation = _root.Q<VisualElement>("StatePreparation");
+            _stateWave = _root.Q<VisualElement>("StateWave");
+
             _payTowerButton = _root.Q<Button>("PayTowerButton");
             _payButtonTowerIcon = _payTowerButton?.Q<VisualElement>("TowerIcon");
             _shopButton = _root.Q<Button>("ShopButton");
@@ -108,6 +114,16 @@ namespace Project.Scripts.UI.LevelUI
         public void SetNextWaveButtonEnabled(bool isEnabled)
         {
             _nextWaveButton?.SetEnabled(isEnabled);
+        }
+
+        public void SetRunPhase(ERunPhase phase)
+        {
+            _statePreparation.style.display = phase == ERunPhase.Preparation
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+            _stateWave.style.display = phase == ERunPhase.Wave
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
         }
 
         public void SetTowerActionsEnabled(bool isEnabled)

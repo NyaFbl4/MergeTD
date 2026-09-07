@@ -1,4 +1,5 @@
 ﻿using System;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Systems.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,6 +22,7 @@ namespace Project.Scripts.UI.LevelUI
         void SetMaxBaseHealth(int baseMaxHealth);
         void SetTowerLevel(int towerLevel);
         void SetCurrentWaveText(string text);
+        void SetRunPhase(ERunPhase phase);
         void SetNextWaveButtonEnabled(bool isEnabled);
         void SetTowerActionsEnabled(bool isEnabled);
     }

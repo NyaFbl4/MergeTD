@@ -210,6 +210,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void RefreshRunPhaseControls()
         {
+            _layoutView.SetRunPhase(_runState.Phase);
             _layoutView.SetNextWaveButtonEnabled(_runBattleRuntime.CanUseNextWaveButton);
             _layoutView.SetTowerActionsEnabled(_runState.CanEditDefense);
         }
