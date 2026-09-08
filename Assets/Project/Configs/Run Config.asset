@@ -15,6 +15,7 @@ MonoBehaviour:
   _displayName: Default Run
   _description: Default 20-wave run converted from Level Config.
   _startBaseHealth: 10
+  _startMaxEnergy: 12
   _startGold: 250
   _startSelectedTowerLevel: 1
   _waves:

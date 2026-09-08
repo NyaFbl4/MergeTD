@@ -1,6 +1,6 @@
 using System;
 using Project.Scripts.GameManager;
-using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.System.Save;
 using UnityEngine;
 using VContainer;
 
@@ -8,10 +8,10 @@ namespace Project.Scripts.Gameplay.Base
 {
     public class BaseHealth : MonoBehaviour, IBaseHealth, IGameStartListener
     {
-        private RunConfig _runConfig;
         private int _maxHealth;
         private int _currentHealth;
         private IGameManagerService _gameManagerService;
+        private IWorldService _world;
 
         public int CurrentHealth => _currentHealth;
         public int MaxHealth => _maxHealth;
@@ -21,16 +21,22 @@ namespace Project.Scripts.Gameplay.Base
         public event Action Destroyed;
 
         [Inject]
-        public void Construct(IGameManagerService gameManagerService, RunConfig runConfig)
+        public void Construct(
+            IGameManagerService gameManagerService,
+            IWorldService world)
         {
             _gameManagerService = gameManagerService;
-            _runConfig = runConfig;
+            _world = world;
         }
         
         public void AddMaxHealth(int health)
         {
+            if (health <= 0)
+                return;
+
             _maxHealth += health;
             _currentHealth += health;
+            _world.SetMaxBaseHealth(_maxHealth);
 
             OnMaxHealthChanged?.Invoke(_maxHealth);
             OnCurrentHealthChanged?.Invoke(_currentHealth);
@@ -54,7 +60,7 @@ namespace Project.Scripts.Gameplay.Base
 
         public void ResetToStartHealth()
         {
-            SetHealthState(_runConfig.StartBaseHealth, _runConfig.StartBaseHealth);
+            SetHealthState(_world.MaxBaseHealth, _world.MaxBaseHealth);
         }
 
         private void OnEnable()

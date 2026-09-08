@@ -9,6 +9,7 @@ namespace Project.Scripts.Gameplay.Run.Configs
         [SerializeField] private string _displayName;
         [SerializeField, TextArea] private string _description;
         [SerializeField, Min(1)] private int _startBaseHealth = 10;
+        [SerializeField, Min(1)] private int _startMaxEnergy = 12;
         [SerializeField, Min(0)] private int _startGold = 250;
         [SerializeField, Min(1)] private int _startSelectedTowerLevel = 1;
         [SerializeField] private List<RunWaveConfig> _waves;
@@ -16,6 +17,7 @@ namespace Project.Scripts.Gameplay.Run.Configs
         public string DisplayName => _displayName;
         public string Description => _description;
         public int StartBaseHealth => _startBaseHealth;
+        public int StartMaxEnergy => _startMaxEnergy;
         public int StartGold => _startGold;
         public int StartSelectedTowerLevel => _startSelectedTowerLevel;
         public IReadOnlyList<RunWaveConfig> Waves => _waves;

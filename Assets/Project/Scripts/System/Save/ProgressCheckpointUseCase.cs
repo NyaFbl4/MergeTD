@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
@@ -23,6 +24,7 @@ namespace Project.Scripts.System.Save
         private readonly QuestService _questService;
         private readonly RunEnergyService _energy;
         private readonly RunState _runState;
+        private readonly WorldService _world;
 
         public ProgressCheckpointUseCase(
             ProgressSaveService saveService,
@@ -35,7 +37,8 @@ namespace Project.Scripts.System.Save
             RunConfig runConfig,
             QuestService questService,
             RunEnergyService energy,
-            RunState runState)
+            RunState runState,
+            WorldService world)
         {
             _saveService = saveService;
             _playerStatsUseCase = playerStatsUseCase;
@@ -48,6 +51,7 @@ namespace Project.Scripts.System.Save
             _questService = questService;
             _energy = energy;
             _runState = runState;
+            _world = world;
         }
 
         public int RestoreCheckpointOrDefaults()
@@ -55,16 +59,18 @@ namespace Project.Scripts.System.Save
             if (!_saveService.TryLoad(out var data))
             {
                 RestoreDefaults();
+                RestoreWorldTowers();
                 return 1;
             }
 
-            ClearTowers();
+            ClearTowers(false);
+            ImportLegacyWorld(data);
 
             var wave = ClampWave(data.nextWave);
             _runState.MoveToWave(wave);
             _energy.Restore(data.energy);
             _playerStatsUseCase.ApplyState(
-                data.gold,
+                _world.Gold,
                 wave,
                 data.selectedTowerLevel,
                 data.towerDamageBonus,
@@ -75,8 +81,8 @@ namespace Project.Scripts.System.Save
 
             _questService.RestoreQuests(data.quests);
             _buyTowerUseCase.SetTowerCost(data.towerCost);
-            _baseHealth.SetHealthState(data.currentBaseHealth, data.maxBaseHealth);
-            RestoreTowers(data);
+            _baseHealth.SetHealthState(data.currentBaseHealth, _world.MaxBaseHealth);
+            RestoreWorldTowers();
 
             return wave;
         }
@@ -98,7 +104,7 @@ namespace Project.Scripts.System.Save
 
         private void SaveCheckpointInternal(int nextWave, int currentBaseHealth)
         {
-            var maxBaseHealth = Mathf.Max(1, _baseHealth.MaxHealth);
+            var maxBaseHealth = Mathf.Max(1, _world.MaxBaseHealth);
             var data = new ProgressSaveData
             {
                 nextWave = ClampWave(nextWave),
@@ -137,12 +143,12 @@ namespace Project.Scripts.System.Save
 
         private void RestoreDefaults()
         {
-            ClearTowers();
+            ClearTowers(false);
             _runState.Reset();
             _energy.Reset();
             _playerStatsUseCase.ResetState();
             _buyTowerUseCase.ResetTowerCost();
-            _baseHealth.SetHealthState(_runConfig.StartBaseHealth, _runConfig.StartBaseHealth);
+            _baseHealth.SetHealthState(_world.MaxBaseHealth, _world.MaxBaseHealth);
         }
 
         private int ClampWave(int wave)
@@ -151,22 +157,12 @@ namespace Project.Scripts.System.Save
             return Mathf.Clamp(wave, 1, wavesCount);
         }
 
-        private void RestoreTowers(ProgressSaveData data)
+        private void RestoreWorldTowers()
         {
-            if (data.towers == null)
-                return;
-
-            var slots = _battlefieldContext.TowerSlots;
-            if (slots == null)
-                return;
-
-            for (var i = 0; i < data.towers.Count; i++)
+            for (var i = 0; i < _world.Towers.Count; i++)
             {
-                var towerData = data.towers[i];
-                if (towerData.slotIndex < 0 || towerData.slotIndex >= slots.Length)
-                    continue;
-
-                var slot = slots[towerData.slotIndex];
+                var towerData = _world.Towers[i];
+                var slot = _battlefieldContext.FindSlotByPersistentId(towerData.slotId);
                 if (slot == null)
                     continue;
 
@@ -174,18 +170,44 @@ namespace Project.Scripts.System.Save
                 if (towerPrefab == null)
                     continue;
 
-                slot.TryPlaceTower(towerPrefab, _playerStatsUseCase, _audioManager);
+                slot.TryPlaceTower(towerPrefab, _playerStatsUseCase, _audioManager, false);
             }
         }
 
-        private void ClearTowers()
+        private void ImportLegacyWorld(ProgressSaveData data)
+        {
+            if (_world.HasPersistedData)
+                return;
+
+            var towers = new List<WorldTowerSaveData>();
+            var slots = _battlefieldContext.TowerSlots;
+
+            if (data.towers != null && slots != null)
+            {
+                for (var i = 0; i < data.towers.Count; i++)
+                {
+                    var tower = data.towers[i];
+                    if (tower.slotIndex < 0 || tower.slotIndex >= slots.Length || slots[tower.slotIndex] == null)
+                        continue;
+
+                    towers.Add(new WorldTowerSaveData(
+                        slots[tower.slotIndex].PersistentId,
+                        tower.towerLevel,
+                        tower.towerType));
+                }
+            }
+
+            _world.ImportLegacy(data.gold, data.maxBaseHealth, towers);
+        }
+
+        private void ClearTowers(bool persistWorldChange)
         {
             var slots = _battlefieldContext.TowerSlots;
             if (slots == null)
                 return;
 
             for (var i = 0; i < slots.Length; i++)
-                slots[i]?.ClearTower();
+                slots[i]?.ClearTower(persistWorldChange);
         }
     }
 }

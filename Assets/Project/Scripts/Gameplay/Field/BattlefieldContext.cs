@@ -1,8 +1,10 @@
 ﻿
+using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.System.Save;
 using UnityEngine;
 using VContainer;
 
@@ -27,7 +29,12 @@ namespace Project.Scripts.Gameplay.Field
         private IUnitsCatalog _unitsCatalog;
         
         [Inject]
-        public void Construct(UnitsConfig unitsConfig, IUnitsCatalog unitsCatalog, RunState runState, RunEnergyService energy)
+        public void Construct(
+            UnitsConfig unitsConfig,
+            IUnitsCatalog unitsCatalog,
+            RunState runState,
+            RunEnergyService energy,
+            IWorldService world)
         {
             _unitsConfig = unitsConfig;
             _unitsCatalog = unitsCatalog;
@@ -35,12 +42,19 @@ namespace Project.Scripts.Gameplay.Field
             if (_towerSlots == null)
                 return;
 
+            var persistentIds = new HashSet<string>();
+
             for (var i = 0; i < _towerSlots.Length; i++)
             {
                 if (_towerSlots[i] == null)
                     continue;
 
-                _towerSlots[i].Construct(_unitsCatalog, runState, energy);
+                var slot = _towerSlots[i];
+                slot.Construct(_unitsCatalog, runState, energy, world, $"slot_{i}");
+
+                if (!persistentIds.Add(slot.PersistentId))
+                    throw new global::System.InvalidOperationException(
+                        $"Duplicate tower slot id: '{slot.PersistentId}'.");
             }
         }
         
@@ -70,6 +84,21 @@ namespace Project.Scripts.Gameplay.Field
                     continue;
 
                 return slot;
+            }
+
+            return null;
+        }
+
+        public TowerSlot FindSlotByPersistentId(string persistentId)
+        {
+            if (_towerSlots == null)
+                return null;
+
+            for (var i = 0; i < _towerSlots.Length; i++)
+            {
+                var slot = _towerSlots[i];
+                if (slot != null && slot.PersistentId == persistentId)
+                    return slot;
             }
 
             return null;

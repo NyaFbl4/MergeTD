@@ -47,7 +47,7 @@ namespace Project.Scripts.Gameplay.Towers
                 return;
 
             _startPos = transform.position;
-            if (_sourceSlot.DetachTower() != _towerUnit)
+            if (_sourceSlot.DetachTower(false) != _towerUnit)
                 return;
             
             _isDragging = true;
@@ -73,8 +73,9 @@ namespace Project.Scripts.Gameplay.Towers
             var world = GetPointerWorldPosition(eventData);
 
              var targetSlot = FindSlotUnderPointer(world);
-             if (targetSlot != null && targetSlot.TryAttachExistingTower(_towerUnit))
+             if (targetSlot != null && targetSlot.TryAttachExistingTower(_towerUnit, false))
              {
+                 targetSlot.CommitMoveFrom(_sourceSlot);
                  _isDragging = false;
                  if (_towerCollider != null)
                      _towerCollider.enabled = true;
@@ -82,7 +83,7 @@ namespace Project.Scripts.Gameplay.Towers
              }
 
              // rollback
-             if (_sourceSlot != null && _sourceSlot.TryAttachExistingTower(_towerUnit))
+             if (_sourceSlot != null && _sourceSlot.TryAttachExistingTower(_towerUnit, false))
              {
                  _isDragging = false;
                  if (_towerCollider != null)

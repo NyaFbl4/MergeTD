@@ -1,6 +1,8 @@
+using System;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Audio;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace Project.Scripts.Gameplay.Field
     {
         [SerializeField] private Transform _towerAnchor;
         [SerializeField] private ETowerSlotType _slotType = ETowerSlotType.SpawnOnly;
+        [SerializeField] private string _persistentId;
 
         private IPlayerStatsUseCase _playerStats;
         private IAudioManager _audioManager;
@@ -18,6 +21,7 @@ namespace Project.Scripts.Gameplay.Field
         private Collider2D _dropCollider;
         private RunState _runState;
         private RunEnergyService _energy;
+        private IWorldService _world;
 
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
@@ -27,6 +31,7 @@ namespace Project.Scripts.Gameplay.Field
         public bool CanPlaceTower => _slotType != ETowerSlotType.Locked;
         public bool CanEditTower => CanPlaceTower && (_runState == null || _runState.CanEditDefense);
         public ETowerSlotType SlotType => _slotType;
+        public string PersistentId => _persistentId;
 
         public void SetSlotType(ETowerSlotType slotType)
         {
@@ -50,10 +55,19 @@ namespace Project.Scripts.Gameplay.Field
             _dropCollider.enabled = _currentTower == null && CanEditTower;
         }
 
-        public void Construct(IUnitsCatalog unitsCatalog, RunState runState, RunEnergyService energy)
+        public void Construct(
+            IUnitsCatalog unitsCatalog,
+            RunState runState,
+            RunEnergyService energy,
+            IWorldService world,
+            string fallbackPersistentId)
         {
             _unitsCatalog = unitsCatalog;
             _energy = energy;
+            _world = world;
+
+            if (string.IsNullOrWhiteSpace(_persistentId))
+                _persistentId = fallbackPersistentId;
             
             if (_runState != null)
                 _runState.PhaseChanged -= OnRunPhaseChanged;
@@ -63,7 +77,11 @@ namespace Project.Scripts.Gameplay.Field
             RefreshDropCollider();
         }
 
-        public bool TryPlaceTower(TowerUnit towerPrefab, IPlayerStatsUseCase playerStats, IAudioManager audioManager)
+        public bool TryPlaceTower(
+            TowerUnit towerPrefab,
+            IPlayerStatsUseCase playerStats,
+            IAudioManager audioManager,
+            bool persistWorldChange = true)
         {
             if (!CanEditTower || IsOccupied || towerPrefab == null)
                 return false;
@@ -78,10 +96,13 @@ namespace Project.Scripts.Gameplay.Field
             ApplyFireState(_currentTower);
             RefreshDropCollider();
 
+            if (persistWorldChange)
+                PersistCurrentTower();
+
             return true;
         }
 
-        public TowerUnit DetachTower()
+        public TowerUnit DetachTower(bool persistWorldChange = true)
         {
             if (!CanEditTower || _currentTower == null)
                 return null;
@@ -90,16 +111,20 @@ namespace Project.Scripts.Gameplay.Field
             _currentTower = null;
             tower.transform.SetParent(null);
             RefreshDropCollider();
+
+            if (persistWorldChange)
+                _world.RemoveTower(PersistentId);
+
             return tower;
         }
 
-        public bool TryAttachExistingTower(TowerUnit tower)
+        public bool TryAttachExistingTower(TowerUnit tower, bool persistWorldChange = true)
         {
             if (!CanEditTower || tower == null)
                 return false;
 
             if (IsOccupied)
-                return TryMergeTower(tower);
+                return TryMergeTower(tower, persistWorldChange);
 
             _currentTower = tower;
             _playerStats = tower.PlayerStats;
@@ -111,10 +136,13 @@ namespace Project.Scripts.Gameplay.Field
             ApplyFireState(_currentTower);
             RefreshDropCollider();
 
+            if (persistWorldChange)
+                PersistCurrentTower();
+
             return true;
         }
 
-        private bool TryMergeTower(TowerUnit incomingTower)
+        private bool TryMergeTower(TowerUnit incomingTower, bool persistWorldChange)
         {
             if (_currentTower == null)
                 return false;
@@ -145,6 +173,9 @@ namespace Project.Scripts.Gameplay.Field
             ApplyFireState(_currentTower);
             RefreshDropCollider();
 
+            if (persistWorldChange)
+                PersistCurrentTower();
+
             return true;
         }
 
@@ -161,15 +192,37 @@ namespace Project.Scripts.Gameplay.Field
             if (_currentTower != null)
                 ApplyFireState(_currentTower);
             RefreshDropCollider();
+
+            if (_currentTower == null)
+                _world.RemoveTower(PersistentId);
+            else
+                PersistCurrentTower();
         }
 
-        public void ClearTower()
+        public void ClearTower(bool persistWorldChange = true)
         {
             if (_currentTower != null)
                 Destroy(_currentTower.gameObject);
 
             _currentTower = null;
             RefreshDropCollider();
+
+            if (persistWorldChange)
+                _world.RemoveTower(PersistentId);
+        }
+
+        private void PersistCurrentTower()
+        {
+            _world.SetTower(PersistentId, _currentTower.CurrentLevel, _currentTower.TowerType);
+        }
+
+        public void CommitMoveFrom(TowerSlot sourceSlot)
+        {
+            _world.MoveTower(
+                sourceSlot.PersistentId,
+                PersistentId,
+                _currentTower.CurrentLevel,
+                _currentTower.TowerType);
         }
 
         private void ApplyFireState(TowerUnit towerObject)
@@ -189,5 +242,13 @@ namespace Project.Scripts.Gameplay.Field
             if (_runState != null)
                 _runState.PhaseChanged -= OnRunPhaseChanged;
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(_persistentId))
+                _persistentId = Guid.NewGuid().ToString("N");
+        }
+#endif
     }
 }

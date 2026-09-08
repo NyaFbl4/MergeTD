@@ -16,12 +16,14 @@ namespace Project.Scripts.UI.SettingsUI
         private readonly ILocalizationService _localizationService;
         private readonly IGameManagerService _gameManagerService;
         private readonly ProgressSaveService _progressSaveService;
+        private readonly IWorldService _world;
 
         public SettingsUIPresenter(
             IPublisher<HidePopupDto> hidePopupPublisher, 
             IAudioManager audioManager, 
             ILocalizationService localizationService,
             ProgressSaveService progressSaveService,
+            IWorldService world,
             IGameManagerService gameManagerService)
         {
             _hidePopupPublisher = hidePopupPublisher;
@@ -29,6 +31,7 @@ namespace Project.Scripts.UI.SettingsUI
             _localizationService = localizationService;
             _gameManagerService = gameManagerService;
             _progressSaveService = progressSaveService;
+            _world = world;
             
             _localizationService.OnChangeLanguage += OnLanguageChanged;
         }
@@ -66,6 +69,7 @@ namespace Project.Scripts.UI.SettingsUI
         {
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _progressSaveService.Clear();
+            _world.Reset();
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(ISettingsUIPresenter),

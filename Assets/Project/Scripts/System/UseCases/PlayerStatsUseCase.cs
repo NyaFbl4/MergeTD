@@ -10,8 +10,8 @@ namespace Project.Scripts.System.UseCases
     public class PlayerStatsUseCase : IPlayerStatsUseCase, IInitializable, IDisposable
     {
         private readonly RunConfig _runConfig;
+        private readonly IWorldService _world;
 
-        private int _gold;
         private int _currentWave;
         private int _selectedTowerLevel;
 
@@ -22,7 +22,7 @@ namespace Project.Scripts.System.UseCases
 
         private readonly Dictionary<string, int> _upgradeLevels = new();
 
-        public int Gold => _gold;
+        public int Gold => _world.Gold;
         public int Wave => _currentWave;
         public int SelectedTowerLevel => _selectedTowerLevel;
         public float TowerCritChanceBonus => _towerCritChanceBonus;
@@ -36,14 +36,16 @@ namespace Project.Scripts.System.UseCases
         public event Action<int> SelectedTowerLevelChanged;
         public event Action UpgradesChanged;
 
-        public PlayerStatsUseCase(RunConfig runConfig)
+        public PlayerStatsUseCase(RunConfig runConfig, IWorldService world)
         {
             _runConfig = runConfig;
+            _world = world;
             ResetValues();
         }
 
         public void Initialize()
         {
+            _world.GoldChanged += OnWorldGoldChanged;
             NotifyStateChanged();
         }
 
@@ -63,7 +65,6 @@ namespace Project.Scripts.System.UseCases
             float towerCritDamageBonus,
             IReadOnlyList<UpgradeLevelSaveData> upgradeLevels)
         {
-            _gold = Math.Max(0, gold);
             _currentWave = Math.Max(1, wave);
             _selectedTowerLevel = Math.Max(1, selectedTowerLevel);
             _towerDamageBonus = Mathf.Max(0f, towerDamageBonus);
@@ -135,25 +136,16 @@ namespace Project.Scripts.System.UseCases
             SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
         }
 
-        public bool CanSpend(int amount) => amount > 0 && _gold >= amount;
+        public bool CanSpend(int amount) => _world.CanSpendGold(amount);
 
         public bool TrySpend(int amount)
         {
-            if (!CanSpend(amount))
-                return false;
-
-            _gold -= amount;
-            OnGoldChanged?.Invoke(_gold);
-            return true;
+            return _world.TrySpendGold(amount);
         }
 
         public void AddGold(int amount)
         {
-            if (amount <= 0)
-                return;
-
-            _gold += amount;
-            OnGoldChanged?.Invoke(_gold);
+            _world.AddGold(amount);
         }
 
         public void SetWave(int amount)
@@ -168,7 +160,6 @@ namespace Project.Scripts.System.UseCases
 
         private void ResetValues()
         {
-            _gold = _runConfig.StartGold;
             _selectedTowerLevel = Math.Max(1, _runConfig.StartSelectedTowerLevel);
             _currentWave = 1;
             _towerDamageBonus = 0f;
@@ -180,7 +171,7 @@ namespace Project.Scripts.System.UseCases
 
         private void NotifyStateChanged()
         {
-            OnGoldChanged?.Invoke(_gold);
+            OnGoldChanged?.Invoke(Gold);
             SelectedTowerLevelChanged?.Invoke(_selectedTowerLevel);
             WaveChanged?.Invoke(_currentWave);
             UpgradesChanged?.Invoke();
@@ -188,6 +179,9 @@ namespace Project.Scripts.System.UseCases
 
         public void Dispose()
         {
+            _world.GoldChanged -= OnWorldGoldChanged;
         }
+
+        private void OnWorldGoldChanged(int value) => OnGoldChanged?.Invoke(value);
     }
 }

@@ -68,6 +68,8 @@ namespace Installers
             builder.Register<LocalizationService>(Lifetime.Singleton).As<ILocalizationService>();
             builder.Register<ProgressSaveService>(Lifetime.Singleton).AsSelf();
             builder.Register<ProgressCheckpointUseCase>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<WorldSaveService>(Lifetime.Singleton).AsSelf();
+            builder.Register<WorldService>(Lifetime.Singleton).As<IWorldService>().AsSelf();
             
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();

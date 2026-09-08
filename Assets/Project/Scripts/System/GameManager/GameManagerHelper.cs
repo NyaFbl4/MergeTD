@@ -123,14 +123,17 @@ namespace Project.Scripts.GameManager
                 return;
             }
 
-            var tower = sourceSlot.DetachTower();
+            var tower = sourceSlot.DetachTower(false);
             if (tower == null)
                 return;
 
-            if (targetSlot.TryAttachExistingTower(tower))
+            if (targetSlot.TryAttachExistingTower(tower, false))
+            {
+                targetSlot.CommitMoveFrom(sourceSlot);
                 return;
+            }
 
-            sourceSlot.TryAttachExistingTower(tower);
+            sourceSlot.TryAttachExistingTower(tower, false);
             Debug.LogWarning("GameManagerHelper: Failed to move tower to active slot.");
         }
 
