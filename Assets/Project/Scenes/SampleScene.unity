@@ -227,6 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 28803294}
   _slotType: 0
+  _persistentId: d92ce6cd62e244bc9cb29b52f65c92f9
 --- !u!61 &28803297
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -425,8 +426,8 @@ Transform:
   m_GameObject: {fileID: 202285181}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.68, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: -1.9, y: 1.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -470,7 +471,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0
@@ -491,6 +492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: a8abe503e80c411fb8ea5ef2f447c39e
 --- !u!212 &202285185
 SpriteRenderer:
   serializedVersion: 3
@@ -545,7 +547,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.53, y: 1.54}
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -659,6 +661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 236395596}
   _slotType: 1
+  _persistentId: 9e6024ac9a8146f0a6b6bdfe26664d2b
 --- !u!61 &236395599
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -813,6 +816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 252262241}
   _slotType: 0
+  _persistentId: 5ce069b2493f43889e863261f0589e22
 --- !u!61 &252262244
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1196,6 +1200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 355486716}
   _slotType: 0
+  _persistentId: c29a645882354094bdf2ec844d1e1ea7
 --- !u!61 &355486719
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1425,6 +1430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 392971865}
   _slotType: 1
+  _persistentId: 88eb396344cf444fb13106d6e3774e82
 --- !u!61 &392971868
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1530,8 +1536,8 @@ Transform:
   m_GameObject: {fileID: 486601031}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.68, y: -0.75, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: -1.9, y: -0.66999996, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -1575,9 +1581,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -1596,6 +1602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: dd0e9f2eadd44a9bb38ddd4abb34e7b1
 --- !u!212 &486601035
 SpriteRenderer:
   serializedVersion: 3
@@ -1649,8 +1656,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1881,7 +1888,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 10, y: 3.2}
+  m_Size: {x: 5, y: 3.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1896,8 +1903,8 @@ Transform:
   m_GameObject: {fileID: 532831424}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.02, y: -2.49, z: 0}
-  m_LocalScale: {x: 0.425, y: 0.8020312, z: 1}
+  m_LocalPosition: {x: -0.02, y: -2.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 202285182}
@@ -2055,8 +2062,8 @@ Transform:
   m_GameObject: {fileID: 566371225}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.8800001, y: 0.14, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: -0.94, y: 0.22000004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -2100,9 +2107,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -2120,7 +2127,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
-  _slotType: 2
+  _slotType: 1
+  _persistentId: 60a023a17c754e3aaa97365591bce165
 --- !u!212 &566371229
 SpriteRenderer:
   serializedVersion: 3
@@ -2174,8 +2182,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2271,8 +2279,8 @@ Transform:
   m_GameObject: {fileID: 598741188}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.62, y: -0.75, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 1.9, y: -0.66999996, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -2316,9 +2324,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -2337,6 +2345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 43d977a15321475abd5497c5e6017bd3
 --- !u!212 &598741192
 SpriteRenderer:
   serializedVersion: 3
@@ -2390,8 +2399,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2917,6 +2926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 785183606}
   _slotType: 1
+  _persistentId: 5bbe20faa20c4e8c98a04e2b5e5dbebc
 --- !u!61 &785183609
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2991,8 +3001,8 @@ Transform:
   m_GameObject: {fileID: 808452762}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.62, y: 0.14, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 1.9, y: 0.22000004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -3036,9 +3046,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -3057,6 +3067,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 37cb63e3c94846fea9fcc3a2dad08b5c
 --- !u!212 &808452766
 SpriteRenderer:
   serializedVersion: 3
@@ -3110,8 +3121,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -3225,6 +3236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 815318310}
   _slotType: 0
+  _persistentId: 1994351e220944bba557ee8c45daef7b
 --- !u!61 &815318313
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3489,6 +3501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 892357490}
   _slotType: 0
+  _persistentId: 26745356fe994e35be666dfcc014d619
 --- !u!61 &892357493
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3563,8 +3576,8 @@ Transform:
   m_GameObject: {fileID: 905141392}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.62, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 1.9, y: 1.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -3608,7 +3621,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0
@@ -3629,6 +3642,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 0be4a30f43a74ee8a54cad9fe90646e9
 --- !u!212 &905141396
 SpriteRenderer:
   serializedVersion: 3
@@ -3683,7 +3697,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.53, y: 1.54}
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -3797,6 +3811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 948820018}
   _slotType: 0
+  _persistentId: 09e37a18a4774ee8bf5a46fe552e9764
 --- !u!61 &948820021
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3951,6 +3966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 953522377}
   _slotType: 0
+  _persistentId: c69afd9fcaa3443797627308f558ab6f
 --- !u!61 &953522380
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4105,6 +4121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 968104645}
   _slotType: 1
+  _persistentId: 0b05c7007d5b454394f65021cceaf302
 --- !u!61 &968104648
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4179,8 +4196,8 @@ Transform:
   m_GameObject: {fileID: 1021346451}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.68, y: 0.14, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: -1.9, y: 0.22000004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -4224,9 +4241,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -4245,6 +4262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 7718da88677a4aa2b6aae54d27ebd510
 --- !u!212 &1021346455
 SpriteRenderer:
   serializedVersion: 3
@@ -4298,8 +4316,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -4470,8 +4488,8 @@ Transform:
   m_GameObject: {fileID: 1131641945}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.08000012, y: -0.75, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: -0.66999996, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -4515,9 +4533,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -4536,6 +4554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 1198f29027864ec1a1a5e13714e0d384
 --- !u!212 &1131641949
 SpriteRenderer:
   serializedVersion: 3
@@ -4589,8 +4608,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -4655,8 +4674,8 @@ Transform:
   m_GameObject: {fileID: 1210434951}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.08000012, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: 1.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -4700,7 +4719,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0
@@ -4721,6 +4740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 190a410b4fc848ba9e348f8250f596e5
 --- !u!212 &1210434955
 SpriteRenderer:
   serializedVersion: 3
@@ -4775,7 +4795,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.53, y: 1.54}
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5109,6 +5129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 1281697141}
   _slotType: 1
+  _persistentId: c71234b072fe4a7db063a124e1a128af
 --- !u!61 &1281697144
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5373,6 +5394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 1309855171}
   _slotType: 0
+  _persistentId: 3fa4c00cf9234691b3b5921cbf51cfc1
 --- !u!61 &1309855174
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5558,6 +5580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 1397021707}
   _slotType: 0
+  _persistentId: 02995310e38747649b0bd8f979d3a814
 --- !u!61 &1397021710
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5853,6 +5876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 1494432481}
   _slotType: 0
+  _persistentId: 2cffda74381948f1a442dd766a3cba21
 --- !u!61 &1494432484
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5962,8 +5986,8 @@ Transform:
   m_GameObject: {fileID: 1558140751}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.7199999, y: 0.14, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0.94, y: 0.22000004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -6007,9 +6031,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -6028,6 +6052,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 56e8e40975e1476690c7cc04bfc0f51f
 --- !u!212 &1558140755
 SpriteRenderer:
   serializedVersion: 3
@@ -6081,8 +6106,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -6227,6 +6252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 1592938921}
   _slotType: 1
+  _persistentId: a6a40ace8049425ca72a27c4a880ddd5
 --- !u!61 &1592938924
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6749,8 +6775,8 @@ Transform:
   m_GameObject: {fileID: 1816902300}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.7199999, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0.94, y: 1.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -6794,7 +6820,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0
@@ -6815,6 +6841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: e8a5c12959624e208b437380bec264ef
 --- !u!212 &1816902304
 SpriteRenderer:
   serializedVersion: 3
@@ -6869,7 +6896,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.53, y: 1.54}
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -6903,8 +6930,8 @@ Transform:
   m_GameObject: {fileID: 1852215851}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.08000012, y: 0.14, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0.22000004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -6948,9 +6975,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -6969,6 +6996,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 61aa73917d2549b18356f72d3b60d023
 --- !u!212 &1852215855
 SpriteRenderer:
   serializedVersion: 3
@@ -7022,8 +7050,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -7253,8 +7281,8 @@ Transform:
   m_GameObject: {fileID: 2039159109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.8800001, y: -0.75, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: -0.94, y: -0.66999996, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -7298,9 +7326,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -7319,6 +7347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: c7d399bb3e884301a254423e9fcd4b16
 --- !u!212 &2039159113
 SpriteRenderer:
   serializedVersion: 3
@@ -7372,8 +7401,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -7500,8 +7529,8 @@ Transform:
   m_GameObject: {fileID: 2079267392}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.8800001, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: -0.94, y: 1.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -7545,7 +7574,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0
@@ -7566,6 +7595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 75f82e56679544aca37adeb62c9e6487
 --- !u!212 &2079267396
 SpriteRenderer:
   serializedVersion: 3
@@ -7620,7 +7650,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.53, y: 1.54}
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -7734,6 +7764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 2086550980}
   _slotType: 0
+  _persistentId: 5583c41f6c744ab2911371f2bef223a2
 --- !u!61 &2086550983
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7888,6 +7919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 2138125082}
   _slotType: 0
+  _persistentId: d8dbd49c45ce421b914560d4af5abf4f
 --- !u!61 &2138125085
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7962,8 +7994,8 @@ Transform:
   m_GameObject: {fileID: 2143964738}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.7199999, y: -0.75, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0.94, y: -0.66999996, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532831426}
@@ -8007,9 +8039,9 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.53, y: 1.54}
-    newSize: {x: 1.53, y: 1.54}
+    newSize: {x: 0.75, y: 0.75}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.53, y: 1.54}
@@ -8028,6 +8060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Field.TowerSlot
   _towerAnchor: {fileID: 0}
   _slotType: 1
+  _persistentId: 9467555bec9a4391ba84b27c128ef117
 --- !u!212 &2143964742
 SpriteRenderer:
   serializedVersion: 3
@@ -8081,8 +8114,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.53, y: 1.54}
+  m_DrawMode: 1
+  m_Size: {x: 0.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

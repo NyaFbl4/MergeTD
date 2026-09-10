@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &1830318065701484586
 GameObject:
@@ -34,6 +34,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &164778888171417040
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -79,6 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 5565086758255556982, guid: 93f0247dcaed9284e9f3537c071d2e16, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -88,8 +90,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &3884059583719198704
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,6 +129,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3523446691594339929
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -172,6 +175,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -3090903425614839014, guid: 7dcc00c47aa0c4f4b8318cac27279bca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -181,8 +185,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!95 &6705187990689304865
 Animator:
   serializedVersion: 7
@@ -248,7 +252,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.34883, y: 0.63027, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9002335383536459500}
@@ -267,6 +271,7 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 250
   m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
 --- !u!114 &2084401357731635588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,15 +286,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Towers.TowerUnit
   _towerConfig: {fileID: 11400000, guid: 2172613c9130cc546a95d2f64c59645a, type: 2}
   _turretPivot: {fileID: 9002335383536459500}
-  _firePoint: {fileID: 2502189378863360425}
   _currentLevelText: {fileID: 7537546963133529158}
   _animator: {fileID: 6705187990689304865}
   _projectilePrefab: {fileID: 8319070672697281119, guid: 8118189810209a54b8b80f1390418189, type: 3}
+  _firePoint: {fileID: 2502189378863360425}
+  _firePoints: []
+  _fireMode: 0
   _range: 6
   _towerLevel: 1
   _angleOffset: -90
   _rotationSpeed: 360
   _animationSpeed: 0
+  _criticalDamageMultiplier: 2
 --- !u!114 &-2286130548361520535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,6 +392,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2218241817756060825
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -429,6 +438,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -6717884257390833292, guid: 0c00a92671112ba48851dc612c3705c2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -438,8 +448,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &8207554654753324979
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,6 +534,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7537546963133529158
 MonoBehaviour:
@@ -583,6 +594,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

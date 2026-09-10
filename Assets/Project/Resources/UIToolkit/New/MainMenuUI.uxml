@@ -10,5 +10,19 @@
                 <ui:Label text="500" name="GemLabel" style="width: 177px; top: auto; left: -35px; -unity-text-align: middle-left; font-size: 50px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="Body" style="flex-grow: 1;">
+            <ui:VisualElement name="MainPanel" style="flex-grow: 1;">
+                <ui:VisualElement name="LebelPanel" style="flex-grow: 1; height: 800px; min-height: 800px; max-height: 800px; align-items: stretch; justify-content: center; flex-direction: row;">
+                    <ui:Button text="" name="PrevLevelButton" style="background-image: resource(&quot;UI/new/Button_TaperedLeft_Green&quot;); background-color: rgba(188, 188, 188, 0); -unity-background-scale-mode: scale-to-fit; width: 120px; min-width: 120px; max-width: 120px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
+                    <ui:VisualElement name="LevelPanel" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
+                        <ui:VisualElement name="LevelNamePanel" style="flex-grow: 1; width: 300px; height: 100px; min-height: 100px; max-height: 100px; min-width: 300px; max-width: 300px; justify-content: flex-start; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; align-items: center;">
+                            <ui:Label text="1 уровень" name="LevelNameLabel" style="width: 100%; height: 100%; -unity-text-align: middle-center; font-size: 50px; -unity-text-auto-size: none;"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Button text="" name="NextLevelButton" style="width: 120px; min-width: 120px; max-width: 120px; background-image: resource(&quot;UI/new/Button_TaperedLeft_Green&quot;); -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); background-repeat: no-repeat no-repeat; -unity-slice-type: tiled; transform-origin: center; rotate: 180deg; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ButtonsPanel" style="flex-grow: 1; bottom: 0; width: 100%; min-width: 100%; max-width: 100%; height: 300px; min-height: 300px; max-height: 300px;"/>
     </ui:VisualElement>
 </ui:UXML>
