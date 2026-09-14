@@ -68,7 +68,7 @@ namespace Project.Scripts.System.Save
 
             var wave = ClampWave(data.nextWave);
             _runState.MoveToWave(wave);
-            _energy.Restore(data.energy);
+            _energy.Reset();
             _playerStatsUseCase.ApplyState(
                 _world.Gold,
                 wave,
@@ -109,7 +109,6 @@ namespace Project.Scripts.System.Save
             {
                 nextWave = ClampWave(nextWave),
                 gold = _playerStatsUseCase.Gold,
-                energy = _energy.Current,
                 selectedTowerLevel = _playerStatsUseCase.SelectedTowerLevel,
                 towerCost = _buyTowerUseCase.TowerCost,
                 currentBaseHealth = Mathf.Clamp(currentBaseHealth, 1, maxBaseHealth),

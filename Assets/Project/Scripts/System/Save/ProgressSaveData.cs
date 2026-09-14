@@ -9,7 +9,6 @@ namespace Project.Scripts.System.Save
     {
         public int nextWave = 1;
         public int gold;
-        public int energy;
         public int selectedTowerLevel = 1;
         public int towerCost;
         public int currentBaseHealth;

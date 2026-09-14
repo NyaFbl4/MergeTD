@@ -16,7 +16,7 @@ MonoBehaviour:
   _towerLevel: 1
   _towerType: 1
   _generationInterval: 3
-  _energyPerPulse: 5
+  _energyPerPulse: 1
   _startPrice: 100
   _startDamage: 0
   _startAttackSpeed: 0

@@ -19,7 +19,7 @@
                             <ui:Label text="1 уровень" name="LevelNameLabel" style="width: 100%; height: 100%; -unity-text-align: middle-center; font-size: 50px; -unity-text-auto-size: none;"/>
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:Button text="" name="NextLevelButton" style="width: 120px; min-width: 120px; max-width: 120px; background-image: resource(&quot;UI/new/Button_TaperedLeft_Green&quot;); -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); background-repeat: no-repeat no-repeat; -unity-slice-type: tiled; transform-origin: center; rotate: 180deg; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
+                    <ui:Button text="" name="NextLevelButton" style="width: 120px; min-width: 120px; max-width: 120px; background-image: resource(&quot;UI/new/Button_TaperedLeft_Green&quot;); -unity-background-scale-mode: scale-to-fit; background-color: rgba(188, 188, 188, 0); background-repeat: no-repeat no-repeat; -unity-slice-type: tiled; transform-origin: center; rotate: 0 0 0 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; scale: -1 1;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
