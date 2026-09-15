@@ -82,6 +82,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/LevelUI/LevelUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/LevelUI/LevelUIUseCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/LevelUI/LevelUIView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/MainMenuUI/IMainMenuUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/MainMenuUI/IMainMenuUIView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/MainMenuUI/MainMenuUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/MainMenuUI/MainMenuUIUseCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/QuestUI/IQuestUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/QuestUI/IQuestUIView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/QuestUI/QuestItemView.cs" root0="FORCE_HIGHLIGHTING" />
@@ -95,7 +99,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/ShopUI/IShopUIView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/ShopUI/ShopUIPresenter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Project/Scripts/UI/ShopUI/ShopUIView.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/jp.hadashikick.vcontainer@8c70d0b94b30/Runtime/Unity/EntryPointExceptionHandler.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />

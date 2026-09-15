@@ -16,6 +16,7 @@ using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.EndWaveLoseUI;
 using Project.Scripts.UI.LevelUI;
+using Project.Scripts.UI.MainMenuUI;
 using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.SettingsUI;
 using Project.Scripts.UI.ShopUI;
@@ -105,6 +106,7 @@ namespace Installers
             builder.RegisterEntryPoint<ShopUIPresenter>().As<IShopUIPresenter>();
             builder.RegisterEntryPoint<QuestUIPresenter>().As<IQuestUIPresenter>();
             builder.RegisterEntryPoint<SettingsUIPresenter>().As<ISettingsUIPresenter>();
+            builder.RegisterEntryPoint<MainMenuUIPresenter>().As<IMainMenuUIPresenter>();
         }
 
         private void RegisterUseCases(IContainerBuilder builder)
@@ -119,6 +121,7 @@ namespace Installers
             builder.RegisterEntryPoint<EndWaveLoseUseCase>();
             builder.RegisterEntryPoint<QuestDamageEventsUseCase>();
             builder.RegisterEntryPoint<QuestWaveEventsUseCase>();
+            builder.RegisterEntryPoint<MainMenuUIUseCase>();
             
             builder.Register<UnitsCatalog>(Lifetime.Singleton).As<IUnitsCatalog>();
         }
