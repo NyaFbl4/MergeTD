@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Save;
 using UnityEngine;
 using VContainer.Unity;
@@ -9,7 +9,7 @@ namespace Project.Scripts.System.UseCases
 {
     public class PlayerStatsUseCase : IPlayerStatsUseCase, IInitializable, IDisposable
     {
-        private readonly RunConfig _runConfig;
+        private readonly IRunSelectionService _runSelection;
         private readonly IWorldService _world;
 
         private int _currentWave;
@@ -36,9 +36,9 @@ namespace Project.Scripts.System.UseCases
         public event Action<int> SelectedTowerLevelChanged;
         public event Action UpgradesChanged;
 
-        public PlayerStatsUseCase(RunConfig runConfig, IWorldService world)
+        public PlayerStatsUseCase(IRunSelectionService runSelection, IWorldService world)
         {
-            _runConfig = runConfig;
+            _runSelection = runSelection;
             _world = world;
             ResetValues();
         }
@@ -160,7 +160,7 @@ namespace Project.Scripts.System.UseCases
 
         private void ResetValues()
         {
-            _selectedTowerLevel = Math.Max(1, _runConfig.StartSelectedTowerLevel);
+            _selectedTowerLevel = Math.Max(1, _runSelection.SelectedRun.StartSelectedTowerLevel);
             _currentWave = 1;
             _towerDamageBonus = 0f;
             _towerAttackSpeedBonus = 0f;

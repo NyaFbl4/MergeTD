@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Towers;
 
 namespace Project.Scripts.System.Save
 {
-    public sealed class WorldService : IWorldService
+    public sealed class WorldService : IWorldService, IDisposable
     {
         private const int CurrentVersion = 1;
 
         private readonly WorldSaveService _saveService;
-        private readonly RunConfig _runConfig;
+        private readonly IRunSelectionService _runSelection;
         private WorldSaveData _data;
 
         public int Gold => _data.gold;
@@ -28,10 +29,11 @@ namespace Project.Scripts.System.Save
         public event Action TowersChanged;
         public event Action SpellsChanged;
 
-        public WorldService(WorldSaveService saveService, RunConfig runConfig)
+        public WorldService(WorldSaveService saveService, IRunSelectionService runSelection)
         {
             _saveService = saveService;
-            _runConfig = runConfig;
+            _runSelection = runSelection;
+            _runSelection.SelectionChanged += OnRunSelectionChanged;
             HasPersistedData = _saveService.TryLoad(out _data);
 
             if (!HasPersistedData)
@@ -264,15 +266,20 @@ namespace Project.Scripts.System.Save
             SpellsChanged?.Invoke();
         }
 
+        public void Dispose()
+        {
+            _runSelection.SelectionChanged -= OnRunSelectionChanged;
+        }
+
         private WorldSaveData CreateDefaults()
         {
             return new WorldSaveData
             {
                 version = CurrentVersion,
-                gold = Math.Max(0, _runConfig.StartGold),
+                gold = Math.Max(0, _runSelection.SelectedRun.StartGold),
                 gems = 0,
-                maxBaseHealth = Math.Max(1, _runConfig.StartBaseHealth),
-                maxEnergy = Math.Max(1, _runConfig.StartMaxEnergy)
+                maxBaseHealth = Math.Max(1, _runSelection.SelectedRun.StartBaseHealth),
+                maxEnergy = Math.Max(1, _runSelection.SelectedRun.StartMaxEnergy)
             };
         }
 
@@ -283,10 +290,10 @@ namespace Project.Scripts.System.Save
             _data.gems = Math.Max(0, _data.gems);
             _data.maxBaseHealth = _data.maxBaseHealth > 0
                 ? _data.maxBaseHealth
-                : Math.Max(1, _runConfig.StartBaseHealth);
+                : Math.Max(1, _runSelection.SelectedRun.StartBaseHealth);
             _data.maxEnergy = _data.maxEnergy > 0
                 ? _data.maxEnergy
-                : Math.Max(1, _runConfig.StartMaxEnergy);
+                : Math.Max(1, _runSelection.SelectedRun.StartMaxEnergy);
             _data.towers ??= new List<WorldTowerSaveData>();
             _data.spells ??= new List<SpellProgressSaveData>();
 
@@ -362,6 +369,19 @@ namespace Project.Scripts.System.Save
         {
             HasPersistedData = true;
             _saveService.Save(_data);
+        }
+
+        private void OnRunSelectionChanged(RunConfig runConfig)
+        {
+            if (HasPersistedData)
+                return;
+
+            _data.gold = Math.Max(0, runConfig.StartGold);
+            _data.maxBaseHealth = Math.Max(1, runConfig.StartBaseHealth);
+            _data.maxEnergy = Math.Max(1, runConfig.StartMaxEnergy);
+            GoldChanged?.Invoke(Gold);
+            MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
+            MaxEnergyChanged?.Invoke(MaxEnergy);
         }
 
         private static int AddClamped(int current, int amount)

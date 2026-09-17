@@ -20,7 +20,7 @@ namespace Project.Scripts.System.Save
         private readonly BaseHealth _baseHealth;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IAudioManager _audioManager;
-        private readonly RunConfig _runConfig;
+        private readonly IRunSelectionService _runSelection;
         private readonly QuestService _questService;
         private readonly RunEnergyService _energy;
         private readonly RunState _runState;
@@ -34,7 +34,7 @@ namespace Project.Scripts.System.Save
             BaseHealth baseHealth,
             IUnitsCatalog unitsCatalog,
             IAudioManager audioManager,
-            RunConfig runConfig,
+            IRunSelectionService runSelection,
             QuestService questService,
             RunEnergyService energy,
             RunState runState,
@@ -47,7 +47,7 @@ namespace Project.Scripts.System.Save
             _baseHealth = baseHealth;
             _unitsCatalog = unitsCatalog;
             _audioManager = audioManager;
-            _runConfig = runConfig;
+            _runSelection = runSelection;
             _questService = questService;
             _energy = energy;
             _runState = runState;
@@ -152,7 +152,7 @@ namespace Project.Scripts.System.Save
 
         private int ClampWave(int wave)
         {
-            var wavesCount = Mathf.Max(1, _runConfig.Waves.Count);
+            var wavesCount = Mathf.Max(1, _runSelection.SelectedRun.Waves.Count);
             return Mathf.Clamp(wave, 1, wavesCount);
         }
 

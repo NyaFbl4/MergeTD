@@ -6,7 +6,7 @@ namespace Project.Scripts.Gameplay.Run
 {
     public class RunState
     {
-        private readonly RunConfig _config;
+        private readonly IRunSelectionService _runSelection;
         
         private int _currentWave;
         private ERunPhase _phase;
@@ -17,7 +17,7 @@ namespace Project.Scripts.Gameplay.Run
         private bool _isBossWave => _currentWaveConfig.IsBossWave;
         
         public int CurrentWave => _currentWave;
-        public int MaxWaves => _config.Waves.Count;
+        public int MaxWaves => _runSelection.SelectedRun.Waves.Count;
         public ERunPhase Phase => _phase;
         public bool CanEditDefense => _canEditDefense;
         public bool CanUseAbilities => _canUseAbilities;
@@ -26,9 +26,9 @@ namespace Project.Scripts.Gameplay.Run
         
         public event Action<ERunPhase> PhaseChanged;
 
-        public RunState(RunConfig runConfig)
+        public RunState(IRunSelectionService runSelection)
         {
-            _config = runConfig;
+            _runSelection = runSelection;
         }
         
         public void Reset()
@@ -39,7 +39,7 @@ namespace Project.Scripts.Gameplay.Run
         public void MoveToWave(int waveNumber)
         {
             _currentWave = UnityEngine.Mathf.Clamp(waveNumber, 1, MaxWaves);
-            _currentWaveConfig = _config.Waves[_currentWave - 1];
+            _currentWaveConfig = _runSelection.SelectedRun.Waves[_currentWave - 1];
             SetPhase(ERunPhase.Preparation);
         }
 

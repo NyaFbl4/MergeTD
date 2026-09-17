@@ -6,6 +6,8 @@ namespace Project.Scripts.Gameplay.Run.Configs
     [CreateAssetMenu(menuName = "Project/Configs/Run Config", fileName = "Run Config")]
     public class RunConfig : ScriptableObject
     {
+        [SerializeField] private string _id;
+        [SerializeField] private Sprite _icon;
         [SerializeField] private string _displayName;
         [SerializeField, TextArea] private string _description;
         [SerializeField, Min(1)] private int _startBaseHealth = 10;
@@ -14,6 +16,8 @@ namespace Project.Scripts.Gameplay.Run.Configs
         [SerializeField, Min(1)] private int _startSelectedTowerLevel = 1;
         [SerializeField] private List<RunWaveConfig> _waves;
         
+        public string Id => _id;
+        public Sprite Icon => _icon;
         public string DisplayName => _displayName;
         public string Description => _description;
         public int StartBaseHealth => _startBaseHealth;

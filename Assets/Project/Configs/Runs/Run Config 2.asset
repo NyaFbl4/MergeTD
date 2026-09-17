@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 645fe2540a4f4dbc87face14ed327e24, type: 3}
-  m_Name: Run Config
+  m_Name: Run Config 2
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Run.Configs.RunConfig
-  _displayName: Default Run
+  _id: default-run-2
+  _icon: {fileID: 0}
+  _displayName: Default Run 2
   _description: Default 20-wave run converted from Level Config.
   _startBaseHealth: 10
   _startMaxEnergy: 12

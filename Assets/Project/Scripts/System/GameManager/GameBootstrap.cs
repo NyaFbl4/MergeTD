@@ -4,6 +4,7 @@ using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.UI.LevelUI;
+using Project.Scripts.UI.MainMenuUI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -24,7 +25,10 @@ namespace Project.Scripts.GameManager
 
         public void Start()
         {
-            _gameManagerService.StartGame();
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(IMainMenuUIPresenter)
+            });
         }
 
         public void OnStartGame()

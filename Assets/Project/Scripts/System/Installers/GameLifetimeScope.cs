@@ -42,7 +42,7 @@ namespace Installers
         [SerializeField] private EnemyConfig _enemyConfig;
         [SerializeField] private QuestCatalog _questCatalog;
         [SerializeField] private SoundLibrary _soundLibrary;
-        [SerializeField] private RunConfig _runConfig;
+        [SerializeField] private RunCatalog _runCatalog;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -121,13 +121,14 @@ namespace Installers
             builder.RegisterEntryPoint<EndWaveLoseUseCase>();
             builder.RegisterEntryPoint<QuestDamageEventsUseCase>();
             builder.RegisterEntryPoint<QuestWaveEventsUseCase>();
-            builder.RegisterEntryPoint<MainMenuUIUseCase>();
+            builder.Register<MainMenuUIUseCase>(Lifetime.Singleton);
             
             builder.Register<UnitsCatalog>(Lifetime.Singleton).As<IUnitsCatalog>();
         }
         
         private void RegisterGameplay(IContainerBuilder builder)
         {
+            builder.Register<RunSelectionService>(Lifetime.Singleton).As<IRunSelectionService>();
             builder.Register<RunState>(Lifetime.Singleton);
             builder.Register<RunEnergyService>(Lifetime.Singleton);
         }
@@ -161,7 +162,7 @@ namespace Installers
             builder.RegisterInstance(_levelConfig);
             builder.RegisterInstance(_enemyConfig);
             builder.RegisterInstance(_questCatalog);
-            builder.RegisterInstance(_runConfig);
+            builder.RegisterInstance(_runCatalog);
         }
     }
 

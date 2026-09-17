@@ -184,9 +184,14 @@ namespace Project.Scripts.Systems.UI
             public float HoverScaleMultiplier;
             public float PressedScaleMultiplier;
             public float DurationSeconds;
+            public float MinimumPressedSeconds;
+            public float PressedAtTime;
             public float CurrentScale;
+            public bool FlipX;
             public bool IsHovered;
             public bool IsPressed;
+            public bool IsReleasePending;
+            public int PressVersion;
             public int AnimationVersion;
         }
 
@@ -196,8 +201,10 @@ namespace Project.Scripts.Systems.UI
             Button button,
             float baseScale = 1f,
             float hoverScaleMultiplier = 1.06f,
-            float pressedScaleMultiplier = 0.93f,
-            float durationSeconds = 0.08f)
+            float pressedScaleMultiplier = 0.9f,
+            float durationSeconds = 0.08f,
+            bool flipX = false,
+            float minimumPressedSeconds = 0.12f)
         {
             if (button == null)
                 return;
@@ -216,7 +223,9 @@ namespace Project.Scripts.Systems.UI
                 button.RegisterCallback<PointerLeaveEvent>(_ =>
                 {
                     state.IsHovered = false;
+                    state.PressVersion++;
                     state.IsPressed = false;
+                    state.IsReleasePending = false;
                     AnimateToCurrentTarget(button, state);
                 });
 
@@ -225,27 +234,36 @@ namespace Project.Scripts.Systems.UI
                     if (evt.button != 0)
                         return;
 
+                    state.PressVersion++;
+                    state.PressedAtTime = Time.unscaledTime;
                     state.IsPressed = true;
+                    state.IsReleasePending = false;
                     AnimateToCurrentTarget(button, state);
-                });
+                }, TrickleDown.TrickleDown);
 
                 button.RegisterCallback<PointerUpEvent>(evt =>
                 {
                     if (evt.button != 0)
                         return;
 
-                    state.IsPressed = false;
-                    AnimateToCurrentTarget(button, state);
-                });
+                    if (!state.IsPressed || state.IsReleasePending)
+                        return;
+
+                    state.IsReleasePending = true;
+                    ReleaseAfterMinimumPress(button, state, state.PressVersion).Forget();
+                }, TrickleDown.TrickleDown);
 
                 button.RegisterCallback<PointerCancelEvent>(_ =>
                 {
+                    state.PressVersion++;
                     state.IsPressed = false;
+                    state.IsReleasePending = false;
                     AnimateToCurrentTarget(button, state);
-                });
+                }, TrickleDown.TrickleDown);
 
                 button.RegisterCallback<DetachFromPanelEvent>(_ =>
                 {
+                    state.PressVersion++;
                     state.AnimationVersion++;
                     States.Remove(button);
                 });
@@ -255,11 +273,13 @@ namespace Project.Scripts.Systems.UI
             state.HoverScaleMultiplier = Mathf.Max(1f, hoverScaleMultiplier);
             state.PressedScaleMultiplier = Mathf.Clamp(pressedScaleMultiplier, 0.5f, 1f);
             state.DurationSeconds = Mathf.Clamp(durationSeconds, 0.02f, 0.25f);
+            state.MinimumPressedSeconds = Mathf.Clamp(minimumPressedSeconds, state.DurationSeconds, 0.5f);
+            state.FlipX = flipX;
 
             if (state.CurrentScale <= 0f)
                 state.CurrentScale = state.BaseScale;
 
-            SetScale(button, state.CurrentScale);
+            SetScale(button, state.CurrentScale, state.FlipX);
             AnimateToCurrentTarget(button, state);
         }
 
@@ -280,7 +300,7 @@ namespace Project.Scripts.Systems.UI
             {
                 state.AnimationVersion++;
                 state.CurrentScale = state.BaseScale;
-                SetScale(button, state.CurrentScale);
+                SetScale(button, state.CurrentScale, state.FlipX);
                 return;
             }
 
@@ -294,6 +314,26 @@ namespace Project.Scripts.Systems.UI
             RunScaleAnimation(button, state, targetScale, version).Forget();
         }
 
+        private static async UniTaskVoid ReleaseAfterMinimumPress(
+            Button button,
+            ButtonAnimationState state,
+            int pressVersion)
+        {
+            while (Time.unscaledTime - state.PressedAtTime < state.MinimumPressedSeconds)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update);
+                if (pressVersion != state.PressVersion)
+                    return;
+            }
+
+            if (pressVersion != state.PressVersion)
+                return;
+
+            state.IsPressed = false;
+            state.IsReleasePending = false;
+            AnimateToCurrentTarget(button, state);
+        }
+
         private static async UniTaskVoid RunScaleAnimation(
             Button button,
             ButtonAnimationState state,
@@ -304,7 +344,7 @@ namespace Project.Scripts.Systems.UI
             if (Mathf.Approximately(startScale, targetScale))
             {
                 state.CurrentScale = targetScale;
-                SetScale(button, targetScale);
+                SetScale(button, targetScale, state.FlipX);
                 return;
             }
 
@@ -319,7 +359,7 @@ namespace Project.Scripts.Systems.UI
                 var eased = 1f - Mathf.Pow(1f - t, 3f);
                 var scale = Mathf.Lerp(startScale, targetScale, eased);
                 state.CurrentScale = scale;
-                SetScale(button, scale);
+                SetScale(button, scale, state.FlipX);
                 await UniTask.Yield(PlayerLoopTiming.Update);
             }
 
@@ -327,7 +367,7 @@ namespace Project.Scripts.Systems.UI
                 return;
 
             state.CurrentScale = targetScale;
-            SetScale(button, targetScale);
+            SetScale(button, targetScale, state.FlipX);
         }
 
         private static float ResolveTargetScale(ButtonAnimationState state)
@@ -341,12 +381,12 @@ namespace Project.Scripts.Systems.UI
             return state.BaseScale;
         }
 
-        private static void SetScale(VisualElement element, float scale)
+        private static void SetScale(VisualElement element, float scale, bool flipX)
         {
             if (element == null)
                 return;
 
-            element.style.scale = new Scale(new Vector3(scale, scale, 1f));
+            element.style.scale = new Scale(new Vector3(flipX ? -scale : scale, scale, 1f));
         }
     }
 }
