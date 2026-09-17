@@ -97,8 +97,12 @@ namespace Project.Scripts.UI.LevelUI
         }
         private void RefreshWaveText()
         {
-           _layoutView.SetCurrentWaveText(
-               _localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave));
+            var waveText = _localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave);
+            var displayName = _runState.CurrentWaveConfig?.DisplayName;
+            if (!string.IsNullOrWhiteSpace(displayName))
+                waveText = $"{waveText}: {displayName}";
+
+            _layoutView.SetCurrentWaveText(waveText);
         }
 
         private void OnPayTowerButtonClicked()

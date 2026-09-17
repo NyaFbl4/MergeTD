@@ -1,5 +1,6 @@
 ﻿using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Base;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Project.Scripts.Gameplay.UpgradeItem
 {
     public class BaseHealthUpgradeItem : UpgradeItem
     {
+        protected override EWorldUpgradeType UpgradeType => EWorldUpgradeType.BaseHealth;
+
         private readonly BaseHealth _baseHealth;
         
         public BaseHealthUpgradeItem(
@@ -17,9 +20,12 @@ namespace Project.Scripts.Gameplay.UpgradeItem
             _baseHealth = baseHealth;
         }
 
-        protected override void ApplyUpgrade(float value)
+        protected override void OnPurchased(float value)
         {
-            _baseHealth.AddMaxHealth(Mathf.RoundToInt(value));
+            var healthIncrease = Mathf.Max(0, Mathf.RoundToInt(value));
+            _baseHealth.SetHealthState(
+                _baseHealth.CurrentHealth + healthIncrease,
+                _baseHealth.MaxHealth + healthIncrease);
         }
     }
 }

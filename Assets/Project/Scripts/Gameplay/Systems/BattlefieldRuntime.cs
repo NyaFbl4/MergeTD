@@ -213,13 +213,11 @@ namespace Project.Scripts.Gameplay.Systems
                 Quaternion.identity,
                 _context.EnemiesRoot);
 
-            var wave = _runState.CurrentWaveConfig.WaveConfig;
-            
             var typeHealthMultiplier = sequence.EnemyConfig.GetHealthMultiplier(enemy.EnemyType);
             var scaledHealth = Mathf.Max(1, Mathf.RoundToInt(
                 sequence.EnemyConfig.StartHealth * sequence.HealthMultiplier * typeHealthMultiplier));
             
-            enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig, wave.KillRewardGold, scaledHealth);
+            enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig, scaledHealth);
             enemy.Finished += OnEnemyFinished;
 
             _aliveEnemies++;

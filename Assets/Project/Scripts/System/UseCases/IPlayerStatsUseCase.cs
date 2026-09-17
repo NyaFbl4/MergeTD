@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Project.Scripts.System.Save;
 
 namespace Project.Scripts.System.UseCases
@@ -13,7 +12,6 @@ namespace Project.Scripts.System.UseCases
         float TowerDamageBonus { get; }
         float TowerAttackSpeedBonus { get; }
         float TowerCritDamageBonus { get; }
-        IReadOnlyDictionary<string, int> UpgradeLevels { get; }
         
         event Action<int> OnGoldChanged;
         event Action<int> WaveChanged;
@@ -24,23 +22,10 @@ namespace Project.Scripts.System.UseCases
         bool TrySpend(int amount);
         void AddGold(int amount);
         void SetWave(int amount);
-        void SetSelectedTowerLevel(int level);
         void ResetState();
-        void ApplyState(
-            int gold,
-            int wave,
-            int selectedTowerLevel,
-            float towerDamageBonus,
-            float towerAttackSpeedBonus,
-            float towerCritChanceBonus,
-            float towerCritDamageBonus,
-            IReadOnlyList<UpgradeLevelSaveData> upgradeLevels);
+        void ApplyState(int wave);
         
         int GetUpgradeLevel(string upgradeId);
-        void SetUpgradeLevel(string upgradeId, int level);
-        void AddTowerCritChanceBonus(float value);
-        void AddTowerDamageBonus(float value);
-        void AddTowerAttackSpeedBonus(float value);
-        void AddTowerCritDamageBonus(float value);
+        bool TryPurchaseUpgrade(string upgradeId, int expectedLevel, int price, EWorldUpgradeType type, float value);
     }
 }

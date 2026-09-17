@@ -1,23 +1,29 @@
 using System;
 using System.Collections.Generic;
-using Project.Scripts.Gameplay.Run;
-using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Towers;
 
 namespace Project.Scripts.System.Save
 {
-    public sealed class WorldService : IWorldService, IDisposable
+    public sealed class WorldService : IWorldService
     {
-        private const int CurrentVersion = 1;
+        private const int CurrentVersion = 2;
+        private const int InitialGold = 250;
+        private const int InitialBaseHealth = 10;
+        private const int InitialMaxEnergy = 12;
 
         private readonly WorldSaveService _saveService;
-        private readonly IRunSelectionService _runSelection;
         private WorldSaveData _data;
+        private bool _needsUpgradeMigration;
 
         public int Gold => _data.gold;
         public int Gems => _data.gems;
         public int MaxBaseHealth => _data.maxBaseHealth;
         public int MaxEnergy => _data.maxEnergy;
+        public int SelectedTowerLevel => _data.selectedTowerLevel;
+        public float TowerDamageBonus => _data.towerDamageBonus;
+        public float TowerAttackSpeedBonus => _data.towerAttackSpeedBonus;
+        public float TowerCritChanceBonus => _data.towerCritChanceBonus;
+        public float TowerCritDamageBonus => _data.towerCritDamageBonus;
         public IReadOnlyList<WorldTowerSaveData> Towers => _data.towers;
         public IReadOnlyList<SpellProgressSaveData> Spells => _data.spells;
         public bool HasPersistedData { get; private set; }
@@ -26,19 +32,19 @@ namespace Project.Scripts.System.Save
         public event Action<int> GemsChanged;
         public event Action<int> MaxBaseHealthChanged;
         public event Action<int> MaxEnergyChanged;
+        public event Action UpgradesChanged;
         public event Action TowersChanged;
         public event Action SpellsChanged;
 
-        public WorldService(WorldSaveService saveService, IRunSelectionService runSelection)
+        public WorldService(WorldSaveService saveService)
         {
             _saveService = saveService;
-            _runSelection = runSelection;
-            _runSelection.SelectionChanged += OnRunSelectionChanged;
             HasPersistedData = _saveService.TryLoad(out _data);
 
             if (!HasPersistedData)
                 _data = CreateDefaults();
 
+            _needsUpgradeMigration = !HasPersistedData || _data.version < CurrentVersion;
             Normalize();
 
             if (HasPersistedData)
@@ -257,45 +263,59 @@ namespace Project.Scripts.System.Save
         public void Reset()
         {
             _data = CreateDefaults();
+            _data.version = CurrentVersion;
+            _needsUpgradeMigration = false;
             Save();
             GoldChanged?.Invoke(Gold);
             GemsChanged?.Invoke(Gems);
             MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
             MaxEnergyChanged?.Invoke(MaxEnergy);
+            UpgradesChanged?.Invoke();
             TowersChanged?.Invoke();
             SpellsChanged?.Invoke();
-        }
-
-        public void Dispose()
-        {
-            _runSelection.SelectionChanged -= OnRunSelectionChanged;
         }
 
         private WorldSaveData CreateDefaults()
         {
             return new WorldSaveData
             {
-                version = CurrentVersion,
-                gold = Math.Max(0, _runSelection.SelectedRun.StartGold),
+                // A new world may still have a legacy checkpoint with shop upgrades to import.
+                version = 1,
+                gold = InitialGold,
                 gems = 0,
-                maxBaseHealth = Math.Max(1, _runSelection.SelectedRun.StartBaseHealth),
-                maxEnergy = Math.Max(1, _runSelection.SelectedRun.StartMaxEnergy)
+                maxBaseHealth = InitialBaseHealth,
+                maxEnergy = InitialMaxEnergy,
+                selectedTowerLevel = 1
             };
         }
 
         private void Normalize()
         {
-            _data.version = CurrentVersion;
             _data.gold = Math.Max(0, _data.gold);
             _data.gems = Math.Max(0, _data.gems);
             _data.maxBaseHealth = _data.maxBaseHealth > 0
                 ? _data.maxBaseHealth
-                : Math.Max(1, _runSelection.SelectedRun.StartBaseHealth);
+                : InitialBaseHealth;
             _data.maxEnergy = _data.maxEnergy > 0
                 ? _data.maxEnergy
-                : Math.Max(1, _runSelection.SelectedRun.StartMaxEnergy);
+                : InitialMaxEnergy;
+            _data.selectedTowerLevel = Math.Max(1, _data.selectedTowerLevel);
+            _data.towerDamageBonus = Math.Clamp(_data.towerDamageBonus, 0f, 1f);
+            _data.towerAttackSpeedBonus = Math.Max(0f, _data.towerAttackSpeedBonus);
+            _data.towerCritChanceBonus = Math.Clamp(_data.towerCritChanceBonus, 0f, 1f);
+            _data.towerCritDamageBonus = Math.Max(0f, _data.towerCritDamageBonus);
+            _data.upgrades ??= new List<WorldUpgradeSaveData>();
             _data.towers ??= new List<WorldTowerSaveData>();
             _data.spells ??= new List<SpellProgressSaveData>();
+
+            var upgradeIds = new HashSet<string>();
+            for (var i = _data.upgrades.Count - 1; i >= 0; i--)
+            {
+                var upgrade = _data.upgrades[i];
+                if (upgrade == null || string.IsNullOrWhiteSpace(upgrade.id) || upgrade.level < 1
+                    || !upgradeIds.Add(upgrade.id))
+                    _data.upgrades.RemoveAt(i);
+            }
 
             var towerSlotIds = new HashSet<string>();
             for (var i = _data.towers.Count - 1; i >= 0; i--)
@@ -354,6 +374,20 @@ namespace Project.Scripts.System.Save
             return null;
         }
 
+        private WorldUpgradeSaveData FindUpgrade(string upgradeId)
+        {
+            if (string.IsNullOrWhiteSpace(upgradeId))
+                return null;
+
+            for (var i = 0; i < _data.upgrades.Count; i++)
+            {
+                if (_data.upgrades[i].id == upgradeId)
+                    return _data.upgrades[i];
+            }
+
+            return null;
+        }
+
         private SpellProgressSaveData GetOrCreateSpell(string spellId)
         {
             var spell = FindSpell(spellId);
@@ -371,17 +405,96 @@ namespace Project.Scripts.System.Save
             _saveService.Save(_data);
         }
 
-        private void OnRunSelectionChanged(RunConfig runConfig)
+        public int GetUpgradeLevel(string upgradeId)
         {
-            if (HasPersistedData)
+            var upgrade = FindUpgrade(upgradeId);
+            return upgrade?.level ?? 0;
+        }
+
+        public bool TryPurchaseUpgrade(
+            string upgradeId,
+            int expectedLevel,
+            int price,
+            EWorldUpgradeType type,
+            float value)
+        {
+            if (string.IsNullOrWhiteSpace(upgradeId) || expectedLevel < 0 || !CanSpendGold(price)
+                || float.IsNaN(value) || float.IsInfinity(value))
+                return false;
+
+            var upgrade = FindUpgrade(upgradeId);
+            if ((upgrade?.level ?? 0) != expectedLevel)
+                return false;
+
+            switch (type)
+            {
+                case EWorldUpgradeType.TowerLevel:
+                    _data.selectedTowerLevel = Math.Max(1, (int)Math.Round(value));
+                    break;
+                case EWorldUpgradeType.TowerDamage:
+                    _data.towerDamageBonus = Math.Clamp(_data.towerDamageBonus + value, 0f, 1f);
+                    break;
+                case EWorldUpgradeType.TowerAttackSpeed:
+                    _data.towerAttackSpeedBonus += value;
+                    break;
+                case EWorldUpgradeType.BaseHealth:
+                    var healthIncrease = (int)Math.Round(value);
+                    if (healthIncrease > 0)
+                        _data.maxBaseHealth = AddClamped(_data.maxBaseHealth, healthIncrease);
+                    break;
+                case EWorldUpgradeType.TowerCritChance:
+                    _data.towerCritChanceBonus = Math.Clamp(_data.towerCritChanceBonus + value, 0f, 1f);
+                    break;
+                case EWorldUpgradeType.TowerCritDamage:
+                    _data.towerCritDamageBonus += value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type));
+            }
+
+            _data.gold -= price;
+            if (upgrade == null)
+                _data.upgrades.Add(new WorldUpgradeSaveData(upgradeId, 1));
+            else
+                upgrade.level++;
+
+            _data.version = CurrentVersion;
+            _needsUpgradeMigration = false;
+            Save();
+            GoldChanged?.Invoke(Gold);
+            if (type == EWorldUpgradeType.BaseHealth)
+                MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
+            UpgradesChanged?.Invoke();
+            return true;
+        }
+
+        public void ImportLegacyShopProgress(ProgressSaveData progress)
+        {
+            if (!_needsUpgradeMigration)
                 return;
 
-            _data.gold = Math.Max(0, runConfig.StartGold);
-            _data.maxBaseHealth = Math.Max(1, runConfig.StartBaseHealth);
-            _data.maxEnergy = Math.Max(1, runConfig.StartMaxEnergy);
-            GoldChanged?.Invoke(Gold);
-            MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
-            MaxEnergyChanged?.Invoke(MaxEnergy);
+            _data.selectedTowerLevel = Math.Max(1, progress.selectedTowerLevel);
+            _data.towerDamageBonus = Math.Clamp(progress.towerDamageBonus, 0f, 1f);
+            _data.towerAttackSpeedBonus = Math.Max(0f, progress.towerAttackSpeedBonus);
+            _data.towerCritChanceBonus = Math.Clamp(progress.towerCritChanceBonus, 0f, 1f);
+            _data.towerCritDamageBonus = Math.Max(0f, progress.towerCritDamageBonus);
+            _data.upgrades.Clear();
+            if (progress.upgrades != null)
+            {
+                foreach (var upgrade in progress.upgrades)
+                {
+                    if (upgrade == null || string.IsNullOrWhiteSpace(upgrade.id) || upgrade.level <= 0
+                        || FindUpgrade(upgrade.id) != null)
+                        continue;
+
+                    _data.upgrades.Add(new WorldUpgradeSaveData(upgrade.id, upgrade.level));
+                }
+            }
+
+            _data.version = CurrentVersion;
+            _needsUpgradeMigration = false;
+            Save();
+            UpgradesChanged?.Invoke();
         }
 
         private static int AddClamped(int current, int amount)

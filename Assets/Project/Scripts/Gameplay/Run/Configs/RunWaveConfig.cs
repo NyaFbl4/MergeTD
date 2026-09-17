@@ -7,11 +7,13 @@ namespace Project.Scripts.Gameplay.Run.Configs
     [Serializable]
     public class RunWaveConfig
     {
+        [SerializeField] private string _displayName;
         [SerializeField] private EnemyWaveConfig _waveConfig;
         [SerializeField] private int _completeRewardGold;
         [SerializeField] private bool _isBossWave;
         [SerializeField] private ERunPhase _phaseAfterComplete;
         
+        public string DisplayName => _displayName;
         public EnemyWaveConfig WaveConfig => _waveConfig;
         public int CompleteRewardGold => _completeRewardGold;
         public bool IsBossWave => _isBossWave;

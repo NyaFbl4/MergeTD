@@ -1,7 +1,7 @@
 ﻿using Project.Scripts.Configs;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
-using NotImplementedException = System.NotImplementedException;
 
 namespace Project.Scripts.Gameplay.UpgradeItem
 {
@@ -9,6 +9,7 @@ namespace Project.Scripts.Gameplay.UpgradeItem
     {
         protected readonly UpgradeItemConfig _config;
         protected readonly IPlayerStatsUseCase _playerStats;
+        protected abstract EWorldUpgradeType UpgradeType { get; }
 
         public UpgradeItemConfig Config => _config;
         public int CurrentLevel => _playerStats.GetUpgradeLevel(_config.Id);
@@ -29,14 +30,13 @@ namespace Project.Scripts.Gameplay.UpgradeItem
 
             var levelData = _config.Levels[CurrentLevel];
 
-            if (!_playerStats.TrySpend(levelData.Price))
-                return false;
-
             var oldLevel = CurrentLevel;
             var newLevel = oldLevel + 1;
-            
-            ApplyUpgrade(levelData.Value);
-            _playerStats.SetUpgradeLevel(_config.Id, CurrentLevel + 1);
+
+            if (!_playerStats.TryPurchaseUpgrade(_config.Id, oldLevel, levelData.Price, UpgradeType, levelData.Value))
+                return false;
+
+            OnPurchased(levelData.Value);
             
             Debug.Log(
                 $"[Upgrade] Purchased '{_config.Id}' " +
@@ -46,6 +46,8 @@ namespace Project.Scripts.Gameplay.UpgradeItem
             return true;
         }
 
-        protected abstract void ApplyUpgrade(float value);
+        protected virtual void OnPurchased(float value)
+        {
+        }
     }
 }

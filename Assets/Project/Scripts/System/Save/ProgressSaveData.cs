@@ -9,6 +9,7 @@ namespace Project.Scripts.System.Save
     {
         public int nextWave = 1;
         public int gold;
+        // Kept only to migrate checkpoints written before shop upgrades moved to the world save.
         public int selectedTowerLevel = 1;
         public int towerCost;
         public int currentBaseHealth;

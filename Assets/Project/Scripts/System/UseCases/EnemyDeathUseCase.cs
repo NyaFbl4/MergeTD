@@ -25,11 +25,9 @@ namespace Project.Scripts.System.UseCases
             EnemyUnit.DieEnemy -= OnEnemyDie;
         }
 
-        private void OnEnemyDie(EnemyUnit enemy, int rewardGold)
+        private void OnEnemyDie(EnemyUnit enemy)
         {
-            _publisherEnemyKilledDTO.Publish(new EnemyKilledQuestEventDTO(
-                enemy.EnemyType,
-                0));
+            _publisherEnemyKilledDTO.Publish(new EnemyKilledQuestEventDTO(enemy.EnemyType));
         }
     }
 }

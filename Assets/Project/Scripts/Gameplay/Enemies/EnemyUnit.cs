@@ -29,13 +29,12 @@ namespace Project.Scripts.Gameplay.Enemies
         private Collider2D[] _colliders;
         private int _targetWaypointIndex;
         private bool _isInitialized;
-        private int _killRewardGold;
         private bool _isDead;
         private bool _isFinished;
         private EnemyConfig _config;
         
         public EnemyConfig Config => _config;
-        public static event Action<EnemyUnit, int> DieEnemy;
+        public static event Action<EnemyUnit> DieEnemy;
         public event Action<EnemyUnit> Finished;
         public EEnemyType EnemyType => _enemyType;
 
@@ -46,7 +45,7 @@ namespace Project.Scripts.Gameplay.Enemies
         
         public void Initialize(LanePath lanePath, 
             BaseHealth baseHealth, EnemyConfig config, 
-            int killRewardGold, int startHealth)
+            int startHealth)
         {
             CacheRenderOrderComponents();
 
@@ -60,7 +59,6 @@ namespace Project.Scripts.Gameplay.Enemies
 
             _moveSpeed = _config.StartMoveSpeed * _config.GetMoveSpeedMultiplier(_enemyType);
             _damageToBase = _enemyType == EEnemyType.Boss ? BossDamageToBase : _config.StartDamage;
-            _killRewardGold = killRewardGold;
 
             var enemyHP = gameObject.GetComponent<IEnemyHealth>();
             enemyHP?.SetHealth(startHealth);
@@ -188,7 +186,7 @@ namespace Project.Scripts.Gameplay.Enemies
             if (_animator != null)
                 _animator.SetTrigger("IsDie");
             
-            DieEnemy?.Invoke(this, _killRewardGold);
+            DieEnemy?.Invoke(this);
             Finish();
         }
 

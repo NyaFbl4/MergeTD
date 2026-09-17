@@ -9,11 +9,6 @@ namespace Project.Scripts.Gameplay.Wave
     public class EnemyWaveConfig : ScriptableObject
     {
         [SerializeField] private List<EnemySpawnSequenceConfig> _sequence;
-        [SerializeField] private float _delayAfterWave;
-        [SerializeField] private int _killRewardGold;
-        
-        public int KillRewardGold => _killRewardGold;
         public IReadOnlyList<EnemySpawnSequenceConfig> Sequence => _sequence;
-        public float DelayAfterWave => _delayAfterWave;
     }
 }

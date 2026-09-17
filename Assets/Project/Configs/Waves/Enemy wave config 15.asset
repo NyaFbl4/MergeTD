@@ -1562,5 +1562,3 @@ MonoBehaviour:
     _count: 1
     _spawnInterval: 1.1
     _startDelay: 113.575
-  _delayAfterWave: 0
-  _killRewardGold: 40

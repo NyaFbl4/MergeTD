@@ -12,8 +12,31 @@ namespace Project.Scripts.System.Save
         public int gems;
         public int maxBaseHealth;
         public int maxEnergy;
+        public int selectedTowerLevel = 1;
+        public float towerDamageBonus;
+        public float towerAttackSpeedBonus;
+        public float towerCritChanceBonus;
+        public float towerCritDamageBonus;
+        public List<WorldUpgradeSaveData> upgrades = new();
         public List<WorldTowerSaveData> towers = new();
         public List<SpellProgressSaveData> spells = new();
+    }
+
+    [Serializable]
+    public sealed class WorldUpgradeSaveData
+    {
+        public string id;
+        public int level;
+
+        public WorldUpgradeSaveData()
+        {
+        }
+
+        public WorldUpgradeSaveData(string id, int level)
+        {
+            this.id = id;
+            this.level = level;
+        }
     }
 
     [Serializable]

@@ -65,19 +65,12 @@ namespace Project.Scripts.System.Save
 
             ClearTowers(false);
             ImportLegacyWorld(data);
+            _world.ImportLegacyShopProgress(data);
 
             var wave = ClampWave(data.nextWave);
             _runState.MoveToWave(wave);
             _energy.Reset();
-            _playerStatsUseCase.ApplyState(
-                _world.Gold,
-                wave,
-                data.selectedTowerLevel,
-                data.towerDamageBonus,
-                data.towerAttackSpeedBonus,
-                data.towerCritChanceBonus,
-                data.towerCritDamageBonus,
-                data.upgrades);
+            _playerStatsUseCase.ApplyState(wave);
 
             _questService.RestoreQuests(data.quests);
             _buyTowerUseCase.SetTowerCost(data.towerCost);
@@ -109,21 +102,13 @@ namespace Project.Scripts.System.Save
             {
                 nextWave = ClampWave(nextWave),
                 gold = _playerStatsUseCase.Gold,
-                selectedTowerLevel = _playerStatsUseCase.SelectedTowerLevel,
                 towerCost = _buyTowerUseCase.TowerCost,
                 currentBaseHealth = Mathf.Clamp(currentBaseHealth, 1, maxBaseHealth),
-                maxBaseHealth = maxBaseHealth,
-                towerDamageBonus = _playerStatsUseCase.TowerDamageBonus,
-                towerAttackSpeedBonus = _playerStatsUseCase.TowerAttackSpeedBonus,
-                towerCritChanceBonus = _playerStatsUseCase.TowerCritChanceBonus,
-                towerCritDamageBonus = _playerStatsUseCase.TowerCritDamageBonus
+                maxBaseHealth = maxBaseHealth
             };
 
             data.quests = _questService.CaptureState();
             
-            foreach (var upgrade in _playerStatsUseCase.UpgradeLevels)
-                data.upgrades.Add(new UpgradeLevelSaveData(upgrade.Key, upgrade.Value));
-
             var slots = _battlefieldContext.TowerSlots;
             if (slots != null)
             {
