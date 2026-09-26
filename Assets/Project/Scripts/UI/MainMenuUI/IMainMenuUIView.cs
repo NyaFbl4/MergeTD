@@ -1,7 +1,7 @@
 ﻿using Project.Scripts.Systems.UI;
 
 using System;
-using UnityEngine;
+using Project.Scripts.UI.InBattleUI;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
@@ -16,14 +16,12 @@ namespace Project.Scripts.UI.MainMenuUI
 
     public interface IMainMenuUIView : ILayoutView
     {
-        event Action PreviousRunClicked;
-        event Action NextRunClicked;
-        event Action PlayClicked;
         event Action<MainMenuSection> SectionClicked;
+
+        IInBattleUIView InBattleView { get; }
 
         void SetGoldCount(int goldCount);
         void SetDiamondCount(int diamondCount);
-        void SetRun(string displayName, Sprite icon, bool canNavigate);
         void SetActiveSection(MainMenuSection section);
     }
 }

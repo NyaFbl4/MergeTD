@@ -49,9 +49,9 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  alignment: 9
+  spritePivot: {x: 0.504053567, y: 0.518045880}
+  spritePixelsToUnits: 193.47826087
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -144,10 +144,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 186
-        height: 167
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []

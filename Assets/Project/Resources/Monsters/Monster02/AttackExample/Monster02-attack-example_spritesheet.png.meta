@@ -35,6 +35,9 @@ TextureImporter:
   - first:
       213: -1925498923273491551
     second: Monster02-attack-example_spritesheet_10
+  - first:
+      213: 8460243458379031556
+    second: Monster02-attack-example_spritesheet_11
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -81,7 +84,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 193.47826087
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -172,12 +175,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 6
-        width: 172
-        height: 143
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -194,12 +197,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_1
       rect:
         serializedVersion: 2
-        x: 191
-        y: 4
-        width: 175
-        height: 140
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 362
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -216,12 +219,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_2
       rect:
         serializedVersion: 2
-        x: 377
-        y: 6
-        width: 176
-        height: 143
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 724
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -238,12 +241,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_3
       rect:
         serializedVersion: 2
-        x: 565
-        y: 5
-        width: 172
-        height: 144
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1086
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -260,12 +263,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_4
       rect:
         serializedVersion: 2
-        x: 747
-        y: 1
-        width: 171
-        height: 137
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -282,12 +285,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_5
       rect:
         serializedVersion: 2
-        x: 748
-        y: 47
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 362
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -304,12 +307,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_6
       rect:
         serializedVersion: 2
-        x: 911
-        y: 48
-        width: 15
-        height: 25
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 724
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -326,12 +329,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_7
       rect:
         serializedVersion: 2
-        x: 935
-        y: 2
-        width: 177
-        height: 139
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1086
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -348,12 +351,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_8
       rect:
         serializedVersion: 2
-        x: 936
-        y: 49
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -370,12 +373,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_9
       rect:
         serializedVersion: 2
-        x: 1123
-        y: 5
-        width: 172
-        height: 143
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 362
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -392,12 +395,12 @@ TextureImporter:
       name: Monster02-attack-example_spritesheet_10
       rect:
         serializedVersion: 2
-        x: 1309
-        y: 6
-        width: 172
-        height: 143
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 724
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -406,6 +409,28 @@ TextureImporter:
       bones: []
       spriteID: 1abe2e65ee04745e0800000000000000
       internalID: -1925498923273491551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Monster02-attack-example_spritesheet_11
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.504053567, y: 0.518045880}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 725d53956bf84f5cab1dbf4e93791e39
+      internalID: 8460243458379031556
       vertices: []
       indices: 
       edges: []
@@ -426,7 +451,6 @@ TextureImporter:
     nameFileIdTable:
       Monster02-attack-example_spritesheet_0: -3176689564860150819
       Monster02-attack-example_spritesheet_1: 4586889142751444768
-      Monster02-attack-example_spritesheet_10: -1925498923273491551
       Monster02-attack-example_spritesheet_2: 4826157248854939952
       Monster02-attack-example_spritesheet_3: -6641922419739241691
       Monster02-attack-example_spritesheet_4: -6636478770387679295
@@ -435,6 +459,8 @@ TextureImporter:
       Monster02-attack-example_spritesheet_7: 5423352443970226528
       Monster02-attack-example_spritesheet_8: 154823596080009868
       Monster02-attack-example_spritesheet_9: 4793046287065242357
+      Monster02-attack-example_spritesheet_10: -1925498923273491551
+      Monster02-attack-example_spritesheet_11: 8460243458379031556
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

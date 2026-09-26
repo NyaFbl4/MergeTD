@@ -43,6 +43,7 @@ namespace Installers
         [SerializeField] private QuestCatalog _questCatalog;
         [SerializeField] private SoundLibrary _soundLibrary;
         [SerializeField] private RunCatalog _runCatalog;
+        [SerializeField] private UIElements _uiElements;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -163,6 +164,7 @@ namespace Installers
             builder.RegisterInstance(_enemyConfig);
             builder.RegisterInstance(_questCatalog);
             builder.RegisterInstance(_runCatalog);
+            builder.RegisterInstance(_uiElements);
         }
     }
 

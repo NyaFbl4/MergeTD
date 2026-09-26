@@ -1,5 +1,6 @@
 using Project.Scripts.Systems.UI;
 using Cysharp.Threading.Tasks;
+using Project.Scripts.UI.InBattleUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System;
@@ -20,11 +21,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private Label _goldCountLabel;
         private Label _gemsCountLabel;
-        private Button _nextLevelButton;
-        private Button _prevLevelButton;
-        private Button _playButton;
-        private Label _levelNameLabel;
-        private VisualElement _runIcon;
+        private IInBattleUIView _inBattleView;
         private Button[] _sectionButtons;
         private VisualElement[] _sectionIcons;
         private Label[] _sectionLabels;
@@ -35,10 +32,8 @@ namespace Project.Scripts.UI.MainMenuUI
         private bool _sectionStyleInitialized;
         private int _sectionAnimationVersion;
 
-        public event Action PreviousRunClicked;
-        public event Action NextRunClicked;
-        public event Action PlayClicked;
         public event Action<MainMenuSection> SectionClicked;
+        public IInBattleUIView InBattleView => _inBattleView;
 
         public override void Awake()
         {
@@ -46,11 +41,10 @@ namespace Project.Scripts.UI.MainMenuUI
             
             _goldCountLabel = _root.Q<Label>("GoldLabel");
             _gemsCountLabel = _root.Q<Label>("GemLabel");
-            _nextLevelButton = _root.Q<Button>("NextLevelButton");
-            _prevLevelButton = _root.Q<Button>("PrevLevelButton");
-            _playButton = _root.Q<Button>("PlayButton");
-            _levelNameLabel = _root.Q<Label>("LevelNameLabel");
-            _runIcon = _root.Q<VisualElement>("RunIcon");
+            var inBattleRoot = _root.Q<VisualElement>("InBattleContent")
+                               ?? throw new InvalidOperationException(
+                                   "MainMenuUIView: element 'InBattleContent' was not found.");
+            _inBattleView = new InBattleUIView(inBattleRoot);
             _sectionButtons = new[]
             {
                 _root.Q<Button>("ShopButton"),
@@ -65,14 +59,6 @@ namespace Project.Scripts.UI.MainMenuUI
             _sectionActiveProgress = new float[_sectionButtons.Length];
             _normalSectionBackground = LoadSectionBackground("UI/new/CardFrame08_Single_Blue");
             _activeSectionBackground = LoadSectionBackground("UI/new/CardFrame08_Single_Purple");
-
-            _prevLevelButton.clicked += OnPreviousRunClicked;
-            _nextLevelButton.clicked += OnNextRunClicked;
-            _playButton.clicked += OnPlayClicked;
-
-            UIButtonAnimationUtility.EnableDefault(_prevLevelButton);
-            UIButtonAnimationUtility.EnableDefault(_nextLevelButton, flipX: true);
-            UIButtonAnimationUtility.EnableDefault(_playButton);
 
             for (var i = 0; i < _sectionButtons.Length; i++)
             {
@@ -95,20 +81,12 @@ namespace Project.Scripts.UI.MainMenuUI
             _gemsCountLabel.text = Math.Max(0, diamondCount).ToString();
         }
 
-        public void SetRun(string displayName, Sprite icon, bool canNavigate)
-        {
-            _levelNameLabel.text = displayName;
-            _runIcon.style.backgroundImage = icon == null
-                ? new StyleBackground(StyleKeyword.None)
-                : new StyleBackground(icon);
-            _prevLevelButton.SetEnabled(canNavigate);
-            _nextLevelButton.SetEnabled(canNavigate);
-        }
-
         public void SetActiveSection(MainMenuSection section)
         {
             var activeIndex = (int)section;
             var version = ++_sectionAnimationVersion;
+
+            _inBattleView.SetVisible(section == MainMenuSection.Battle);
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].style.backgroundImage = i == activeIndex
@@ -203,16 +181,10 @@ namespace Project.Scripts.UI.MainMenuUI
         private void OnDestroy()
         {
             _sectionAnimationVersion++;
-            _prevLevelButton.clicked -= OnPreviousRunClicked;
-            _nextLevelButton.clicked -= OnNextRunClicked;
-            _playButton.clicked -= OnPlayClicked;
+            _inBattleView.Dispose();
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].clicked -= _sectionClickHandlers[i];
         }
-
-        private void OnPreviousRunClicked() => PreviousRunClicked?.Invoke();
-        private void OnNextRunClicked() => NextRunClicked?.Invoke();
-        private void OnPlayClicked() => PlayClicked?.Invoke();
     }
 }

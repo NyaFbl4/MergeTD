@@ -11,6 +11,26 @@ namespace Project.Scripts.System.Save
         private const int InitialBaseHealth = 10;
         private const int InitialMaxEnergy = 12;
 
+        private static readonly IReadOnlyDictionary<string, string> TowerSlotIdMigrations =
+            new Dictionary<string, string>
+            {
+                ["a8abe503e80c411fb8ea5ef2f447c39e"] = "11",
+                ["75f82e56679544aca37adeb62c9e6487"] = "12",
+                ["190a410b4fc848ba9e348f8250f596e5"] = "13",
+                ["e8a5c12959624e208b437380bec264ef"] = "14",
+                ["0be4a30f43a74ee8a54cad9fe90646e9"] = "15",
+                ["7718da88677a4aa2b6aae54d27ebd510"] = "21",
+                ["60a023a17c754e3aaa97365591bce165"] = "22",
+                ["61aa73917d2549b18356f72d3b60d023"] = "23",
+                ["56e8e40975e1476690c7cc04bfc0f51f"] = "24",
+                ["37cb63e3c94846fea9fcc3a2dad08b5c"] = "25",
+                ["dd0e9f2eadd44a9bb38ddd4abb34e7b1"] = "31",
+                ["c7d399bb3e884301a254423e9fcd4b16"] = "32",
+                ["1198f29027864ec1a1a5e13714e0d384"] = "33",
+                ["9467555bec9a4391ba84b27c128ef117"] = "34",
+                ["43d977a15321475abd5497c5e6017bd3"] = "35"
+            };
+
         private readonly WorldSaveService _saveService;
         private WorldSaveData _data;
         private bool _needsUpgradeMigration;
@@ -45,6 +65,7 @@ namespace Project.Scripts.System.Save
                 _data = CreateDefaults();
 
             _needsUpgradeMigration = !HasPersistedData || _data.version < CurrentVersion;
+            MigrateTowerSlotIds();
             Normalize();
 
             if (HasPersistedData)
@@ -346,6 +367,35 @@ namespace Project.Scripts.System.Save
                     spell.level = 0;
                 else
                     spell.level = Math.Max(1, spell.level);
+            }
+        }
+
+        private void MigrateTowerSlotIds()
+        {
+            if (_data.towers == null || _data.towers.Count == 0)
+                return;
+
+            var currentIds = new HashSet<string>();
+            for (var i = 0; i < _data.towers.Count; i++)
+            {
+                var slotId = _data.towers[i]?.slotId;
+                if (!string.IsNullOrWhiteSpace(slotId) && !TowerSlotIdMigrations.ContainsKey(slotId))
+                    currentIds.Add(slotId);
+            }
+
+            for (var i = _data.towers.Count - 1; i >= 0; i--)
+            {
+                var tower = _data.towers[i];
+                if (tower == null || !TowerSlotIdMigrations.TryGetValue(tower.slotId, out var newSlotId))
+                    continue;
+
+                if (!currentIds.Add(newSlotId))
+                {
+                    _data.towers.RemoveAt(i);
+                    continue;
+                }
+
+                tower.slotId = newSlotId;
             }
         }
 
