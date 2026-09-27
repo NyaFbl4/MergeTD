@@ -16,6 +16,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly MainMenuUIUseCase _menuUIUseCase;
         private readonly UIElements _uiElements;
         private readonly IWorldService _world;
+        private readonly IArmyUIUseCase _armyUIUseCase;
         private readonly IRunSelectionService _runSelection;
         private readonly IGameManagerService _gameManagerService;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
@@ -26,6 +27,7 @@ namespace Project.Scripts.UI.MainMenuUI
             MainMenuUIUseCase menuUIUseCase,
             UIElements uiElements,
             IWorldService world,
+            IArmyUIUseCase armyUIUseCase,
             IRunSelectionService runSelection,
             IGameManagerService gameManagerService,
             IPublisher<HidePopupDto> hidePopupPublisher)
@@ -33,6 +35,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _menuUIUseCase = menuUIUseCase;
             _uiElements = uiElements;
             _world = world;
+            _armyUIUseCase = armyUIUseCase;
             _runSelection = runSelection;
             _gameManagerService = gameManagerService;
             _hidePopupPublisher = hidePopupPublisher;
@@ -42,7 +45,7 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             base.Initialize();
             _layoutView.InitializeArmy(_uiElements);
-            _armyPresenter = new ArmyUIPresenter(_layoutView.ArmyView, _world);
+            _armyPresenter = new ArmyUIPresenter(_layoutView.ArmyView, _world, _armyUIUseCase);
             _armyPresenter.Initialize();
 
             _inBattlePresenter = new InBattleUIPresenter(

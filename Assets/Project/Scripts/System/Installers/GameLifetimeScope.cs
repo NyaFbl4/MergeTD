@@ -17,6 +17,7 @@ using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.EndWaveLoseUI;
 using Project.Scripts.UI.LevelUI;
 using Project.Scripts.UI.MainMenuUI;
+using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.SettingsUI;
 using Project.Scripts.UI.ShopUI;
@@ -116,6 +117,7 @@ namespace Installers
             builder.RegisterEntryPoint<HidePopUpUseCase>();
             builder.RegisterEntryPoint<PlayerStatsUseCase>().As<IPlayerStatsUseCase>();
             builder.RegisterEntryPoint<BuyTowerUseCase>().As<IBuyTowerUseCase>();
+            builder.Register<ArmyUIUseCase>(Lifetime.Singleton).As<IArmyUIUseCase>();
             builder.RegisterEntryPoint<EnemyDeathUseCase>();
             builder.RegisterEntryPoint<LevelUIUseCase>().As<ILevelUIUseCase>();
             builder.RegisterEntryPoint<EndWaveUseCase>();
