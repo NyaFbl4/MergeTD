@@ -1,6 +1,8 @@
 using Project.Scripts.Systems.UI;
 using Cysharp.Threading.Tasks;
 using Project.Scripts.UI.InBattleUI;
+using Project.Scripts.UI.ArmyUI;
+using Project.Scripts.Configs;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System;
@@ -22,6 +24,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private Label _goldCountLabel;
         private Label _gemsCountLabel;
         private IInBattleUIView _inBattleView;
+        private IArmyUIView _armyView;
         private Button[] _sectionButtons;
         private VisualElement[] _sectionIcons;
         private Label[] _sectionLabels;
@@ -34,6 +37,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         public event Action<MainMenuSection> SectionClicked;
         public IInBattleUIView InBattleView => _inBattleView;
+        public IArmyUIView ArmyView => _armyView;
 
         public override void Awake()
         {
@@ -71,6 +75,12 @@ namespace Project.Scripts.UI.MainMenuUI
             }
         }
 
+        public void InitializeArmy(UIElements uiElements)
+        {
+            var armyRoot = _root.Q<TemplateContainer>("ArmyPanel");
+            _armyView = new ArmyUIView(armyRoot, uiElements);
+        }
+
         public void SetGoldCount(int goldCount)
         {
             _goldCountLabel.text = Math.Max(0, goldCount).ToString();
@@ -87,6 +97,7 @@ namespace Project.Scripts.UI.MainMenuUI
             var version = ++_sectionAnimationVersion;
 
             _inBattleView.SetVisible(section == MainMenuSection.Battle);
+            _armyView.SetVisible(section == MainMenuSection.Army);
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].style.backgroundImage = i == activeIndex
@@ -182,6 +193,7 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             _sectionAnimationVersion++;
             _inBattleView.Dispose();
+            _armyView.Dispose();
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].clicked -= _sectionClickHandlers[i];

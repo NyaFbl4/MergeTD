@@ -1,4 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="ArmyPanel" src="project://database/Assets/Project/Resources/UIToolkit/New/ArmyPanel.uxml?fileID=9197481963319205126&amp;guid=94e86a50830bfa2479e01b60fd900afe&amp;type=3#ArmyPanel"/>
     <ui:Template name="InBattlePanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/InBattlePanel.uxml?fileID=9197481963319205126&amp;guid=34cfc351c81e1c54b825581bca0f511d&amp;type=3#InBattlePanel"/>
     <ui:VisualElement name="Layout" style="flex-grow: 1;">
         <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&quot;exec-3857d5d4-a61d-4425-901c-e1216a7ac466&quot;);"/>
@@ -14,8 +15,9 @@
         </ui:VisualElement>
         <ui:VisualElement name="Body" style="flex-grow: 1;">
             <ui:VisualElement name="MainPanel" style="flex-grow: 1; justify-content: flex-end; align-items: stretch; align-content: stretch;">
-                <ui:VisualElement name="ContentHost" style="flex-grow: 1; width: 100%; height: 100%;">
-                    <ui:Instance template="InBattlePanelTemplate" name="InBattleContent" style="flex-grow: 1; width: 100%; height: 100%;"/>
+                <ui:VisualElement name="ContentHost" style="flex-grow: 1; width: 100%; height: 100%; align-self: center; justify-content: center;">
+                    <ui:Instance template="ArmyPanel" name="ArmyPanel" style="display: flex; flex-grow: 1; width: 100%; height: 100%;"/>
+                    <ui:Instance template="InBattlePanelTemplate" name="InBattleContent" style="flex-grow: 1; width: 100%; height: 100%; display: none;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

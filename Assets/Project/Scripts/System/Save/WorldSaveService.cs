@@ -17,9 +17,26 @@ namespace Project.Scripts.System.Save
 
         public bool TryLoad(out WorldSaveData data)
         {
+            if (YG2.saves.world != null)
+            {
+                data = YG2.saves.world;
+                SaveLocal(JsonUtility.ToJson(data));
+
+                if (!string.IsNullOrEmpty(YG2.saves.worldJson))
+                {
+                    YG2.saves.worldJson = string.Empty;
+                    QueueCloudSave();
+                }
+
+                return true;
+            }
+
             if (TryDeserialize(YG2.saves.worldJson, out data))
             {
-                SaveLocal(YG2.saves.worldJson);
+                SaveLocal(JsonUtility.ToJson(data));
+                YG2.saves.world = data;
+                YG2.saves.worldJson = string.Empty;
+                QueueCloudSave();
                 return true;
             }
 
@@ -28,7 +45,8 @@ namespace Project.Scripts.System.Save
                 var localJson = PlayerPrefs.GetString(SaveKey);
                 if (TryDeserialize(localJson, out data))
                 {
-                    YG2.saves.worldJson = localJson;
+                    YG2.saves.world = data;
+                    YG2.saves.worldJson = string.Empty;
                     QueueCloudSave();
                     return true;
                 }
@@ -42,7 +60,8 @@ namespace Project.Scripts.System.Save
         {
             var json = JsonUtility.ToJson(data);
             SaveLocal(json);
-            YG2.saves.worldJson = json;
+            YG2.saves.world = data;
+            YG2.saves.worldJson = string.Empty;
             QueueCloudSave();
         }
 
@@ -50,6 +69,7 @@ namespace Project.Scripts.System.Save
         {
             PlayerPrefs.DeleteKey(SaveKey);
             PlayerPrefs.Save();
+            YG2.saves.world = null;
             YG2.saves.worldJson = string.Empty;
             QueueCloudSave();
         }

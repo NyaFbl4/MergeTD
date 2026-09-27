@@ -1,7 +1,9 @@
-﻿namespace Project.Scripts.UI.ArmyUI
+﻿using System;
+
+namespace Project.Scripts.UI.ArmyUI
 {
-    public interface IArmyUIPresenter
+    public interface IArmyUIPresenter : IDisposable
     {
-        
+        void Initialize();
     }
 }

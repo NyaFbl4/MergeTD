@@ -25,6 +25,7 @@ namespace Project.Scripts.System.Save
         float TowerAttackSpeedBonus { get; }
         float TowerCritChanceBonus { get; }
         float TowerCritDamageBonus { get; }
+        IReadOnlyList<WorldTowerSlotSaveData> TowerSlots { get; }
         IReadOnlyList<WorldTowerSaveData> Towers { get; }
         IReadOnlyList<SpellProgressSaveData> Spells { get; }
 
@@ -34,6 +35,7 @@ namespace Project.Scripts.System.Save
         event Action<int> MaxEnergyChanged;
         event Action UpgradesChanged;
         event Action TowersChanged;
+        event Action TowerSlotsChanged;
         event Action SpellsChanged;
 
         bool CanSpendGold(int amount);
@@ -45,6 +47,8 @@ namespace Project.Scripts.System.Save
         void SetMaxEnergy(int value);
         int GetUpgradeLevel(string upgradeId);
         bool TryPurchaseUpgrade(string upgradeId, int expectedLevel, int price, EWorldUpgradeType type, float value);
+        bool IsTowerSlotUnlocked(string slotId);
+        void UnlockTowerSlot(string slotId);
         void SetTower(string slotId, int towerLevel, ETowerType towerType);
         void MoveTower(string sourceSlotId, string targetSlotId, int towerLevel, ETowerType towerType);
         void RemoveTower(string slotId);

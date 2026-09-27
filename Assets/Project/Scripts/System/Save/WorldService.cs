@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.Gameplay.Field;
 
 namespace Project.Scripts.System.Save
 {
@@ -44,6 +45,7 @@ namespace Project.Scripts.System.Save
         public float TowerAttackSpeedBonus => _data.towerAttackSpeedBonus;
         public float TowerCritChanceBonus => _data.towerCritChanceBonus;
         public float TowerCritDamageBonus => _data.towerCritDamageBonus;
+        public IReadOnlyList<WorldTowerSlotSaveData> TowerSlots => _data.towerSlots;
         public IReadOnlyList<WorldTowerSaveData> Towers => _data.towers;
         public IReadOnlyList<SpellProgressSaveData> Spells => _data.spells;
         public bool HasPersistedData { get; private set; }
@@ -54,6 +56,7 @@ namespace Project.Scripts.System.Save
         public event Action<int> MaxEnergyChanged;
         public event Action UpgradesChanged;
         public event Action TowersChanged;
+        public event Action TowerSlotsChanged;
         public event Action SpellsChanged;
 
         public WorldService(WorldSaveService saveService)
@@ -138,10 +141,28 @@ namespace Project.Scripts.System.Save
             MaxEnergyChanged?.Invoke(MaxEnergy);
         }
 
+        public bool IsTowerSlotUnlocked(string slotId)
+        {
+            ValidateTowerSlotId(slotId);
+            return FindTowerSlot(slotId).unlockedSlot == WorldTowerSlotSaveData.Unlocked;
+        }
+
+        public void UnlockTowerSlot(string slotId)
+        {
+            ValidateTowerSlotId(slotId);
+            var towerSlot = FindTowerSlot(slotId);
+            if (towerSlot.unlockedSlot == WorldTowerSlotSaveData.Unlocked)
+                return;
+
+            towerSlot.unlockedSlot = WorldTowerSlotSaveData.Unlocked;
+            Save();
+            TowerSlotsChanged?.Invoke();
+        }
+
         public void SetTower(string slotId, int towerLevel, ETowerType towerType)
         {
-            if (string.IsNullOrWhiteSpace(slotId))
-                throw new ArgumentException("A persistent slot id is required.", nameof(slotId));
+            if (!TowerSlotGrid.IsValidSlotId(slotId))
+                return;
 
             var safeLevel = Math.Max(1, towerLevel);
             var tower = FindTower(slotId);
@@ -165,6 +186,9 @@ namespace Project.Scripts.System.Save
 
         public void RemoveTower(string slotId)
         {
+            if (!TowerSlotGrid.IsValidSlotId(slotId))
+                return;
+
             var tower = FindTower(slotId);
             if (tower == null)
                 return;
@@ -180,15 +204,21 @@ namespace Project.Scripts.System.Save
             int towerLevel,
             ETowerType towerType)
         {
-            if (string.IsNullOrWhiteSpace(sourceSlotId))
-                throw new ArgumentException("A source slot id is required.", nameof(sourceSlotId));
-
-            if (string.IsNullOrWhiteSpace(targetSlotId))
-                throw new ArgumentException("A target slot id is required.", nameof(targetSlotId));
-
-            var sourceTower = FindTower(sourceSlotId);
+            var sourceTower = TowerSlotGrid.IsValidSlotId(sourceSlotId)
+                ? FindTower(sourceSlotId)
+                : null;
             if (sourceTower != null)
                 _data.towers.Remove(sourceTower);
+
+            if (!TowerSlotGrid.IsValidSlotId(targetSlotId))
+            {
+                if (sourceTower == null)
+                    return;
+
+                Save();
+                TowersChanged?.Invoke();
+                return;
+            }
 
             var targetTower = FindTower(targetSlotId);
             if (targetTower == null)
@@ -264,7 +294,7 @@ namespace Project.Scripts.System.Save
                 for (var i = 0; i < towers.Count; i++)
                 {
                     var tower = towers[i];
-                    if (tower == null || string.IsNullOrWhiteSpace(tower.slotId))
+                    if (tower == null || !TowerSlotGrid.IsValidSlotId(tower.slotId))
                         continue;
 
                     _data.towers.Add(new WorldTowerSaveData(
@@ -275,10 +305,12 @@ namespace Project.Scripts.System.Save
             }
 
             HasPersistedData = true;
+            UnlockOccupiedTowerSlots();
             Save();
             GoldChanged?.Invoke(Gold);
             MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
             TowersChanged?.Invoke();
+            TowerSlotsChanged?.Invoke();
         }
 
         public void Reset()
@@ -293,6 +325,7 @@ namespace Project.Scripts.System.Save
             MaxEnergyChanged?.Invoke(MaxEnergy);
             UpgradesChanged?.Invoke();
             TowersChanged?.Invoke();
+            TowerSlotsChanged?.Invoke();
             SpellsChanged?.Invoke();
         }
 
@@ -306,7 +339,8 @@ namespace Project.Scripts.System.Save
                 gems = 0,
                 maxBaseHealth = InitialBaseHealth,
                 maxEnergy = InitialMaxEnergy,
-                selectedTowerLevel = 1
+                selectedTowerLevel = 1,
+                towerSlots = CreateDefaultTowerSlots()
             };
         }
 
@@ -327,6 +361,7 @@ namespace Project.Scripts.System.Save
             _data.towerCritDamageBonus = Math.Max(0f, _data.towerCritDamageBonus);
             _data.upgrades ??= new List<WorldUpgradeSaveData>();
             _data.towers ??= new List<WorldTowerSaveData>();
+            _data.towerSlots ??= new List<WorldTowerSlotSaveData>();
             _data.spells ??= new List<SpellProgressSaveData>();
 
             var upgradeIds = new HashSet<string>();
@@ -343,13 +378,16 @@ namespace Project.Scripts.System.Save
             {
                 var tower = _data.towers[i];
                 if (tower == null
-                    || string.IsNullOrWhiteSpace(tower.slotId)
+                    || !TowerSlotGrid.IsValidSlotId(tower.slotId)
                     || tower.towerLevel < 1
                     || !towerSlotIds.Add(tower.slotId))
                 {
                     _data.towers.RemoveAt(i);
                 }
             }
+
+            NormalizeTowerSlots();
+            UnlockOccupiedTowerSlots();
 
             var spellIds = new HashSet<string>();
             for (var i = _data.spells.Count - 1; i >= 0; i--)
@@ -368,6 +406,8 @@ namespace Project.Scripts.System.Save
                 else
                     spell.level = Math.Max(1, spell.level);
             }
+
+            SortTowerData();
         }
 
         private void MigrateTowerSlotIds()
@@ -408,6 +448,79 @@ namespace Project.Scripts.System.Save
             }
 
             return null;
+        }
+
+        private WorldTowerSlotSaveData FindTowerSlot(string slotId)
+        {
+            for (var i = 0; i < _data.towerSlots.Count; i++)
+            {
+                if (_data.towerSlots[i].slotId == slotId)
+                    return _data.towerSlots[i];
+            }
+
+            throw new InvalidOperationException($"Tower slot '{slotId}' is missing from world data.");
+        }
+
+        private void NormalizeTowerSlots()
+        {
+            var savedStates = new Dictionary<string, int>();
+            for (var i = 0; i < _data.towerSlots.Count; i++)
+            {
+                var towerSlot = _data.towerSlots[i];
+                if (towerSlot == null || !TowerSlotGrid.IsValidSlotId(towerSlot.slotId)
+                                      || savedStates.ContainsKey(towerSlot.slotId))
+                    continue;
+
+                savedStates.Add(
+                    towerSlot.slotId,
+                    towerSlot.unlockedSlot == WorldTowerSlotSaveData.Unlocked
+                        ? WorldTowerSlotSaveData.Unlocked
+                        : WorldTowerSlotSaveData.Locked);
+            }
+
+            var normalizedSlots = new List<WorldTowerSlotSaveData>(TowerSlotGrid.SlotCount);
+            for (var i = 0; i < TowerSlotGrid.SlotCount; i++)
+            {
+                var slotId = TowerSlotGrid.GetSlotId(i);
+                var unlockedSlot = savedStates.TryGetValue(slotId, out var savedState)
+                    ? savedState
+                    : slotId == "11" || FindTower(slotId) != null
+                        ? WorldTowerSlotSaveData.Unlocked
+                        : WorldTowerSlotSaveData.Locked;
+
+                normalizedSlots.Add(new WorldTowerSlotSaveData(slotId, unlockedSlot));
+            }
+
+            _data.towerSlots = normalizedSlots;
+        }
+
+        private static List<WorldTowerSlotSaveData> CreateDefaultTowerSlots()
+        {
+            var towerSlots = new List<WorldTowerSlotSaveData>(TowerSlotGrid.SlotCount);
+            for (var i = 0; i < TowerSlotGrid.SlotCount; i++)
+            {
+                towerSlots.Add(new WorldTowerSlotSaveData(
+                    TowerSlotGrid.GetSlotId(i),
+                    i == 0 ? WorldTowerSlotSaveData.Unlocked : WorldTowerSlotSaveData.Locked));
+            }
+
+            return towerSlots;
+        }
+
+        private void UnlockOccupiedTowerSlots()
+        {
+            for (var i = 0; i < _data.towers.Count; i++)
+            {
+                var slotId = _data.towers[i].slotId;
+                if (TowerSlotGrid.IsValidSlotId(slotId))
+                    FindTowerSlot(slotId).unlockedSlot = WorldTowerSlotSaveData.Unlocked;
+            }
+        }
+
+        private static void ValidateTowerSlotId(string slotId)
+        {
+            if (!TowerSlotGrid.IsValidSlotId(slotId))
+                throw new ArgumentException($"Unknown tower slot id '{slotId}'.", nameof(slotId));
         }
 
         private SpellProgressSaveData FindSpell(string spellId)
@@ -452,7 +565,14 @@ namespace Project.Scripts.System.Save
         private void Save()
         {
             HasPersistedData = true;
+            SortTowerData();
             _saveService.Save(_data);
+        }
+
+        private void SortTowerData()
+        {
+            _data.towers.Sort((left, right) => string.CompareOrdinal(left.slotId, right.slotId));
+            _data.towerSlots.Sort((left, right) => string.CompareOrdinal(left.slotId, right.slotId));
         }
 
         public int GetUpgradeLevel(string upgradeId)

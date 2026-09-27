@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fde5eb7290649159e5e2f5e888564de, type: 3}
+  m_Name: UIElements
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UIElements
+  _towerSlotPanel: {fileID: 9197481963319205126, guid: 28e3860fed26d42448ede79b53fad3dd, type: 3}
+  _towerIcons:
+  - {fileID: -3090903425614839014, guid: 7dcc00c47aa0c4f4b8318cac27279bca, type: 3}
+  - {fileID: -2710602050473076177, guid: c19c698714c9d4346bd18f0581fcee07, type: 3}
+  - {fileID: 8819732992421283937, guid: 1167c10535377a749a749c51cc533091, type: 3}
+  - {fileID: 4239000947511304158, guid: fcfcd4f66c115f1468b5c53527e44a11, type: 3}
+  - {fileID: -1676200258026193708, guid: a63dd89fbdbd45448a8617c9094a7040, type: 3}
+  - {fileID: -2803115103008600510, guid: 17fbc10d887a5f84c9e73e4e580d9662, type: 3}
+  - {fileID: 312201234892154663, guid: 82473bbb684670c45ae698b3d05e05d2, type: 3}
+  - {fileID: 8018528669636757146, guid: fc91ba00403045d43ac8a703833f2380, type: 3}
+  - {fileID: 9077095721173853532, guid: 1aa7f4821cabed84aa4891051d1e916d, type: 3}
+  - {fileID: 6648719631037923154, guid: 90748c5e227c0054a9eee055248b4d8f, type: 3}
+  - {fileID: 2467257474254069040, guid: 9be541a65643e694e848b3d01e32511b, type: 3}
+  - {fileID: 8937071769642865339, guid: 414615c1240ca9a428843711d842e907, type: 3}
+  - {fileID: 5872530482939010565, guid: d2f973b99d6c72d4ab3d2551277ba932, type: 3}
+  - {fileID: 4075274922023927729, guid: 8e68d38d26a6a094a8b0d0de9f3e8bca, type: 3}
+  - {fileID: -5226889055005543415, guid: d3c8a4537ba00c94c8ec1e4a524209d9, type: 3}
+  - {fileID: 6661267127144323732, guid: 09be369bce46e7242918441228394d01, type: 3}
+  - {fileID: 6274477817223741028, guid: 4b388096b6a49d8478029e78d0a07bbb, type: 3}
+  - {fileID: 7691596433448163429, guid: 57c969816e2ee5f44910b6ee6994b548, type: 3}
+  - {fileID: -3779750424519434450, guid: fdbf4fc06d60d6e46adc5fbf8755a301, type: 3}
+  _generatorIcons:
+  - {fileID: -5838201558316246991, guid: 6965b68df94aee148b26c938d7793d33, type: 3}

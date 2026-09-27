@@ -19,6 +19,7 @@ namespace Project.Scripts.System.Save
         public float towerCritDamageBonus;
         public List<WorldUpgradeSaveData> upgrades = new();
         public List<WorldTowerSaveData> towers = new();
+        public List<WorldTowerSlotSaveData> towerSlots = new();
         public List<SpellProgressSaveData> spells = new();
     }
 
@@ -36,6 +37,26 @@ namespace Project.Scripts.System.Save
         {
             this.id = id;
             this.level = level;
+        }
+    }
+
+    [Serializable]
+    public sealed class WorldTowerSlotSaveData
+    {
+        public const int Unlocked = 0;
+        public const int Locked = 1;
+
+        public string slotId;
+        public int unlockedSlot = Locked;
+
+        public WorldTowerSlotSaveData()
+        {
+        }
+
+        public WorldTowerSlotSaveData(string slotId, int unlockedSlot)
+        {
+            this.slotId = slotId;
+            this.unlockedSlot = unlockedSlot;
         }
     }
 
