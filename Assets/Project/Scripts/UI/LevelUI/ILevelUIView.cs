@@ -15,6 +15,7 @@ namespace Project.Scripts.UI.LevelUI
         event Action QuestsButtonClicked;
         event Action SettingsButtonClicked;
         event Action NextWaveButtonClicked;
+        event Action WeaponBarrageButtonClicked;
         
         void SetPriceTower(int price);
         void SetGeneratorPrice(int price);
@@ -29,5 +30,6 @@ namespace Project.Scripts.UI.LevelUI
         void SetRunPhase(ERunPhase phase);
         void SetNextWaveButtonEnabled(bool isEnabled);
         void SetTowerActionsEnabled(bool isEnabled);
+        void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled);
     }
 }

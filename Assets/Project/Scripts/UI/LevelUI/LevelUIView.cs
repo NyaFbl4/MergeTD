@@ -20,6 +20,9 @@ namespace Project.Scripts.UI.LevelUI
         private Button _questsButton;
         private Button _settingsButton;
         private Button _nextWaveButton;
+        private Button _weaponBarrageButton;
+        private Label _weaponBarrageNameLabel;
+        private Label _weaponBarrageStatusLabel;
         private Label _payTowerLabel;
         private Label _moneyLabel;
         private Label _currentBaseHealthLabel;
@@ -37,6 +40,7 @@ namespace Project.Scripts.UI.LevelUI
         public event Action QuestsButtonClicked;
         public event Action SettingsButtonClicked;
         public event Action NextWaveButtonClicked;
+        public event Action WeaponBarrageButtonClicked;
 
         public override void Awake()
         {
@@ -58,6 +62,9 @@ namespace Project.Scripts.UI.LevelUI
             _questsButton =  _root.Q<Button>("QuestsButton");
             _settingsButton = _root.Q<Button>("SettingsButton");
             _nextWaveButton = _root.Q<Button>("GoNextWaveButton");
+            _weaponBarrageButton = _root.Q<Button>("SpellButton");
+            _weaponBarrageNameLabel = _weaponBarrageButton.Q<Label>("SpellDamageTypeLabel");
+            _weaponBarrageStatusLabel = _weaponBarrageButton.Q<Label>("SpellManaLabel");
             _adButtonTowerIcon = _adButton?.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("GoldLabel") ?? _root.Q<Label>("MoneyLabel");
@@ -77,6 +84,7 @@ namespace Project.Scripts.UI.LevelUI
                 _settingsButton.clicked += OnSettingsButtonClicked;
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked += OnNextWaveButtonClicked;
+            _weaponBarrageButton.clicked += OnWeaponBarrageButtonClicked;
         }
         
         public void SetPriceTower(int price)
@@ -159,6 +167,17 @@ namespace Project.Scripts.UI.LevelUI
             _adButton?.SetEnabled(isEnabled);
         }
 
+        public void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled)
+        {
+            _weaponBarrageButton.SetEnabled(isEnabled);
+            _weaponBarrageNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ЗАЛП";
+            _weaponBarrageStatusLabel.text = isTargeting
+                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
+                : cooldownSeconds > 0
+                    ? $"КД {cooldownSeconds}с"
+                    : "ГОТОВО";
+        }
+
         private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnShopButtonClicked() => ShopButtonClicked?.Invoke();
@@ -166,6 +185,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnQuestsButtonClicked() => QuestsButtonClicked?.Invoke();
         private void OnSettingsButtonClicked() => SettingsButtonClicked?.Invoke();
         private void OnNextWaveButtonClicked() => NextWaveButtonClicked?.Invoke();
+        private void OnWeaponBarrageButtonClicked() => WeaponBarrageButtonClicked?.Invoke();
 
         private void OnDestroy()
         {
@@ -182,6 +202,7 @@ namespace Project.Scripts.UI.LevelUI
                 _settingsButton.clicked -= OnSettingsButtonClicked;
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked -= OnNextWaveButtonClicked;
+            _weaponBarrageButton.clicked -= OnWeaponBarrageButtonClicked;
         }
     }
 }

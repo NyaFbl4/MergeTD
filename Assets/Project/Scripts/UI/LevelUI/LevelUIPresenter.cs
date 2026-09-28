@@ -3,6 +3,7 @@ using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.UseCases;
@@ -31,6 +32,7 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IGameManagerService _gameManagerService;
         private readonly IAudioManager _audioManager;
+        private readonly WeaponBarrageUseCase _weaponBarrageUseCase;
 
         private bool _isWaitingAdReward;
 
@@ -45,7 +47,8 @@ namespace Project.Scripts.UI.LevelUI
             ILocalizationService localizationService,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IGameManagerService gameManagerService,
-            IAudioManager audioManager)
+            IAudioManager audioManager,
+            WeaponBarrageUseCase weaponBarrageUseCase)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
@@ -58,6 +61,7 @@ namespace Project.Scripts.UI.LevelUI
             _showPopupPublisher = showPopupPublisher;
             _gameManagerService = gameManagerService;
             _audioManager = audioManager;
+            _weaponBarrageUseCase = weaponBarrageUseCase;
         }
 
         public override void Initialize()
@@ -80,6 +84,8 @@ namespace Project.Scripts.UI.LevelUI
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage += OnLanguageChanged;
             _runState.PhaseChanged += OnRunPhaseChanged;
+            _layoutView.WeaponBarrageButtonClicked += OnWeaponBarrageButtonClicked;
+            _weaponBarrageUseCase.StateChanged += OnWeaponBarrageStateChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetGeneratorPrice(_buyTowerUseCase.GeneratorCost);
@@ -89,6 +95,7 @@ namespace Project.Scripts.UI.LevelUI
             RefreshWaveText();
             RefreshRunPhaseControls();
             UpdateTowerIcon();
+            RefreshWeaponBarrage();
         }
 
         private void OnTowerCostChanged(int price)
@@ -131,6 +138,26 @@ namespace Project.Scripts.UI.LevelUI
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _runBattleRuntime.AdvanceFromLevelButton();
             RefreshRunPhaseControls();
+        }
+
+        private void OnWeaponBarrageButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _weaponBarrageUseCase.ToggleTargeting();
+            RefreshWeaponBarrage();
+        }
+
+        private void OnWeaponBarrageStateChanged()
+        {
+            RefreshWeaponBarrage();
+        }
+
+        private void RefreshWeaponBarrage()
+        {
+            _layoutView.SetWeaponBarrageState(
+                Mathf.CeilToInt(_weaponBarrageUseCase.CooldownRemaining),
+                _weaponBarrageUseCase.IsTargeting,
+                _weaponBarrageUseCase.CanInteract);
         }
 
         private void OnShopButtonClicked()
@@ -241,6 +268,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetNextWaveButtonEnabled(_runBattleRuntime.CanUseNextWaveButton);
             _layoutView.SetTowerActionsEnabled(_runState.CanEditDefense);
             RefreshGeneratorPurchase();
+            RefreshWeaponBarrage();
         }
 
         private void TryGrantAdTowerUpgrade()
@@ -313,6 +341,8 @@ namespace Project.Scripts.UI.LevelUI
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
             _runState.PhaseChanged -= OnRunPhaseChanged;
+            _layoutView.WeaponBarrageButtonClicked -= OnWeaponBarrageButtonClicked;
+            _weaponBarrageUseCase.StateChanged -= OnWeaponBarrageStateChanged;
             
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();
