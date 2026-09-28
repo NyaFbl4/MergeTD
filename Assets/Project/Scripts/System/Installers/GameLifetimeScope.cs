@@ -45,7 +45,7 @@ namespace Installers
         [SerializeField] private SoundLibrary _soundLibrary;
         [SerializeField] private RunCatalog _runCatalog;
         [SerializeField] private UIElements _uiElements;
-        [SerializeField] private WeaponBarrageConfig _weaponBarrageConfig;
+        [SerializeField] private SpellCatalog _spellCatalog;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -136,6 +136,7 @@ namespace Installers
             builder.Register<RunState>(Lifetime.Singleton);
             builder.Register<RunEnergyService>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WeaponBarrageUseCase>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<BaseRepairUseCase>(Lifetime.Singleton).AsSelf();
         }
 
         private void RegisterViews(IContainerBuilder builder)
@@ -169,7 +170,7 @@ namespace Installers
             builder.RegisterInstance(_questCatalog);
             builder.RegisterInstance(_runCatalog);
             builder.RegisterInstance(_uiElements);
-            builder.RegisterInstance(_weaponBarrageConfig);
+            builder.RegisterInstance(_spellCatalog);
         }
     }
 

@@ -43,10 +43,10 @@ namespace Project.Scripts.Gameplay.Systems
         public bool CanInteract => _isTargeting
             || (_runState.CanUseAbilities && !_isCasting && _cooldownRemaining <= 0f);
 
-        public WeaponBarrageUseCase(RunState runState, WeaponBarrageConfig config)
+        public WeaponBarrageUseCase(RunState runState, SpellCatalog spellCatalog)
         {
             _runState = runState;
-            _config = config;
+            _config = spellCatalog.Get<WeaponBarrageConfig>();
         }
 
         public void Start()

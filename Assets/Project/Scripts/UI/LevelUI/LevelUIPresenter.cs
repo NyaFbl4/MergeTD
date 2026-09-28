@@ -33,6 +33,7 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IGameManagerService _gameManagerService;
         private readonly IAudioManager _audioManager;
         private readonly WeaponBarrageUseCase _weaponBarrageUseCase;
+        private readonly BaseRepairUseCase _baseRepairUseCase;
 
         private bool _isWaitingAdReward;
 
@@ -48,7 +49,8 @@ namespace Project.Scripts.UI.LevelUI
             IPublisher<ShowPopupDto> showPopupPublisher,
             IGameManagerService gameManagerService,
             IAudioManager audioManager,
-            WeaponBarrageUseCase weaponBarrageUseCase)
+            WeaponBarrageUseCase weaponBarrageUseCase,
+            BaseRepairUseCase baseRepairUseCase)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
@@ -62,6 +64,7 @@ namespace Project.Scripts.UI.LevelUI
             _gameManagerService = gameManagerService;
             _audioManager = audioManager;
             _weaponBarrageUseCase = weaponBarrageUseCase;
+            _baseRepairUseCase = baseRepairUseCase;
         }
 
         public override void Initialize()
@@ -86,6 +89,8 @@ namespace Project.Scripts.UI.LevelUI
             _runState.PhaseChanged += OnRunPhaseChanged;
             _layoutView.WeaponBarrageButtonClicked += OnWeaponBarrageButtonClicked;
             _weaponBarrageUseCase.StateChanged += OnWeaponBarrageStateChanged;
+            _layoutView.BaseRepairButtonClicked += OnBaseRepairButtonClicked;
+            _baseRepairUseCase.StateChanged += OnBaseRepairStateChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetGeneratorPrice(_buyTowerUseCase.GeneratorCost);
@@ -96,6 +101,7 @@ namespace Project.Scripts.UI.LevelUI
             RefreshRunPhaseControls();
             UpdateTowerIcon();
             RefreshWeaponBarrage();
+            RefreshBaseRepair();
         }
 
         private void OnTowerCostChanged(int price)
@@ -158,6 +164,28 @@ namespace Project.Scripts.UI.LevelUI
                 Mathf.CeilToInt(_weaponBarrageUseCase.CooldownRemaining),
                 _weaponBarrageUseCase.IsTargeting,
                 _weaponBarrageUseCase.CanInteract);
+        }
+
+        private void OnBaseRepairButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _baseRepairUseCase.TryUse();
+            RefreshBaseRepair();
+        }
+
+        private void OnBaseRepairStateChanged()
+        {
+            RefreshBaseRepair();
+        }
+
+        private void RefreshBaseRepair()
+        {
+            _layoutView.SetBaseRepairState(
+                _baseRepairUseCase.DisplayName,
+                _baseRepairUseCase.HealAmount,
+                Mathf.CeilToInt(_baseRepairUseCase.CooldownRemaining),
+                _baseRepairUseCase.IsBaseFull,
+                _baseRepairUseCase.CanUse);
         }
 
         private void OnShopButtonClicked()
@@ -230,6 +258,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnCurrentHealthChanged(int health)
         {
             _layoutView.SetCurrentBaseHealth(health);
+            RefreshBaseRepair();
         }
 
         private void OnCurrentWaveChanged(int wave)
@@ -269,6 +298,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetTowerActionsEnabled(_runState.CanEditDefense);
             RefreshGeneratorPurchase();
             RefreshWeaponBarrage();
+            RefreshBaseRepair();
         }
 
         private void TryGrantAdTowerUpgrade()
@@ -343,6 +373,8 @@ namespace Project.Scripts.UI.LevelUI
             _runState.PhaseChanged -= OnRunPhaseChanged;
             _layoutView.WeaponBarrageButtonClicked -= OnWeaponBarrageButtonClicked;
             _weaponBarrageUseCase.StateChanged -= OnWeaponBarrageStateChanged;
+            _layoutView.BaseRepairButtonClicked -= OnBaseRepairButtonClicked;
+            _baseRepairUseCase.StateChanged -= OnBaseRepairStateChanged;
             
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();

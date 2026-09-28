@@ -1323,7 +1323,7 @@ MonoBehaviour:
   _soundLibrary: {fileID: 11400000, guid: 9fc0967e7d4a40e4a46f8fb25e6743f5, type: 2}
   _runCatalog: {fileID: 11400000, guid: 571075c31d2d4cfaae2d21b9b3de9c45, type: 2}
   _uiElements: {fileID: 11400000, guid: 87ef45966fc1bee439b8e30bfcbca13b, type: 2}
-  _weaponBarrageConfig: {fileID: 11400000, guid: f84dd8ae857f43968d25d33cf9f54e04, type: 2}
+  _spellCatalog: {fileID: 11400000, guid: 096f34ce93284244893161e177831eba, type: 2}
 --- !u!1 &392971864
 GameObject:
   m_ObjectHideFlags: 0

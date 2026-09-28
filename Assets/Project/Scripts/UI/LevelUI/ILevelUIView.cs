@@ -16,6 +16,7 @@ namespace Project.Scripts.UI.LevelUI
         event Action SettingsButtonClicked;
         event Action NextWaveButtonClicked;
         event Action WeaponBarrageButtonClicked;
+        event Action BaseRepairButtonClicked;
         
         void SetPriceTower(int price);
         void SetGeneratorPrice(int price);
@@ -31,5 +32,6 @@ namespace Project.Scripts.UI.LevelUI
         void SetNextWaveButtonEnabled(bool isEnabled);
         void SetTowerActionsEnabled(bool isEnabled);
         void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled);
+        void SetBaseRepairState(string displayName, int healAmount, int cooldownSeconds, bool isBaseFull, bool isEnabled);
     }
 }

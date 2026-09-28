@@ -23,6 +23,10 @@ namespace Project.Scripts.UI.LevelUI
         private Button _weaponBarrageButton;
         private Label _weaponBarrageNameLabel;
         private Label _weaponBarrageStatusLabel;
+        private Button _baseRepairButton;
+        private Label _baseRepairNameLabel;
+        private Label _baseRepairStatusLabel;
+        private VisualElement _baseRepairIcon;
         private Label _payTowerLabel;
         private Label _moneyLabel;
         private Label _currentBaseHealthLabel;
@@ -41,6 +45,7 @@ namespace Project.Scripts.UI.LevelUI
         public event Action SettingsButtonClicked;
         public event Action NextWaveButtonClicked;
         public event Action WeaponBarrageButtonClicked;
+        public event Action BaseRepairButtonClicked;
 
         public override void Awake()
         {
@@ -62,9 +67,16 @@ namespace Project.Scripts.UI.LevelUI
             _questsButton =  _root.Q<Button>("QuestsButton");
             _settingsButton = _root.Q<Button>("SettingsButton");
             _nextWaveButton = _root.Q<Button>("GoNextWaveButton");
-            _weaponBarrageButton = _root.Q<Button>("SpellButton");
+            var weaponBarrageElement = _root.Q<VisualElement>("WeaponBarrageSpell");
+            _weaponBarrageButton = weaponBarrageElement.Q<Button>("SpellButton");
             _weaponBarrageNameLabel = _weaponBarrageButton.Q<Label>("SpellDamageTypeLabel");
             _weaponBarrageStatusLabel = _weaponBarrageButton.Q<Label>("SpellManaLabel");
+            var baseRepairElement = _root.Q<VisualElement>("BaseRepairSpell");
+            _baseRepairButton = baseRepairElement.Q<Button>("SpellButton");
+            _baseRepairNameLabel = _baseRepairButton.Q<Label>("SpellDamageTypeLabel");
+            _baseRepairStatusLabel = _baseRepairButton.Q<Label>("SpellManaLabel");
+            _baseRepairIcon = _baseRepairButton.Q<VisualElement>("TowerIcon");
+            _baseRepairIcon.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>("Guns/Shield"));
             _adButtonTowerIcon = _adButton?.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("GoldLabel") ?? _root.Q<Label>("MoneyLabel");
@@ -85,6 +97,7 @@ namespace Project.Scripts.UI.LevelUI
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked += OnNextWaveButtonClicked;
             _weaponBarrageButton.clicked += OnWeaponBarrageButtonClicked;
+            _baseRepairButton.clicked += OnBaseRepairButtonClicked;
         }
         
         public void SetPriceTower(int price)
@@ -178,6 +191,22 @@ namespace Project.Scripts.UI.LevelUI
                     : "ГОТОВО";
         }
 
+        public void SetBaseRepairState(
+            string displayName,
+            int healAmount,
+            int cooldownSeconds,
+            bool isBaseFull,
+            bool isEnabled)
+        {
+            _baseRepairButton.SetEnabled(isEnabled);
+            _baseRepairNameLabel.text = displayName;
+            _baseRepairStatusLabel.text = isBaseFull
+                ? "БАЗА ЦЕЛА"
+                : cooldownSeconds > 0
+                    ? $"КД {cooldownSeconds}с"
+                    : $"+{healAmount} HP";
+        }
+
         private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnShopButtonClicked() => ShopButtonClicked?.Invoke();
@@ -186,6 +215,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnSettingsButtonClicked() => SettingsButtonClicked?.Invoke();
         private void OnNextWaveButtonClicked() => NextWaveButtonClicked?.Invoke();
         private void OnWeaponBarrageButtonClicked() => WeaponBarrageButtonClicked?.Invoke();
+        private void OnBaseRepairButtonClicked() => BaseRepairButtonClicked?.Invoke();
 
         private void OnDestroy()
         {
@@ -203,6 +233,7 @@ namespace Project.Scripts.UI.LevelUI
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked -= OnNextWaveButtonClicked;
             _weaponBarrageButton.clicked -= OnWeaponBarrageButtonClicked;
+            _baseRepairButton.clicked -= OnBaseRepairButtonClicked;
         }
     }
 }

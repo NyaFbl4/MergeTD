@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Project.Scripts.Configs
+{
+    [Serializable]
+    public sealed class SpellUpgradeDescription
+    {
+        [SerializeField, Min(2)] private int _level = 2;
+        [SerializeField] private string _title;
+        [SerializeField, TextArea(2, 4)] private string _description;
+
+        public int Level => _level;
+        public string Title => _title;
+        public string Description => _description;
+    }
+
+    public abstract class BaseSpellConfig : ScriptableObject
+    {
+        [Header("Identity")]
+        [SerializeField] private string _spellId;
+        [SerializeField] private string _displayName;
+        [SerializeField, TextArea(2, 5)] private string _description;
+        [SerializeField] private Sprite _icon;
+
+        [Header("Common gameplay")]
+        [SerializeField, Min(0.1f)] private float _cooldown = 10f;
+
+        [Header("Future upgrades")]
+        [SerializeField] private List<SpellUpgradeDescription> _upgrades = new();
+
+        public string SpellId => _spellId;
+        public string DisplayName => _displayName;
+        public string Description => _description;
+        public Sprite Icon => _icon;
+        public float Cooldown => _cooldown;
+        public IReadOnlyList<SpellUpgradeDescription> Upgrades => _upgrades;
+    }
+}

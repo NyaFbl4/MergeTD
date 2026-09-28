@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fdf7e193ec4d05ac37b99a70e3653b, type: 3}
+  m_Name: Spell Catalog
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.SpellCatalog
+  _spells:
+  - {fileID: 11400000, guid: f84dd8ae857f43968d25d33cf9f54e04, type: 2}
+  - {fileID: 11400000, guid: 1aa205b7831741f0b69f93a195c68cf5, type: 2}

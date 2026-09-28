@@ -64,7 +64,8 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="SpellsButtonPanel" style="flex-grow: 1; flex-direction: row; justify-content: center; margin-bottom: 0; align-items: center; align-self: auto;">
-                    <ui:Instance template="SpellButton" name="SpellButton"/>
+                    <ui:Instance template="SpellButton" name="WeaponBarrageSpell"/>
+                    <ui:Instance template="SpellButton" name="BaseRepairSpell"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
