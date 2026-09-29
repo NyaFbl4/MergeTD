@@ -16,7 +16,14 @@ namespace Project.Scripts.Gameplay.Enemies
         private const int BossDamageToBase = 5;
         private const float MinBaseReachDistance = 0.25f;
 
+        private float _baseMoveSpeed;
         private float _moveSpeed;
+        private float _slowMoveSpeedMultiplier = 1f;
+        private float _slowDurationRemaining;
+        private float _stunDurationRemaining;
+        private Vector2 _gravityTarget;
+        private float _gravityPullSpeed;
+        private float _gravityPullDurationRemaining;
         private int _damageToBase = 1;
 
         [SerializeField] private Animator _animator;
@@ -57,7 +64,12 @@ namespace Project.Scripts.Gameplay.Enemies
             _isFinished = false;
             _config = config;
 
-            _moveSpeed = _config.StartMoveSpeed * _config.GetMoveSpeedMultiplier(_enemyType);
+            _baseMoveSpeed = _config.StartMoveSpeed * _config.GetMoveSpeedMultiplier(_enemyType);
+            _slowMoveSpeedMultiplier = 1f;
+            _slowDurationRemaining = 0f;
+            _stunDurationRemaining = 0f;
+            _gravityPullDurationRemaining = 0f;
+            RefreshMoveSpeed();
             _damageToBase = _enemyType == EEnemyType.Boss ? BossDamageToBase : _config.StartDamage;
 
             var enemyHP = gameObject.GetComponent<IEnemyHealth>();
@@ -91,6 +103,12 @@ namespace Project.Scripts.Gameplay.Enemies
             if (!_isInitialized || _lanePath == null || _isDead)
                 return;
 
+            UpdateSlow(deltaTime);
+            UpdateStun(deltaTime);
+
+            if (UpdateGravityPull(deltaTime))
+                return;
+
             if (_targetWaypointIndex >= _lanePath.WaypointCount)
             {
                 ReachBase();
@@ -109,6 +127,108 @@ namespace Project.Scripts.Gameplay.Enemies
 
             if (Vector3.SqrMagnitude(transform.position - targetPosition) <= 0.0001f)
                 _targetWaypointIndex++;
+        }
+
+        public bool TryApplySlow(float moveSpeedMultiplier, float duration)
+        {
+            if (!_isInitialized || _isDead || duration <= 0f)
+                return false;
+
+            _slowMoveSpeedMultiplier = Mathf.Min(
+                _slowMoveSpeedMultiplier,
+                Mathf.Clamp(moveSpeedMultiplier, 0.01f, 1f));
+            _slowDurationRemaining = Mathf.Max(_slowDurationRemaining, duration);
+            RefreshMoveSpeed();
+            return true;
+        }
+
+        public bool TryApplyStun(float duration)
+        {
+            if (!_isInitialized || _isDead || duration <= 0f)
+                return false;
+
+            _stunDurationRemaining = Mathf.Max(_stunDurationRemaining, duration);
+            RefreshMoveSpeed();
+            return true;
+        }
+
+        public bool TryApplyGravityPull(Vector2 target, float pullSpeed, float duration)
+        {
+            if (!_isInitialized || _isDead || pullSpeed <= 0f || duration <= 0f)
+                return false;
+
+            var wasInactive = _gravityPullDurationRemaining <= 0f;
+            _gravityTarget = target;
+            _gravityPullSpeed = pullSpeed;
+            _gravityPullDurationRemaining = Mathf.Max(_gravityPullDurationRemaining, duration);
+
+            if (wasInactive)
+                RefreshMoveSpeed();
+
+            return true;
+        }
+
+        public void ClearGravityPull()
+        {
+            if (_gravityPullDurationRemaining <= 0f)
+                return;
+
+            _gravityPullDurationRemaining = 0f;
+            RefreshMoveSpeed();
+        }
+
+        private void UpdateSlow(float deltaTime)
+        {
+            if (_slowDurationRemaining <= 0f)
+                return;
+
+            _slowDurationRemaining = Mathf.Max(0f, _slowDurationRemaining - deltaTime);
+            if (_slowDurationRemaining > 0f)
+                return;
+
+            _slowMoveSpeedMultiplier = 1f;
+            RefreshMoveSpeed();
+        }
+
+        private void UpdateStun(float deltaTime)
+        {
+            if (_stunDurationRemaining <= 0f)
+                return;
+
+            _stunDurationRemaining = Mathf.Max(0f, _stunDurationRemaining - deltaTime);
+            if (_stunDurationRemaining <= 0f)
+                RefreshMoveSpeed();
+        }
+
+        private bool UpdateGravityPull(float deltaTime)
+        {
+            if (_gravityPullDurationRemaining <= 0f)
+                return false;
+
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                _gravityTarget,
+                _gravityPullSpeed * deltaTime);
+            UpdateRenderOrder();
+
+            _gravityPullDurationRemaining = Mathf.Max(
+                0f,
+                _gravityPullDurationRemaining - deltaTime);
+            if (_gravityPullDurationRemaining <= 0f)
+                RefreshMoveSpeed();
+
+            return true;
+        }
+
+        private void RefreshMoveSpeed()
+        {
+            var controlMultiplier = _stunDurationRemaining > 0f
+                                    || _gravityPullDurationRemaining > 0f
+                ? 0f
+                : _slowMoveSpeedMultiplier;
+            _moveSpeed = _baseMoveSpeed * controlMultiplier;
+            if (_animator != null)
+                _animator.speed = controlMultiplier;
         }
 
         private void CacheRenderOrderComponents()
@@ -184,7 +304,10 @@ namespace Project.Scripts.Gameplay.Enemies
             _moveSpeed = 0f;
 
             if (_animator != null)
+            {
+                _animator.speed = 1f;
                 _animator.SetTrigger("IsDie");
+            }
             
             DieEnemy?.Invoke(this);
             Finish();

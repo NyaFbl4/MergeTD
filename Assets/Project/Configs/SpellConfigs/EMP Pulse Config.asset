@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c2b795d9d8e4ad98771c245ba98a41e, type: 3}
+  m_Name: EMP Pulse Config
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.EmpPulseConfig
+  _spellId: emp_pulse
+  _displayName: ЭМИ-импульс
+  _description: Мгновенно оглушает всех врагов в выбранной области. Не наносит урон.
+  _icon: {fileID: 0}
+  _cooldown: 20
+  _upgrades:
+  - _level: 2
+    _title: Усиленный разряд
+    _description: Длительность оглушения увеличивается на 1 секунду.
+  - _level: 3
+    _title: Широкий импульс
+    _description: Радиус области увеличивается на 0,75.
+  - _level: 4
+    _title: Быстрая перезарядка
+    _description: Перезарядка уменьшается на 4 секунды.
+  _radius: 2.5
+  _stunDuration: 3
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295

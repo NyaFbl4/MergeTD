@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f97c725d91e4a6b9b9c912087f7634c, type: 3}
+  m_Name: Barrage Protocol Config
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.BarrageProtocolConfig
+  _spellId: barrage_protocol
+  _displayName: Протокол «Шквал»
+  _description: Временно увеличивает скорость атаки всех боевых башен.
+  _icon: {fileID: 0}
+  _cooldown: 25
+  _upgrades:
+  - _level: 2
+    _title: Усиленный разгон
+    _description: Бонус скорости атаки увеличивается до 70%.
+  - _level: 3
+    _title: Продлённый протокол
+    _description: Длительность увеличивается на 3 секунды.
+  - _level: 4
+    _title: Нулевая задержка
+    _description: Перезарядка сокращается на 5 секунд.
+  _attackSpeedMultiplier: 1.5
+  _duration: 8

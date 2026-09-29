@@ -26,6 +26,7 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private float _range = 3f;
         private int _damage;
         private float _fireRate;
+        private float _spellAttackSpeedMultiplier = 1f;
 
         [Header("Tower parametrs")]
         [SerializeField] private int _towerLevel = 1;
@@ -77,6 +78,12 @@ namespace Project.Scripts.Gameplay.Towers
             _canFire = canFire;
             if (!_canFire)
                 _currentTarget = null;
+        }
+
+        public void SetSpellAttackSpeedMultiplier(float multiplier)
+        {
+            _spellAttackSpeedMultiplier = Mathf.Max(0.01f, multiplier);
+            RecalculateStats();
         }
 
         private void OnEnable() => IGameListener.Register(this);
@@ -165,7 +172,9 @@ namespace Project.Scripts.Gameplay.Towers
 
             _currentCriticalDamageMultiplier = _criticalDamageMultiplier + critDamageBonus;
             _damage = Mathf.RoundToInt(_towerConfig.StartTowerDamage * (1f + damageBonus));
-            _fireRate = _towerConfig.StartAttackSpeed * (1f + attackSpeedBonus);
+            _fireRate = _towerConfig.StartAttackSpeed
+                * (1f + attackSpeedBonus)
+                * _spellAttackSpeedMultiplier;
             _criticalChance = _playerStats?.TowerCritChanceBonus ?? 0f;
 
             var attackSpeedRatio = _towerConfig.StartAttackSpeed <= 0f

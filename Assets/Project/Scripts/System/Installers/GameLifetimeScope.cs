@@ -137,6 +137,11 @@ namespace Installers
             builder.Register<RunEnergyService>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WeaponBarrageUseCase>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BaseRepairUseCase>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<BarrageProtocolUseCase>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<CryoDischargeUseCase>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<EmpPulseUseCase>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<OrbitalRailgunUseCase>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<GravityTrapUseCase>(Lifetime.Singleton).AsSelf();
         }
 
         private void RegisterViews(IContainerBuilder builder)

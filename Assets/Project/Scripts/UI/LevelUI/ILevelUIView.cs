@@ -17,6 +17,11 @@ namespace Project.Scripts.UI.LevelUI
         event Action NextWaveButtonClicked;
         event Action WeaponBarrageButtonClicked;
         event Action BaseRepairButtonClicked;
+        event Action BarrageProtocolButtonClicked;
+        event Action CryoDischargeButtonClicked;
+        event Action EmpPulseButtonClicked;
+        event Action OrbitalRailgunButtonClicked;
+        event Action GravityTrapButtonClicked;
         
         void SetPriceTower(int price);
         void SetGeneratorPrice(int price);
@@ -33,5 +38,23 @@ namespace Project.Scripts.UI.LevelUI
         void SetTowerActionsEnabled(bool isEnabled);
         void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled);
         void SetBaseRepairState(string displayName, int healAmount, int cooldownSeconds, bool isBaseFull, bool isEnabled);
+        void SetBarrageProtocolState(
+            int attackSpeedBonusPercent,
+            int activeSeconds,
+            int cooldownSeconds,
+            bool hasCombatTower,
+            bool isEnabled);
+        void SetCryoDischargeState(int cooldownSeconds, bool isTargeting, bool isEnabled);
+        void SetEmpPulseState(int cooldownSeconds, bool isTargeting, bool isEnabled);
+        void SetOrbitalRailgunState(
+            int cooldownSeconds,
+            bool isTargeting,
+            bool isCasting,
+            bool isEnabled);
+        void SetGravityTrapState(
+            int activeSeconds,
+            int cooldownSeconds,
+            bool isTargeting,
+            bool isEnabled);
     }
 }

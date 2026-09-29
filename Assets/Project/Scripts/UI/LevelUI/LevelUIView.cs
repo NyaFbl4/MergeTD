@@ -27,6 +27,21 @@ namespace Project.Scripts.UI.LevelUI
         private Label _baseRepairNameLabel;
         private Label _baseRepairStatusLabel;
         private VisualElement _baseRepairIcon;
+        private Button _barrageProtocolButton;
+        private Label _barrageProtocolNameLabel;
+        private Label _barrageProtocolStatusLabel;
+        private Button _cryoDischargeButton;
+        private Label _cryoDischargeNameLabel;
+        private Label _cryoDischargeStatusLabel;
+        private Button _empPulseButton;
+        private Label _empPulseNameLabel;
+        private Label _empPulseStatusLabel;
+        private Button _orbitalRailgunButton;
+        private Label _orbitalRailgunNameLabel;
+        private Label _orbitalRailgunStatusLabel;
+        private Button _gravityTrapButton;
+        private Label _gravityTrapNameLabel;
+        private Label _gravityTrapStatusLabel;
         private Label _payTowerLabel;
         private Label _moneyLabel;
         private Label _currentBaseHealthLabel;
@@ -46,6 +61,11 @@ namespace Project.Scripts.UI.LevelUI
         public event Action NextWaveButtonClicked;
         public event Action WeaponBarrageButtonClicked;
         public event Action BaseRepairButtonClicked;
+        public event Action BarrageProtocolButtonClicked;
+        public event Action CryoDischargeButtonClicked;
+        public event Action EmpPulseButtonClicked;
+        public event Action OrbitalRailgunButtonClicked;
+        public event Action GravityTrapButtonClicked;
 
         public override void Awake()
         {
@@ -77,6 +97,26 @@ namespace Project.Scripts.UI.LevelUI
             _baseRepairStatusLabel = _baseRepairButton.Q<Label>("SpellManaLabel");
             _baseRepairIcon = _baseRepairButton.Q<VisualElement>("TowerIcon");
             _baseRepairIcon.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>("Guns/Shield"));
+            var barrageProtocolElement = _root.Q<VisualElement>("BarrageProtocolSpell");
+            _barrageProtocolButton = barrageProtocolElement.Q<Button>("SpellButton");
+            _barrageProtocolNameLabel = _barrageProtocolButton.Q<Label>("SpellDamageTypeLabel");
+            _barrageProtocolStatusLabel = _barrageProtocolButton.Q<Label>("SpellManaLabel");
+            var cryoDischargeElement = _root.Q<VisualElement>("CryoDischargeSpell");
+            _cryoDischargeButton = cryoDischargeElement.Q<Button>("SpellButton");
+            _cryoDischargeNameLabel = _cryoDischargeButton.Q<Label>("SpellDamageTypeLabel");
+            _cryoDischargeStatusLabel = _cryoDischargeButton.Q<Label>("SpellManaLabel");
+            var empPulseElement = _root.Q<VisualElement>("EmpPulseSpell");
+            _empPulseButton = empPulseElement.Q<Button>("SpellButton");
+            _empPulseNameLabel = _empPulseButton.Q<Label>("SpellDamageTypeLabel");
+            _empPulseStatusLabel = _empPulseButton.Q<Label>("SpellManaLabel");
+            var orbitalRailgunElement = _root.Q<VisualElement>("OrbitalRailgunSpell");
+            _orbitalRailgunButton = orbitalRailgunElement.Q<Button>("SpellButton");
+            _orbitalRailgunNameLabel = _orbitalRailgunButton.Q<Label>("SpellDamageTypeLabel");
+            _orbitalRailgunStatusLabel = _orbitalRailgunButton.Q<Label>("SpellManaLabel");
+            var gravityTrapElement = _root.Q<VisualElement>("GravityTrapSpell");
+            _gravityTrapButton = gravityTrapElement.Q<Button>("SpellButton");
+            _gravityTrapNameLabel = _gravityTrapButton.Q<Label>("SpellDamageTypeLabel");
+            _gravityTrapStatusLabel = _gravityTrapButton.Q<Label>("SpellManaLabel");
             _adButtonTowerIcon = _adButton?.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("GoldLabel") ?? _root.Q<Label>("MoneyLabel");
@@ -98,6 +138,11 @@ namespace Project.Scripts.UI.LevelUI
                 _nextWaveButton.clicked += OnNextWaveButtonClicked;
             _weaponBarrageButton.clicked += OnWeaponBarrageButtonClicked;
             _baseRepairButton.clicked += OnBaseRepairButtonClicked;
+            _barrageProtocolButton.clicked += OnBarrageProtocolButtonClicked;
+            _cryoDischargeButton.clicked += OnCryoDischargeButtonClicked;
+            _empPulseButton.clicked += OnEmpPulseButtonClicked;
+            _orbitalRailgunButton.clicked += OnOrbitalRailgunButtonClicked;
+            _gravityTrapButton.clicked += OnGravityTrapButtonClicked;
         }
         
         public void SetPriceTower(int price)
@@ -207,6 +252,80 @@ namespace Project.Scripts.UI.LevelUI
                     : $"+{healAmount} HP";
         }
 
+        public void SetBarrageProtocolState(
+            int attackSpeedBonusPercent,
+            int activeSeconds,
+            int cooldownSeconds,
+            bool hasCombatTower,
+            bool isEnabled)
+        {
+            _barrageProtocolButton.SetEnabled(isEnabled);
+            _barrageProtocolNameLabel.text = "ШКВАЛ";
+            _barrageProtocolStatusLabel.text = activeSeconds > 0
+                ? $"АКТИВЕН {activeSeconds}с"
+                : !hasCombatTower
+                    ? "НЕТ БАШЕН"
+                    : cooldownSeconds > 0
+                        ? $"КД {cooldownSeconds}с"
+                        : $"+{attackSpeedBonusPercent}%";
+        }
+
+        public void SetCryoDischargeState(int cooldownSeconds, bool isTargeting, bool isEnabled)
+        {
+            _cryoDischargeButton.SetEnabled(isEnabled);
+            _cryoDischargeNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "КРИО";
+            _cryoDischargeStatusLabel.text = isTargeting
+                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
+                : cooldownSeconds > 0
+                    ? $"КД {cooldownSeconds}с"
+                    : "ГОТОВО";
+        }
+
+        public void SetEmpPulseState(int cooldownSeconds, bool isTargeting, bool isEnabled)
+        {
+            _empPulseButton.SetEnabled(isEnabled);
+            _empPulseNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ЭМИ";
+            _empPulseStatusLabel.text = isTargeting
+                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
+                : cooldownSeconds > 0
+                    ? $"КД {cooldownSeconds}с"
+                    : "ГОТОВО";
+        }
+
+        public void SetOrbitalRailgunState(
+            int cooldownSeconds,
+            bool isTargeting,
+            bool isCasting,
+            bool isEnabled)
+        {
+            _orbitalRailgunButton.SetEnabled(isEnabled);
+            _orbitalRailgunNameLabel.text = isTargeting ? "ПРОВЕДИ ЛИНИЮ" : "РЕЛЬС";
+            _orbitalRailgunStatusLabel.text = isTargeting
+                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
+                : isCasting
+                    ? "НАВЕДЕНИЕ"
+                    : cooldownSeconds > 0
+                        ? $"КД {cooldownSeconds}с"
+                        : "ГОТОВО";
+        }
+
+        public void SetGravityTrapState(
+            int activeSeconds,
+            int cooldownSeconds,
+            bool isTargeting,
+            bool isEnabled)
+        {
+            _gravityTrapButton.SetEnabled(isEnabled);
+            _gravityTrapNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ГРАВИ";
+            _gravityTrapStatusLabel.text = isTargeting
+                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
+                : activeSeconds > 0
+                    ? $"АКТИВНА {activeSeconds}с"
+                    : cooldownSeconds > 0
+                        ? $"КД {cooldownSeconds}с"
+                        : "ГОТОВО";
+        }
+
         private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnShopButtonClicked() => ShopButtonClicked?.Invoke();
@@ -216,6 +335,11 @@ namespace Project.Scripts.UI.LevelUI
         private void OnNextWaveButtonClicked() => NextWaveButtonClicked?.Invoke();
         private void OnWeaponBarrageButtonClicked() => WeaponBarrageButtonClicked?.Invoke();
         private void OnBaseRepairButtonClicked() => BaseRepairButtonClicked?.Invoke();
+        private void OnBarrageProtocolButtonClicked() => BarrageProtocolButtonClicked?.Invoke();
+        private void OnCryoDischargeButtonClicked() => CryoDischargeButtonClicked?.Invoke();
+        private void OnEmpPulseButtonClicked() => EmpPulseButtonClicked?.Invoke();
+        private void OnOrbitalRailgunButtonClicked() => OrbitalRailgunButtonClicked?.Invoke();
+        private void OnGravityTrapButtonClicked() => GravityTrapButtonClicked?.Invoke();
 
         private void OnDestroy()
         {
@@ -234,6 +358,11 @@ namespace Project.Scripts.UI.LevelUI
                 _nextWaveButton.clicked -= OnNextWaveButtonClicked;
             _weaponBarrageButton.clicked -= OnWeaponBarrageButtonClicked;
             _baseRepairButton.clicked -= OnBaseRepairButtonClicked;
+            _barrageProtocolButton.clicked -= OnBarrageProtocolButtonClicked;
+            _cryoDischargeButton.clicked -= OnCryoDischargeButtonClicked;
+            _empPulseButton.clicked -= OnEmpPulseButtonClicked;
+            _orbitalRailgunButton.clicked -= OnOrbitalRailgunButtonClicked;
+            _gravityTrapButton.clicked -= OnGravityTrapButtonClicked;
         }
     }
 }

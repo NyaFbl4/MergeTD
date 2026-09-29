@@ -34,6 +34,11 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IAudioManager _audioManager;
         private readonly WeaponBarrageUseCase _weaponBarrageUseCase;
         private readonly BaseRepairUseCase _baseRepairUseCase;
+        private readonly BarrageProtocolUseCase _barrageProtocolUseCase;
+        private readonly CryoDischargeUseCase _cryoDischargeUseCase;
+        private readonly EmpPulseUseCase _empPulseUseCase;
+        private readonly OrbitalRailgunUseCase _orbitalRailgunUseCase;
+        private readonly GravityTrapUseCase _gravityTrapUseCase;
 
         private bool _isWaitingAdReward;
 
@@ -50,7 +55,12 @@ namespace Project.Scripts.UI.LevelUI
             IGameManagerService gameManagerService,
             IAudioManager audioManager,
             WeaponBarrageUseCase weaponBarrageUseCase,
-            BaseRepairUseCase baseRepairUseCase)
+            BaseRepairUseCase baseRepairUseCase,
+            BarrageProtocolUseCase barrageProtocolUseCase,
+            CryoDischargeUseCase cryoDischargeUseCase,
+            EmpPulseUseCase empPulseUseCase,
+            OrbitalRailgunUseCase orbitalRailgunUseCase,
+            GravityTrapUseCase gravityTrapUseCase)
         {
             _buyTowerUseCase = buyTowerUseCase;
             _playerStatsUseCase = playerStatsUseCase;
@@ -65,6 +75,11 @@ namespace Project.Scripts.UI.LevelUI
             _audioManager = audioManager;
             _weaponBarrageUseCase = weaponBarrageUseCase;
             _baseRepairUseCase = baseRepairUseCase;
+            _barrageProtocolUseCase = barrageProtocolUseCase;
+            _cryoDischargeUseCase = cryoDischargeUseCase;
+            _empPulseUseCase = empPulseUseCase;
+            _orbitalRailgunUseCase = orbitalRailgunUseCase;
+            _gravityTrapUseCase = gravityTrapUseCase;
         }
 
         public override void Initialize()
@@ -91,6 +106,16 @@ namespace Project.Scripts.UI.LevelUI
             _weaponBarrageUseCase.StateChanged += OnWeaponBarrageStateChanged;
             _layoutView.BaseRepairButtonClicked += OnBaseRepairButtonClicked;
             _baseRepairUseCase.StateChanged += OnBaseRepairStateChanged;
+            _layoutView.BarrageProtocolButtonClicked += OnBarrageProtocolButtonClicked;
+            _barrageProtocolUseCase.StateChanged += OnBarrageProtocolStateChanged;
+            _layoutView.CryoDischargeButtonClicked += OnCryoDischargeButtonClicked;
+            _cryoDischargeUseCase.StateChanged += OnCryoDischargeStateChanged;
+            _layoutView.EmpPulseButtonClicked += OnEmpPulseButtonClicked;
+            _empPulseUseCase.StateChanged += OnEmpPulseStateChanged;
+            _layoutView.OrbitalRailgunButtonClicked += OnOrbitalRailgunButtonClicked;
+            _orbitalRailgunUseCase.StateChanged += OnOrbitalRailgunStateChanged;
+            _layoutView.GravityTrapButtonClicked += OnGravityTrapButtonClicked;
+            _gravityTrapUseCase.StateChanged += OnGravityTrapStateChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetGeneratorPrice(_buyTowerUseCase.GeneratorCost);
@@ -102,6 +127,11 @@ namespace Project.Scripts.UI.LevelUI
             UpdateTowerIcon();
             RefreshWeaponBarrage();
             RefreshBaseRepair();
+            RefreshBarrageProtocol();
+            RefreshCryoDischarge();
+            RefreshEmpPulse();
+            RefreshOrbitalRailgun();
+            RefreshGravityTrap();
         }
 
         private void OnTowerCostChanged(int price)
@@ -149,6 +179,19 @@ namespace Project.Scripts.UI.LevelUI
         private void OnWeaponBarrageButtonClicked()
         {
             _audioManager.PlaySound(ESoundId.UiButtonClick);
+
+            if (_cryoDischargeUseCase.IsTargeting)
+                _cryoDischargeUseCase.ToggleTargeting();
+
+            if (_empPulseUseCase.IsTargeting)
+                _empPulseUseCase.ToggleTargeting();
+
+            if (_orbitalRailgunUseCase.IsTargeting)
+                _orbitalRailgunUseCase.ToggleTargeting();
+
+            if (_gravityTrapUseCase.IsTargeting)
+                _gravityTrapUseCase.ToggleTargeting();
+
             _weaponBarrageUseCase.ToggleTargeting();
             RefreshWeaponBarrage();
         }
@@ -186,6 +229,162 @@ namespace Project.Scripts.UI.LevelUI
                 Mathf.CeilToInt(_baseRepairUseCase.CooldownRemaining),
                 _baseRepairUseCase.IsBaseFull,
                 _baseRepairUseCase.CanUse);
+        }
+
+        private void OnBarrageProtocolButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _barrageProtocolUseCase.TryUse();
+            RefreshBarrageProtocol();
+        }
+
+        private void OnBarrageProtocolStateChanged()
+        {
+            RefreshBarrageProtocol();
+        }
+
+        private void RefreshBarrageProtocol()
+        {
+            _layoutView.SetBarrageProtocolState(
+                Mathf.RoundToInt((_barrageProtocolUseCase.AttackSpeedMultiplier - 1f) * 100f),
+                Mathf.CeilToInt(_barrageProtocolUseCase.ActiveDurationRemaining),
+                Mathf.CeilToInt(_barrageProtocolUseCase.CooldownRemaining),
+                _barrageProtocolUseCase.HasCombatTower,
+                _barrageProtocolUseCase.CanUse);
+        }
+
+        private void OnCryoDischargeButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+
+            if (_weaponBarrageUseCase.IsTargeting)
+                _weaponBarrageUseCase.ToggleTargeting();
+
+            if (_empPulseUseCase.IsTargeting)
+                _empPulseUseCase.ToggleTargeting();
+
+            if (_orbitalRailgunUseCase.IsTargeting)
+                _orbitalRailgunUseCase.ToggleTargeting();
+
+            if (_gravityTrapUseCase.IsTargeting)
+                _gravityTrapUseCase.ToggleTargeting();
+
+            _cryoDischargeUseCase.ToggleTargeting();
+            RefreshCryoDischarge();
+        }
+
+        private void OnCryoDischargeStateChanged()
+        {
+            RefreshCryoDischarge();
+        }
+
+        private void RefreshCryoDischarge()
+        {
+            _layoutView.SetCryoDischargeState(
+                Mathf.CeilToInt(_cryoDischargeUseCase.CooldownRemaining),
+                _cryoDischargeUseCase.IsTargeting,
+                _cryoDischargeUseCase.CanInteract);
+        }
+
+        private void OnEmpPulseButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+
+            if (_weaponBarrageUseCase.IsTargeting)
+                _weaponBarrageUseCase.ToggleTargeting();
+
+            if (_cryoDischargeUseCase.IsTargeting)
+                _cryoDischargeUseCase.ToggleTargeting();
+
+            if (_orbitalRailgunUseCase.IsTargeting)
+                _orbitalRailgunUseCase.ToggleTargeting();
+
+            if (_gravityTrapUseCase.IsTargeting)
+                _gravityTrapUseCase.ToggleTargeting();
+
+            _empPulseUseCase.ToggleTargeting();
+            RefreshEmpPulse();
+        }
+
+        private void OnEmpPulseStateChanged()
+        {
+            RefreshEmpPulse();
+        }
+
+        private void RefreshEmpPulse()
+        {
+            _layoutView.SetEmpPulseState(
+                Mathf.CeilToInt(_empPulseUseCase.CooldownRemaining),
+                _empPulseUseCase.IsTargeting,
+                _empPulseUseCase.CanInteract);
+        }
+
+        private void OnOrbitalRailgunButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+
+            if (_weaponBarrageUseCase.IsTargeting)
+                _weaponBarrageUseCase.ToggleTargeting();
+
+            if (_cryoDischargeUseCase.IsTargeting)
+                _cryoDischargeUseCase.ToggleTargeting();
+
+            if (_empPulseUseCase.IsTargeting)
+                _empPulseUseCase.ToggleTargeting();
+
+            if (_gravityTrapUseCase.IsTargeting)
+                _gravityTrapUseCase.ToggleTargeting();
+
+            _orbitalRailgunUseCase.ToggleTargeting();
+            RefreshOrbitalRailgun();
+        }
+
+        private void OnOrbitalRailgunStateChanged()
+        {
+            RefreshOrbitalRailgun();
+        }
+
+        private void RefreshOrbitalRailgun()
+        {
+            _layoutView.SetOrbitalRailgunState(
+                Mathf.CeilToInt(_orbitalRailgunUseCase.CooldownRemaining),
+                _orbitalRailgunUseCase.IsTargeting,
+                _orbitalRailgunUseCase.IsCasting,
+                _orbitalRailgunUseCase.CanInteract);
+        }
+
+        private void OnGravityTrapButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+
+            if (_weaponBarrageUseCase.IsTargeting)
+                _weaponBarrageUseCase.ToggleTargeting();
+
+            if (_cryoDischargeUseCase.IsTargeting)
+                _cryoDischargeUseCase.ToggleTargeting();
+
+            if (_empPulseUseCase.IsTargeting)
+                _empPulseUseCase.ToggleTargeting();
+
+            if (_orbitalRailgunUseCase.IsTargeting)
+                _orbitalRailgunUseCase.ToggleTargeting();
+
+            _gravityTrapUseCase.ToggleTargeting();
+            RefreshGravityTrap();
+        }
+
+        private void OnGravityTrapStateChanged()
+        {
+            RefreshGravityTrap();
+        }
+
+        private void RefreshGravityTrap()
+        {
+            _layoutView.SetGravityTrapState(
+                Mathf.CeilToInt(_gravityTrapUseCase.ActiveDurationRemaining),
+                Mathf.CeilToInt(_gravityTrapUseCase.CooldownRemaining),
+                _gravityTrapUseCase.IsTargeting,
+                _gravityTrapUseCase.CanInteract);
         }
 
         private void OnShopButtonClicked()
@@ -299,6 +498,11 @@ namespace Project.Scripts.UI.LevelUI
             RefreshGeneratorPurchase();
             RefreshWeaponBarrage();
             RefreshBaseRepair();
+            RefreshBarrageProtocol();
+            RefreshCryoDischarge();
+            RefreshEmpPulse();
+            RefreshOrbitalRailgun();
+            RefreshGravityTrap();
         }
 
         private void TryGrantAdTowerUpgrade()
@@ -375,6 +579,16 @@ namespace Project.Scripts.UI.LevelUI
             _weaponBarrageUseCase.StateChanged -= OnWeaponBarrageStateChanged;
             _layoutView.BaseRepairButtonClicked -= OnBaseRepairButtonClicked;
             _baseRepairUseCase.StateChanged -= OnBaseRepairStateChanged;
+            _layoutView.BarrageProtocolButtonClicked -= OnBarrageProtocolButtonClicked;
+            _barrageProtocolUseCase.StateChanged -= OnBarrageProtocolStateChanged;
+            _layoutView.CryoDischargeButtonClicked -= OnCryoDischargeButtonClicked;
+            _cryoDischargeUseCase.StateChanged -= OnCryoDischargeStateChanged;
+            _layoutView.EmpPulseButtonClicked -= OnEmpPulseButtonClicked;
+            _empPulseUseCase.StateChanged -= OnEmpPulseStateChanged;
+            _layoutView.OrbitalRailgunButtonClicked -= OnOrbitalRailgunButtonClicked;
+            _orbitalRailgunUseCase.StateChanged -= OnOrbitalRailgunStateChanged;
+            _layoutView.GravityTrapButtonClicked -= OnGravityTrapButtonClicked;
+            _gravityTrapUseCase.StateChanged -= OnGravityTrapStateChanged;
             
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();

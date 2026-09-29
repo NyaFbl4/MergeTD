@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e2a45f2cbb1484da88d348c4869588e, type: 3}
+  m_Name: Gravity Trap Config
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.GravityTrapConfig
+  _spellId: gravity_trap
+  _displayName: Гравитационная ловушка
+  _description: Стягивает врагов в выбранную точку и удерживает их там. Не наносит урон.
+  _icon: {fileID: 0}
+  _cooldown: 28
+  _upgrades:
+  - _level: 2
+    _title: Усиленный коллапс
+    _description: Скорость стягивания увеличивается на 0,75.
+  - _level: 3
+    _title: Широкий горизонт
+    _description: Радиус области увеличивается на 0,75.
+  - _level: 4
+    _title: Стабильная сингулярность
+    _description: Длительность ловушки увеличивается на 2 секунды.
+  _radius: 3
+  _duration: 4
+  _pullSpeed: 2.5
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
