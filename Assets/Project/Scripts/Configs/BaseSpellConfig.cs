@@ -4,6 +4,17 @@ using UnityEngine;
 
 namespace Project.Scripts.Configs
 {
+    public static class SpellIds
+    {
+        public const string WeaponBarrage = "weapon_barrage";
+        public const string BaseRepair = "base_repair";
+        public const string BarrageProtocol = "barrage_protocol";
+        public const string CryoDischarge = "cryo_discharge";
+        public const string EmpPulse = "emp_pulse";
+        public const string OrbitalRailgun = "orbital_railgun";
+        public const string GravityTrap = "gravity_trap";
+    }
+
     [Serializable]
     public sealed class SpellUpgradeDescription
     {

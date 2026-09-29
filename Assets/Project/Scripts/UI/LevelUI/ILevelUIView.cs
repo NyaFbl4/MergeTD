@@ -15,6 +15,7 @@ namespace Project.Scripts.UI.LevelUI
         event Action QuestsButtonClicked;
         event Action SettingsButtonClicked;
         event Action NextWaveButtonClicked;
+        event Action SetTowersButtonClicked;
         event Action WeaponBarrageButtonClicked;
         event Action BaseRepairButtonClicked;
         event Action BarrageProtocolButtonClicked;
@@ -36,6 +37,7 @@ namespace Project.Scripts.UI.LevelUI
         void SetRunPhase(ERunPhase phase);
         void SetNextWaveButtonEnabled(bool isEnabled);
         void SetTowerActionsEnabled(bool isEnabled);
+        void SetSpellVisible(string spellId, bool isVisible);
         void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled);
         void SetBaseRepairState(string displayName, int healAmount, int cooldownSeconds, bool isBaseFull, bool isEnabled);
         void SetBarrageProtocolState(

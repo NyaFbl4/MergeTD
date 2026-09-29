@@ -1,5 +1,6 @@
 using YG;
 using MessagePipe;
+using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Run;
@@ -13,6 +14,7 @@ using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.SettingsUI;
 using Project.Scripts.UI.ShopUI;
+using Project.Scripts.UI.SpellsUI;
 using UnityEngine;
 
 namespace Project.Scripts.UI.LevelUI
@@ -32,6 +34,7 @@ namespace Project.Scripts.UI.LevelUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IGameManagerService _gameManagerService;
         private readonly IAudioManager _audioManager;
+        private readonly ISpellsUIUseCase _spellsUIUseCase;
         private readonly WeaponBarrageUseCase _weaponBarrageUseCase;
         private readonly BaseRepairUseCase _baseRepairUseCase;
         private readonly BarrageProtocolUseCase _barrageProtocolUseCase;
@@ -54,6 +57,7 @@ namespace Project.Scripts.UI.LevelUI
             IPublisher<ShowPopupDto> showPopupPublisher,
             IGameManagerService gameManagerService,
             IAudioManager audioManager,
+            ISpellsUIUseCase spellsUIUseCase,
             WeaponBarrageUseCase weaponBarrageUseCase,
             BaseRepairUseCase baseRepairUseCase,
             BarrageProtocolUseCase barrageProtocolUseCase,
@@ -73,6 +77,7 @@ namespace Project.Scripts.UI.LevelUI
             _showPopupPublisher = showPopupPublisher;
             _gameManagerService = gameManagerService;
             _audioManager = audioManager;
+            _spellsUIUseCase = spellsUIUseCase;
             _weaponBarrageUseCase = weaponBarrageUseCase;
             _baseRepairUseCase = baseRepairUseCase;
             _barrageProtocolUseCase = barrageProtocolUseCase;
@@ -97,6 +102,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.QuestsButtonClicked += OnQuestsButtonClicked;
             _layoutView.SettingsButtonClicked += OnSettingsButtonClicked;
             _layoutView.NextWaveButtonClicked += OnNextWaveButtonClicked;
+            _layoutView.SetTowersButtonClicked += OnSetTowersButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
@@ -116,6 +122,7 @@ namespace Project.Scripts.UI.LevelUI
             _orbitalRailgunUseCase.StateChanged += OnOrbitalRailgunStateChanged;
             _layoutView.GravityTrapButtonClicked += OnGravityTrapButtonClicked;
             _gravityTrapUseCase.StateChanged += OnGravityTrapStateChanged;
+            _spellsUIUseCase.SelectionChanged += OnSpellSelectionChanged;
 
             _layoutView.SetPriceTower(_buyTowerUseCase.TowerCost);
             _layoutView.SetGeneratorPrice(_buyTowerUseCase.GeneratorCost);
@@ -132,6 +139,7 @@ namespace Project.Scripts.UI.LevelUI
             RefreshEmpPulse();
             RefreshOrbitalRailgun();
             RefreshGravityTrap();
+            RefreshActiveSpells();
         }
 
         private void OnTowerCostChanged(int price)
@@ -178,6 +186,9 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnWeaponBarrageButtonClicked()
         {
+            if (!_spellsUIUseCase.IsSelected(SpellIds.WeaponBarrage))
+                return;
+
             _audioManager.PlaySound(ESoundId.UiButtonClick);
 
             if (_cryoDischargeUseCase.IsTargeting)
@@ -211,6 +222,9 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnBaseRepairButtonClicked()
         {
+            if (!_spellsUIUseCase.IsSelected(SpellIds.BaseRepair))
+                return;
+
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _baseRepairUseCase.TryUse();
             RefreshBaseRepair();
@@ -233,6 +247,9 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnBarrageProtocolButtonClicked()
         {
+            if (!_spellsUIUseCase.IsSelected(SpellIds.BarrageProtocol))
+                return;
+
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _barrageProtocolUseCase.TryUse();
             RefreshBarrageProtocol();
@@ -255,6 +272,9 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnCryoDischargeButtonClicked()
         {
+            if (!_spellsUIUseCase.IsSelected(SpellIds.CryoDischarge))
+                return;
+
             _audioManager.PlaySound(ESoundId.UiButtonClick);
 
             if (_weaponBarrageUseCase.IsTargeting)
@@ -288,6 +308,9 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnEmpPulseButtonClicked()
         {
+            if (!_spellsUIUseCase.IsSelected(SpellIds.EmpPulse))
+                return;
+
             _audioManager.PlaySound(ESoundId.UiButtonClick);
 
             if (_weaponBarrageUseCase.IsTargeting)
@@ -321,6 +344,9 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnOrbitalRailgunButtonClicked()
         {
+            if (!_spellsUIUseCase.IsSelected(SpellIds.OrbitalRailgun))
+                return;
+
             _audioManager.PlaySound(ESoundId.UiButtonClick);
 
             if (_weaponBarrageUseCase.IsTargeting)
@@ -355,6 +381,9 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnGravityTrapButtonClicked()
         {
+            if (!_spellsUIUseCase.IsSelected(SpellIds.GravityTrap))
+                return;
+
             _audioManager.PlaySound(ESoundId.UiButtonClick);
 
             if (_weaponBarrageUseCase.IsTargeting)
@@ -387,6 +416,18 @@ namespace Project.Scripts.UI.LevelUI
                 _gravityTrapUseCase.CanInteract);
         }
 
+        private void OnSpellSelectionChanged()
+        {
+            RefreshActiveSpells();
+        }
+
+        private void RefreshActiveSpells()
+        {
+            var spells = _spellsUIUseCase.GetSpells();
+            for (var i = 0; i < spells.Count; i++)
+                _layoutView.SetSpellVisible(spells[i].SpellId, spells[i].IsSelected);
+        }
+
         private void OnShopButtonClicked()
         {
             _audioManager.PlaySound(ESoundId.UiButtonClick);
@@ -396,6 +437,15 @@ namespace Project.Scripts.UI.LevelUI
                 TargetPopUpType = typeof(IShopUIPresenter)
             });
             _gameManagerService.PauseGame();
+        }
+
+        private void OnSetTowersButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(ISpellsUIPresenter)
+            });
         }
 
         private void OnADButtonClicked()
@@ -569,6 +619,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.QuestsButtonClicked -= OnQuestsButtonClicked;
             _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;
             _layoutView.NextWaveButtonClicked -= OnNextWaveButtonClicked;
+            _layoutView.SetTowersButtonClicked -= OnSetTowersButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
@@ -589,6 +640,7 @@ namespace Project.Scripts.UI.LevelUI
             _orbitalRailgunUseCase.StateChanged -= OnOrbitalRailgunStateChanged;
             _layoutView.GravityTrapButtonClicked -= OnGravityTrapButtonClicked;
             _gravityTrapUseCase.StateChanged -= OnGravityTrapStateChanged;
+            _spellsUIUseCase.SelectionChanged -= OnSpellSelectionChanged;
             
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();

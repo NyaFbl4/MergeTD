@@ -21,6 +21,7 @@ using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.SettingsUI;
 using Project.Scripts.UI.ShopUI;
+using Project.Scripts.UI.SpellsUI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -110,6 +111,7 @@ namespace Installers
             builder.RegisterEntryPoint<QuestUIPresenter>().As<IQuestUIPresenter>();
             builder.RegisterEntryPoint<SettingsUIPresenter>().As<ISettingsUIPresenter>();
             builder.RegisterEntryPoint<MainMenuUIPresenter>().As<IMainMenuUIPresenter>();
+            builder.RegisterEntryPoint<SpellsUIPresenter>().As<ISpellsUIPresenter>();
         }
 
         private void RegisterUseCases(IContainerBuilder builder)
@@ -126,6 +128,7 @@ namespace Installers
             builder.RegisterEntryPoint<QuestDamageEventsUseCase>();
             builder.RegisterEntryPoint<QuestWaveEventsUseCase>();
             builder.Register<MainMenuUIUseCase>(Lifetime.Singleton);
+            builder.Register<SpellsUIUseCase>(Lifetime.Singleton).As<ISpellsUIUseCase>();
             
             builder.Register<UnitsCatalog>(Lifetime.Singleton).As<IUnitsCatalog>();
         }
