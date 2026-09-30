@@ -18,6 +18,7 @@ namespace Project.Scripts.Gameplay.Systems
         private const int TargetingSortingOrder = 500;
 
         private readonly RunState _runState;
+        private readonly RunEnergyService _energy;
         private readonly GravityTrapConfig _config;
         private readonly HashSet<EnemyUnit> _affectedEnemies = new();
         private readonly HashSet<EnemyUnit> _frameEnemies = new();
@@ -41,11 +42,18 @@ namespace Project.Scripts.Gameplay.Systems
         public float CooldownRemaining => _cooldownRemaining;
         public bool IsTargeting => _isTargeting;
         public bool CanInteract => _isTargeting
-            || (_runState.CanUseAbilities && _activeDurationRemaining <= 0f && _cooldownRemaining <= 0f);
+            || (_runState.CanUseAbilities
+                && _activeDurationRemaining <= 0f
+                && _cooldownRemaining <= 0f
+                && _energy.Current >= _config.ManaCost);
 
-        public GravityTrapUseCase(RunState runState, SpellCatalog spellCatalog)
+        public GravityTrapUseCase(
+            RunState runState,
+            RunEnergyService energy,
+            SpellCatalog spellCatalog)
         {
             _runState = runState;
+            _energy = energy;
             _config = spellCatalog.Get<GravityTrapConfig>();
         }
 
@@ -144,6 +152,12 @@ namespace Project.Scripts.Gameplay.Systems
 
         private void Cast(Vector2 center)
         {
+            if (!_energy.TrySpend(_config.ManaCost))
+            {
+                CancelTargeting();
+                return;
+            }
+
             _isTargeting = false;
             _waitForPointerRelease = false;
             _targetingPreviewObject.SetActive(false);

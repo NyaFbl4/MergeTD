@@ -102,7 +102,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.QuestsButtonClicked += OnQuestsButtonClicked;
             _layoutView.SettingsButtonClicked += OnSettingsButtonClicked;
             _layoutView.NextWaveButtonClicked += OnNextWaveButtonClicked;
-            _layoutView.SetTowersButtonClicked += OnSetTowersButtonClicked;
+            _layoutView.SetSpellsButtonClicked += OnSetSpellsButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
@@ -170,7 +170,17 @@ namespace Project.Scripts.UI.LevelUI
             Debug.Log($"BuyGenerator result: {result}");
         }
 
-        private void OnEnergyChanged(int energy) => RefreshEnergy();
+        private void OnEnergyChanged(int energy)
+        {
+            RefreshEnergy();
+            RefreshWeaponBarrage();
+            RefreshBaseRepair();
+            RefreshBarrageProtocol();
+            RefreshCryoDischarge();
+            RefreshEmpPulse();
+            RefreshOrbitalRailgun();
+            RefreshGravityTrap();
+        }
 
         private void RefreshEnergy() => _layoutView.SetEnergy(_energy.Current, _energy.Max);
 
@@ -425,7 +435,10 @@ namespace Project.Scripts.UI.LevelUI
         {
             var spells = _spellsUIUseCase.GetSpells();
             for (var i = 0; i < spells.Count; i++)
+            {
+                _layoutView.SetSpellIcon(spells[i].SpellId, spells[i].Icon);
                 _layoutView.SetSpellVisible(spells[i].SpellId, spells[i].IsSelected);
+            }
         }
 
         private void OnShopButtonClicked()
@@ -439,7 +452,7 @@ namespace Project.Scripts.UI.LevelUI
             _gameManagerService.PauseGame();
         }
 
-        private void OnSetTowersButtonClicked()
+        private void OnSetSpellsButtonClicked()
         {
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _showPopupPublisher.Publish(new ShowPopupDto
@@ -619,7 +632,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.QuestsButtonClicked -= OnQuestsButtonClicked;
             _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;
             _layoutView.NextWaveButtonClicked -= OnNextWaveButtonClicked;
-            _layoutView.SetTowersButtonClicked -= OnSetTowersButtonClicked;
+            _layoutView.SetSpellsButtonClicked -= OnSetSpellsButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;

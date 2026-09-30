@@ -42,6 +42,7 @@ namespace Project.Scripts.UI.SpellsUI
                     config.Icon,
                     Math.Max(1, _world.GetSpellLevel(config.SpellId)),
                     config.Cooldown,
+                    config.ManaCost,
                     _selectedSpellIds.Contains(config.SpellId),
                     CanSelect(config.SpellId)));
             }

@@ -15,8 +15,9 @@ MonoBehaviour:
   _spellId: emp_pulse
   _displayName: ЭМИ-импульс
   _description: Мгновенно оглушает всех врагов в выбранной области. Не наносит урон.
-  _icon: {fileID: 0}
+  _icon: {fileID: -8683594438223814369, guid: 07eb0cc7976e903458406e38affc2ad4, type: 3}
   _cooldown: 20
+  _manaCost: 5
   _upgrades:
   - _level: 2
     _title: Усиленный разряд

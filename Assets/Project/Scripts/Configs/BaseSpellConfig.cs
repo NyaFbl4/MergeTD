@@ -37,6 +37,7 @@ namespace Project.Scripts.Configs
 
         [Header("Common gameplay")]
         [SerializeField, Min(0.1f)] private float _cooldown = 10f;
+        [SerializeField, Min(1)] private int _manaCost = 1;
 
         [Header("Future upgrades")]
         [SerializeField] private List<SpellUpgradeDescription> _upgrades = new();
@@ -46,6 +47,7 @@ namespace Project.Scripts.Configs
         public string Description => _description;
         public Sprite Icon => _icon;
         public float Cooldown => _cooldown;
+        public int ManaCost => _manaCost;
         public IReadOnlyList<SpellUpgradeDescription> Upgrades => _upgrades;
     }
 }

@@ -15,8 +15,9 @@ MonoBehaviour:
   _spellId: base_repair
   _displayName: "\u0420\u0435\u043C\u043E\u043D\u0442 \u0431\u0430\u0437\u044B"
   _description: "\u041C\u0433\u043D\u043E\u0432\u0435\u043D\u043D\u043E \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u0442 \u0447\u0430\u0441\u0442\u044C HP \u0431\u0430\u0437\u044B."
-  _icon: {fileID: 0}
+  _icon: {fileID: 3880603984668780416, guid: 75c6b17cfd9a91548a13b4ad95545d9d, type: 3}
   _cooldown: 20
+  _manaCost: 5
   _upgrades:
   - _level: 2
     _title: "\u0423\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0439 \u0440\u0435\u043C\u043E\u043D\u0442"

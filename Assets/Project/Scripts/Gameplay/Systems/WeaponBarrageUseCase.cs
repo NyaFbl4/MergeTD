@@ -20,6 +20,7 @@ namespace Project.Scripts.Gameplay.Systems
         private const int TargetingSortingOrder = 500;
 
         private readonly RunState _runState;
+        private readonly RunEnergyService _energy;
         private readonly WeaponBarrageConfig _config;
         private readonly HashSet<IEnemyHealth> _damagedEnemies = new();
         private readonly CancellationTokenSource _lifetimeCancellation = new();
@@ -41,11 +42,18 @@ namespace Project.Scripts.Gameplay.Systems
         public float CooldownRemaining => _cooldownRemaining;
         public bool IsTargeting => _isTargeting;
         public bool CanInteract => _isTargeting
-            || (_runState.CanUseAbilities && !_isCasting && _cooldownRemaining <= 0f);
+            || (_runState.CanUseAbilities
+                && !_isCasting
+                && _cooldownRemaining <= 0f
+                && _energy.Current >= _config.ManaCost);
 
-        public WeaponBarrageUseCase(RunState runState, SpellCatalog spellCatalog)
+        public WeaponBarrageUseCase(
+            RunState runState,
+            RunEnergyService energy,
+            SpellCatalog spellCatalog)
         {
             _runState = runState;
+            _energy = energy;
             _config = spellCatalog.Get<WeaponBarrageConfig>();
         }
 
@@ -149,6 +157,12 @@ namespace Project.Scripts.Gameplay.Systems
 
         private void BeginCast(Vector2 center)
         {
+            if (!_energy.TrySpend(_config.ManaCost))
+            {
+                CancelTargeting();
+                return;
+            }
+
             _isTargeting = false;
             _isCasting = true;
             _targetingPreviewObject.SetActive(false);

@@ -22,14 +22,13 @@ namespace Project.Scripts.UI.LevelUI
         private Button _questsButton;
         private Button _settingsButton;
         private Button _nextWaveButton;
-        private Button _setTowersButton;
+        private Button _setSpellsButton;
         private Button _weaponBarrageButton;
         private Label _weaponBarrageNameLabel;
         private Label _weaponBarrageStatusLabel;
         private Button _baseRepairButton;
         private Label _baseRepairNameLabel;
         private Label _baseRepairStatusLabel;
-        private VisualElement _baseRepairIcon;
         private Button _barrageProtocolButton;
         private Label _barrageProtocolNameLabel;
         private Label _barrageProtocolStatusLabel;
@@ -56,6 +55,8 @@ namespace Project.Scripts.UI.LevelUI
         private VisualElement _stateWave;
         private readonly Dictionary<string, VisualElement> _spellElements =
             new(StringComparer.Ordinal);
+        private readonly Dictionary<string, VisualElement> _spellIcons =
+            new(StringComparer.Ordinal);
         
         public event Action BuyTowerButtonClicked;
         public event Action BuyGeneratorButtonClicked;
@@ -64,7 +65,7 @@ namespace Project.Scripts.UI.LevelUI
         public event Action QuestsButtonClicked;
         public event Action SettingsButtonClicked;
         public event Action NextWaveButtonClicked;
-        public event Action SetTowersButtonClicked;
+        public event Action SetSpellsButtonClicked;
         public event Action WeaponBarrageButtonClicked;
         public event Action BaseRepairButtonClicked;
         public event Action BarrageProtocolButtonClicked;
@@ -93,7 +94,7 @@ namespace Project.Scripts.UI.LevelUI
             _questsButton =  _root.Q<Button>("QuestsButton");
             _settingsButton = _root.Q<Button>("SettingsButton");
             _nextWaveButton = _root.Q<Button>("GoNextWaveButton");
-            _setTowersButton = _root.Q<Button>("SetTowersButton");
+            _setSpellsButton = _root.Q<Button>("SetSpellsButton");
             var weaponBarrageElement = _root.Q<VisualElement>("WeaponBarrageSpell");
             _weaponBarrageButton = weaponBarrageElement.Q<Button>("SpellButton");
             _weaponBarrageNameLabel = _weaponBarrageButton.Q<Label>("SpellDamageTypeLabel");
@@ -102,8 +103,6 @@ namespace Project.Scripts.UI.LevelUI
             _baseRepairButton = baseRepairElement.Q<Button>("SpellButton");
             _baseRepairNameLabel = _baseRepairButton.Q<Label>("SpellDamageTypeLabel");
             _baseRepairStatusLabel = _baseRepairButton.Q<Label>("SpellManaLabel");
-            _baseRepairIcon = _baseRepairButton.Q<VisualElement>("TowerIcon");
-            _baseRepairIcon.style.backgroundImage = new StyleBackground(Resources.Load<Sprite>("Guns/Shield"));
             var barrageProtocolElement = _root.Q<VisualElement>("BarrageProtocolSpell");
             _barrageProtocolButton = barrageProtocolElement.Q<Button>("SpellButton");
             _barrageProtocolNameLabel = _barrageProtocolButton.Q<Label>("SpellDamageTypeLabel");
@@ -131,6 +130,13 @@ namespace Project.Scripts.UI.LevelUI
             _spellElements.Add(SpellIds.EmpPulse, empPulseElement);
             _spellElements.Add(SpellIds.OrbitalRailgun, orbitalRailgunElement);
             _spellElements.Add(SpellIds.GravityTrap, gravityTrapElement);
+            _spellIcons.Add(SpellIds.WeaponBarrage, _weaponBarrageButton.Q<VisualElement>("TowerIcon"));
+            _spellIcons.Add(SpellIds.BaseRepair, _baseRepairButton.Q<VisualElement>("TowerIcon"));
+            _spellIcons.Add(SpellIds.BarrageProtocol, _barrageProtocolButton.Q<VisualElement>("TowerIcon"));
+            _spellIcons.Add(SpellIds.CryoDischarge, _cryoDischargeButton.Q<VisualElement>("TowerIcon"));
+            _spellIcons.Add(SpellIds.EmpPulse, _empPulseButton.Q<VisualElement>("TowerIcon"));
+            _spellIcons.Add(SpellIds.OrbitalRailgun, _orbitalRailgunButton.Q<VisualElement>("TowerIcon"));
+            _spellIcons.Add(SpellIds.GravityTrap, _gravityTrapButton.Q<VisualElement>("TowerIcon"));
             _adButtonTowerIcon = _adButton?.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("GoldLabel") ?? _root.Q<Label>("MoneyLabel");
@@ -150,7 +156,7 @@ namespace Project.Scripts.UI.LevelUI
                 _settingsButton.clicked += OnSettingsButtonClicked;
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked += OnNextWaveButtonClicked;
-            _setTowersButton.clicked += OnSetTowersButtonClicked;
+            _setSpellsButton.clicked += OnSetSpellsButtonClicked;
             _weaponBarrageButton.clicked += OnWeaponBarrageButtonClicked;
             _baseRepairButton.clicked += OnBaseRepairButtonClicked;
             _barrageProtocolButton.clicked += OnBarrageProtocolButtonClicked;
@@ -175,6 +181,14 @@ namespace Project.Scripts.UI.LevelUI
                 throw new ArgumentException($"Unknown spell id '{spellId}'.", nameof(spellId));
 
             spellElement.style.display = isVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        public void SetSpellIcon(string spellId, Sprite icon)
+        {
+            if (!_spellIcons.TryGetValue(spellId, out var spellIcon))
+                throw new ArgumentException($"Unknown spell id '{spellId}'.", nameof(spellId));
+
+            spellIcon.style.backgroundImage = new StyleBackground(icon);
         }
 
         public void SetEnergy(int current, int maximum)
@@ -356,7 +370,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnQuestsButtonClicked() => QuestsButtonClicked?.Invoke();
         private void OnSettingsButtonClicked() => SettingsButtonClicked?.Invoke();
         private void OnNextWaveButtonClicked() => NextWaveButtonClicked?.Invoke();
-        private void OnSetTowersButtonClicked() => SetTowersButtonClicked?.Invoke();
+        private void OnSetSpellsButtonClicked() => SetSpellsButtonClicked?.Invoke();
         private void OnWeaponBarrageButtonClicked() => WeaponBarrageButtonClicked?.Invoke();
         private void OnBaseRepairButtonClicked() => BaseRepairButtonClicked?.Invoke();
         private void OnBarrageProtocolButtonClicked() => BarrageProtocolButtonClicked?.Invoke();
@@ -380,7 +394,7 @@ namespace Project.Scripts.UI.LevelUI
                 _settingsButton.clicked -= OnSettingsButtonClicked;
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked -= OnNextWaveButtonClicked;
-            _setTowersButton.clicked -= OnSetTowersButtonClicked;
+            _setSpellsButton.clicked -= OnSetSpellsButtonClicked;
             _weaponBarrageButton.clicked -= OnWeaponBarrageButtonClicked;
             _baseRepairButton.clicked -= OnBaseRepairButtonClicked;
             _barrageProtocolButton.clicked -= OnBarrageProtocolButtonClicked;

@@ -13,6 +13,7 @@ namespace Project.Scripts.Gameplay.Systems
     public sealed class BarrageProtocolUseCase : IStartable, IDisposable, IGameUpdateListener, IGameFinishListener
     {
         private readonly RunState _runState;
+        private readonly RunEnergyService _energy;
         private readonly BattlefieldContext _battlefieldContext;
         private readonly BarrageProtocolConfig _config;
         private readonly List<BarrageProtocolVfx> _activeEffects = new();
@@ -30,14 +31,17 @@ namespace Project.Scripts.Gameplay.Systems
         public bool CanUse => _runState.CanUseAbilities
             && !IsActive
             && _cooldownRemaining <= 0f
+            && _energy.Current >= _config.ManaCost
             && HasCombatTower;
 
         public BarrageProtocolUseCase(
             RunState runState,
+            RunEnergyService energy,
             BattlefieldContext battlefieldContext,
             SpellCatalog spellCatalog)
         {
             _runState = runState;
+            _energy = energy;
             _battlefieldContext = battlefieldContext;
             _config = spellCatalog.Get<BarrageProtocolConfig>();
         }
@@ -49,7 +53,7 @@ namespace Project.Scripts.Gameplay.Systems
 
         public bool TryUse()
         {
-            if (!CanUse)
+            if (!CanUse || !_energy.TrySpend(_config.ManaCost))
                 return false;
 
             _cooldownRemaining = _config.Cooldown;

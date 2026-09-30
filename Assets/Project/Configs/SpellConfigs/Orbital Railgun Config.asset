@@ -15,8 +15,9 @@ MonoBehaviour:
   _spellId: orbital_railgun
   _displayName: Орбитальный рельсотрон
   _description: После короткой задержки наносит огромный урон всем врагам вдоль выбранной линии.
-  _icon: {fileID: 0}
+  _icon: {fileID: 5176572134045062995, guid: bda9cc22aae71ba4b81eeba19d6d2bc9, type: 3}
   _cooldown: 35
+  _manaCost: 10
   _upgrades:
   - _level: 2
     _title: Перегрузка ускорителя

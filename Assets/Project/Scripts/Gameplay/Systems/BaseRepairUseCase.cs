@@ -11,6 +11,7 @@ namespace Project.Scripts.Gameplay.Systems
     public sealed class BaseRepairUseCase : IStartable, IDisposable, IGameUpdateListener, IGameFinishListener
     {
         private readonly RunState _runState;
+        private readonly RunEnergyService _energy;
         private readonly BaseHealth _baseHealth;
         private readonly BaseRepairConfig _config;
 
@@ -25,14 +26,17 @@ namespace Project.Scripts.Gameplay.Systems
         public bool IsBaseFull => _baseHealth.CurrentHealth >= _baseHealth.MaxHealth;
         public bool CanUse => _runState.CanUseAbilities
             && _cooldownRemaining <= 0f
+            && _energy.Current >= _config.ManaCost
             && !IsBaseFull;
 
         public BaseRepairUseCase(
             RunState runState,
+            RunEnergyService energy,
             BaseHealth baseHealth,
             SpellCatalog spellCatalog)
         {
             _runState = runState;
+            _energy = energy;
             _baseHealth = baseHealth;
             _config = spellCatalog.Get<BaseRepairConfig>();
         }
@@ -44,7 +48,7 @@ namespace Project.Scripts.Gameplay.Systems
 
         public bool TryUse()
         {
-            if (!CanUse)
+            if (!CanUse || !_energy.TrySpend(_config.ManaCost))
                 return false;
 
             _cooldownRemaining = _config.Cooldown;

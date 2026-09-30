@@ -19,6 +19,7 @@ namespace Project.Scripts.Gameplay.Systems
         private const int TargetingSortingOrder = 500;
 
         private readonly RunState _runState;
+        private readonly RunEnergyService _energy;
         private readonly OrbitalRailgunConfig _config;
         private readonly HashSet<IEnemyHealth> _damagedEnemies = new();
         private readonly CancellationTokenSource _lifetimeCancellation = new();
@@ -44,11 +45,18 @@ namespace Project.Scripts.Gameplay.Systems
         public bool IsTargeting => _isTargeting;
         public bool IsCasting => _isCasting;
         public bool CanInteract => _isTargeting
-            || (_runState.CanUseAbilities && !_isCasting && _cooldownRemaining <= 0f);
+            || (_runState.CanUseAbilities
+                && !_isCasting
+                && _cooldownRemaining <= 0f
+                && _energy.Current >= _config.ManaCost);
 
-        public OrbitalRailgunUseCase(RunState runState, SpellCatalog spellCatalog)
+        public OrbitalRailgunUseCase(
+            RunState runState,
+            RunEnergyService energy,
+            SpellCatalog spellCatalog)
         {
             _runState = runState;
+            _energy = energy;
             _config = spellCatalog.Get<OrbitalRailgunConfig>();
         }
 
@@ -170,6 +178,12 @@ namespace Project.Scripts.Gameplay.Systems
 
         private void BeginCast(Vector2 start, Vector2 end)
         {
+            if (!_energy.TrySpend(_config.ManaCost))
+            {
+                CancelTargeting();
+                return;
+            }
+
             _isTargeting = false;
             _isDragging = false;
             _waitForPointerRelease = false;

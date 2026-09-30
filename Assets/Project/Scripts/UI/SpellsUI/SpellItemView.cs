@@ -10,6 +10,7 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly Label _levelLabel;
         private readonly Label _cooldownLabel;
         private readonly VisualElement _icon;
+        private readonly VisualElement _selectedElement;
         private readonly Button _selectionButton;
         private readonly Label _selectionLabel;
 
@@ -22,6 +23,7 @@ namespace Project.Scripts.UI.SpellsUI
             _levelLabel = root.Q<Label>("SpellLevelLabel");
             _cooldownLabel = root.Q<Label>("SpellCooldownLabel");
             _icon = root.Q<VisualElement>("TowerIcon");
+            _selectedElement = root.Q<VisualElement>("SelectedElement");
             _selectionButton = root.Q<Button>("SetSpellButton");
             _selectionLabel = _selectionButton?.Q<Label>();
 
@@ -35,7 +37,8 @@ namespace Project.Scripts.UI.SpellsUI
             _nameLabel.text = spell.DisplayName;
             _descriptionLabel.text = spell.Description;
             _levelLabel.text = $"Уровень {spell.Level}";
-            _cooldownLabel.text = $"КД {spell.Cooldown:0.#} сек.";
+            _cooldownLabel.text =
+                $"КД {spell.Cooldown:0.#} секунд, стоит {spell.ManaCost} маны";
 
             if (_icon != null)
             {
@@ -52,7 +55,12 @@ namespace Project.Scripts.UI.SpellsUI
                         ? "ВЫБРАТЬ"
                         : "ЛИМИТ";
 
+            _selectedElement.style.display = spell.IsSelected
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+
             _selectionButton.SetEnabled(spell.IsSelected || spell.CanSelect);
+            _selectionButton.style.opacity = 1f;
         }
     }
 }

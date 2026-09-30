@@ -15,8 +15,9 @@ MonoBehaviour:
   _spellId: gravity_trap
   _displayName: Гравитационная ловушка
   _description: Стягивает врагов в выбранную точку и удерживает их там. Не наносит урон.
-  _icon: {fileID: 0}
+  _icon: {fileID: -8340345365926156504, guid: 7afb94d19a7ef854c8789763b1eb88a3, type: 3}
   _cooldown: 28
+  _manaCost: 7
   _upgrades:
   - _level: 2
     _title: Усиленный коллапс
