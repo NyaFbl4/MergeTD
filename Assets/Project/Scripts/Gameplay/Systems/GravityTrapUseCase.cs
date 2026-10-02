@@ -27,7 +27,7 @@ namespace Project.Scripts.Gameplay.Systems
         private Material _lineMaterial;
         private GameObject _targetingPreviewObject;
         private LineRenderer _targetingPreview;
-        private GravityTrapVfx _activeVfx;
+        private GameObject _activeVfx;
         private Vector2 _activeCenter;
         private float _activeDurationRemaining;
         private float _cooldownRemaining;
@@ -167,7 +167,9 @@ namespace Project.Scripts.Gameplay.Systems
             _activeDurationRemaining = _config.Duration;
             _displayedActiveSeconds = Mathf.CeilToInt(_activeDurationRemaining);
             _affectedEnemies.Clear();
-            _activeVfx = GravityTrapVfx.Play(center, _config.Radius, _config.Duration);
+            _activeVfx = SpellPrefabVfx.PlayAt(_config, center);
+            if (_activeVfx == null)
+                _activeVfx = GravityTrapVfx.Play(center, _config.Radius, _config.Duration).gameObject;
             StateChanged?.Invoke();
         }
 
@@ -226,7 +228,7 @@ namespace Project.Scripts.Gameplay.Systems
             _frameEnemies.Clear();
 
             if (_activeVfx != null)
-                Object.Destroy(_activeVfx.gameObject);
+                Object.Destroy(_activeVfx);
 
             _activeVfx = null;
         }

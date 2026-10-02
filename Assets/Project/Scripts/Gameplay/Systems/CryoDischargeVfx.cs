@@ -70,11 +70,11 @@ namespace Project.Scripts.Gameplay.Systems
 
     internal sealed class CryoSlowVfx : MonoBehaviour
     {
-        private const int CircleSegments = 32;
-        private const float RingRadius = 0.55f;
+        private const float FrostTintStrength = 0.6f;
+        private const float FadeDuration = 0.5f;
 
-        private LineRenderer _ring;
-        private Material _material;
+        private SpriteRenderer[] _targetRenderers;
+        private Color[] _originalColors;
         private float _duration;
         private float _elapsed;
 
@@ -91,50 +91,65 @@ namespace Project.Scripts.Gameplay.Systems
         private void Initialize(float duration)
         {
             _duration = duration;
-            _material = new Material(Shader.Find("Sprites/Default"))
-            {
-                name = "Cryo Slow Effect Material"
-            };
-
-            _ring = gameObject.AddComponent<LineRenderer>();
-            _ring.sharedMaterial = _material;
-            _ring.useWorldSpace = false;
-            _ring.loop = true;
-            _ring.positionCount = CircleSegments;
-            _ring.startWidth = 0.05f;
-            _ring.endWidth = 0.05f;
-            _ring.sortingOrder = 516;
-
-            for (var i = 0; i < CircleSegments; i++)
-            {
-                var angle = Mathf.PI * 2f * i / CircleSegments;
-                _ring.SetPosition(i, new Vector3(
-                    Mathf.Cos(angle) * RingRadius,
-                    Mathf.Sin(angle) * RingRadius,
-                    0f));
-            }
+            CacheTargetRenderers();
+            ApplyFrostTint(FrostTintStrength);
         }
 
         private void Update()
         {
             _elapsed += Time.deltaTime;
-            transform.Rotate(0f, 0f, 80f * Time.deltaTime);
 
-            var pulse = 1f + Mathf.Sin(_elapsed * 6f) * 0.08f;
-            transform.localScale = new Vector3(pulse, pulse, 1f);
-
-            var fade = Mathf.Clamp01((_duration - _elapsed) / 0.5f);
-            var color = new Color(0.55f, 0.95f, 1f, fade);
-            _ring.startColor = color;
-            _ring.endColor = color;
+            var fade = Mathf.Clamp01((_duration - _elapsed) / FadeDuration);
+            ApplyFrostTint(FrostTintStrength * fade);
 
             if (_elapsed >= _duration)
                 Destroy(gameObject);
         }
 
+        private void CacheTargetRenderers()
+        {
+            var renderers = transform.parent.GetComponentsInChildren<SpriteRenderer>(true);
+            var targetCount = 0;
+
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i].GetComponent<SpellStatusIconVfx>() == null)
+                    targetCount++;
+            }
+
+            _targetRenderers = new SpriteRenderer[targetCount];
+            _originalColors = new Color[targetCount];
+
+            var targetIndex = 0;
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                var renderer = renderers[i];
+                if (renderer.GetComponent<SpellStatusIconVfx>() != null)
+                    continue;
+
+                _targetRenderers[targetIndex] = renderer;
+                _originalColors[targetIndex] = renderer.color;
+                targetIndex++;
+            }
+        }
+
+        private void ApplyFrostTint(float strength)
+        {
+            for (var i = 0; i < _targetRenderers.Length; i++)
+            {
+                var renderer = _targetRenderers[i];
+                if (renderer == null)
+                    continue;
+
+                var originalColor = _originalColors[i];
+                var frostColor = new Color(0.35f, 0.75f, 1f, originalColor.a);
+                renderer.color = Color.Lerp(originalColor, frostColor, strength);
+            }
+        }
+
         private void OnDestroy()
         {
-            Destroy(_material);
+            ApplyFrostTint(0f);
         }
     }
 }

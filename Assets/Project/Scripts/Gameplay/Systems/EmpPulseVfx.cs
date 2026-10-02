@@ -77,21 +77,22 @@ namespace Project.Scripts.Gameplay.Systems
         private const float RingRadius = 0.58f;
 
         private LineRenderer _ring;
+        private SpellStatusIconVfx _statusIcon;
         private Material _material;
         private float _duration;
         private float _elapsed;
 
-        public static void Play(Transform target, float duration)
+        public static void Play(Transform target, float duration, Sprite icon)
         {
             var effectObject = new GameObject("EMP Stun Effect")
             {
                 hideFlags = HideFlags.DontSave
             };
             effectObject.transform.SetParent(target, false);
-            effectObject.AddComponent<EmpStunVfx>().Initialize(duration);
+            effectObject.AddComponent<EmpStunVfx>().Initialize(duration, icon);
         }
 
-        private void Initialize(float duration)
+        private void Initialize(float duration, Sprite icon)
         {
             _duration = duration;
             _material = new Material(Shader.Find("Sprites/Default"))
@@ -117,6 +118,15 @@ namespace Project.Scripts.Gameplay.Systems
                     Mathf.Sin(angle) * RingRadius * distortion,
                     0f));
             }
+
+            _statusIcon = SpellStatusIconVfx.Create(
+                transform,
+                icon,
+                new Color(0.75f, 0.65f, 1f, 1f),
+                new Vector3(0f, 0.95f, 0f),
+                0.3f,
+                9f,
+                0.06f);
         }
 
         private void Update()
@@ -131,6 +141,7 @@ namespace Project.Scripts.Gameplay.Systems
             var color = new Color(0.45f, 0.75f, 1f, fade);
             _ring.startColor = color;
             _ring.endColor = new Color(0.75f, 0.35f, 1f, fade);
+            _statusIcon.SetOpacity(fade);
 
             if (_elapsed >= _duration)
                 Destroy(gameObject);

@@ -54,7 +54,8 @@ namespace Project.Scripts.Gameplay.Systems
             _cooldownRemaining = _config.Cooldown;
             _displayedCooldownSeconds = Mathf.CeilToInt(_cooldownRemaining);
             _baseHealth.AddCurrentHealth(_config.HealAmount);
-            BaseRepairVfx.Play(_baseHealth.transform.position);
+            if (SpellPrefabVfx.PlayAt(_config, _baseHealth.transform.position) == null)
+                BaseRepairVfx.Play(_baseHealth.transform.position);
             StateChanged?.Invoke();
             return true;
         }

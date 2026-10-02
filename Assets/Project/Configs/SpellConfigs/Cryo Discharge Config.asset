@@ -18,6 +18,10 @@ MonoBehaviour:
   _icon: {fileID: 750792369792279797, guid: b84869c1e3625fd47a4906094ac57d48, type: 3}
   _cooldown: 18
   _manaCost: 4
+  _vfxPrefab: {fileID: 4823525608512824734, guid: 80287f7d04f67624c93ff4dae786ef27, type: 3}
+  _vfxScale: 0.75
+  _vfxEulerAngles: {x: 90, y: 0, z: 0}
+  _vfxLifetime: 2
   _upgrades:
   - _level: 2
     _title: Глубокая заморозка

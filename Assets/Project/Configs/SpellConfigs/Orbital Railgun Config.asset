@@ -18,6 +18,10 @@ MonoBehaviour:
   _icon: {fileID: 5176572134045062995, guid: bda9cc22aae71ba4b81eeba19d6d2bc9, type: 3}
   _cooldown: 35
   _manaCost: 10
+  _vfxPrefab: {fileID: 5904719056005892913, guid: 7a1f5c2344e7b8046b22ca0e8ffce4c1, type: 3}
+  _vfxScale: 0.85
+  _vfxEulerAngles: {x: 0, y: 0, z: 0}
+  _vfxLifetime: 3
   _upgrades:
   - _level: 2
     _title: Перегрузка ускорителя

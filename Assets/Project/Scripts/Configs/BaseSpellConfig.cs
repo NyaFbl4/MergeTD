@@ -39,6 +39,12 @@ namespace Project.Scripts.Configs
         [SerializeField, Min(0.1f)] private float _cooldown = 10f;
         [SerializeField, Min(1)] private int _manaCost = 1;
 
+        [Header("Visual effect")]
+        [SerializeField] private GameObject _vfxPrefab;
+        [SerializeField, Min(0.01f)] private float _vfxScale = 1f;
+        [SerializeField] private Vector3 _vfxEulerAngles;
+        [SerializeField, Min(0f)] private float _vfxLifetime;
+
         [Header("Future upgrades")]
         [SerializeField] private List<SpellUpgradeDescription> _upgrades = new();
 
@@ -48,6 +54,10 @@ namespace Project.Scripts.Configs
         public Sprite Icon => _icon;
         public float Cooldown => _cooldown;
         public int ManaCost => _manaCost;
+        public GameObject VfxPrefab => _vfxPrefab;
+        public float VfxScale => _vfxScale;
+        public Vector3 VfxEulerAngles => _vfxEulerAngles;
+        public float VfxLifetime => _vfxLifetime;
         public IReadOnlyList<SpellUpgradeDescription> Upgrades => _upgrades;
     }
 }

@@ -199,6 +199,7 @@ namespace Project.Scripts.Gameplay.Systems
                     _config.ProjectileCount,
                     _config.BarrageDuration,
                     _lineMaterial,
+                    _config,
                     cancellationToken);
             }
             catch (OperationCanceledException)

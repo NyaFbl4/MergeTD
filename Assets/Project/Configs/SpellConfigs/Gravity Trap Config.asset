@@ -18,6 +18,10 @@ MonoBehaviour:
   _icon: {fileID: -8340345365926156504, guid: 7afb94d19a7ef854c8789763b1eb88a3, type: 3}
   _cooldown: 28
   _manaCost: 7
+  _vfxPrefab: {fileID: 4903989986093316332, guid: 142b394e21edf1c42947ec16dc7a523c, type: 3}
+  _vfxScale: 0.75
+  _vfxEulerAngles: {x: 0, y: 0, z: 0}
+  _vfxLifetime: 4.2
   _upgrades:
   - _level: 2
     _title: Усиленный коллапс

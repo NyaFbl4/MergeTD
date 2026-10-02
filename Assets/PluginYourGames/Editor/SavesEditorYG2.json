@@ -1,8 +1,8 @@
 {
-    "idSave": 144,
+    "idSave": 161,
     "world": {
         "version": 2,
-        "gold": 3510,
+        "gold": 3410,
         "gems": 0,
         "maxBaseHealth": 20,
         "maxEnergy": 12,
@@ -35,39 +35,19 @@
         ],
         "towers": [
             {
-                "slotId": "11",
-                "towerLevel": 3,
-                "towerType": 0
-            },
-            {
                 "slotId": "12",
                 "towerLevel": 3,
                 "towerType": 0
             },
             {
                 "slotId": "13",
-                "towerLevel": 3,
-                "towerType": 0
-            },
-            {
-                "slotId": "14",
-                "towerLevel": 2,
-                "towerType": 0
-            },
-            {
-                "slotId": "15",
-                "towerLevel": 3,
+                "towerLevel": 5,
                 "towerType": 0
             },
             {
                 "slotId": "21",
                 "towerLevel": 1,
                 "towerType": 1
-            },
-            {
-                "slotId": "22",
-                "towerLevel": 1,
-                "towerType": 0
             },
             {
                 "slotId": "23",

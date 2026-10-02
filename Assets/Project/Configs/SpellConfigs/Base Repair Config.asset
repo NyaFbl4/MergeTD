@@ -18,6 +18,10 @@ MonoBehaviour:
   _icon: {fileID: 3880603984668780416, guid: 75c6b17cfd9a91548a13b4ad95545d9d, type: 3}
   _cooldown: 20
   _manaCost: 5
+  _vfxPrefab: {fileID: 3031766928850544864, guid: a8cb176ac2d6504459d1fb8e59257cda, type: 3}
+  _vfxScale: 0.85
+  _vfxEulerAngles: {x: 0, y: 0, z: 0}
+  _vfxLifetime: 3
   _upgrades:
   - _level: 2
     _title: "\u0423\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0439 \u0440\u0435\u043C\u043E\u043D\u0442"

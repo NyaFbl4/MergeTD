@@ -155,7 +155,8 @@ namespace Project.Scripts.Gameplay.Systems
             _displayedCooldownSeconds = Mathf.CeilToInt(_cooldownRemaining);
 
             ApplyStun(center);
-            EmpPulseVfx.Play(center, _config.Radius);
+            if (SpellPrefabVfx.PlayAt(_config, center) == null)
+                EmpPulseVfx.Play(center, _config.Radius);
             StateChanged?.Invoke();
         }
 
@@ -171,7 +172,7 @@ namespace Project.Scripts.Gameplay.Systems
                     continue;
 
                 if (enemy.TryApplyStun(_config.StunDuration))
-                    EmpStunVfx.Play(enemy.transform, _config.StunDuration);
+                    EmpStunVfx.Play(enemy.transform, _config.StunDuration, _config.Icon);
             }
         }
 

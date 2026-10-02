@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Project.Scripts.Configs;
 using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Systems
@@ -29,6 +30,7 @@ namespace Project.Scripts.Gameplay.Systems
             int projectileCount,
             float duration,
             Material material,
+            WeaponBarrageConfig config,
             CancellationToken cancellationToken)
         {
             if (_warningObject != null)
@@ -45,7 +47,8 @@ namespace Project.Scripts.Gameplay.Systems
                     TimeSpan.FromSeconds(flightDuration),
                     cancellationToken: cancellationToken);
 
-                SpawnImpactPulse(impactPoint, radius, material);
+                if (SpellPrefabVfx.PlayAt(config, impactPoint) == null)
+                    SpawnImpactPulse(impactPoint, radius, material);
 
                 var remainingInterval = interval - flightDuration;
                 if (remainingInterval > 0f)

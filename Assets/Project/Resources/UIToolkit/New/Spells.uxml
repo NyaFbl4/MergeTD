@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="SpellPanel" src="project://database/Assets/Project/Resources/UIToolkit/New/SpellPanel.uxml?fileID=9197481963319205126&amp;guid=923b582f7c3502740930a27e17ab925b&amp;type=3#SpellPanel"/>
-    <ui:VisualElement name="Layout" style="flex-grow: 1; align-items: center; justify-content: center;">
+    <ui:Template name="SpellPanel" src="project://database/Assets/Project/Resources/UIToolkit/New/%D0%9D%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BF%D0%B0%D0%BF%D0%BA%D0%B0/SpellPanel.uxml?fileID=9197481963319205126&amp;guid=923b582f7c3502740930a27e17ab925b&amp;type=3#SpellPanel"/>
+    <ui:VisualElement name="Layout" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.549);">
         <ui:VisualElement name="SpellPanel" style="flex-grow: 1; background-image: resource(&quot;UI/new/CardFrame08_White&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; width: 800px; height: 1200px; min-width: 800px; max-width: 800px; min-height: 1200px; max-height: 1200px; -unity-background-image-tint-color: rgb(219, 146, 146);">
             <ui:VisualElement name="Header" style="flex-grow: 1; width: 100%; height: 150px; min-height: 150px; max-height: 150px;">
                 <ui:Label text="Способности" name="Header1Label" style="-unity-text-align: upper-center; font-size: 50px; margin-top: 15px;"/>

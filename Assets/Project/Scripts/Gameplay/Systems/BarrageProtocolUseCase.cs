@@ -16,7 +16,7 @@ namespace Project.Scripts.Gameplay.Systems
         private readonly RunEnergyService _energy;
         private readonly BattlefieldContext _battlefieldContext;
         private readonly BarrageProtocolConfig _config;
-        private readonly List<BarrageProtocolVfx> _activeEffects = new();
+        private readonly List<GameObject> _activeEffects = new();
 
         private float _cooldownRemaining;
         private float _activeDurationRemaining;
@@ -128,7 +128,10 @@ namespace Project.Scripts.Gameplay.Systems
 
                 tower.SetSpellAttackSpeedMultiplier(multiplier);
                 if (playEffect)
-                    _activeEffects.Add(BarrageProtocolVfx.Play(tower.transform, _config.Duration));
+                    _activeEffects.Add(BarrageProtocolVfx.Play(
+                        tower.transform,
+                        _config.Duration,
+                        _config.Icon).gameObject);
             }
         }
 
@@ -143,7 +146,7 @@ namespace Project.Scripts.Gameplay.Systems
             for (var i = 0; i < _activeEffects.Count; i++)
             {
                 if (_activeEffects[i] != null)
-                    _activeEffects[i].Stop();
+                    UnityEngine.Object.Destroy(_activeEffects[i]);
             }
 
             _activeEffects.Clear();

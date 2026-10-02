@@ -18,6 +18,10 @@ MonoBehaviour:
   _icon: {fileID: -8683594438223814369, guid: 07eb0cc7976e903458406e38affc2ad4, type: 3}
   _cooldown: 20
   _manaCost: 5
+  _vfxPrefab: {fileID: 1814315751473787963, guid: e9459def1a517a24ba482f9e639df7ff, type: 3}
+  _vfxScale: 0.75
+  _vfxEulerAngles: {x: 90, y: 0, z: 0}
+  _vfxLifetime: 3
   _upgrades:
   - _level: 2
     _title: Усиленный разряд

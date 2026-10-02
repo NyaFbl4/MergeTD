@@ -1,3 +1,4 @@
+using Project.Scripts.Configs;
 using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Systems
@@ -91,6 +92,70 @@ namespace Project.Scripts.Gameplay.Systems
         private void OnDestroy()
         {
             Destroy(_material);
+        }
+    }
+
+    public static class SpellPrefabVfx
+    {
+        private const int EffectSortingOrder = 520;
+
+        public static GameObject PlayAt(BaseSpellConfig config, Vector3 position)
+        {
+            return Create(config, position, null);
+        }
+
+        public static GameObject PlayAttached(BaseSpellConfig config, Transform target)
+        {
+            if (target == null)
+                return null;
+
+            return Create(config, target.position, target);
+        }
+
+        private static GameObject Create(
+            BaseSpellConfig config,
+            Vector3 position,
+            Transform parent)
+        {
+            if (config == null || config.VfxPrefab == null)
+                return null;
+
+            var instanceObject = UnityEngine.Object.Instantiate((UnityEngine.Object)config.VfxPrefab);
+            var instance = instanceObject as GameObject;
+            if (instance == null)
+            {
+                Debug.LogError($"Spell VFX '{config.VfxPrefab.name}' is not a GameObject prefab.");
+                UnityEngine.Object.Destroy(instanceObject);
+                return null;
+            }
+
+            if (parent == null)
+            {
+                instance.transform.position = position;
+                instance.transform.rotation *= Quaternion.Euler(config.VfxEulerAngles);
+            }
+            else
+            {
+                instance.transform.SetParent(parent, false);
+                instance.transform.localPosition = Vector3.zero;
+                instance.transform.localRotation *= Quaternion.Euler(config.VfxEulerAngles);
+            }
+
+            instance.transform.localScale *= config.VfxScale;
+            instance.hideFlags = HideFlags.DontSave;
+            ApplySortingOrder(instance);
+
+            if (config.VfxLifetime > 0f)
+                UnityEngine.Object.Destroy(instance, config.VfxLifetime);
+
+            return instance;
+        }
+
+        private static void ApplySortingOrder(GameObject instance)
+        {
+            var renderers = instance.GetComponentsInChildren<Renderer>(true);
+            for (var i = 0; i < renderers.Length; i++)
+                renderers[i].sortingOrder += EffectSortingOrder;
         }
     }
 }

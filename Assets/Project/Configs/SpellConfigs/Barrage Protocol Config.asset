@@ -18,6 +18,10 @@ MonoBehaviour:
   _icon: {fileID: -7794484074879603317, guid: a9d82559243660d4d9a81cf70f3fc85a, type: 3}
   _cooldown: 25
   _manaCost: 6
+  _vfxPrefab: {fileID: 0}
+  _vfxScale: 1
+  _vfxEulerAngles: {x: 0, y: 0, z: 0}
+  _vfxLifetime: 0
   _upgrades:
   - _level: 2
     _title: Усиленный разгон

@@ -217,6 +217,7 @@ namespace Project.Scripts.Gameplay.Systems
                     cancellationToken: cancellationToken);
 
                 DamageEnemies(start, end);
+                SpellPrefabVfx.PlayAt(_config, (start + end) * 0.5f);
 
                 await effect.PlayStrikeAsync(
                     start,

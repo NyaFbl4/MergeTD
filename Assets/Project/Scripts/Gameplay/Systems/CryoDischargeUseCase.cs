@@ -155,7 +155,7 @@ namespace Project.Scripts.Gameplay.Systems
             _displayedCooldownSeconds = Mathf.CeilToInt(_cooldownRemaining);
 
             ApplySlow(center);
-            CryoDischargeVfx.Play(center, _config.Radius);
+            SpellPrefabVfx.PlayAt(_config, center);
             StateChanged?.Invoke();
         }
 
