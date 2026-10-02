@@ -34,6 +34,7 @@ namespace Project.Scripts.Configs
         [SerializeField] private string _displayName;
         [SerializeField, TextArea(2, 5)] private string _description;
         [SerializeField] private Sprite _icon;
+        [SerializeField] private Sprite _background;
 
         [Header("Common gameplay")]
         [SerializeField, Min(0.1f)] private float _cooldown = 10f;
@@ -52,6 +53,7 @@ namespace Project.Scripts.Configs
         public string DisplayName => _displayName;
         public string Description => _description;
         public Sprite Icon => _icon;
+        public Sprite Background => _background;
         public float Cooldown => _cooldown;
         public int ManaCost => _manaCost;
         public GameObject VfxPrefab => _vfxPrefab;

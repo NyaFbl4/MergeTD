@@ -16,6 +16,7 @@ MonoBehaviour:
   _displayName: Криоразряд
   _description: Накладывает замедление на всех врагов в выбранной области. Не наносит урон.
   _icon: {fileID: 750792369792279797, guid: b84869c1e3625fd47a4906094ac57d48, type: 3}
+  _background: {fileID: 7569198331679980289, guid: 4274602a3c64f3748848e3d67ed4dbb8, type: 3}
   _cooldown: 18
   _manaCost: 4
   _vfxPrefab: {fileID: 4823525608512824734, guid: 80287f7d04f67624c93ff4dae786ef27, type: 3}

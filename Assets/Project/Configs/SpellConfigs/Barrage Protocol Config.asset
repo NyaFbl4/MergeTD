@@ -16,6 +16,7 @@ MonoBehaviour:
   _displayName: Протокол «Шквал»
   _description: Временно увеличивает скорость атаки всех боевых башен.
   _icon: {fileID: -7794484074879603317, guid: a9d82559243660d4d9a81cf70f3fc85a, type: 3}
+  _background: {fileID: 4977526221841929852, guid: 83fc82f110364614fbec332a148a404a, type: 3}
   _cooldown: 25
   _manaCost: 6
   _vfxPrefab: {fileID: 0}

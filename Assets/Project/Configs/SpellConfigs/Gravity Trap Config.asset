@@ -16,6 +16,7 @@ MonoBehaviour:
   _displayName: Гравитационная ловушка
   _description: Стягивает врагов в выбранную точку и удерживает их там. Не наносит урон.
   _icon: {fileID: -8340345365926156504, guid: 7afb94d19a7ef854c8789763b1eb88a3, type: 3}
+  _background: {fileID: 7569198331679980289, guid: 4274602a3c64f3748848e3d67ed4dbb8, type: 3}
   _cooldown: 28
   _manaCost: 7
   _vfxPrefab: {fileID: 4903989986093316332, guid: 142b394e21edf1c42947ec16dc7a523c, type: 3}

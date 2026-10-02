@@ -57,6 +57,8 @@ namespace Project.Scripts.UI.LevelUI
             new(StringComparer.Ordinal);
         private readonly Dictionary<string, VisualElement> _spellIcons =
             new(StringComparer.Ordinal);
+        private readonly Dictionary<string, VisualElement> _spellBackgrounds =
+            new(StringComparer.Ordinal);
         
         public event Action BuyTowerButtonClicked;
         public event Action BuyGeneratorButtonClicked;
@@ -137,6 +139,13 @@ namespace Project.Scripts.UI.LevelUI
             _spellIcons.Add(SpellIds.EmpPulse, _empPulseButton.Q<VisualElement>("TowerIcon"));
             _spellIcons.Add(SpellIds.OrbitalRailgun, _orbitalRailgunButton.Q<VisualElement>("TowerIcon"));
             _spellIcons.Add(SpellIds.GravityTrap, _gravityTrapButton.Q<VisualElement>("TowerIcon"));
+            _spellBackgrounds.Add(SpellIds.WeaponBarrage, _weaponBarrageButton);
+            _spellBackgrounds.Add(SpellIds.BaseRepair, _baseRepairButton);
+            _spellBackgrounds.Add(SpellIds.BarrageProtocol, _barrageProtocolButton);
+            _spellBackgrounds.Add(SpellIds.CryoDischarge, _cryoDischargeButton);
+            _spellBackgrounds.Add(SpellIds.EmpPulse, _empPulseButton);
+            _spellBackgrounds.Add(SpellIds.OrbitalRailgun, _orbitalRailgunButton);
+            _spellBackgrounds.Add(SpellIds.GravityTrap, _gravityTrapButton);
             _adButtonTowerIcon = _adButton?.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("GoldLabel") ?? _root.Q<Label>("MoneyLabel");
@@ -189,6 +198,14 @@ namespace Project.Scripts.UI.LevelUI
                 throw new ArgumentException($"Unknown spell id '{spellId}'.", nameof(spellId));
 
             spellIcon.style.backgroundImage = new StyleBackground(icon);
+        }
+
+        public void SetSpellBackground(string spellId, Sprite background)
+        {
+            if (!_spellBackgrounds.TryGetValue(spellId, out var spellBackground))
+                throw new ArgumentException($"Unknown spell id '{spellId}'.", nameof(spellId));
+
+            spellBackground.style.backgroundImage = new StyleBackground(background);
         }
 
         public void SetEnergy(int current, int maximum)

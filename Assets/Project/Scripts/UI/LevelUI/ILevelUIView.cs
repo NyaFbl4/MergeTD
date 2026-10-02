@@ -39,6 +39,7 @@ namespace Project.Scripts.UI.LevelUI
         void SetTowerActionsEnabled(bool isEnabled);
         void SetSpellVisible(string spellId, bool isVisible);
         void SetSpellIcon(string spellId, Sprite icon);
+        void SetSpellBackground(string spellId, Sprite background);
         void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled);
         void SetBaseRepairState(string displayName, int healAmount, int cooldownSeconds, bool isBaseFull, bool isEnabled);
         void SetBarrageProtocolState(

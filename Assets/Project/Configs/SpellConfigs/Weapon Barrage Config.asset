@@ -18,6 +18,7 @@ MonoBehaviour:
     \u0432\u0441\u0435\u043C \u0432\u0440\u0430\u0433\u0430\u043C \u0432 \u0432\u044B\u0431\u0440\u0430\u043D\u043D\u043E\u0439
     \u043E\u0431\u043B\u0430\u0441\u0442\u0438."
   _icon: {fileID: -4149582666677244345, guid: dd0c010bb7a559f4d8446b32497bed16, type: 3}
+  _background: {fileID: 3552237782043751338, guid: 42d9ddac7d10f1441a6333221d11cfac, type: 3}
   _cooldown: 15
   _manaCost: 4
   _vfxPrefab: {fileID: 3308840082544497919, guid: af0ef20d9a41ee7479f76ea5c49918cf, type: 3}

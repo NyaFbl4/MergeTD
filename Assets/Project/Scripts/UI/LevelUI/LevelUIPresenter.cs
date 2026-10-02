@@ -437,6 +437,7 @@ namespace Project.Scripts.UI.LevelUI
             for (var i = 0; i < spells.Count; i++)
             {
                 _layoutView.SetSpellIcon(spells[i].SpellId, spells[i].Icon);
+                _layoutView.SetSpellBackground(spells[i].SpellId, spells[i].Background);
                 _layoutView.SetSpellVisible(spells[i].SpellId, spells[i].IsSelected);
             }
         }

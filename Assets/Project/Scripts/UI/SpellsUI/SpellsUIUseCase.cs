@@ -40,6 +40,7 @@ namespace Project.Scripts.UI.SpellsUI
                     config.DisplayName,
                     config.Description,
                     config.Icon,
+                    config.Background,
                     Math.Max(1, _world.GetSpellLevel(config.SpellId)),
                     config.Cooldown,
                     config.ManaCost,

@@ -8,6 +8,7 @@ namespace Project.Scripts.UI.SpellsUI
         public string DisplayName { get; }
         public string Description { get; }
         public Sprite Icon { get; }
+        public Sprite Background { get; }
         public int Level { get; }
         public float Cooldown { get; }
         public int ManaCost { get; }
@@ -19,6 +20,7 @@ namespace Project.Scripts.UI.SpellsUI
             string displayName,
             string description,
             Sprite icon,
+            Sprite background,
             int level,
             float cooldown,
             int manaCost,
@@ -29,6 +31,7 @@ namespace Project.Scripts.UI.SpellsUI
             DisplayName = displayName;
             Description = description;
             Icon = icon;
+            Background = background;
             Level = level;
             Cooldown = cooldown;
             ManaCost = manaCost;
