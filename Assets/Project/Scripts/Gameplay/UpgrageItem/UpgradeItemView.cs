@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Project.Scripts.System.Localization;
+using Project.Scripts.Systems.UI;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.Gameplay.UpgradeItem
@@ -19,6 +20,7 @@ namespace Project.Scripts.Gameplay.UpgradeItem
             _priceLabel = root.Q<Label>("PriceLabel");
             _buyButton = root.Q<Button>("BuyUpgradeButton");
             _icon = root.Q<VisualElement>("UpgradeIcon");
+            UIButtonAnimationUtility.EnableDefault(_buyButton);
 
             _stars = new List<VisualElement>();
             for (var i = 1; i <= 9; i++)

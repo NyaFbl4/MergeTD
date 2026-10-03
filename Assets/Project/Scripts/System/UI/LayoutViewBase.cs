@@ -16,6 +16,7 @@ namespace Project.Scripts.Systems.UI
             _uiDocument = GetComponent<UIDocument>();
             _root = _uiDocument.rootVisualElement;
 
+            UIButtonAnimationUtility.EnableAll(_root);
             Hide();
         }
 
@@ -196,6 +197,11 @@ namespace Project.Scripts.Systems.UI
         }
 
         private static readonly Dictionary<Button, ButtonAnimationState> States = new();
+
+        public static void EnableAll(VisualElement root)
+        {
+            root.Query<Button>().ForEach(button => EnableDefault(button));
+        }
 
         public static void EnableDefault(
             Button button,

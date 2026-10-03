@@ -11,6 +11,7 @@ namespace Project.Scripts.System.Save
         private const int InitialGold = 250;
         private const int InitialBaseHealth = 10;
         private const int InitialMaxEnergy = 12;
+        private const int MaximumActiveSpellCount = 3;
 
         private static readonly IReadOnlyDictionary<string, string> TowerSlotIdMigrations =
             new Dictionary<string, string>
@@ -48,6 +49,7 @@ namespace Project.Scripts.System.Save
         public IReadOnlyList<WorldTowerSlotSaveData> TowerSlots => _data.towerSlots;
         public IReadOnlyList<WorldTowerSaveData> Towers => _data.towers;
         public IReadOnlyList<SpellProgressSaveData> Spells => _data.spells;
+        public IReadOnlyList<string> ActiveSpellIds => _data.activeSpellIds;
         public bool HasPersistedData { get; private set; }
 
         public event Action<int> GoldChanged;
@@ -277,6 +279,56 @@ namespace Project.Scripts.System.Save
             SpellsChanged?.Invoke();
         }
 
+        public bool TryUpgradeSpell(string spellId, int expectedLevel, int price)
+        {
+            if (string.IsNullOrWhiteSpace(spellId) || expectedLevel < 1 || price < 1 || Gems < price)
+                return false;
+
+            var spell = GetOrCreateSpell(spellId);
+            var currentLevel = spell.isUnlocked ? Math.Max(1, spell.level) : 1;
+            if (currentLevel != expectedLevel)
+                return false;
+
+            _data.gems -= price;
+            spell.isUnlocked = true;
+            spell.level = currentLevel + 1;
+            Save();
+            GemsChanged?.Invoke(Gems);
+            SpellsChanged?.Invoke();
+            return true;
+        }
+
+        public bool IsSpellSelected(string spellId)
+        {
+            if (string.IsNullOrWhiteSpace(spellId))
+                return false;
+
+            return _data.activeSpellIds.Contains(spellId);
+        }
+
+        public bool SetSpellSelected(string spellId, bool isSelected)
+        {
+            if (string.IsNullOrWhiteSpace(spellId))
+                throw new ArgumentException("A spell id is required.", nameof(spellId));
+
+            if (isSelected)
+            {
+                if (_data.activeSpellIds.Contains(spellId)
+                    || _data.activeSpellIds.Count >= MaximumActiveSpellCount)
+                    return false;
+
+                _data.activeSpellIds.Add(spellId);
+            }
+            else if (!_data.activeSpellIds.Remove(spellId))
+            {
+                return false;
+            }
+
+            Save();
+            SpellsChanged?.Invoke();
+            return true;
+        }
+
         public void ImportLegacy(
             int gold,
             int maxBaseHealth,
@@ -363,6 +415,7 @@ namespace Project.Scripts.System.Save
             _data.towers ??= new List<WorldTowerSaveData>();
             _data.towerSlots ??= new List<WorldTowerSlotSaveData>();
             _data.spells ??= new List<SpellProgressSaveData>();
+            _data.activeSpellIds ??= new List<string>();
 
             var upgradeIds = new HashSet<string>();
             for (var i = _data.upgrades.Count - 1; i >= 0; i--)
@@ -405,6 +458,21 @@ namespace Project.Scripts.System.Save
                     spell.level = 0;
                 else
                     spell.level = Math.Max(1, spell.level);
+            }
+
+            var activeSpellIds = new HashSet<string>();
+            for (var i = _data.activeSpellIds.Count - 1; i >= 0; i--)
+            {
+                var spellId = _data.activeSpellIds[i];
+                if (string.IsNullOrWhiteSpace(spellId) || !activeSpellIds.Add(spellId))
+                    _data.activeSpellIds.RemoveAt(i);
+            }
+
+            if (_data.activeSpellIds.Count > MaximumActiveSpellCount)
+            {
+                _data.activeSpellIds.RemoveRange(
+                    MaximumActiveSpellCount,
+                    _data.activeSpellIds.Count - MaximumActiveSpellCount);
             }
 
             SortTowerData();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.Systems.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -34,7 +35,13 @@ namespace Project.Scripts.UI.ArmyUI
 
         private int _dragSourceIndex = -1;
         private int _dragPointerId = -1;
-        private Vector3 _dragStartPointerPosition;
+        private Vector2 _dragStartPointerPosition;
+        private Vector2 _dragStartIconPosition;
+        private VisualElement _dragIconParent;
+        private int _dragIconSiblingIndex = -1;
+        private StyleEnum<Position> _dragIconPosition;
+        private StyleLength _dragIconLeft;
+        private StyleLength _dragIconTop;
 
         public event Action BuyTowerButtonClicked;
         public event Action BuyGeneratorButtonClicked;
@@ -56,6 +63,8 @@ namespace Project.Scripts.UI.ArmyUI
 
             _buyTowerButton.clicked += OnBuyTowerButtonClicked;
             _buyGeneratorButton.clicked += OnBuyGeneratorButtonClicked;
+            UIButtonAnimationUtility.EnableDefault(_buyTowerButton);
+            UIButtonAnimationUtility.EnableDefault(_buyGeneratorButton);
 
             _towersSlotContainer.Clear();
             for (var i = 0; i < TowerSlotGrid.SlotCount; i++)
@@ -162,8 +171,7 @@ namespace Project.Scripts.UI.ArmyUI
 
             _dragSourceIndex = slotIndex;
             _dragPointerId = evt.pointerId;
-            _dragStartPointerPosition = evt.position;
-            _towerImages[slotIndex].style.opacity = 0.6f;
+            MoveDraggedIconToFront(evt.position, slotIndex);
             _towerSlots[slotIndex].CapturePointer(evt.pointerId);
             evt.StopPropagation();
         }
@@ -173,8 +181,12 @@ namespace Project.Scripts.UI.ArmyUI
             if (_dragSourceIndex != slotIndex || _dragPointerId != evt.pointerId)
                 return;
 
-            var delta = evt.position - _dragStartPointerPosition;
-            _towerImages[slotIndex].style.translate = new Translate(delta.x, delta.y, 0f);
+            var pointerPosition = _towersSlotContainer.WorldToLocal(
+                new Vector2(evt.position.x, evt.position.y));
+            var delta = pointerPosition - _dragStartPointerPosition;
+            var towerImage = _towerImages[slotIndex];
+            towerImage.style.left = _dragStartIconPosition.x + delta.x;
+            towerImage.style.top = _dragStartIconPosition.y + delta.y;
             evt.StopPropagation();
         }
 
@@ -217,13 +229,46 @@ namespace Project.Scripts.UI.ArmyUI
                 return;
 
             var sourceSlot = _towerSlots[_dragSourceIndex];
-            _towerImages[_dragSourceIndex].style.opacity = 1f;
-            _towerImages[_dragSourceIndex].style.translate = new Translate(0f, 0f, 0f);
+            RestoreDraggedIcon();
             if (pointerId >= 0 && sourceSlot.HasPointerCapture(pointerId))
                 sourceSlot.ReleasePointer(pointerId);
 
             _dragSourceIndex = -1;
             _dragPointerId = -1;
+        }
+
+        private void MoveDraggedIconToFront(Vector3 pointerPosition, int slotIndex)
+        {
+            var towerImage = _towerImages[slotIndex];
+            _dragIconParent = towerImage.parent;
+            _dragIconSiblingIndex = _dragIconParent.IndexOf(towerImage);
+            _dragIconPosition = towerImage.style.position;
+            _dragIconLeft = towerImage.style.left;
+            _dragIconTop = towerImage.style.top;
+
+            _dragStartPointerPosition = _towersSlotContainer.WorldToLocal(
+                new Vector2(pointerPosition.x, pointerPosition.y));
+            _dragStartIconPosition = _towersSlotContainer.WorldToLocal(towerImage.worldBound.position);
+
+            towerImage.RemoveFromHierarchy();
+            _towersSlotContainer.Add(towerImage);
+            towerImage.style.position = Position.Absolute;
+            towerImage.style.left = _dragStartIconPosition.x;
+            towerImage.style.top = _dragStartIconPosition.y;
+            towerImage.BringToFront();
+        }
+
+        private void RestoreDraggedIcon()
+        {
+            var towerImage = _towerImages[_dragSourceIndex];
+            towerImage.RemoveFromHierarchy();
+            _dragIconParent.Insert(_dragIconSiblingIndex, towerImage);
+            towerImage.style.position = _dragIconPosition;
+            towerImage.style.left = _dragIconLeft;
+            towerImage.style.top = _dragIconTop;
+
+            _dragIconParent = null;
+            _dragIconSiblingIndex = -1;
         }
 
         private void SetIcon(VisualElement element, Sprite icon)

@@ -2,6 +2,7 @@ using Project.Scripts.Systems.UI;
 using Cysharp.Threading.Tasks;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
+using Project.Scripts.UI.SpellsUI;
 using Project.Scripts.Configs;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -25,6 +26,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private Label _gemsCountLabel;
         private IInBattleUIView _inBattleView;
         private IArmyUIView _armyView;
+        private ISpellsPanelUIView _spellsPanelView;
         private Button[] _sectionButtons;
         private VisualElement[] _sectionIcons;
         private Label[] _sectionLabels;
@@ -38,6 +40,7 @@ namespace Project.Scripts.UI.MainMenuUI
         public event Action<MainMenuSection> SectionClicked;
         public IInBattleUIView InBattleView => _inBattleView;
         public IArmyUIView ArmyView => _armyView;
+        public ISpellsPanelUIView SpellsPanelView => _spellsPanelView;
 
         public override void Awake()
         {
@@ -81,6 +84,12 @@ namespace Project.Scripts.UI.MainMenuUI
             _armyView = new ArmyUIView(armyRoot, uiElements);
         }
 
+        public void InitializeSpells(UIElements uiElements)
+        {
+            var spellsRoot = _root.Q<TemplateContainer>("SpellsPanel");
+            _spellsPanelView = new SpellsPanelUIView(spellsRoot, uiElements);
+        }
+
         public void SetGoldCount(int goldCount)
         {
             _goldCountLabel.text = Math.Max(0, goldCount).ToString();
@@ -98,6 +107,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
             _inBattleView.SetVisible(section == MainMenuSection.Battle);
             _armyView.SetVisible(section == MainMenuSection.Army);
+            _spellsPanelView.SetVisible(section == MainMenuSection.Spells);
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].style.backgroundImage = i == activeIndex
@@ -194,6 +204,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _sectionAnimationVersion++;
             _inBattleView.Dispose();
             _armyView.Dispose();
+            _spellsPanelView.Dispose();
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].clicked -= _sectionClickHandlers[i];

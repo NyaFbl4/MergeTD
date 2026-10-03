@@ -21,6 +21,7 @@ namespace Project.Scripts.System.Save
         public List<WorldTowerSaveData> towers = new();
         public List<WorldTowerSlotSaveData> towerSlots = new();
         public List<SpellProgressSaveData> spells = new();
+        public List<string> activeSpellIds = new();
     }
 
     [Serializable]

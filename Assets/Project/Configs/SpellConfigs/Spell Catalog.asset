@@ -20,3 +20,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b2ae56f47f2c4126a82e628be22c83e7, type: 2}
   - {fileID: 11400000, guid: 30e4b15818ee4c8eb3dc5d7cd79c86a1, type: 2}
   - {fileID: 11400000, guid: 9f33818ddf4146178f9daac1f1159914, type: 2}
+  _upgradeConfig: {fileID: 11400000, guid: c4de3a70efaa4536ba270de7be6d980d, type: 2}

@@ -2,12 +2,14 @@
 using Project.Scripts.Configs;
 using Project.Scripts.System.Save;
 using Project.Scripts.UI.ArmyUI;
+using Project.Scripts.UI.SpellsUI;
 
 using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.Systems.UI.Dtos;
+using Project.Scripts.System.Audio;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
@@ -17,17 +19,22 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly UIElements _uiElements;
         private readonly IWorldService _world;
         private readonly IArmyUIUseCase _armyUIUseCase;
+        private readonly ISpellsUIUseCase _spellsUIUseCase;
+        private readonly IAudioManager _audioManager;
         private readonly IRunSelectionService _runSelection;
         private readonly IGameManagerService _gameManagerService;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private IInBattleUIPresenter _inBattlePresenter;
         private IArmyUIPresenter _armyPresenter;
+        private SpellsPanelUIPresenter _spellsPanelPresenter;
 
         public MainMenuUIPresenter(
             MainMenuUIUseCase menuUIUseCase,
             UIElements uiElements,
             IWorldService world,
             IArmyUIUseCase armyUIUseCase,
+            ISpellsUIUseCase spellsUIUseCase,
+            IAudioManager audioManager,
             IRunSelectionService runSelection,
             IGameManagerService gameManagerService,
             IPublisher<HidePopupDto> hidePopupPublisher)
@@ -36,6 +43,8 @@ namespace Project.Scripts.UI.MainMenuUI
             _uiElements = uiElements;
             _world = world;
             _armyUIUseCase = armyUIUseCase;
+            _spellsUIUseCase = spellsUIUseCase;
+            _audioManager = audioManager;
             _runSelection = runSelection;
             _gameManagerService = gameManagerService;
             _hidePopupPublisher = hidePopupPublisher;
@@ -47,6 +56,13 @@ namespace Project.Scripts.UI.MainMenuUI
             _layoutView.InitializeArmy(_uiElements);
             _armyPresenter = new ArmyUIPresenter(_layoutView.ArmyView, _world, _armyUIUseCase);
             _armyPresenter.Initialize();
+
+            _layoutView.InitializeSpells(_uiElements);
+            _spellsPanelPresenter = new SpellsPanelUIPresenter(
+                _layoutView.SpellsPanelView,
+                _spellsUIUseCase,
+                _audioManager);
+            _spellsPanelPresenter.Initialize();
 
             _inBattlePresenter = new InBattleUIPresenter(
                 _layoutView.InBattleView,
@@ -86,6 +102,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _layoutView.SectionClicked -= OnSectionClicked;
             _inBattlePresenter.Dispose();
             _armyPresenter.Dispose();
+            _spellsPanelPresenter.Dispose();
 
             base.Dispose();
         }

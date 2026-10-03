@@ -1,6 +1,7 @@
 ﻿using System;
 using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.System.Localization;
+using Project.Scripts.Systems.UI;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
@@ -23,6 +24,7 @@ namespace Project.Scripts.UI.QuestUI
             _maxProgressLabel = root.Q<Label>("MaxProgress");
             _rewardLabel = root.Q<Label>("RewardLabel");
             _takeRewardButton = root.Q<Button>("TakeRewardButton");
+            UIButtonAnimationUtility.EnableDefault(_takeRewardButton);
         }
 
         public void Bind(IQuestRuntime quest, Action onClaimReward, ILocalizationService localizationService)

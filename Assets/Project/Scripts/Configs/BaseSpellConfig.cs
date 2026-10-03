@@ -61,5 +61,37 @@ namespace Project.Scripts.Configs
         public Vector3 VfxEulerAngles => _vfxEulerAngles;
         public float VfxLifetime => _vfxLifetime;
         public IReadOnlyList<SpellUpgradeDescription> Upgrades => _upgrades;
+
+        public int MaximumLevel
+        {
+            get
+            {
+                var maximumLevel = 1;
+                for (var i = 0; i < _upgrades.Count; i++)
+                    maximumLevel = Math.Max(maximumLevel, _upgrades[i].Level);
+
+                return maximumLevel;
+            }
+        }
+
+        public SpellUpgradeDescription GetUpgrade(int level)
+        {
+            SpellUpgradeDescription result = null;
+
+            for (var i = 0; i < _upgrades.Count; i++)
+            {
+                var upgrade = _upgrades[i];
+                if (upgrade.Level != level)
+                    continue;
+
+                if (result != null)
+                    throw new InvalidOperationException(
+                        $"Spell '{_spellId}' contains duplicate upgrade level {level}.");
+
+                result = upgrade;
+            }
+
+            return result;
+        }
     }
 }

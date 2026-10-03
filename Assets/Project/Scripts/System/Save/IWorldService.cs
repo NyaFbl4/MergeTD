@@ -28,6 +28,7 @@ namespace Project.Scripts.System.Save
         IReadOnlyList<WorldTowerSlotSaveData> TowerSlots { get; }
         IReadOnlyList<WorldTowerSaveData> Towers { get; }
         IReadOnlyList<SpellProgressSaveData> Spells { get; }
+        IReadOnlyList<string> ActiveSpellIds { get; }
 
         event Action<int> GoldChanged;
         event Action<int> GemsChanged;
@@ -56,6 +57,9 @@ namespace Project.Scripts.System.Save
         int GetSpellLevel(string spellId);
         void UnlockSpell(string spellId);
         void SetSpellLevel(string spellId, int level);
+        bool TryUpgradeSpell(string spellId, int expectedLevel, int price);
+        bool IsSpellSelected(string spellId);
+        bool SetSpellSelected(string spellId, bool isSelected);
         void Reset();
     }
 }

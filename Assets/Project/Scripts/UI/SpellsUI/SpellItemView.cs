@@ -1,4 +1,5 @@
 using System;
+using Project.Scripts.Systems.UI;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.SpellsUI
@@ -13,10 +14,14 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly VisualElement _selectedElement;
         private readonly Button _selectionButton;
         private readonly Label _selectionLabel;
+        private readonly VisualElement _infoElement;
 
         private string _spellId;
 
-        public SpellItemView(VisualElement root, Action<string> onSelectionClicked)
+        public SpellItemView(
+            VisualElement root,
+            Action<string> onSelectionClicked,
+            Action<string> onInfoClicked = null)
         {
             _nameLabel = root.Q<Label>("SpellNameLabel");
             _descriptionLabel = root.Q<Label>("SpellDescriptionLabel");
@@ -26,9 +31,17 @@ namespace Project.Scripts.UI.SpellsUI
             _selectedElement = root.Q<VisualElement>("SelectedElement");
             _selectionButton = root.Q<Button>("SetSpellButton");
             _selectionLabel = _selectionButton?.Q<Label>();
+            _infoElement = root.Q<VisualElement>("TowerPanel");
+            UIButtonAnimationUtility.EnableDefault(_selectionButton);
 
             if (_selectionButton != null)
+            {
+                _selectionButton.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
                 _selectionButton.clicked += () => onSelectionClicked?.Invoke(_spellId);
+            }
+
+            if (_infoElement != null && onInfoClicked != null)
+                _infoElement.RegisterCallback<ClickEvent>(_ => onInfoClicked(_spellId));
         }
 
         public void Bind(SpellUIItemData spell)

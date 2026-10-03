@@ -8,10 +8,16 @@ namespace Project.Scripts.Configs
     public class UIElements: ScriptableObject
     {
         [SerializeField] private VisualTreeAsset _towerSlotPanel;
+        [SerializeField] private VisualTreeAsset _spellPanel;
+        [SerializeField] private VisualTreeAsset _spellButton;
+        [SerializeField] private VisualTreeAsset _spellInfo;
         [SerializeField] private List<Sprite> _towerIcons;
         [SerializeField] private List<Sprite> _generatorIcons;
         
         public VisualTreeAsset TowerSlotPanel => _towerSlotPanel;
+        public VisualTreeAsset SpellPanel => _spellPanel;
+        public VisualTreeAsset SpellButton => _spellButton;
+        public VisualTreeAsset SpellInfo => _spellInfo;
         public List<Sprite> TowerIcons => _towerIcons;
         public List<Sprite> GeneratorIcons => _generatorIcons;
     }

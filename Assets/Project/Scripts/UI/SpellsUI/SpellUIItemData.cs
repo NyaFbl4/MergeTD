@@ -14,6 +14,12 @@ namespace Project.Scripts.UI.SpellsUI
         public int ManaCost { get; }
         public bool IsSelected { get; }
         public bool CanSelect { get; }
+        public int MaximumLevel { get; }
+        public int UpgradePrice { get; }
+        public string UpgradeTitle { get; }
+        public string UpgradeDescription { get; }
+        public bool HasNextUpgrade { get; }
+        public bool CanAffordUpgrade { get; }
 
         public SpellUIItemData(
             string spellId,
@@ -25,7 +31,13 @@ namespace Project.Scripts.UI.SpellsUI
             float cooldown,
             int manaCost,
             bool isSelected,
-            bool canSelect)
+            bool canSelect,
+            int maximumLevel,
+            int upgradePrice,
+            string upgradeTitle,
+            string upgradeDescription,
+            bool hasNextUpgrade,
+            bool canAffordUpgrade)
         {
             SpellId = spellId;
             DisplayName = displayName;
@@ -37,6 +49,12 @@ namespace Project.Scripts.UI.SpellsUI
             ManaCost = manaCost;
             IsSelected = isSelected;
             CanSelect = canSelect;
+            MaximumLevel = maximumLevel;
+            UpgradePrice = upgradePrice;
+            UpgradeTitle = upgradeTitle;
+            UpgradeDescription = upgradeDescription;
+            HasNextUpgrade = hasNextUpgrade;
+            CanAffordUpgrade = canAffordUpgrade;
         }
     }
 }

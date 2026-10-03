@@ -10,8 +10,10 @@ namespace Project.Scripts.Configs
     public sealed class SpellCatalog : ScriptableObject
     {
         [SerializeField] private List<BaseSpellConfig> _spells = new();
+        [SerializeField] private SpellUpgradeConfig _upgradeConfig;
 
         public IReadOnlyList<BaseSpellConfig> Spells => _spells;
+        public SpellUpgradeConfig UpgradeConfig => _upgradeConfig;
 
         public T Get<T>() where T : BaseSpellConfig
         {

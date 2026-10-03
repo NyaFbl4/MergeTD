@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: UIElements
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UIElements
   _towerSlotPanel: {fileID: 9197481963319205126, guid: 28e3860fed26d42448ede79b53fad3dd, type: 3}
+  _spellPanel: {fileID: 9197481963319205126, guid: 923b582f7c3502740930a27e17ab925b, type: 3}
+  _spellButton: {fileID: 9197481963319205126, guid: 290c677105eae334abb1a2452ac79b4e, type: 3}
+  _spellInfo: {fileID: 9197481963319205126, guid: 38c4031819d2fb44babd505119fd58a9, type: 3}
   _towerIcons:
   - {fileID: -3090903425614839014, guid: 7dcc00c47aa0c4f4b8318cac27279bca, type: 3}
   - {fileID: -2710602050473076177, guid: c19c698714c9d4346bd18f0581fcee07, type: 3}

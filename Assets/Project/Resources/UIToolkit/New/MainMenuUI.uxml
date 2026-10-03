@@ -1,6 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="ArmyPanel" src="project://database/Assets/Project/Resources/UIToolkit/New/ArmyPanel.uxml?fileID=9197481963319205126&amp;guid=94e86a50830bfa2479e01b60fd900afe&amp;type=3#ArmyPanel"/>
     <ui:Template name="InBattlePanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/InBattlePanel.uxml?fileID=9197481963319205126&amp;guid=34cfc351c81e1c54b825581bca0f511d&amp;type=3#InBattlePanel"/>
+    <ui:Template name="SpellsPanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/SpellsPanel.uxml?fileID=9197481963319205126&amp;guid=f58d8253033568441930b1764a916116&amp;type=3#SpellsPanel"/>
     <ui:VisualElement name="Layout" style="flex-grow: 1;">
         <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&quot;exec-3857d5d4-a61d-4425-901c-e1216a7ac466&quot;);"/>
         <ui:VisualElement name="HeaderPanel" style="flex-grow: 1; width: 100%; min-width: 100%; max-width: 100%; height: 150px; min-height: 150px; max-height: 150px; justify-content: flex-end; flex-direction: row-reverse; align-self: center; align-items: center;">
@@ -18,6 +19,7 @@
                 <ui:VisualElement name="ContentHost" style="flex-grow: 1; width: 100%; height: 100%; align-self: center; justify-content: center;">
                     <ui:Instance template="ArmyPanel" name="ArmyPanel" style="display: flex; flex-grow: 1; width: 100%; height: 100%;"/>
                     <ui:Instance template="InBattlePanelTemplate" name="InBattleContent" style="flex-grow: 1; width: 100%; height: 100%; display: none;"/>
+                    <ui:Instance template="SpellsPanelTemplate" name="SpellsPanel" style="flex-grow: 1; width: 100%; height: 100%; display: none;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

@@ -8,9 +8,11 @@ namespace Project.Scripts.UI.SpellsUI
         int SelectedCount { get; }
         int MaximumSelectedCount { get; }
         event Action SelectionChanged;
+        event Action<int> GemsChanged;
 
         IReadOnlyList<SpellUIItemData> GetSpells();
         bool IsSelected(string spellId);
         bool ToggleSelection(string spellId);
+        bool TryUpgrade(string spellId);
     }
 }
