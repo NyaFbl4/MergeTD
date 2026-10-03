@@ -6,14 +6,14 @@
         </ui:VisualElement>
         <ui:VisualElement name="DescriptionPanel" style="flex-grow: 1; margin-left: 5px;">
             <ui:VisualElement style="flex-grow: 1; flex-direction: row; height: 43px; min-height: 43px; max-height: 43px;">
-                <ui:Label text="Огненный шар  " name="SpellNameLabel" style="font-size: 25px; -unity-font-style: bold; height: 45px; white-space: normal; -unity-text-align: middle-center;"/>
-                <ui:Label text="Уровень 2" name="SpellLevelLabel" style="font-size: 25px; color: rgb(255, 252, 0); height: 45px; -unity-font-style: bold; -unity-text-align: middle-center;"/>
+                <ui:Label text="Огненный шар  " name="SpellNameLabel" style="-unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 25px; -unity-font-style: bold; height: 45px; white-space: normal; -unity-text-align: middle-center;"/>
+                <ui:Label text="Уровень 2" name="SpellLevelLabel" style="-unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 25px; color: rgb(255, 252, 0); height: 45px; -unity-font-style: bold; -unity-text-align: middle-center;"/>
             </ui:VisualElement>
-            <ui:Label text="Взрыв взрыв взрыв" name="SpellDescriptionLabel" style="font-size: 20px; white-space: normal; height: 90px; min-height: 90px; max-height: 90px;"/>
-            <ui:Label text="КД 4 секунд, стоит 6 маны" name="SpellCooldownLabel" style="font-size: 25px; color: rgb(111, 0, 255); white-space: nowrap; -unity-text-auto-size: best-fit 14px 25px; -unity-text-align: upper-left;"/>
+            <ui:Label text="Взрыв взрыв взрыв" name="SpellDescriptionLabel" style="-unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 20px; white-space: normal; height: 90px; min-height: 90px; max-height: 90px;"/>
+            <ui:Label text="КД 4 секунд, стоит 6 маны" name="SpellCooldownLabel" style="-unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 25px; color: rgb(111, 0, 255); white-space: nowrap; -unity-text-auto-size: best-fit 14px 25px; -unity-text-align: upper-left;"/>
         </ui:VisualElement>
-        <ui:Button text="" name="SetSpellButton" style="width: 150px; min-width: 150px; max-width: 150px; height: 60px; min-height: 60px; max-height: 60px; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-direction: row; align-self: center; -unity-background-image-tint-color: rgb(237, 243, 61);">
-            <ui:Label text="ВЫБРАНО" style="font-size: 25px; width: 142px; height: 52px; min-width: 100%; top: -9px; left: -9px;"/>
+        <ui:Button text="" name="SetSpellButton" style="-unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); width: 150px; min-width: 150px; max-width: 150px; height: 60px; min-height: 60px; max-height: 60px; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-direction: row; align-self: center; -unity-background-image-tint-color: rgb(237, 243, 61);">
+            <ui:Label text="ВЫБРАНО" style="-unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 25px; width: 142px; height: 52px; min-width: 100%; top: -9px; left: -9px;"/>
         </ui:Button>
     </ui:VisualElement>
 </ui:UXML>

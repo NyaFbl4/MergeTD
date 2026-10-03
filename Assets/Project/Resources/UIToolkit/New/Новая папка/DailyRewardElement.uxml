@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="DailyRewardElement" style="flex-grow: 1; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; width: 90px; height: 90px; min-height: 90px; max-height: 90px; min-width: 90px; max-width: 90px; margin-top: 0; margin-right: 5px; margin-left: 5px; align-items: center; justify-content: center;">
         <ui:VisualElement name="RewardIcon" style="flex-grow: 1; width: 50px; height: 50px; align-items: center; background-image: resource(&quot;UI/new/Icons/Icon_Gold&quot;); min-width: 50px; max-width: 50px; min-height: 50px; max-height: 50px; top: 8px;"/>
-        <ui:Label text="350" name="RevardCountLabel" style="-unity-text-align: upper-center; font-size: 25px; top: 0; width: 100%; min-width: 100%; max-width: 100%;"/>
+        <ui:Label text="350" name="RevardCountLabel" style="-unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: upper-center; font-size: 25px; top: 0; width: 100%; min-width: 100%; max-width: 100%;"/>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,5 +1,5 @@
 {
-    "idSave": 194,
+    "idSave": 197,
     "world": {
         "version": 2,
         "gold": 3410,
@@ -130,8 +130,8 @@
         "spells": [],
         "activeSpellIds": [
             "orbital_railgun",
-            "cryo_discharge",
-            "base_repair"
+            "emp_pulse",
+            "barrage_protocol"
         ]
     },
     "worldJson": ""
