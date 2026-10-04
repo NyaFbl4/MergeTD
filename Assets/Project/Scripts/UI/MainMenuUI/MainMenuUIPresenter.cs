@@ -10,6 +10,7 @@ using Project.Scripts.Gameplay.Run;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.System.Audio;
+using Project.Scripts.System.Reward;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
@@ -24,6 +25,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly IRunSelectionService _runSelection;
         private readonly IGameManagerService _gameManagerService;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
+        private readonly DailyRewardService _dailyRewardService;
         private IInBattleUIPresenter _inBattlePresenter;
         private IArmyUIPresenter _armyPresenter;
         private SpellsPanelUIPresenter _spellsPanelPresenter;
@@ -37,7 +39,8 @@ namespace Project.Scripts.UI.MainMenuUI
             IAudioManager audioManager,
             IRunSelectionService runSelection,
             IGameManagerService gameManagerService,
-            IPublisher<HidePopupDto> hidePopupPublisher)
+            IPublisher<HidePopupDto> hidePopupPublisher,
+            DailyRewardService dailyRewardService)
         {
             _menuUIUseCase = menuUIUseCase;
             _uiElements = uiElements;
@@ -48,6 +51,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _runSelection = runSelection;
             _gameManagerService = gameManagerService;
             _hidePopupPublisher = hidePopupPublisher;
+            _dailyRewardService = dailyRewardService;
         }
         
         public override void Initialize()
@@ -68,7 +72,8 @@ namespace Project.Scripts.UI.MainMenuUI
                 _layoutView.InBattleView,
                 _runSelection,
                 _gameManagerService,
-                _hidePopupPublisher);
+                _hidePopupPublisher,
+                _dailyRewardService);
             _inBattlePresenter.Initialize();
             
             _menuUIUseCase.GoldChanged += OnGoldChanged;

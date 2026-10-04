@@ -39,6 +39,8 @@ namespace Project.Scripts.System.Save
 
         public int Gold => _data.gold;
         public int Gems => _data.gems;
+        public long DailyRewardLastClaimDay => _data.dailyRewardLastClaimDay;
+        public int DailyRewardIndex => _data.dailyRewardIndex;
         public int MaxBaseHealth => _data.maxBaseHealth;
         public int MaxEnergy => _data.maxEnergy;
         public int SelectedTowerLevel => _data.selectedTowerLevel;
@@ -54,6 +56,7 @@ namespace Project.Scripts.System.Save
 
         public event Action<int> GoldChanged;
         public event Action<int> GemsChanged;
+        public event Action DailyRewardChanged;
         public event Action<int> MaxBaseHealthChanged;
         public event Action<int> MaxEnergyChanged;
         public event Action UpgradesChanged;
@@ -108,6 +111,40 @@ namespace Project.Scripts.System.Save
             _data.gems = AddClamped(_data.gems, amount);
             Save();
             GemsChanged?.Invoke(Gems);
+        }
+
+        public bool TryClaimDailyReward(
+            long moscowDay,
+            int rewardIndex,
+            int goldAmount,
+            int gemsAmount)
+        {
+            if (moscowDay < 0)
+                throw new ArgumentOutOfRangeException(nameof(moscowDay));
+
+            if (rewardIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(rewardIndex));
+
+            if (goldAmount < 0 || gemsAmount < 0 || goldAmount == 0 && gemsAmount == 0)
+                throw new ArgumentOutOfRangeException(nameof(goldAmount));
+
+            if (moscowDay <= _data.dailyRewardLastClaimDay)
+                return false;
+
+            _data.gold = AddClamped(_data.gold, goldAmount);
+            _data.gems = AddClamped(_data.gems, gemsAmount);
+            _data.dailyRewardLastClaimDay = moscowDay;
+            _data.dailyRewardIndex = rewardIndex;
+            Save();
+
+            if (goldAmount > 0)
+                GoldChanged?.Invoke(Gold);
+
+            if (gemsAmount > 0)
+                GemsChanged?.Invoke(Gems);
+
+            DailyRewardChanged?.Invoke();
+            return true;
         }
 
         public bool TrySpendGems(int amount)
@@ -373,6 +410,7 @@ namespace Project.Scripts.System.Save
             Save();
             GoldChanged?.Invoke(Gold);
             GemsChanged?.Invoke(Gems);
+            DailyRewardChanged?.Invoke();
             MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
             MaxEnergyChanged?.Invoke(MaxEnergy);
             UpgradesChanged?.Invoke();
@@ -400,6 +438,15 @@ namespace Project.Scripts.System.Save
         {
             _data.gold = Math.Max(0, _data.gold);
             _data.gems = Math.Max(0, _data.gems);
+            if (_data.dailyRewardLastClaimDay <= 0)
+            {
+                _data.dailyRewardLastClaimDay = -1;
+                _data.dailyRewardIndex = -1;
+            }
+            else
+            {
+                _data.dailyRewardIndex = Math.Max(0, _data.dailyRewardIndex);
+            }
             _data.maxBaseHealth = _data.maxBaseHealth > 0
                 ? _data.maxBaseHealth
                 : InitialBaseHealth;

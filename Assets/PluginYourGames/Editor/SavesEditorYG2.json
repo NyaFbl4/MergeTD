@@ -1,9 +1,11 @@
 {
-    "idSave": 201,
+    "idSave": 210,
     "world": {
         "version": 2,
-        "gold": 3410,
-        "gems": 0,
+        "gold": 3710,
+        "gems": 5,
+        "dailyRewardLastClaimDay": 20731,
+        "dailyRewardIndex": 1,
         "maxBaseHealth": 20,
         "maxEnergy": 12,
         "selectedTowerLevel": 1,

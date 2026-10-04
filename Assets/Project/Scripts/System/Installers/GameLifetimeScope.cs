@@ -1,3 +1,4 @@
+using System;
 using MessagePipe;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
@@ -10,6 +11,8 @@ using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
+using Project.Scripts.System.Reward;
+using Project.Scripts.System.Reward.RewardConfigs;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
@@ -75,6 +78,8 @@ namespace Installers
             builder.Register<ProgressCheckpointUseCase>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<WorldSaveService>(Lifetime.Singleton).AsSelf();
             builder.Register<WorldService>(Lifetime.Singleton).As<IWorldService>().AsSelf();
+            builder.Register<YGDailyRewardTimeProvider>(Lifetime.Singleton).As<IDailyRewardTimeProvider>();
+            builder.Register<DailyRewardService>(Lifetime.Singleton);
             
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
@@ -179,6 +184,10 @@ namespace Installers
             builder.RegisterInstance(_runCatalog);
             builder.RegisterInstance(_uiElements);
             builder.RegisterInstance(_spellCatalog);
+            builder.RegisterInstance(
+                Resources.Load<DailyRewards>("Daily Rewards")
+                ?? throw new InvalidOperationException(
+                    "Daily rewards config was not found at Resources/Daily Rewards."));
         }
     }
 

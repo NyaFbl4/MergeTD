@@ -18,6 +18,8 @@ namespace Project.Scripts.System.Save
     {
         int Gold { get; }
         int Gems { get; }
+        long DailyRewardLastClaimDay { get; }
+        int DailyRewardIndex { get; }
         int MaxBaseHealth { get; }
         int MaxEnergy { get; }
         int SelectedTowerLevel { get; }
@@ -32,6 +34,7 @@ namespace Project.Scripts.System.Save
 
         event Action<int> GoldChanged;
         event Action<int> GemsChanged;
+        event Action DailyRewardChanged;
         event Action<int> MaxBaseHealthChanged;
         event Action<int> MaxEnergyChanged;
         event Action UpgradesChanged;
@@ -43,6 +46,7 @@ namespace Project.Scripts.System.Save
         bool TrySpendGold(int amount);
         void AddGold(int amount);
         void AddGems(int amount);
+        bool TryClaimDailyReward(long moscowDay, int rewardIndex, int goldAmount, int gemsAmount);
         bool TrySpendGems(int amount);
         void SetMaxBaseHealth(int value);
         void SetMaxEnergy(int value);

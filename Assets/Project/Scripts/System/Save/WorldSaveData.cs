@@ -10,6 +10,8 @@ namespace Project.Scripts.System.Save
         public int version = 1;
         public int gold;
         public int gems;
+        public long dailyRewardLastClaimDay = -1;
+        public int dailyRewardIndex = -1;
         public int maxBaseHealth;
         public int maxEnergy;
         public int selectedTowerLevel = 1;
