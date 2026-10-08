@@ -107,9 +107,44 @@
           "en": "Quests"
         },
         {
+          "key": "quests.daily_title",
+          "ru": "Ежедневные задания",
+          "en": "Daily quests"
+        },
+        {
+          "key": "quests.button",
+          "ru": "Задания",
+          "en": "Quests"
+        },
+        {
+          "key": "quests.daily_header_format",
+          "ru": "ДНЕВНЫЕ • {0}/{1} за день",
+          "en": "DAILY • {0}/{1} today"
+        },
+        {
+          "key": "quests.weekly_header_format",
+          "ru": "НЕДЕЛЬНЫЕ • {0}/{1}",
+          "en": "WEEKLY • {0}/{1}"
+        },
+        {
+          "key": "quests.achievement_header_format",
+          "ru": "ДОСТИЖЕНИЯ • {0}/{1}",
+          "en": "ACHIEVEMENTS • {0}/{1}"
+        },
+        {
+          "key": "quests.close",
+          "ru": "Закрыть",
+          "en": "Close"
+        },
+        {
           "key": "quest.done",
           "ru": "Готово",
           "en": "Done"
+        },
+        {
+          "key": "quest.claim",
+          "ru": "Забрать",
+          "en": "Claim"
         },
         {
           "key": "upgrade.max",

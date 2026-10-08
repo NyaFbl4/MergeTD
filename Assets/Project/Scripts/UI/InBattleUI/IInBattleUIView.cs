@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Project.Scripts.System.Reward;
 using Project.Scripts.System.Reward.RewardConfigs;
+using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Localization;
 using UnityEngine;
 
 namespace Project.Scripts.UI.InBattleUI
@@ -14,6 +16,8 @@ namespace Project.Scripts.UI.InBattleUI
         event Action DailyRewardClicked;
         event Action DailyRewardNormalClaimClicked;
         event Action DailyRewardDoubleClaimClicked;
+        event Action DailyQuestsButtonClicked;
+        event Action<IQuestRuntime> DailyQuestClaimClicked;
 
         void SetRun(string displayName, Sprite icon, bool canNavigate);
         void SetDailyRewards(IReadOnlyList<DailyRewardEntry> rewards, DailyRewardState state);
@@ -21,6 +25,9 @@ namespace Project.Scripts.UI.InBattleUI
         void ShowDailyRewardOffer(DailyRewardEntry reward);
         void HideDailyRewardOffer();
         void SetDailyRewardOfferButtonsEnabled(bool enabled);
+        void SetDailyQuests(
+            IReadOnlyList<IQuestRuntime> quests,
+            ILocalizationService localizationService);
         void SetVisible(bool visible);
     }
 }

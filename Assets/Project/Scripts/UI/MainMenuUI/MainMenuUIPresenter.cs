@@ -11,6 +11,8 @@ using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Reward;
+using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Localization;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
@@ -25,7 +27,10 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly IRunSelectionService _runSelection;
         private readonly IGameManagerService _gameManagerService;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
+        private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly DailyRewardService _dailyRewardService;
+        private readonly QuestService _questService;
+        private readonly ILocalizationService _localizationService;
         private IInBattleUIPresenter _inBattlePresenter;
         private IArmyUIPresenter _armyPresenter;
         private SpellsPanelUIPresenter _spellsPanelPresenter;
@@ -40,7 +45,10 @@ namespace Project.Scripts.UI.MainMenuUI
             IRunSelectionService runSelection,
             IGameManagerService gameManagerService,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            DailyRewardService dailyRewardService)
+            IPublisher<ShowPopupDto> showPopupPublisher,
+            DailyRewardService dailyRewardService,
+            QuestService questService,
+            ILocalizationService localizationService)
         {
             _menuUIUseCase = menuUIUseCase;
             _uiElements = uiElements;
@@ -51,7 +59,10 @@ namespace Project.Scripts.UI.MainMenuUI
             _runSelection = runSelection;
             _gameManagerService = gameManagerService;
             _hidePopupPublisher = hidePopupPublisher;
+            _showPopupPublisher = showPopupPublisher;
             _dailyRewardService = dailyRewardService;
+            _questService = questService;
+            _localizationService = localizationService;
         }
         
         public override void Initialize()
@@ -73,7 +84,10 @@ namespace Project.Scripts.UI.MainMenuUI
                 _runSelection,
                 _gameManagerService,
                 _hidePopupPublisher,
-                _dailyRewardService);
+                _showPopupPublisher,
+                _dailyRewardService,
+                _questService,
+                _localizationService);
             _inBattlePresenter.Initialize();
             
             _menuUIUseCase.GoldChanged += OnGoldChanged;

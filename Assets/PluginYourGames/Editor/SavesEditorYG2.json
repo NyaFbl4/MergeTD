@@ -1,11 +1,14 @@
 {
-    "idSave": 210,
+    "idSave": 227,
     "world": {
         "version": 2,
         "gold": 3710,
         "gems": 5,
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 1,
+        "dailyQuestDay": 20731,
+        "dailyQuestCycleDay": 0,
+        "weeklyQuestWeek": 2962,
         "maxBaseHealth": 20,
         "maxEnergy": 12,
         "selectedTowerLevel": 1,
@@ -134,6 +137,76 @@
             "orbital_railgun",
             "emp_pulse",
             "barrage_protocol"
+        ],
+        "dailyQuests": [
+            {
+                "id": "BuyTowerQuest",
+                "currentValue": 0,
+                "targetValue": 10,
+                "rewardGold": 100,
+                "rewardGems": 0,
+                "isRewardClaimed": false
+            },
+            {
+                "id": "5",
+                "currentValue": 0,
+                "targetValue": 10,
+                "rewardGold": 125,
+                "rewardGems": 0,
+                "isRewardClaimed": false
+            }
+        ],
+        "weeklyQuests": [
+            {
+                "id": "BuyTowerQuest",
+                "currentValue": 0,
+                "targetValue": 70,
+                "rewardGold": 0,
+                "rewardGems": 10,
+                "isRewardClaimed": false
+            },
+            {
+                "id": "2",
+                "currentValue": 0,
+                "targetValue": 7,
+                "rewardGold": 0,
+                "rewardGems": 10,
+                "isRewardClaimed": false
+            }
+        ],
+        "achievementQuests": [
+            {
+                "id": "BuyTowerQuest",
+                "currentValue": 0,
+                "targetValue": 500,
+                "rewardGold": 0,
+                "rewardGems": 50,
+                "isRewardClaimed": false
+            },
+            {
+                "id": "DealDamageQuest",
+                "currentValue": 0,
+                "targetValue": 125000,
+                "rewardGold": 0,
+                "rewardGems": 50,
+                "isRewardClaimed": false
+            },
+            {
+                "id": "KillEnemyQuest",
+                "currentValue": 0,
+                "targetValue": 500,
+                "rewardGold": 0,
+                "rewardGems": 50,
+                "isRewardClaimed": false
+            },
+            {
+                "id": "2",
+                "currentValue": 0,
+                "targetValue": 50,
+                "rewardGold": 0,
+                "rewardGems": 50,
+                "isRewardClaimed": false
+            }
         ]
     },
     "worldJson": ""

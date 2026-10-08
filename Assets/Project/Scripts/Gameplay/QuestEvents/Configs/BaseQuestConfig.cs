@@ -12,7 +12,7 @@ namespace Project.Scripts.Gameplay.Quests
         [SerializeField, Min(0f)] private float _targetScalePerWave = 0.15f;
         [SerializeField, Min(0f)] private float _rewardScalePerWave = 0.1f;
 
-        public string Id => _id;
+        public string Id => string.IsNullOrWhiteSpace(_id) ? name : _id;
         public Sprite Icon => _icon;
         public string Description => _description;
         public int RewardGold => _rewardGold;

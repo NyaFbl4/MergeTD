@@ -148,9 +148,9 @@ MonoBehaviour:
     labelAdvSimLabel: 0
   ServerTime:
     manualDateSetup: 1
-    year: 2025
-    month: 6
-    day: 17
+    year: 2026
+    month: 10
+    day: 5
     hour: 12
     minute: 30
     second: 30

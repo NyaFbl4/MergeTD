@@ -66,6 +66,7 @@ namespace Project.Scripts.System.Save
         public int currentValue;
         public int targetValue; 
         public int rewardGold;
+        public int rewardGems;
         public bool isRewardClaimed;
     }
 }

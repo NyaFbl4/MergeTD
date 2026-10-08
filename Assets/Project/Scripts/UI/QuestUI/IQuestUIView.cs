@@ -9,8 +9,17 @@ namespace Project.Scripts.UI.QuestUI
     {
         event Action CloseButtonClicked;
         
-        void SetTitle(string title);
+        void SetTexts(
+            string title,
+            string dailyHeader,
+            string weeklyHeader,
+            string achievementHeader,
+            string closeButton);
         void ClearItems();
-        void AddQuest(IQuestRuntime quest, Action onClaimReward, ILocalizationService localizationService);
+        void AddQuest(
+            EQuestCategory category,
+            IQuestRuntime quest,
+            Action onClaimReward,
+            ILocalizationService localizationService);
     }
 }

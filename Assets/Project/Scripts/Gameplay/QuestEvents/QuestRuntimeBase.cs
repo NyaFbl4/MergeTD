@@ -1,5 +1,6 @@
 using System;
 using Project.Scripts.System.UseCases;
+using Project.Scripts.System.Save;
 using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Quests
@@ -8,16 +9,20 @@ namespace Project.Scripts.Gameplay.Quests
     {
         protected readonly TConfig _config;
         protected readonly IPlayerStatsUseCase _playerStats;
+        private readonly IWorldService _world;
 
         private readonly int _targetValue;
         private readonly int _rewardGold;
+        private readonly int _rewardGems;
         private int _currentValue;
         private bool _isRewardClaimed;
 
         public string Id => _config.Id;
         public Sprite Icon => _config.Icon;
         public string Description => _config.Description;
+        public EQuestCategory Category { get; }
         public int RewardGold => _rewardGold;
+        public int RewardGems => _rewardGems;
         public int CurrentValue => _currentValue;
         public int TargetValue => _targetValue;
         public bool IsCompleted => _currentValue >= _targetValue;
@@ -25,12 +30,22 @@ namespace Project.Scripts.Gameplay.Quests
 
         public event Action ProgressChanged;
 
-        protected QuestRuntimeBase(TConfig config, IPlayerStatsUseCase playerStats, int targetValue, int rewardGold)
+        protected QuestRuntimeBase(
+            TConfig config,
+            IPlayerStatsUseCase playerStats,
+            IWorldService world,
+            EQuestCategory category,
+            int targetValue,
+            int rewardGold,
+            int rewardGems)
         {
             _config = config;
             _playerStats = playerStats;
+            _world = world;
+            Category = category;
             _targetValue = Math.Max(1, targetValue);
             _rewardGold = Math.Max(0, rewardGold);
+            _rewardGems = Math.Max(0, rewardGems);
         }
 
         protected void AddProgress(int value)
@@ -49,7 +64,12 @@ namespace Project.Scripts.Gameplay.Quests
                 return false;
 
             _isRewardClaimed = true;
-            _playerStats.AddGold(_rewardGold);
+            if (_rewardGold > 0)
+                _playerStats.AddGold(_rewardGold);
+
+            if (_rewardGems > 0)
+                _world.AddGems(_rewardGems);
+
             ProgressChanged?.Invoke();
             return true;
         }

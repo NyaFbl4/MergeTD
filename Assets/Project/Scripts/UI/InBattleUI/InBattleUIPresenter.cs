@@ -5,9 +5,12 @@ using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Localization;
 using Project.Scripts.System.Reward;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.UI.MainMenuUI;
+using Project.Scripts.UI.QuestUI;
 using UnityEngine;
 using YG;
 
@@ -21,7 +24,10 @@ namespace Project.Scripts.UI.InBattleUI
         private readonly IRunSelectionService _runSelection;
         private readonly IGameManagerService _gameManagerService;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
+        private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly DailyRewardService _dailyRewardService;
+        private readonly QuestService _questService;
+        private readonly ILocalizationService _localizationService;
         private CancellationTokenSource _refreshCancellation;
         private DailyRewardState _dailyRewardState;
         private bool _hasDailyRewardState;
@@ -32,13 +38,19 @@ namespace Project.Scripts.UI.InBattleUI
             IRunSelectionService runSelection,
             IGameManagerService gameManagerService,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            DailyRewardService dailyRewardService)
+            IPublisher<ShowPopupDto> showPopupPublisher,
+            DailyRewardService dailyRewardService,
+            QuestService questService,
+            ILocalizationService localizationService)
         {
             _view = view;
             _runSelection = runSelection;
             _gameManagerService = gameManagerService;
             _hidePopupPublisher = hidePopupPublisher;
+            _showPopupPublisher = showPopupPublisher;
             _dailyRewardService = dailyRewardService;
+            _questService = questService;
+            _localizationService = localizationService;
         }
 
         public void Initialize()
@@ -50,9 +62,15 @@ namespace Project.Scripts.UI.InBattleUI
             _view.DailyRewardClicked += OnDailyRewardClicked;
             _view.DailyRewardNormalClaimClicked += OnDailyRewardNormalClaimClicked;
             _view.DailyRewardDoubleClaimClicked += OnDailyRewardDoubleClaimClicked;
+            _view.DailyQuestsButtonClicked += OnDailyQuestsButtonClicked;
+            _view.DailyQuestClaimClicked += OnDailyQuestClaimClicked;
+            _questService.QuestsChanged += OnDailyQuestsChanged;
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
 
             RefreshRun();
             RefreshDailyRewards();
+            _questService.EnsureActiveQuests();
+            RefreshDailyQuests();
             _refreshCancellation = new CancellationTokenSource();
             RefreshDailyRewardsLoopAsync(_refreshCancellation.Token).Forget();
         }
@@ -69,6 +87,10 @@ namespace Project.Scripts.UI.InBattleUI
             _view.DailyRewardClicked -= OnDailyRewardClicked;
             _view.DailyRewardNormalClaimClicked -= OnDailyRewardNormalClaimClicked;
             _view.DailyRewardDoubleClaimClicked -= OnDailyRewardDoubleClaimClicked;
+            _view.DailyQuestsButtonClicked -= OnDailyQuestsButtonClicked;
+            _view.DailyQuestClaimClicked -= OnDailyQuestClaimClicked;
+            _questService.QuestsChanged -= OnDailyQuestsChanged;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
         }
 
         private async UniTaskVoid RefreshDailyRewardsLoopAsync(CancellationToken cancellationToken)
@@ -88,6 +110,8 @@ namespace Project.Scripts.UI.InBattleUI
                     RefreshDailyRewards(state);
                 else
                     RefreshDailyRewardCountdown(state);
+
+                _questService.EnsureActiveQuests();
             }
         }
 
@@ -133,6 +157,29 @@ namespace Project.Scripts.UI.InBattleUI
             _view.SetDailyRewardOfferButtonsEnabled(false);
             SubscribeRewardedAdEvents();
             YG2.RewardedAdvShow(DailyRewardAdId);
+        }
+
+        private void OnDailyQuestClaimClicked(IQuestRuntime quest)
+        {
+            _questService.TryClaimReward(quest);
+        }
+
+        private void OnDailyQuestsButtonClicked()
+        {
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(IQuestUIPresenter)
+            });
+        }
+
+        private void OnDailyQuestsChanged() => RefreshDailyQuests();
+        private void OnLanguageChanged(string _) => RefreshDailyQuests();
+
+        private void RefreshDailyQuests()
+        {
+            _view.SetDailyQuests(
+                _questService.Quests,
+                _localizationService);
         }
 
         private void SubscribeRewardedAdEvents()

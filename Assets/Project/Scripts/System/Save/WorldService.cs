@@ -12,6 +12,7 @@ namespace Project.Scripts.System.Save
         private const int InitialBaseHealth = 10;
         private const int InitialMaxEnergy = 12;
         private const int MaximumActiveSpellCount = 3;
+        private const int DailyQuestCycleLength = 7;
 
         private static readonly IReadOnlyDictionary<string, string> TowerSlotIdMigrations =
             new Dictionary<string, string>
@@ -41,6 +42,9 @@ namespace Project.Scripts.System.Save
         public int Gems => _data.gems;
         public long DailyRewardLastClaimDay => _data.dailyRewardLastClaimDay;
         public int DailyRewardIndex => _data.dailyRewardIndex;
+        public long DailyQuestDay => _data.dailyQuestDay;
+        public int DailyQuestCycleDay => _data.dailyQuestCycleDay;
+        public long WeeklyQuestWeek => _data.weeklyQuestWeek;
         public int MaxBaseHealth => _data.maxBaseHealth;
         public int MaxEnergy => _data.maxEnergy;
         public int SelectedTowerLevel => _data.selectedTowerLevel;
@@ -52,11 +56,15 @@ namespace Project.Scripts.System.Save
         public IReadOnlyList<WorldTowerSaveData> Towers => _data.towers;
         public IReadOnlyList<SpellProgressSaveData> Spells => _data.spells;
         public IReadOnlyList<string> ActiveSpellIds => _data.activeSpellIds;
+        public IReadOnlyList<QuestSaveData> DailyQuests => _data.dailyQuests;
+        public IReadOnlyList<QuestSaveData> WeeklyQuests => _data.weeklyQuests;
+        public IReadOnlyList<QuestSaveData> AchievementQuests => _data.achievementQuests;
         public bool HasPersistedData { get; private set; }
 
         public event Action<int> GoldChanged;
         public event Action<int> GemsChanged;
         public event Action DailyRewardChanged;
+        public event Action DailyQuestsChanged;
         public event Action<int> MaxBaseHealthChanged;
         public event Action<int> MaxEnergyChanged;
         public event Action UpgradesChanged;
@@ -145,6 +153,88 @@ namespace Project.Scripts.System.Save
 
             DailyRewardChanged?.Invoke();
             return true;
+        }
+
+        public void SaveQuests(
+            long moscowDay,
+            int cycleDay,
+            IReadOnlyList<QuestSaveData> dailyQuests,
+            long moscowWeek,
+            IReadOnlyList<QuestSaveData> weeklyQuests,
+            IReadOnlyList<QuestSaveData> achievementQuests)
+        {
+            if (moscowDay < -1)
+                throw new ArgumentOutOfRangeException(nameof(moscowDay));
+
+            if (moscowDay >= 0 && (cycleDay < 0 || cycleDay >= DailyQuestCycleLength))
+                throw new ArgumentOutOfRangeException(nameof(cycleDay));
+
+            if (moscowWeek < -1)
+                throw new ArgumentOutOfRangeException(nameof(moscowWeek));
+
+            if (dailyQuests == null)
+                throw new ArgumentNullException(nameof(dailyQuests));
+
+            if (weeklyQuests == null)
+                throw new ArgumentNullException(nameof(weeklyQuests));
+
+            if (achievementQuests == null)
+                throw new ArgumentNullException(nameof(achievementQuests));
+
+            _data.dailyQuestDay = moscowDay;
+            _data.dailyQuestCycleDay = moscowDay < 0 ? -1 : cycleDay;
+            _data.weeklyQuestWeek = moscowWeek;
+            CopyQuests(dailyQuests, _data.dailyQuests);
+            CopyQuests(weeklyQuests, _data.weeklyQuests);
+            CopyQuests(achievementQuests, _data.achievementQuests);
+
+            Save();
+            DailyQuestsChanged?.Invoke();
+        }
+
+        private static void CopyQuests(
+            IReadOnlyList<QuestSaveData> source,
+            List<QuestSaveData> destination)
+        {
+            destination.Clear();
+
+            var questIds = new HashSet<string>();
+            for (var i = 0; i < source.Count; i++)
+            {
+                var quest = source[i];
+                if (quest == null || string.IsNullOrWhiteSpace(quest.id) || !questIds.Add(quest.id))
+                    continue;
+
+                var targetValue = Math.Max(1, quest.targetValue);
+                destination.Add(new QuestSaveData
+                {
+                    id = quest.id,
+                    currentValue = Math.Clamp(quest.currentValue, 0, targetValue),
+                    targetValue = targetValue,
+                    rewardGold = Math.Max(0, quest.rewardGold),
+                    rewardGems = Math.Max(0, quest.rewardGems),
+                    isRewardClaimed = quest.isRewardClaimed
+                });
+            }
+        }
+
+        private static void NormalizeQuests(List<QuestSaveData> quests)
+        {
+            var questIds = new HashSet<string>();
+            for (var i = quests.Count - 1; i >= 0; i--)
+            {
+                var quest = quests[i];
+                if (quest == null || string.IsNullOrWhiteSpace(quest.id) || !questIds.Add(quest.id))
+                {
+                    quests.RemoveAt(i);
+                    continue;
+                }
+
+                quest.targetValue = Math.Max(1, quest.targetValue);
+                quest.currentValue = Math.Clamp(quest.currentValue, 0, quest.targetValue);
+                quest.rewardGold = Math.Max(0, quest.rewardGold);
+                quest.rewardGems = Math.Max(0, quest.rewardGems);
+            }
         }
 
         public bool TrySpendGems(int amount)
@@ -411,6 +501,7 @@ namespace Project.Scripts.System.Save
             GoldChanged?.Invoke(Gold);
             GemsChanged?.Invoke(Gems);
             DailyRewardChanged?.Invoke();
+            DailyQuestsChanged?.Invoke();
             MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
             MaxEnergyChanged?.Invoke(MaxEnergy);
             UpgradesChanged?.Invoke();
@@ -427,6 +518,9 @@ namespace Project.Scripts.System.Save
                 version = 1,
                 gold = InitialGold,
                 gems = 0,
+                dailyQuestDay = -1,
+                dailyQuestCycleDay = -1,
+                weeklyQuestWeek = -1,
                 maxBaseHealth = InitialBaseHealth,
                 maxEnergy = InitialMaxEnergy,
                 selectedTowerLevel = 1,
@@ -447,6 +541,27 @@ namespace Project.Scripts.System.Save
             {
                 _data.dailyRewardIndex = Math.Max(0, _data.dailyRewardIndex);
             }
+            _data.dailyQuests ??= new List<QuestSaveData>();
+            _data.weeklyQuests ??= new List<QuestSaveData>();
+            _data.achievementQuests ??= new List<QuestSaveData>();
+            if (_data.dailyQuestDay <= 0)
+            {
+                _data.dailyQuestDay = -1;
+                _data.dailyQuestCycleDay = -1;
+                _data.dailyQuests.Clear();
+            }
+            else
+            {
+                _data.dailyQuestCycleDay = Math.Clamp(
+                    _data.dailyQuestCycleDay,
+                    0,
+                    DailyQuestCycleLength - 1);
+            }
+            if (_data.weeklyQuestWeek <= 0)
+            {
+                _data.weeklyQuestWeek = -1;
+                _data.weeklyQuests.Clear();
+            }
             _data.maxBaseHealth = _data.maxBaseHealth > 0
                 ? _data.maxBaseHealth
                 : InitialBaseHealth;
@@ -463,6 +578,10 @@ namespace Project.Scripts.System.Save
             _data.towerSlots ??= new List<WorldTowerSlotSaveData>();
             _data.spells ??= new List<SpellProgressSaveData>();
             _data.activeSpellIds ??= new List<string>();
+
+            NormalizeQuests(_data.dailyQuests);
+            NormalizeQuests(_data.weeklyQuests);
+            NormalizeQuests(_data.achievementQuests);
 
             var upgradeIds = new HashSet<string>();
             for (var i = _data.upgrades.Count - 1; i >= 0; i--)

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Localization;
 using Project.Scripts.System.Reward;
 using Project.Scripts.System.Reward.RewardConfigs;
 using Project.Scripts.Systems.UI;
@@ -12,6 +14,7 @@ namespace Project.Scripts.UI.InBattleUI
     public sealed class InBattleUIView : IInBattleUIView
     {
         private const int RewardCellCount = DailyRewards.CycleLength;
+        private const int DailyQuestCount = 2;
         private const float PulseSpeed = 4f;
         private const float PulseScale = 1.08f;
         private const string GoldIconPath = "UI/new/Icons/Icon_Gold";
@@ -37,6 +40,15 @@ namespace Project.Scripts.UI.InBattleUI
         private readonly VisualElement[] _rewardCells = new VisualElement[RewardCellCount];
         private readonly VisualElement[] _rewardIcons = new VisualElement[RewardCellCount];
         private readonly Label[] _rewardAmountLabels = new Label[RewardCellCount];
+        private readonly Label _dailyQuestHeaderLabel;
+        private readonly Button _dailyQuestOpenButton;
+        private readonly VisualElement[] _dailyQuestItems = new VisualElement[DailyQuestCount];
+        private readonly VisualElement[] _dailyQuestIcons = new VisualElement[DailyQuestCount];
+        private readonly Label[] _dailyQuestDescriptions = new Label[DailyQuestCount];
+        private readonly Label[] _dailyQuestRewards = new Label[DailyQuestCount];
+        private readonly Button[] _dailyQuestClaimButtons = new Button[DailyQuestCount];
+        private readonly IQuestRuntime[] _dailyQuests = new IQuestRuntime[DailyQuestCount];
+        private readonly Action[] _dailyQuestClaimHandlers = new Action[DailyQuestCount];
         private readonly StyleBackground _goldIcon;
         private readonly StyleBackground _gemsIcon;
         private int _pulseVersion;
@@ -47,6 +59,8 @@ namespace Project.Scripts.UI.InBattleUI
         public event Action DailyRewardClicked;
         public event Action DailyRewardNormalClaimClicked;
         public event Action DailyRewardDoubleClaimClicked;
+        public event Action DailyQuestsButtonClicked;
+        public event Action<IQuestRuntime> DailyQuestClaimClicked;
 
         public InBattleUIView(VisualElement root)
         {
@@ -63,6 +77,8 @@ namespace Project.Scripts.UI.InBattleUI
             _runIcon = Require<VisualElement>("RunIcon");
             _offerOverlay = Require<VisualElement>("DailyRewardOfferOverlay");
             _offerIcon = Require<VisualElement>("DailyRewardOfferIcon");
+            _dailyQuestHeaderLabel = Require<Label>("DailyQuestHeaderLabel");
+            _dailyQuestOpenButton = Require<Button>("DailyQuestOpenButton");
             _goldIcon = LoadSingleSprite(GoldIconPath);
             _gemsIcon = LoadSingleSprite(GemsIconPath);
 
@@ -79,12 +95,25 @@ namespace Project.Scripts.UI.InBattleUI
                 _rewardAmountLabels[i] = RequireFrom<Label>(rewardTemplate, "RevardCountLabel");
             }
 
+            for (var i = 0; i < DailyQuestCount; i++)
+            {
+                var index = i;
+                _dailyQuestItems[i] = Require<VisualElement>($"DailyQuestItem{i + 1}");
+                _dailyQuestIcons[i] = Require<VisualElement>($"DailyQuestIcon{i + 1}");
+                _dailyQuestDescriptions[i] = Require<Label>($"DailyQuestDescription{i + 1}");
+                _dailyQuestRewards[i] = Require<Label>($"DailyQuestReward{i + 1}");
+                _dailyQuestClaimButtons[i] = Require<Button>($"DailyQuestClaim{i + 1}");
+                _dailyQuestClaimHandlers[i] = () => OnDailyQuestClaimClicked(index);
+                _dailyQuestClaimButtons[i].clicked += _dailyQuestClaimHandlers[i];
+            }
+
             _previousRunButton.clicked += OnPreviousRunClicked;
             _nextRunButton.clicked += OnNextRunClicked;
             _playButton.clicked += OnPlayClicked;
             _dailyRewardButton.clicked += OnDailyRewardClicked;
             _normalRewardButton.clicked += OnDailyRewardNormalClaimClicked;
             _doubleRewardButton.clicked += OnDailyRewardDoubleClaimClicked;
+            _dailyQuestOpenButton.clicked += OnDailyQuestsButtonClicked;
 
             UIButtonAnimationUtility.EnableDefault(_previousRunButton);
             UIButtonAnimationUtility.EnableDefault(_nextRunButton, flipX: true);
@@ -92,6 +121,9 @@ namespace Project.Scripts.UI.InBattleUI
             UIButtonAnimationUtility.EnableDefault(_dailyRewardButton);
             UIButtonAnimationUtility.EnableDefault(_normalRewardButton);
             UIButtonAnimationUtility.EnableDefault(_doubleRewardButton);
+            UIButtonAnimationUtility.EnableDefault(_dailyQuestOpenButton);
+            for (var i = 0; i < _dailyQuestClaimButtons.Length; i++)
+                UIButtonAnimationUtility.EnableDefault(_dailyQuestClaimButtons[i]);
         }
 
         public void SetRun(string displayName, Sprite icon, bool canNavigate)
@@ -172,6 +204,42 @@ namespace Project.Scripts.UI.InBattleUI
             _doubleRewardButton.SetEnabled(enabled);
         }
 
+        public void SetDailyQuests(
+            IReadOnlyList<IQuestRuntime> quests,
+            ILocalizationService localizationService)
+        {
+            _dailyQuestHeaderLabel.text = localizationService.Get(LocalizationKeys.QuestsDailyTitle);
+            _dailyQuestOpenButton.text = localizationService.Get(LocalizationKeys.QuestsButton);
+
+            for (var i = 0; i < DailyQuestCount; i++)
+            {
+                if (i >= quests.Count)
+                {
+                    _dailyQuests[i] = null;
+                    _dailyQuestItems[i].style.display = DisplayStyle.None;
+                    continue;
+                }
+
+                var quest = quests[i];
+                _dailyQuests[i] = quest;
+                _dailyQuestItems[i].style.display = DisplayStyle.Flex;
+                _dailyQuestItems[i].style.opacity = quest.IsRewardClaimed ? 0.55f : 1f;
+                _dailyQuestIcons[i].style.backgroundImage = new StyleBackground(quest.Icon);
+                _dailyQuestDescriptions[i].text =
+                    localizationService.Format(quest.Description, quest.TargetValue);
+                _dailyQuestRewards[i].text = quest.RewardGold.ToString();
+
+                var canClaim = quest.IsCompleted && !quest.IsRewardClaimed;
+                _dailyQuestClaimButtons[i].text = quest.IsRewardClaimed
+                    ? localizationService.Get(LocalizationKeys.QuestDone)
+                    : canClaim
+                        ? localizationService.Get(LocalizationKeys.QuestClaim)
+                        : $"{quest.CurrentValue}/{quest.TargetValue}";
+                _dailyQuestClaimButtons[i].SetEnabled(canClaim);
+                _dailyQuestClaimButtons[i].style.opacity = 1f;
+            }
+        }
+
         public void SetVisible(bool visible)
         {
             _root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
@@ -186,6 +254,9 @@ namespace Project.Scripts.UI.InBattleUI
             _dailyRewardButton.clicked -= OnDailyRewardClicked;
             _normalRewardButton.clicked -= OnDailyRewardNormalClaimClicked;
             _doubleRewardButton.clicked -= OnDailyRewardDoubleClaimClicked;
+            _dailyQuestOpenButton.clicked -= OnDailyQuestsButtonClicked;
+            for (var i = 0; i < _dailyQuestClaimButtons.Length; i++)
+                _dailyQuestClaimButtons[i].clicked -= _dailyQuestClaimHandlers[i];
         }
 
         private async UniTaskVoid PulseRewardAsync(VisualElement rewardCell, int version)
@@ -242,5 +313,12 @@ namespace Project.Scripts.UI.InBattleUI
         private void OnDailyRewardClicked() => DailyRewardClicked?.Invoke();
         private void OnDailyRewardNormalClaimClicked() => DailyRewardNormalClaimClicked?.Invoke();
         private void OnDailyRewardDoubleClaimClicked() => DailyRewardDoubleClaimClicked?.Invoke();
+        private void OnDailyQuestsButtonClicked() => DailyQuestsButtonClicked?.Invoke();
+        private void OnDailyQuestClaimClicked(int index)
+        {
+            var quest = _dailyQuests[index];
+            if (quest != null)
+                DailyQuestClaimClicked?.Invoke(quest);
+        }
     }
 }

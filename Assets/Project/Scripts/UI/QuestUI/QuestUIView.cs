@@ -12,8 +12,13 @@ namespace Project.Scripts.UI.QuestUI
         [SerializeField] private VisualTreeAsset _questItemTemplate;
 
         private Label _titleLabel;
+        private Label _dailyHeaderLabel;
+        private Label _weeklyHeaderLabel;
+        private Label _achievementHeaderLabel;
         private Button _closeButton;
-        private ScrollView _scrollView;
+        private VisualElement _dailyQuestContainer;
+        private VisualElement _weeklyQuestContainer;
+        private VisualElement _achievementQuestContainer;
         
         public event Action CloseButtonClicked;
 
@@ -21,36 +26,70 @@ namespace Project.Scripts.UI.QuestUI
         {
             base.Awake();
             
-            _closeButton = _root.Q<Button>("CloseButton");
-            _scrollView = _root.Q<ScrollView>("ScrollView");
-            _titleLabel = _root.Q<Label>("TitleLabel");
+            _closeButton = Require<Button>("CloseButton");
+            _titleLabel = Require<Label>("TitleLabel");
+            _dailyHeaderLabel = Require<Label>("DailyHeaderLabel");
+            _weeklyHeaderLabel = Require<Label>("WeeklyHeaderLabel");
+            _achievementHeaderLabel = Require<Label>("AchievementHeaderLabel");
+            _dailyQuestContainer = Require<VisualElement>("DailyQuestContainer");
+            _weeklyQuestContainer = Require<VisualElement>("WeeklyQuestContainer");
+            _achievementQuestContainer = Require<VisualElement>("AchievementQuestContainer");
 
-            if (_closeButton != null)
-                _closeButton.clicked += OnCloseButtonClicked;
+            _closeButton.clicked += OnCloseButtonClicked;
+            UIButtonAnimationUtility.EnableDefault(_closeButton);
         }
 
-        public void SetTitle(string title)
+        public void SetTexts(
+            string title,
+            string dailyHeader,
+            string weeklyHeader,
+            string achievementHeader,
+            string closeButton)
         {
             _titleLabel.text = title;
+            _dailyHeaderLabel.text = dailyHeader;
+            _weeklyHeaderLabel.text = weeklyHeader;
+            _achievementHeaderLabel.text = achievementHeader;
+            _closeButton.text = closeButton;
         }
 
         public void ClearItems()
         {
-            _scrollView.Clear();
+            _dailyQuestContainer.Clear();
+            _weeklyQuestContainer.Clear();
+            _achievementQuestContainer.Clear();
         }
 
-        public void AddQuest(IQuestRuntime quest, Action onClaimReward, ILocalizationService localizationService)
+        public void AddQuest(
+            EQuestCategory category,
+            IQuestRuntime quest,
+            Action onClaimReward,
+            ILocalizationService localizationService)
         {
             var itemRoot = _questItemTemplate.Instantiate();
             var itemView = new QuestItemView(itemRoot);
             itemView.Bind(quest, onClaimReward, localizationService);
-            _scrollView.Add(itemRoot);
+
+            var container = category switch
+            {
+                EQuestCategory.Daily => _dailyQuestContainer,
+                EQuestCategory.Weekly => _weeklyQuestContainer,
+                EQuestCategory.Achievement => _achievementQuestContainer,
+                _ => throw new ArgumentOutOfRangeException(nameof(category), category, null)
+            };
+            container.Add(itemRoot);
         }
         
         private void OnDestroy()
         {
-            if (_closeButton != null)
-                _closeButton.clicked -= OnCloseButtonClicked;
+            _closeButton.clicked -= OnCloseButtonClicked;
+        }
+
+        private T Require<T>(string elementName) where T : VisualElement
+        {
+            return _root.Q<T>(elementName)
+                   ?? throw new InvalidOperationException(
+                       $"{nameof(QuestUIView)}: element '{elementName}' was not found.");
         }
 
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();

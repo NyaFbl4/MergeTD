@@ -20,6 +20,9 @@ namespace Project.Scripts.System.Save
         int Gems { get; }
         long DailyRewardLastClaimDay { get; }
         int DailyRewardIndex { get; }
+        long DailyQuestDay { get; }
+        int DailyQuestCycleDay { get; }
+        long WeeklyQuestWeek { get; }
         int MaxBaseHealth { get; }
         int MaxEnergy { get; }
         int SelectedTowerLevel { get; }
@@ -31,10 +34,14 @@ namespace Project.Scripts.System.Save
         IReadOnlyList<WorldTowerSaveData> Towers { get; }
         IReadOnlyList<SpellProgressSaveData> Spells { get; }
         IReadOnlyList<string> ActiveSpellIds { get; }
+        IReadOnlyList<QuestSaveData> DailyQuests { get; }
+        IReadOnlyList<QuestSaveData> WeeklyQuests { get; }
+        IReadOnlyList<QuestSaveData> AchievementQuests { get; }
 
         event Action<int> GoldChanged;
         event Action<int> GemsChanged;
         event Action DailyRewardChanged;
+        event Action DailyQuestsChanged;
         event Action<int> MaxBaseHealthChanged;
         event Action<int> MaxEnergyChanged;
         event Action UpgradesChanged;
@@ -47,6 +54,13 @@ namespace Project.Scripts.System.Save
         void AddGold(int amount);
         void AddGems(int amount);
         bool TryClaimDailyReward(long moscowDay, int rewardIndex, int goldAmount, int gemsAmount);
+        void SaveQuests(
+            long moscowDay,
+            int cycleDay,
+            IReadOnlyList<QuestSaveData> dailyQuests,
+            long moscowWeek,
+            IReadOnlyList<QuestSaveData> weeklyQuests,
+            IReadOnlyList<QuestSaveData> achievementQuests);
         bool TrySpendGems(int amount);
         void SetMaxBaseHealth(int value);
         void SetMaxEnergy(int value);

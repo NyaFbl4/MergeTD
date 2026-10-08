@@ -3,12 +3,21 @@ using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Quests
 {
+    public enum EQuestCategory
+    {
+        Daily,
+        Weekly,
+        Achievement
+    }
+
     public interface IQuestRuntime : IDisposable
     {
         string Id { get; }
         Sprite Icon { get; }
         string Description { get; }
+        EQuestCategory Category { get; }
         int RewardGold { get; }
+        int RewardGems { get; }
         int CurrentValue { get; }
         int TargetValue { get; }
         bool IsCompleted { get; }

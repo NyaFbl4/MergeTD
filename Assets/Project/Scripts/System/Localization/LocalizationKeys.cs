@@ -33,7 +33,14 @@ namespace Project.Scripts.System.Localization
         
         public const string ShopTitle = "shop.title";
         public const string QuestsTitle = "quests.title";
+        public const string QuestsDailyTitle = "quests.daily_title";
+        public const string QuestsButton = "quests.button";
+        public const string QuestsDailyHeaderFormat = "quests.daily_header_format";
+        public const string QuestsWeeklyHeaderFormat = "quests.weekly_header_format";
+        public const string QuestsAchievementHeaderFormat = "quests.achievement_header_format";
+        public const string QuestsClose = "quests.close";
         public const string QuestDone = "quest.done";
+        public const string QuestClaim = "quest.claim";
         public const string UpgradeMax = "upgrade.max";
         public const string QuestCompleteWavesDescription = "quest.complete_waves.description";
         public const string EndWaveReviewButtonFormat = "end_wave.review_button_format";

@@ -12,6 +12,9 @@ namespace Project.Scripts.System.Save
         public int gems;
         public long dailyRewardLastClaimDay = -1;
         public int dailyRewardIndex = -1;
+        public long dailyQuestDay = -1;
+        public int dailyQuestCycleDay = -1;
+        public long weeklyQuestWeek = -1;
         public int maxBaseHealth;
         public int maxEnergy;
         public int selectedTowerLevel = 1;
@@ -24,6 +27,9 @@ namespace Project.Scripts.System.Save
         public List<WorldTowerSlotSaveData> towerSlots = new();
         public List<SpellProgressSaveData> spells = new();
         public List<string> activeSpellIds = new();
+        public List<QuestSaveData> dailyQuests = new();
+        public List<QuestSaveData> weeklyQuests = new();
+        public List<QuestSaveData> achievementQuests = new();
     }
 
     [Serializable]

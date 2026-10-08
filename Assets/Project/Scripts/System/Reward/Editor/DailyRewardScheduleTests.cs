@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Project.Scripts.Gameplay.Quests;
 
 namespace Project.Scripts.System.Reward.Editor
 {
@@ -77,6 +78,74 @@ namespace Project.Scripts.System.Reward.Editor
             Assert.That(
                 DailyRewardDayCalculator.TimeUntilNextMoscowDay(time),
                 Is.EqualTo(TimeSpan.FromMilliseconds(750)));
+        }
+
+        [Test]
+        public void DailyQuests_FirstDay_StartsCycle()
+        {
+            var state = DailyQuestSchedule.Resolve(100, -1, -1);
+
+            Assert.That(state.ShouldReset, Is.True);
+            Assert.That(state.QuestDay, Is.EqualTo(100));
+            Assert.That(state.CycleDay, Is.Zero);
+        }
+
+        [Test]
+        public void DailyQuests_SameDay_KeepCurrentQuests()
+        {
+            var state = DailyQuestSchedule.Resolve(100, 100, 3);
+
+            Assert.That(state.ShouldReset, Is.False);
+            Assert.That(state.CycleDay, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void DailyQuests_NextDay_AdvanceCycle()
+        {
+            var state = DailyQuestSchedule.Resolve(101, 100, 6);
+
+            Assert.That(state.ShouldReset, Is.True);
+            Assert.That(state.CycleDay, Is.Zero);
+        }
+
+        [Test]
+        public void DailyQuests_MissedDay_ResetCycle()
+        {
+            var state = DailyQuestSchedule.Resolve(102, 100, 4);
+
+            Assert.That(state.ShouldReset, Is.True);
+            Assert.That(state.CycleDay, Is.Zero);
+        }
+
+        [Test]
+        public void WeeklyQuests_WeekChangesOnMondayMoscowTime()
+        {
+            var sunday = DailyRewardDayCalculator.FromUnixMilliseconds(
+                new DateTimeOffset(2026, 10, 4, 20, 59, 59, TimeSpan.Zero).ToUnixTimeMilliseconds());
+            var monday = DailyRewardDayCalculator.FromUnixMilliseconds(
+                new DateTimeOffset(2026, 10, 4, 21, 0, 0, TimeSpan.Zero).ToUnixTimeMilliseconds());
+
+            Assert.That(
+                WeeklyQuestSchedule.FromMoscowDay(monday),
+                Is.EqualTo(WeeklyQuestSchedule.FromMoscowDay(sunday) + 1));
+        }
+
+        [Test]
+        public void WeeklyQuests_SameWeek_KeepCurrentQuests()
+        {
+            var state = WeeklyQuestSchedule.Resolve(3000, 3000);
+
+            Assert.That(state.ShouldReset, Is.False);
+            Assert.That(state.QuestWeek, Is.EqualTo(3000));
+        }
+
+        [Test]
+        public void WeeklyQuests_NextWeek_ResetQuests()
+        {
+            var state = WeeklyQuestSchedule.Resolve(3001, 3000);
+
+            Assert.That(state.ShouldReset, Is.True);
+            Assert.That(state.QuestWeek, Is.EqualTo(3001));
         }
     }
 }

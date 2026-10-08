@@ -2,6 +2,7 @@ using System;
 using MessagePipe;
 using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.System.UseCases;
+using Project.Scripts.System.Save;
 
 namespace Project.Scripts.Gameplay.Quests
 {
@@ -12,9 +13,12 @@ namespace Project.Scripts.Gameplay.Quests
         public KillEnemyQuest(
             KillEnemyQuestConfig config,
             IPlayerStatsUseCase playerStats,
+            IWorldService world,
             ISubscriber<EnemyKilledQuestEventDTO> subscriber,
+            EQuestCategory category,
             int targetValue,
-            int rewardGold) : base(config, playerStats, targetValue, rewardGold)
+            int rewardGold,
+            int rewardGems) : base(config, playerStats, world, category, targetValue, rewardGold, rewardGems)
         {
             _subscription = subscriber.Subscribe(OnEnemyKilled);
         }

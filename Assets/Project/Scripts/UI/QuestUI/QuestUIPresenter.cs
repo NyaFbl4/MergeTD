@@ -1,10 +1,10 @@
 using MessagePipe;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
-using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.Systems.UI.Dtos;
 
@@ -15,7 +15,6 @@ namespace Project.Scripts.UI.QuestUI
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly IGameManagerService _gameManagerService;
         private readonly ILocalizationService _localizationService;
-        private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly QuestService _questService;
         private readonly IAudioManager _audioManager;
         
@@ -23,14 +22,12 @@ namespace Project.Scripts.UI.QuestUI
             IPublisher<HidePopupDto> hidePopupPublisher, 
             IGameManagerService gameManagerService, 
             ILocalizationService localizationService, 
-            IPlayerStatsUseCase playerStatsUseCase,
             QuestService questService,
             IAudioManager audioManager)
         {
             _hidePopupPublisher = hidePopupPublisher;
             _gameManagerService = gameManagerService;
             _localizationService = localizationService;
-            _playerStatsUseCase = playerStatsUseCase;
             _questService = questService;
             _audioManager = audioManager;
         }
@@ -44,7 +41,6 @@ namespace Project.Scripts.UI.QuestUI
             _localizationService.OnChangeLanguage += OnLanguageChanged;
             
             Refresh();
-            _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.QuestsTitle));
         }
 
         public override async UniTask ActivateAsync()
@@ -63,7 +59,6 @@ namespace Project.Scripts.UI.QuestUI
         
         private void OnLanguageChanged(string _)
         {
-            _layoutView.SetTitle(_localizationService.Get(LocalizationKeys.QuestsTitle));
             Refresh();
         }
         
@@ -76,13 +71,48 @@ namespace Project.Scripts.UI.QuestUI
         {
             _layoutView.ClearItems();
 
-            foreach (var quest in _questService.Quests)
+            AddQuests(EQuestCategory.Daily, _questService.DailyQuests);
+            AddQuests(EQuestCategory.Weekly, _questService.WeeklyQuests);
+            AddQuests(EQuestCategory.Achievement, _questService.Achievements);
+
+            _layoutView.SetTexts(
+                _localizationService.Get(LocalizationKeys.QuestsTitle),
+                _localizationService.Format(
+                    LocalizationKeys.QuestsDailyHeaderFormat,
+                    CountCompleted(_questService.DailyQuests),
+                    _questService.DailyQuests.Count),
+                _localizationService.Format(
+                    LocalizationKeys.QuestsWeeklyHeaderFormat,
+                    CountCompleted(_questService.WeeklyQuests),
+                    _questService.WeeklyQuests.Count),
+                _localizationService.Format(
+                    LocalizationKeys.QuestsAchievementHeaderFormat,
+                    CountCompleted(_questService.Achievements),
+                    _questService.Achievements.Count),
+                _localizationService.Get(LocalizationKeys.QuestsClose));
+        }
+
+        private void AddQuests(EQuestCategory category, IReadOnlyList<IQuestRuntime> quests)
+        {
+            foreach (var quest in quests)
             {
-                _layoutView.AddQuest(quest, () =>
+                _layoutView.AddQuest(category, quest, () =>
                 {
                     _questService.TryClaimReward(quest);
                 }, _localizationService);
             }
+        }
+
+        private static int CountCompleted(IReadOnlyList<IQuestRuntime> quests)
+        {
+            var completed = 0;
+            foreach (var quest in quests)
+            {
+                if (quest.IsCompleted)
+                    completed++;
+            }
+
+            return completed;
         }
         
         private void OnCloseButtonClicked()
