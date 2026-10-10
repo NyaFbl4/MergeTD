@@ -1,8 +1,8 @@
 {
-    "idSave": 321,
+    "idSave": 325,
     "world": {
         "version": 2,
-        "gold": 5918,
+        "gold": 5668,
         "gems": 5,
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 1,
@@ -59,13 +59,13 @@
             },
             {
                 "slotId": "14",
-                "towerLevel": 3,
+                "towerLevel": 4,
                 "towerType": 0,
-                "purchaseCost": 100
+                "purchaseCost": 200
             },
             {
                 "slotId": "15",
-                "towerLevel": 3,
+                "towerLevel": 1,
                 "towerType": 0,
                 "purchaseCost": 100
             },
@@ -165,7 +165,7 @@
         "dailyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 0,
+                "currentValue": 4,
                 "targetValue": 10,
                 "rewardGold": 100,
                 "rewardGems": 0,
@@ -183,7 +183,7 @@
         "weeklyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 0,
+                "currentValue": 4,
                 "targetValue": 70,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -201,7 +201,7 @@
         "achievementQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 0,
+                "currentValue": 4,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,

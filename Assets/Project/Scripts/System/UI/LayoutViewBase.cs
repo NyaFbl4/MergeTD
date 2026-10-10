@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -46,6 +47,84 @@ namespace Project.Scripts.Systems.UI
         public void Show()
         {
             Visible = true;
+        }
+    }
+
+    public static class UIIntegerAnimationUtility
+    {
+        private const float DefaultDurationSeconds = 0.5f;
+
+        private sealed class IntegerAnimationState
+        {
+            public int CurrentValue;
+            public int AnimationVersion;
+        }
+
+        private static readonly Dictionary<Label, IntegerAnimationState> States = new();
+
+        public static void SetValue(
+            Label label,
+            int value,
+            float durationSeconds = DefaultDurationSeconds)
+        {
+            if (!States.TryGetValue(label, out var state))
+            {
+                state = new IntegerAnimationState { CurrentValue = value };
+                States[label] = state;
+                label.text = value.ToString();
+                label.RegisterCallback<DetachFromPanelEvent>(_ =>
+                {
+                    state.AnimationVersion++;
+                    States.Remove(label);
+                });
+                return;
+            }
+
+            var version = ++state.AnimationVersion;
+            if (state.CurrentValue == value)
+            {
+                label.text = value.ToString();
+                return;
+            }
+
+            AnimateValueAsync(
+                    label,
+                    state,
+                    value,
+                    Mathf.Max(0.01f, durationSeconds),
+                    version)
+                .Forget();
+        }
+
+        private static async UniTaskVoid AnimateValueAsync(
+            Label label,
+            IntegerAnimationState state,
+            int targetValue,
+            float durationSeconds,
+            int version)
+        {
+            var startValue = state.CurrentValue;
+            var elapsed = 0f;
+
+            while (elapsed < durationSeconds)
+            {
+                if (version != state.AnimationVersion)
+                    return;
+
+                elapsed += Time.unscaledDeltaTime;
+                var t = Mathf.Clamp01(elapsed / durationSeconds);
+                var eased = 1f - Mathf.Pow(1f - t, 3f);
+                state.CurrentValue = (int)Math.Round(
+                    startValue + (targetValue - (double)startValue) * eased);
+                label.text = state.CurrentValue.ToString();
+                await UniTask.Yield(PlayerLoopTiming.Update);
+            }
+
+            if (version != state.AnimationVersion)
+                return;
+
+            state.CurrentValue = targetValue;
+            label.text = targetValue.ToString();
         }
     }
 

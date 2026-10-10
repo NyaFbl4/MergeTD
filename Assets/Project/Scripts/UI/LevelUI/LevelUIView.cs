@@ -221,7 +221,7 @@ namespace Project.Scripts.UI.LevelUI
 
         public void SetMoney(int money)
         {
-            _moneyLabel.text = money.ToString();
+            UIIntegerAnimationUtility.SetValue(_moneyLabel, Math.Max(0, money));
         }
 
         public void SetTowerIcon(Sprite towerIcon)

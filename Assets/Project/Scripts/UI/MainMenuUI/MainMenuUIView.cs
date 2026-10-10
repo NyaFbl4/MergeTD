@@ -92,7 +92,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         public void SetGoldCount(int goldCount)
         {
-            _goldCountLabel.text = Math.Max(0, goldCount).ToString();
+            UIIntegerAnimationUtility.SetValue(_goldCountLabel, Math.Max(0, goldCount));
         }
 
         public void SetDiamondCount(int diamondCount)
