@@ -24,9 +24,13 @@ namespace Project.Scripts.Gameplay.Field
 
         [Header("Refs")]
         [SerializeField] private BaseHealth _baseHealth;
+        [SerializeField] private Transform _sellZoneAnchor;
+        [SerializeField] private TowerSellZone _sellZonePrefab;
 
         private UnitsConfig _unitsConfig;
         private IUnitsCatalog _unitsCatalog;
+        private IWorldService _world;
+        private TowerSellZone _sellZone;
         
         [Inject]
         public void Construct(
@@ -38,6 +42,12 @@ namespace Project.Scripts.Gameplay.Field
         {
             _unitsConfig = unitsConfig;
             _unitsCatalog = unitsCatalog;
+
+            if (_world != null)
+                _world.TowerSlotsChanged -= RefreshTowerSlotAvailability;
+
+            _world = world;
+            _sellZone ??= _sellZonePrefab.InstantiateFor(_sellZoneAnchor);
             
             if (_towerSlots == null)
                 return;
@@ -50,12 +60,36 @@ namespace Project.Scripts.Gameplay.Field
                     continue;
 
                 var slot = _towerSlots[i];
-                slot.Construct(_unitsCatalog, runState, energy, world, $"slot_{i}");
+                slot.Construct(_unitsCatalog, runState, energy, world, _sellZone, $"slot_{i}");
 
                 if (!persistentIds.Add(slot.PersistentId))
                     throw new global::System.InvalidOperationException(
                         $"Duplicate tower slot id: '{slot.PersistentId}'.");
             }
+
+            RefreshTowerSlotAvailability();
+            _world.TowerSlotsChanged += RefreshTowerSlotAvailability;
+        }
+
+        private void RefreshTowerSlotAvailability()
+        {
+            for (var i = 0; i < _towerSlots.Length; i++)
+            {
+                var slot = _towerSlots[i];
+                if (slot == null)
+                    continue;
+
+                slot.SetWorldUnlocked(_world.IsTowerSlotUnlocked(slot.PersistentId));
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_world != null)
+                _world.TowerSlotsChanged -= RefreshTowerSlotAvailability;
+
+            if (_sellZone != null)
+                Destroy(_sellZone.gameObject);
         }
         
         public LanePath[] Lanes => _lanes;

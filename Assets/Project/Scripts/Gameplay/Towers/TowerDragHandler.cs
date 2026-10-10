@@ -1,6 +1,7 @@
 ﻿using Project.Scripts.Gameplay.Field;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 namespace Project.Scripts.Gameplay.Towers
 {
@@ -9,10 +10,14 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private float _z = 0f;
         
         private TowerSlot _sourceSlot;
+        private TowerSellZone _sellZone;
         private TowerUnit _towerUnit;
         private Camera _camera;
         private Vector3 _startPos;
         private Collider2D _towerCollider;
+        private SortingGroup _sortingGroup;
+        private int _startSortingLayerId;
+        private int _startSortingOrder;
         private bool _isDragging;
         
         private void Awake()
@@ -20,14 +25,16 @@ namespace Project.Scripts.Gameplay.Towers
             _towerUnit = GetComponent<TowerUnit>();
             _camera = Camera.main;
             _towerCollider = GetComponent<Collider2D>();
+            _sortingGroup = GetComponent<SortingGroup>();
             
             if (_sourceSlot == null)
                 _sourceSlot = GetComponentInParent<TowerSlot>();
         }
 
-        public void Init(TowerSlot sourceSlot)
+        public void Init(TowerSlot sourceSlot, TowerSellZone sellZone)
         {
             _sourceSlot = sourceSlot;
+            _sellZone = sellZone;
         }
         
         public void OnBeginDrag(PointerEventData eventData)
@@ -51,7 +58,12 @@ namespace Project.Scripts.Gameplay.Towers
                 return;
             
             _isDragging = true;
+            _startSortingLayerId = _sortingGroup.sortingLayerID;
+            _startSortingOrder = _sortingGroup.sortingOrder;
+            _sortingGroup.sortingLayerID = _sellZone.SortingLayerId;
+            _sortingGroup.sortingOrder = _sellZone.SortingOrder + 1;
             _towerUnit?.SetCanFire(false);
+            _sellZone.Show(_towerUnit);
 
             if (_towerCollider != null)
                 _towerCollider.enabled = false;
@@ -63,6 +75,7 @@ namespace Project.Scripts.Gameplay.Towers
                 return;
             
             transform.position = GetPointerWorldPosition(eventData);
+            _sellZone.SetHovered(_sellZone.ContainsScreenPoint(eventData.position, _camera));
         } 
         
         public void OnEndDrag(PointerEventData eventData)
@@ -72,30 +85,42 @@ namespace Project.Scripts.Gameplay.Towers
             
             var world = GetPointerWorldPosition(eventData);
 
+             if (_sellZone.ContainsScreenPoint(eventData.position, _camera))
+             {
+                 _sourceSlot.SellDetachedTower(_towerUnit, _sellZone.CurrentRefund);
+                 CompleteDrag();
+                 return;
+             }
+
              var targetSlot = FindSlotUnderPointer(world);
              if (targetSlot != null && targetSlot.TryAttachExistingTower(_towerUnit, false))
              {
                  targetSlot.CommitMoveFrom(_sourceSlot);
-                 _isDragging = false;
-                 if (_towerCollider != null)
-                     _towerCollider.enabled = true;
+                 CompleteDrag();
                  return;
              }
 
              // rollback
              if (_sourceSlot != null && _sourceSlot.TryAttachExistingTower(_towerUnit, false))
              {
-                 _isDragging = false;
-                 if (_towerCollider != null)
-                     _towerCollider.enabled = true;
+                 CompleteDrag();
                  return;
              }
 
-             _isDragging = false;
              transform.position = _startPos;
-             if (_towerCollider != null)
-                 _towerCollider.enabled = true;
+             CompleteDrag();
         } 
+
+        private void CompleteDrag()
+        {
+            _isDragging = false;
+            _sortingGroup.sortingLayerID = _startSortingLayerId;
+            _sortingGroup.sortingOrder = _startSortingOrder;
+            _sellZone.Hide();
+
+            if (_towerCollider != null)
+                _towerCollider.enabled = true;
+        }
         private Vector3 GetPointerWorldPosition(PointerEventData eventData)
         {
             if (_camera == null)

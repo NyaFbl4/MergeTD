@@ -7,11 +7,14 @@ namespace Project.Scripts.UI.ArmyUI
     {
         event Action BuyTowerButtonClicked;
         event Action BuyGeneratorButtonClicked;
+        event Action<int> TowerDragStarted;
+        event Action<int> TowerSellRequested;
         event Action<int, int> TowerDropped;
 
         void SetTower(int slotIndex, bool isLocked, ETowerType? towerType, int towerLevel);
         void SetPurchaseInfo(int towerLevel, int towerPrice, int generatorPrice);
         void SetPurchaseButtonsEnabled(bool canBuyTower, bool canBuyGenerator);
+        void ShowSellZone(int refund);
         void SetVisible(bool visible);
     }
 }

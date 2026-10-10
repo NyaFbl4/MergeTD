@@ -12,8 +12,6 @@ namespace Project.Scripts.System.UseCases
 {
     public class BuyTowerUseCase : IBuyTowerUseCase
     {
-        private const int FixedTowerCost = 100;
-
         private readonly BattlefieldContext _battlefieldContext;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IPlayerStatsUseCase _playerStats;
@@ -21,7 +19,7 @@ namespace Project.Scripts.System.UseCases
         private readonly IAudioManager _audioManager;
         private readonly RunState _runState;
 
-        public int TowerCost => FixedTowerCost;
+        public int TowerCost => TowerEconomy.CombatPurchaseCost;
         public int GeneratorCost => _unitsCatalog.GetTowerConfigByLevel(1, ETowerType.Generator).StartTowerPrice;
         public event Action<int> TowerCostChanged;
 
@@ -64,7 +62,7 @@ namespace Project.Scripts.System.UseCases
             if (towerPrefab == null)
                 return EBuyTowerResult.PlaceFailed;
 
-            if (!slot.TryPlaceTower(towerPrefab, _playerStats, _audioManager))
+            if (!slot.TryPlaceTower(towerPrefab, _playerStats, _audioManager, true, cost))
                 return EBuyTowerResult.PlaceFailed;
 
             var purchasedCost = cost;

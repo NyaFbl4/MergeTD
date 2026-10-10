@@ -64,8 +64,10 @@ namespace Project.Scripts.UI.LevelUI
             if (nextPrefab == null)
                 return false;
 
+            var purchaseCost = currentTower.PurchaseCost;
+
             slot.ClearTower();
-            return slot.TryPlaceTower(nextPrefab, _playerStats, _audioManager);
+            return slot.TryPlaceTower(nextPrefab, _playerStats, _audioManager, true, purchaseCost);
         }
 
         public void OpenShop()

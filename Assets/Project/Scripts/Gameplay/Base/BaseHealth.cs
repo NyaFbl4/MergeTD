@@ -27,6 +27,7 @@ namespace Project.Scripts.Gameplay.Base
         {
             _gameManagerService = gameManagerService;
             _world = world;
+            ResetToStartHealth();
         }
         
         public void AddMaxHealth(int health)
@@ -66,7 +67,6 @@ namespace Project.Scripts.Gameplay.Base
         private void OnEnable()
         {
             IGameListener.Register(this);
-            ResetHealth();
         }
 
         private void OnDisable()
@@ -94,9 +94,5 @@ namespace Project.Scripts.Gameplay.Base
             _gameManagerService?.FinishGame();
         }
 
-        private void ResetHealth()
-        {
-            ResetToStartHealth();
-        }
     }
 }

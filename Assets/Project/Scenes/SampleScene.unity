@@ -939,6 +939,8 @@ MonoBehaviour:
   _waveDelay: 2
   _enemiesRoot: {fileID: 1381261321}
   _baseHealth: {fileID: 688097476}
+  _sellZoneAnchor: {fileID: 1101122222}
+  _sellZonePrefab: {fileID: 114101, guid: 2da0a46a04ae4e548a51a259df419164, type: 3}
 --- !u!1 &324732330
 GameObject:
   m_ObjectHideFlags: 0

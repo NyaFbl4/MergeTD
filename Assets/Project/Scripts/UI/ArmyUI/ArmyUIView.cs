@@ -14,6 +14,9 @@ namespace Project.Scripts.UI.ArmyUI
         private readonly UIElements _uiElements;
         private readonly VisualElement _root;
         private readonly VisualElement _towersSlotContainer;
+        private readonly VisualElement _sellTowerZoneContainer;
+        private readonly VisualElement _sellTowerZone;
+        private readonly Label _sellTowerLabel;
         private readonly Button _buyTowerButton;
         private readonly Button _buyGeneratorButton;
         private readonly Label _buyTowerLevelLabel;
@@ -45,6 +48,8 @@ namespace Project.Scripts.UI.ArmyUI
 
         public event Action BuyTowerButtonClicked;
         public event Action BuyGeneratorButtonClicked;
+        public event Action<int> TowerDragStarted;
+        public event Action<int> TowerSellRequested;
         public event Action<int, int> TowerDropped;
 
         public ArmyUIView(VisualElement root, UIElements uiElements)
@@ -52,6 +57,9 @@ namespace Project.Scripts.UI.ArmyUI
             _root = root;
             _uiElements = uiElements;
             _towersSlotContainer = _root.Q<VisualElement>("TowersSlotContainer");
+            _sellTowerZoneContainer = _root.Q<VisualElement>("SellTowerZoneContainer");
+            _sellTowerZone = _root.Q<VisualElement>("SellTowerZone");
+            _sellTowerLabel = _root.Q<Label>("SellTowerLabel");
             _buyTowerButton = _root.Q<Button>("PayTowerButton");
             _buyGeneratorButton = _root.Q<Button>("PayElectricTowerButton");
             _buyTowerLevelLabel = _buyTowerButton.Q<Label>("TowerLeveLabel");
@@ -60,6 +68,7 @@ namespace Project.Scripts.UI.ArmyUI
             _generatorPriceLabel = _buyGeneratorButton.Q<Label>("GeneratorPriceLabel");
             _buyTowerIcon = _buyTowerButton.Q<VisualElement>("TowerIcon");
             _buyGeneratorIcon = _buyGeneratorButton.Q<VisualElement>("TowerIcon");
+            _sellTowerZoneContainer.style.display = DisplayStyle.None;
 
             _buyTowerButton.clicked += OnBuyTowerButtonClicked;
             _buyGeneratorButton.clicked += OnBuyGeneratorButtonClicked;
@@ -135,6 +144,14 @@ namespace Project.Scripts.UI.ArmyUI
             _buyGeneratorButton.SetEnabled(canBuyGenerator);
         }
 
+        public void ShowSellZone(int refund)
+        {
+            _sellTowerLabel.text = $"Продать за {refund}";
+            _sellTowerZone.style.unityBackgroundImageTintColor = Color.white;
+            _sellTowerZoneContainer.style.display = DisplayStyle.Flex;
+            _sellTowerZoneContainer.BringToFront();
+        }
+
         public void Dispose()
         {
             CancelDrag(_dragPointerId);
@@ -171,6 +188,7 @@ namespace Project.Scripts.UI.ArmyUI
 
             _dragSourceIndex = slotIndex;
             _dragPointerId = evt.pointerId;
+            TowerDragStarted?.Invoke(slotIndex);
             MoveDraggedIconToFront(evt.position, slotIndex);
             _towerSlots[slotIndex].CapturePointer(evt.pointerId);
             evt.StopPropagation();
@@ -181,12 +199,16 @@ namespace Project.Scripts.UI.ArmyUI
             if (_dragSourceIndex != slotIndex || _dragPointerId != evt.pointerId)
                 return;
 
-            var pointerPosition = _towersSlotContainer.WorldToLocal(
+            var pointerPosition = _root.WorldToLocal(
                 new Vector2(evt.position.x, evt.position.y));
             var delta = pointerPosition - _dragStartPointerPosition;
             var towerImage = _towerImages[slotIndex];
             towerImage.style.left = _dragStartIconPosition.x + delta.x;
             towerImage.style.top = _dragStartIconPosition.y + delta.y;
+            _sellTowerZone.style.unityBackgroundImageTintColor =
+                IsPointerOverSellZone(evt.position)
+                    ? new Color(1f, 0.82f, 0.35f, 1f)
+                    : Color.white;
             evt.StopPropagation();
         }
 
@@ -196,10 +218,13 @@ namespace Project.Scripts.UI.ArmyUI
                 return;
 
             var sourceIndex = _dragSourceIndex;
+            var isSellDrop = IsPointerOverSellZone(evt.position);
             var targetIndex = FindSlotAt(evt.position);
             CancelDrag(evt.pointerId);
 
-            if (targetIndex >= 0 && targetIndex != sourceIndex && !_slotLocked[targetIndex])
+            if (isSellDrop)
+                TowerSellRequested?.Invoke(sourceIndex);
+            else if (targetIndex >= 0 && targetIndex != sourceIndex && !_slotLocked[targetIndex])
                 TowerDropped?.Invoke(sourceIndex, targetIndex);
 
             evt.StopPropagation();
@@ -225,6 +250,9 @@ namespace Project.Scripts.UI.ArmyUI
 
         private void CancelDrag(int pointerId)
         {
+            _sellTowerZoneContainer.style.display = DisplayStyle.None;
+            _sellTowerZone.style.unityBackgroundImageTintColor = Color.white;
+
             if (_dragSourceIndex < 0)
                 return;
 
@@ -246,16 +274,25 @@ namespace Project.Scripts.UI.ArmyUI
             _dragIconLeft = towerImage.style.left;
             _dragIconTop = towerImage.style.top;
 
-            _dragStartPointerPosition = _towersSlotContainer.WorldToLocal(
+            _dragStartPointerPosition = _root.WorldToLocal(
                 new Vector2(pointerPosition.x, pointerPosition.y));
-            _dragStartIconPosition = _towersSlotContainer.WorldToLocal(towerImage.worldBound.position);
+            _dragStartIconPosition = _root.WorldToLocal(towerImage.worldBound.position);
 
             towerImage.RemoveFromHierarchy();
-            _towersSlotContainer.Add(towerImage);
+            _root.Add(towerImage);
             towerImage.style.position = Position.Absolute;
             towerImage.style.left = _dragStartIconPosition.x;
             towerImage.style.top = _dragStartIconPosition.y;
             towerImage.BringToFront();
+        }
+
+        private bool IsPointerOverSellZone(Vector3 pointerPosition)
+        {
+            if (_sellTowerZoneContainer.resolvedStyle.display == DisplayStyle.None)
+                return false;
+
+            return _sellTowerZone.worldBound.Contains(
+                new Vector2(pointerPosition.x, pointerPosition.y));
         }
 
         private void RestoreDraggedIcon()

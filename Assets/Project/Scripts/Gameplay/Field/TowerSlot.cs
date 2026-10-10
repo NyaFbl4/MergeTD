@@ -10,6 +10,10 @@ namespace Project.Scripts.Gameplay.Field
 {
     public class TowerSlot : MonoBehaviour
     {
+        private const string LockSpriteResourcePath = "UI/new/Icons/Icon_ImageIcon_Lock01_m";
+        private const string LockIndicatorName = "LockIndicator";
+        private const float LockIndicatorMaxSize = 0.6f;
+
         [SerializeField] private Transform _towerAnchor;
         [SerializeField] private ETowerSlotType _slotType = ETowerSlotType.SpawnOnly;
         [SerializeField] private string _persistentId;
@@ -22,6 +26,13 @@ namespace Project.Scripts.Gameplay.Field
         private RunState _runState;
         private RunEnergyService _energy;
         private IWorldService _world;
+        private TowerSellZone _sellZone;
+        private SpriteRenderer _slotRenderer;
+        private SpriteRenderer _lockIndicator;
+        private ETowerSlotType _unlockedSlotType;
+        private bool _isInitialized;
+
+        private static Sprite _lockSprite;
 
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
@@ -35,16 +46,33 @@ namespace Project.Scripts.Gameplay.Field
 
         public void SetSlotType(ETowerSlotType slotType)
         {
+            if (slotType != ETowerSlotType.Locked)
+                _unlockedSlotType = slotType;
+
             _slotType = slotType;
             if (_currentTower != null)
                 ApplyFireState(_currentTower);
+
             RefreshDropCollider();
+            RefreshLockIndicator();
         }
 
-        private void Awake()
+        public void SetWorldUnlocked(bool isUnlocked) =>
+            SetSlotType(isUnlocked ? _unlockedSlotType : ETowerSlotType.Locked);
+
+        private void Awake() => InitializeComponents();
+
+        private void InitializeComponents()
         {
+            if (_isInitialized)
+                return;
+
+            _isInitialized = true;
             _dropCollider = GetComponent<Collider2D>();
+            _slotRenderer = GetComponent<SpriteRenderer>();
+            _unlockedSlotType = _slotType;
             RefreshDropCollider();
+            RefreshLockIndicator();
         }
 
         private void RefreshDropCollider()
@@ -55,16 +83,55 @@ namespace Project.Scripts.Gameplay.Field
             _dropCollider.enabled = _currentTower == null && CanEditTower;
         }
 
+        private void RefreshLockIndicator()
+        {
+            if (_slotType != ETowerSlotType.Locked)
+            {
+                if (_lockIndicator != null)
+                    _lockIndicator.enabled = false;
+
+                return;
+            }
+
+            if (_lockIndicator == null)
+                _lockIndicator = CreateLockIndicator();
+
+            _lockIndicator.enabled = true;
+        }
+
+        private SpriteRenderer CreateLockIndicator()
+        {
+            _lockSprite ??= Resources.LoadAll<Sprite>(LockSpriteResourcePath)[0];
+
+            var lockObject = new GameObject(LockIndicatorName);
+            lockObject.layer = gameObject.layer;
+            lockObject.transform.SetParent(transform, false);
+            lockObject.transform.localPosition = -_lockSprite.bounds.center;
+
+            var largestSpriteSize = Mathf.Max(_lockSprite.bounds.size.x, _lockSprite.bounds.size.y);
+            lockObject.transform.localScale = Vector3.one * (LockIndicatorMaxSize / largestSpriteSize);
+
+            var indicator = lockObject.AddComponent<SpriteRenderer>();
+            indicator.sprite = _lockSprite;
+            indicator.sharedMaterial = _slotRenderer.sharedMaterial;
+            indicator.sortingLayerID = _slotRenderer.sortingLayerID;
+            indicator.sortingOrder = _slotRenderer.sortingOrder + 1;
+            return indicator;
+        }
+
         public void Construct(
             IUnitsCatalog unitsCatalog,
             RunState runState,
             RunEnergyService energy,
             IWorldService world,
+            TowerSellZone sellZone,
             string fallbackPersistentId)
         {
+            InitializeComponents();
             _unitsCatalog = unitsCatalog;
             _energy = energy;
             _world = world;
+            _sellZone = sellZone;
 
             if (string.IsNullOrWhiteSpace(_persistentId))
                 _persistentId = fallbackPersistentId;
@@ -81,7 +148,8 @@ namespace Project.Scripts.Gameplay.Field
             TowerUnit towerPrefab,
             IPlayerStatsUseCase playerStats,
             IAudioManager audioManager,
-            bool persistWorldChange = true)
+            bool persistWorldChange = true,
+            int purchaseCost = 0)
         {
             if (!CanEditTower || IsOccupied || towerPrefab == null)
                 return false;
@@ -91,6 +159,9 @@ namespace Project.Scripts.Gameplay.Field
             _audioManager = audioManager;
             _currentTower.Initialize(playerStats, audioManager);
             _currentTower.InitializeRun(_runState, _energy);
+            _currentTower.SetPurchaseCost(purchaseCost > 0
+                ? purchaseCost
+                : TowerEconomy.GetDefaultPurchaseCost(_currentTower));
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
@@ -156,6 +227,10 @@ namespace Project.Scripts.Gameplay.Field
             if (nextPrefab == null)
                 return false;
 
+            var mergedPurchaseCost = TowerEconomy.CombinePurchaseCosts(
+                _currentTower.PurchaseCost,
+                incomingTower.PurchaseCost);
+
             Destroy(_currentTower.gameObject);
             Destroy(incomingTower.gameObject);
 
@@ -168,6 +243,7 @@ namespace Project.Scripts.Gameplay.Field
 
             _currentTower.Initialize(_playerStats, _audioManager);
             _currentTower.InitializeRun(_runState, _energy);
+            _currentTower.SetPurchaseCost(mergedPurchaseCost);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);
             ApplyFireState(_currentTower);
@@ -183,7 +259,7 @@ namespace Project.Scripts.Gameplay.Field
         {
             var drag = towerObject.GetComponent<Project.Scripts.Gameplay.Towers.TowerDragHandler>();
             if (drag != null)
-                drag.Init(this);
+                drag.Init(this, _sellZone);
         }
 
         public void SetTower(TowerUnit towerInstance)
@@ -213,7 +289,19 @@ namespace Project.Scripts.Gameplay.Field
 
         private void PersistCurrentTower()
         {
-            _world.SetTower(PersistentId, _currentTower.CurrentLevel, _currentTower.TowerType);
+            _world.SetTower(
+                PersistentId,
+                _currentTower.CurrentLevel,
+                _currentTower.TowerType,
+                _currentTower.PurchaseCost);
+        }
+
+        public void SellDetachedTower(TowerUnit tower, int refund)
+        {
+            _world.RemoveTower(PersistentId);
+            _playerStats.AddGold(refund);
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            Destroy(tower.gameObject);
         }
 
         public void CommitMoveFrom(TowerSlot sourceSlot)
@@ -222,7 +310,8 @@ namespace Project.Scripts.Gameplay.Field
                 sourceSlot.PersistentId,
                 PersistentId,
                 _currentTower.CurrentLevel,
-                _currentTower.TowerType);
+                _currentTower.TowerType,
+                _currentTower.PurchaseCost);
         }
 
         private void ApplyFireState(TowerUnit towerObject)

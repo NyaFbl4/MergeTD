@@ -118,7 +118,11 @@ namespace Project.Scripts.System.Save
                     if (slot == null || slot.CurrentTower == null)
                         continue;
 
-                    data.towers.Add(new TowerSlotSaveData(i, slot.CurrentTower.CurrentLevel, slot.CurrentTower.TowerType));
+                    data.towers.Add(new TowerSlotSaveData(
+                        i,
+                        slot.CurrentTower.CurrentLevel,
+                        slot.CurrentTower.TowerType,
+                        slot.CurrentTower.PurchaseCost));
                 }
             }
 
@@ -154,7 +158,12 @@ namespace Project.Scripts.System.Save
                 if (towerPrefab == null)
                     continue;
 
-                slot.TryPlaceTower(towerPrefab, _playerStatsUseCase, _audioManager, false);
+                slot.TryPlaceTower(
+                    towerPrefab,
+                    _playerStatsUseCase,
+                    _audioManager,
+                    false,
+                    towerData.purchaseCost);
             }
         }
 
@@ -177,7 +186,8 @@ namespace Project.Scripts.System.Save
                     towers.Add(new WorldTowerSaveData(
                         slots[tower.slotIndex].PersistentId,
                         tower.towerLevel,
-                        tower.towerType));
+                        tower.towerType,
+                        tower.purchaseCost));
                 }
             }
 

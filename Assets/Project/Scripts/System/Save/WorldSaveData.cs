@@ -75,16 +75,22 @@ namespace Project.Scripts.System.Save
         public string slotId;
         public int towerLevel;
         public ETowerType towerType;
+        public int purchaseCost;
 
         public WorldTowerSaveData()
         {
         }
 
-        public WorldTowerSaveData(string slotId, int towerLevel, ETowerType towerType)
+        public WorldTowerSaveData(
+            string slotId,
+            int towerLevel,
+            ETowerType towerType,
+            int purchaseCost = 0)
         {
             this.slotId = slotId;
             this.towerLevel = towerLevel;
             this.towerType = towerType;
+            this.purchaseCost = purchaseCost;
         }
     }
 

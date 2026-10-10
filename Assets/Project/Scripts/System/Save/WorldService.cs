@@ -288,25 +288,33 @@ namespace Project.Scripts.System.Save
             TowerSlotsChanged?.Invoke();
         }
 
-        public void SetTower(string slotId, int towerLevel, ETowerType towerType)
+        public void SetTower(string slotId, int towerLevel, ETowerType towerType, int purchaseCost)
         {
             if (!TowerSlotGrid.IsValidSlotId(slotId))
                 return;
 
             var safeLevel = Math.Max(1, towerLevel);
+            var safePurchaseCost = Math.Max(1, purchaseCost);
             var tower = FindTower(slotId);
 
             if (tower == null)
             {
-                _data.towers.Add(new WorldTowerSaveData(slotId, safeLevel, towerType));
+                _data.towers.Add(new WorldTowerSaveData(
+                    slotId,
+                    safeLevel,
+                    towerType,
+                    safePurchaseCost));
             }
             else
             {
-                if (tower.towerLevel == safeLevel && tower.towerType == towerType)
+                if (tower.towerLevel == safeLevel
+                    && tower.towerType == towerType
+                    && tower.purchaseCost == safePurchaseCost)
                     return;
 
                 tower.towerLevel = safeLevel;
                 tower.towerType = towerType;
+                tower.purchaseCost = safePurchaseCost;
             }
 
             Save();
@@ -331,7 +339,8 @@ namespace Project.Scripts.System.Save
             string sourceSlotId,
             string targetSlotId,
             int towerLevel,
-            ETowerType towerType)
+            ETowerType towerType,
+            int purchaseCost)
         {
             var sourceTower = TowerSlotGrid.IsValidSlotId(sourceSlotId)
                 ? FindTower(sourceSlotId)
@@ -355,12 +364,14 @@ namespace Project.Scripts.System.Save
                 _data.towers.Add(new WorldTowerSaveData(
                     targetSlotId,
                     Math.Max(1, towerLevel),
-                    towerType));
+                    towerType,
+                    Math.Max(1, purchaseCost)));
             }
             else
             {
                 targetTower.towerLevel = Math.Max(1, towerLevel);
                 targetTower.towerType = towerType;
+                targetTower.purchaseCost = Math.Max(1, purchaseCost);
             }
 
             Save();
@@ -479,7 +490,8 @@ namespace Project.Scripts.System.Save
                     _data.towers.Add(new WorldTowerSaveData(
                         tower.slotId,
                         Math.Max(1, tower.towerLevel),
-                        tower.towerType));
+                        tower.towerType,
+                        tower.purchaseCost));
                 }
             }
 
@@ -602,7 +614,11 @@ namespace Project.Scripts.System.Save
                     || !towerSlotIds.Add(tower.slotId))
                 {
                     _data.towers.RemoveAt(i);
+                    continue;
                 }
+
+                if (tower.purchaseCost <= 0)
+                    tower.purchaseCost = TowerEconomy.CombatPurchaseCost;
             }
 
             NormalizeTowerSlots();

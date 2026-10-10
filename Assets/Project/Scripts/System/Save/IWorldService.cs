@@ -68,8 +68,13 @@ namespace Project.Scripts.System.Save
         bool TryPurchaseUpgrade(string upgradeId, int expectedLevel, int price, EWorldUpgradeType type, float value);
         bool IsTowerSlotUnlocked(string slotId);
         void UnlockTowerSlot(string slotId);
-        void SetTower(string slotId, int towerLevel, ETowerType towerType);
-        void MoveTower(string sourceSlotId, string targetSlotId, int towerLevel, ETowerType towerType);
+        void SetTower(string slotId, int towerLevel, ETowerType towerType, int purchaseCost);
+        void MoveTower(
+            string sourceSlotId,
+            string targetSlotId,
+            int towerLevel,
+            ETowerType towerType,
+            int purchaseCost);
         void RemoveTower(string slotId);
         bool IsSpellUnlocked(string spellId);
         int GetSpellLevel(string spellId);

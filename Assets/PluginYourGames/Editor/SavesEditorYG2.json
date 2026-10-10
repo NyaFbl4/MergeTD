@@ -1,8 +1,8 @@
 {
-    "idSave": 239,
+    "idSave": 321,
     "world": {
         "version": 2,
-        "gold": 3710,
+        "gold": 5918,
         "gems": 5,
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 1,
@@ -40,34 +40,58 @@
         ],
         "towers": [
             {
-                "slotId": "12",
+                "slotId": "11",
                 "towerLevel": 3,
-                "towerType": 0
+                "towerType": 0,
+                "purchaseCost": 100
+            },
+            {
+                "slotId": "12",
+                "towerLevel": 4,
+                "towerType": 0,
+                "purchaseCost": 100
             },
             {
                 "slotId": "13",
                 "towerLevel": 5,
-                "towerType": 0
+                "towerType": 0,
+                "purchaseCost": 100
+            },
+            {
+                "slotId": "14",
+                "towerLevel": 3,
+                "towerType": 0,
+                "purchaseCost": 100
+            },
+            {
+                "slotId": "15",
+                "towerLevel": 3,
+                "towerType": 0,
+                "purchaseCost": 100
             },
             {
                 "slotId": "21",
                 "towerLevel": 1,
-                "towerType": 1
+                "towerType": 1,
+                "purchaseCost": 100
             },
             {
                 "slotId": "23",
                 "towerLevel": 1,
-                "towerType": 1
+                "towerType": 1,
+                "purchaseCost": 100
             },
             {
                 "slotId": "24",
                 "towerLevel": 1,
-                "towerType": 1
+                "towerType": 1,
+                "purchaseCost": 100
             },
             {
                 "slotId": "25",
                 "towerLevel": 1,
-                "towerType": 1
+                "towerType": 1,
+                "purchaseCost": 100
             }
         ],
         "towerSlots": [
@@ -113,7 +137,7 @@
             },
             {
                 "slotId": "31",
-                "unlockedSlot": 1
+                "unlockedSlot": 0
             },
             {
                 "slotId": "32",
@@ -134,9 +158,9 @@
         ],
         "spells": [],
         "activeSpellIds": [
-            "orbital_railgun",
             "emp_pulse",
-            "barrage_protocol"
+            "orbital_railgun",
+            "gravity_trap"
         ],
         "dailyQuests": [
             {

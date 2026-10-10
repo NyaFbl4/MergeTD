@@ -223,7 +223,7 @@ namespace Project.Scripts.UI.InBattleUI
                 var quest = quests[i];
                 _dailyQuests[i] = quest;
                 _dailyQuestItems[i].style.display = DisplayStyle.Flex;
-                _dailyQuestItems[i].style.opacity = quest.IsRewardClaimed ? 0.55f : 1f;
+                _dailyQuestItems[i].style.opacity = 1f;
                 _dailyQuestIcons[i].style.backgroundImage = new StyleBackground(quest.Icon);
                 _dailyQuestDescriptions[i].text =
                     localizationService.Format(quest.Description, quest.TargetValue);

@@ -30,6 +30,7 @@ namespace Project.Scripts.Gameplay.Towers
 
         [Header("Tower parametrs")]
         [SerializeField] private int _towerLevel = 1;
+        [SerializeField, HideInInspector] private int _purchaseCost;
         [SerializeField] private float _angleOffset = -90f;
         [SerializeField] private float _rotationSpeed = 360f;
         [SerializeField] private float _animationSpeed;
@@ -39,6 +40,7 @@ namespace Project.Scripts.Gameplay.Towers
 
         public int CurrentLevel => _towerLevel;
         public ETowerType TowerType => _towerConfig.TowerType;
+        public int PurchaseCost => _purchaseCost;
         private GeneratorProduction _generatorProduction;
         public TowerConfig TowerConfig => _towerConfig;
         public IPlayerStatsUseCase PlayerStats => _playerStats;
@@ -78,6 +80,11 @@ namespace Project.Scripts.Gameplay.Towers
             _canFire = canFire;
             if (!_canFire)
                 _currentTarget = null;
+        }
+
+        public void SetPurchaseCost(int purchaseCost)
+        {
+            _purchaseCost = Mathf.Max(1, purchaseCost);
         }
 
         public void SetSpellAttackSpeedMultiplier(float multiplier)

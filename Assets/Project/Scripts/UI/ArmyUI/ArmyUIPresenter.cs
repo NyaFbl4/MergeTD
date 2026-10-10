@@ -32,6 +32,8 @@ namespace Project.Scripts.UI.ArmyUI
             _world.TowersChanged += RefreshSlots;
             _view.BuyTowerButtonClicked += OnBuyTowerButtonClicked;
             _view.BuyGeneratorButtonClicked += OnBuyGeneratorButtonClicked;
+            _view.TowerDragStarted += OnTowerDragStarted;
+            _view.TowerSellRequested += OnTowerSellRequested;
             _view.TowerDropped += OnTowerDropped;
             RefreshSlots();
         }
@@ -44,6 +46,8 @@ namespace Project.Scripts.UI.ArmyUI
             _world.TowersChanged -= RefreshSlots;
             _view.BuyTowerButtonClicked -= OnBuyTowerButtonClicked;
             _view.BuyGeneratorButtonClicked -= OnBuyGeneratorButtonClicked;
+            _view.TowerDragStarted -= OnTowerDragStarted;
+            _view.TowerSellRequested -= OnTowerSellRequested;
             _view.TowerDropped -= OnTowerDropped;
         }
 
@@ -90,6 +94,19 @@ namespace Project.Scripts.UI.ArmyUI
             Debug.Log($"ArmyUI BuyGenerator result: {result}");
         }
 
+        private void OnTowerDragStarted(int sourceIndex)
+        {
+            var sourceSlotId = TowerSlotGrid.GetSlotId(sourceIndex);
+            _view.ShowSellZone(_useCase.GetSellRefund(sourceSlotId));
+        }
+
+        private void OnTowerSellRequested(int sourceIndex)
+        {
+            var sourceSlotId = TowerSlotGrid.GetSlotId(sourceIndex);
+            if (!_useCase.TrySellTower(sourceSlotId))
+                Debug.Log($"ArmyUI tower sale rejected: {sourceSlotId}");
+        }
+
         private void OnTowerDropped(int sourceIndex, int targetIndex)
         {
             var sourceSlotId = TowerSlotGrid.GetSlotId(sourceIndex);
@@ -107,18 +124,18 @@ namespace Project.Scripts.UI.ArmyUI
         bool CanBuyGenerator { get; }
         EBuyTowerResult TryBuyTower();
         EBuyTowerResult TryBuyGenerator();
+        int GetSellRefund(string slotId);
+        bool TrySellTower(string slotId);
         bool TryMoveOrMergeTower(string sourceSlotId, string targetSlotId);
     }
 
     public sealed class ArmyUIUseCase : IArmyUIUseCase
     {
-        private const int FixedTowerCost = 100;
-
         private readonly IWorldService _world;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IPublisher<TowerBoughtQuestEventDTO> _towerBoughtPublisher;
 
-        public int TowerCost => FixedTowerCost;
+        public int TowerCost => TowerEconomy.CombatPurchaseCost;
         public int GeneratorCost => Math.Max(
             0,
             _unitsCatalog.GetTowerConfigByLevel(1, ETowerType.Generator)?.StartTowerPrice ?? 0);
@@ -147,6 +164,27 @@ namespace Project.Scripts.UI.ArmyUI
         public EBuyTowerResult TryBuyGenerator() =>
             TryBuy(ETowerType.Generator, 1, GeneratorCost);
 
+        public int GetSellRefund(string slotId)
+        {
+            var tower = FindTower(slotId);
+            return tower == null ? 0 : TowerEconomy.GetSellRefund(tower.purchaseCost);
+        }
+
+        public bool TrySellTower(string slotId)
+        {
+            if (!TowerSlotGrid.IsValidSlotId(slotId))
+                return false;
+
+            var tower = FindTower(slotId);
+            if (tower == null)
+                return false;
+
+            var refund = TowerEconomy.GetSellRefund(tower.purchaseCost);
+            _world.RemoveTower(slotId);
+            _world.AddGold(refund);
+            return true;
+        }
+
         public bool TryMoveOrMergeTower(string sourceSlotId, string targetSlotId)
         {
             if (sourceSlotId == targetSlotId
@@ -167,7 +205,8 @@ namespace Project.Scripts.UI.ArmyUI
                     sourceSlotId,
                     targetSlotId,
                     sourceTower.towerLevel,
-                    sourceTower.towerType);
+                    sourceTower.towerType,
+                    sourceTower.purchaseCost);
                 return true;
             }
 
@@ -180,7 +219,14 @@ namespace Project.Scripts.UI.ArmyUI
             if (!_unitsCatalog.HasTowerLevel(nextLevel, sourceTower.towerType))
                 return false;
 
-            _world.MoveTower(sourceSlotId, targetSlotId, nextLevel, sourceTower.towerType);
+            _world.MoveTower(
+                sourceSlotId,
+                targetSlotId,
+                nextLevel,
+                sourceTower.towerType,
+                TowerEconomy.CombinePurchaseCosts(
+                    sourceTower.purchaseCost,
+                    targetTower.purchaseCost));
             return true;
         }
 
@@ -196,7 +242,7 @@ namespace Project.Scripts.UI.ArmyUI
             if (!_world.TrySpendGold(cost))
                 return EBuyTowerResult.NotEnoughGold;
 
-            _world.SetTower(targetSlotId, towerLevel, towerType);
+            _world.SetTower(targetSlotId, towerLevel, towerType, cost);
             _towerBoughtPublisher.Publish(new TowerBoughtQuestEventDTO(towerLevel, cost));
             return EBuyTowerResult.Success;
         }
