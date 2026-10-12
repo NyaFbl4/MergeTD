@@ -12,6 +12,8 @@ namespace Project.Scripts.Gameplay.Towers
         private double _elapsed;
         private bool _isDisposed;
 
+        public float NormalizedProgress => (float)(_elapsed / _interval);
+
         public GeneratorProduction(RunState runState, RunEnergyService energy, float interval, int amount)
         {
             if (interval <= 0f || float.IsNaN(interval) || float.IsInfinity(interval))
@@ -27,12 +29,12 @@ namespace Project.Scripts.Gameplay.Towers
         }
 
         // Called by the game's update loop, which stops while paused or finished.
-        public void Tick(float deltaTime, bool isPlaced)
+        public bool Tick(float deltaTime, bool isPlaced)
         {
             if (_isDisposed || !isPlaced || _runState.Phase != ERunPhase.Wave)
-                return;
+                return false;
             if (deltaTime <= 0f || float.IsNaN(deltaTime) || float.IsInfinity(deltaTime))
-                return;
+                return true;
 
             _elapsed += deltaTime;
             while (_elapsed >= _interval)
@@ -40,6 +42,8 @@ namespace Project.Scripts.Gameplay.Towers
                 _elapsed -= _interval;
                 _energy.Add(_amount);
             }
+
+            return true;
         }
 
         private void OnPhaseChanged(ERunPhase phase) => _elapsed = 0d;

@@ -1,0 +1,650 @@
+fileFormatVersion: 2
+guid: d7c666f2f5d2fd644a3189d7ee704b22
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1797709760574983769
+    second: Generator04-Charge_04_0
+  - first:
+      213: -4879409228651355409
+    second: Generator04-Charge_04_1
+  - first:
+      213: 1920978484905275267
+    second: Generator04-Charge_04_2
+  - first:
+      213: 8184359704828454460
+    second: Generator04-Charge_04_3
+  - first:
+      213: -6704386020684537918
+    second: Generator04-Charge_04_4
+  - first:
+      213: -5004560861836001281
+    second: Generator04-Charge_04_5
+  - first:
+      213: 490755974557560980
+    second: Generator04-Charge_04_6
+  - first:
+      213: -5708474474743950731
+    second: Generator04-Charge_04_7
+  - first:
+      213: 8111569361398960349
+    second: Generator04-Charge_04_8
+  - first:
+      213: -4875344731139727397
+    second: Generator04-Charge_04_9
+  - first:
+      213: 4761905708072623100
+    second: Generator04-Charge_04_10
+  - first:
+      213: 4946504437501676514
+    second: Generator04-Charge_04_11
+  - first:
+      213: 1027176718376304224
+    second: Generator04-Charge_04_12
+  - first:
+      213: 2207187530374653638
+    second: Generator04-Charge_04_13
+  - first:
+      213: 6662717761638824855
+    second: Generator04-Charge_04_14
+  - first:
+      213: -1443144409318982807
+    second: Generator04-Charge_04_15
+  - first:
+      213: 8385487057662641207
+    second: Generator04-Charge_04_16
+  - first:
+      213: 986260347409689415
+    second: Generator04-Charge_04_17
+  - first:
+      213: 8116787047026849028
+    second: Generator04-Charge_04_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Generator04-Charge_04_0
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 1302
+        width: 28
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a1fca75f704d07e0800000000000000
+      internalID: -1797709760574983769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_1
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 971
+        height: 1283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe22974a82bd84cb0800000000000000
+      internalID: -4879409228651355409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_2
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 68
+        width: 23
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38f62f511cfa8aa10800000000000000
+      internalID: 1920978484905275267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_3
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 79
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c362258f9cfa49170800000000000000
+      internalID: 8184359704828454460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_4
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 119
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cfd0008f6c35f2a0800000000000000
+      internalID: -6704386020684537918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_5
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 85
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fff3175596a3c8ab0800000000000000
+      internalID: -5004560861836001281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_6
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 52
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49077ee65f38fc600800000000000000
+      internalID: 490755974557560980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_7
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 85
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5729083c5bc67c0b0800000000000000
+      internalID: -5708474474743950731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_8
+      rect:
+        serializedVersion: 2
+        x: 610
+        y: 79
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd090257b55129070800000000000000
+      internalID: 8111569361398960349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_9
+      rect:
+        serializedVersion: 2
+        x: 630
+        y: 51
+        width: 19
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdf18d63ccb475cb0800000000000000
+      internalID: -4875344731139727397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_10
+      rect:
+        serializedVersion: 2
+        x: 656
+        y: 79
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfbd2970300b51240800000000000000
+      internalID: 4761905708072623100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_11
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 78
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eb4e25049385a440800000000000000
+      internalID: 4946504437501676514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_12
+      rect:
+        serializedVersion: 2
+        x: 851
+        y: 47
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06efe5c78c3414e00800000000000000
+      internalID: 1027176718376304224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_13
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 0
+        width: 27
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c627ac5d5181ae10800000000000000
+      internalID: 2207187530374653638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_14
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 87
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79bfa2de08ab67c50800000000000000
+      internalID: 6662717761638824855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_15
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 31
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96b73fa4ecbe8fbe0800000000000000
+      internalID: -1443144409318982807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_16
+      rect:
+        serializedVersion: 2
+        x: 1017
+        y: 21
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7340e9cfc0c3f5470800000000000000
+      internalID: 8385487057662641207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_17
+      rect:
+        serializedVersion: 2
+        x: 1076
+        y: 94
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74b686f7f86efad00800000000000000
+      internalID: 986260347409689415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Generator04-Charge_04_18
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 93
+        width: 61
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 405f68f80de94a070800000000000000
+      internalID: 8116787047026849028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Generator04-Charge_04_0: -1797709760574983769
+      Generator04-Charge_04_1: -4879409228651355409
+      Generator04-Charge_04_10: 4761905708072623100
+      Generator04-Charge_04_11: 4946504437501676514
+      Generator04-Charge_04_12: 1027176718376304224
+      Generator04-Charge_04_13: 2207187530374653638
+      Generator04-Charge_04_14: 6662717761638824855
+      Generator04-Charge_04_15: -1443144409318982807
+      Generator04-Charge_04_16: 8385487057662641207
+      Generator04-Charge_04_17: 986260347409689415
+      Generator04-Charge_04_18: 8116787047026849028
+      Generator04-Charge_04_2: 1920978484905275267
+      Generator04-Charge_04_3: 8184359704828454460
+      Generator04-Charge_04_4: -6704386020684537918
+      Generator04-Charge_04_5: -5004560861836001281
+      Generator04-Charge_04_6: 490755974557560980
+      Generator04-Charge_04_7: -5708474474743950731
+      Generator04-Charge_04_8: 8111569361398960349
+      Generator04-Charge_04_9: -4875344731139727397
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

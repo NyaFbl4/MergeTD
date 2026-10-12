@@ -1,4 +1,4 @@
-﻿using Project.Scripts.Configs;
+using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Towers;
 
 namespace Project.Scripts.Gameplay
@@ -19,7 +19,7 @@ namespace Project.Scripts.Gameplay
                 case ETowerType.Combat:
                     return level >= 1 && level <= _unitsConfig.Towers.Count;
                 case ETowerType.Generator:
-                    return level == 1;
+                    return level >= 1 && level <= _unitsConfig.Generators.Count;
                 default:
                     return false;
             }
@@ -41,7 +41,7 @@ namespace Project.Scripts.Gameplay
                 return null;
 
             return towerType == ETowerType.Generator
-                ? _unitsConfig.GeneratorLevelOne
+                ? _unitsConfig.Generators[level - 1]
                 : _unitsConfig.Towers[level - 1];
         }
     }

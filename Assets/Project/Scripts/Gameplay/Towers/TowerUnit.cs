@@ -12,6 +12,8 @@ namespace Project.Scripts.Gameplay.Towers
 {
     public class TowerUnit : MonoBehaviour, ITowerUnit, IGameUpdateListener
     {
+        private const string GeneratorChargeFramesRootPath = "Guns/Generators";
+
         [SerializeField] private TowerConfig _towerConfig;
         [SerializeField] private Transform _turretPivot;
         [SerializeField] private TMP_Text _currentLevelText;
@@ -54,6 +56,10 @@ namespace Project.Scripts.Gameplay.Towers
         private IPlayerStatsUseCase _playerStats;
         private IAudioManager _audioManager;
         private float _currentCriticalDamageMultiplier;
+        private SpriteRenderer _generatorSpriteRenderer;
+        private Sprite[] _generatorChargeFrames;
+        private Sprite _generatorIdleSprite;
+        private int _generatorChargeFrameIndex = -1;
 
         public void Initialize(IPlayerStatsUseCase playerStats, IAudioManager audioManager)
         {
@@ -71,8 +77,11 @@ namespace Project.Scripts.Gameplay.Towers
         {
             _generatorProduction?.Dispose();
             if (TowerType == ETowerType.Generator)
+            {
                 _generatorProduction = new GeneratorProduction(
                     runState, energy, _towerConfig.GenerationInterval, _towerConfig.EnergyPerPulse);
+                InitializeGeneratorChargeAnimation();
+            }
         }
 
         public void SetCanFire(bool canFire)
@@ -108,7 +117,7 @@ namespace Project.Scripts.Gameplay.Towers
             if (other == null)
                 return false;
 
-            if (TowerType == ETowerType.Generator || other.TowerType != TowerType)
+            if (other.TowerType != TowerType)
                 return false;
 
             if (other == this)
@@ -146,7 +155,8 @@ namespace Project.Scripts.Gameplay.Towers
         {
             if (TowerType == ETowerType.Generator)
             {
-                _generatorProduction.Tick(deltaTime, _canFire);
+                var isProducing = _generatorProduction.Tick(deltaTime, _canFire);
+                UpdateGeneratorChargeAnimation(isProducing);
                 return;
             }
 
@@ -189,6 +199,51 @@ namespace Project.Scripts.Gameplay.Towers
                 : _fireRate / _towerConfig.StartAttackSpeed;
 
             _animationSpeed = _towerConfig.AnimationSpeed * attackSpeedRatio;
+        }
+
+        private void InitializeGeneratorChargeAnimation()
+        {
+            _generatorSpriteRenderer = _turretPivot.GetComponent<SpriteRenderer>();
+            _generatorIdleSprite = _generatorSpriteRenderer.sprite;
+
+            var chargeFramesPath = $"{GeneratorChargeFramesRootPath}/Generator{_towerLevel}/Charge";
+            _generatorChargeFrames = Resources.LoadAll<Sprite>(chargeFramesPath);
+
+            if (_generatorChargeFrames.Length == 0)
+            {
+                _generatorChargeFrames = new[] { _generatorIdleSprite };
+            }
+            else
+            {
+                global::System.Array.Sort(_generatorChargeFrames,
+                    (left, right) => string.CompareOrdinal(left.name, right.name));
+            }
+
+            _generatorChargeFrameIndex = -1;
+        }
+
+        private void UpdateGeneratorChargeAnimation(bool isProducing)
+        {
+            if (!isProducing)
+            {
+                if (_generatorChargeFrameIndex >= 0)
+                {
+                    _generatorSpriteRenderer.sprite = _generatorIdleSprite;
+                    _generatorChargeFrameIndex = -1;
+                }
+
+                return;
+            }
+
+            var frameIndex = Mathf.Min(
+                _generatorChargeFrames.Length - 1,
+                Mathf.FloorToInt(_generatorProduction.NormalizedProgress * _generatorChargeFrames.Length));
+
+            if (frameIndex == _generatorChargeFrameIndex)
+                return;
+
+            _generatorSpriteRenderer.sprite = _generatorChargeFrames[frameIndex];
+            _generatorChargeFrameIndex = frameIndex;
         }
 
         private void OnUpgradesChanged()

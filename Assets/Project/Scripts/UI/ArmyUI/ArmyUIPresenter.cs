@@ -210,8 +210,7 @@ namespace Project.Scripts.UI.ArmyUI
                 return true;
             }
 
-            if (sourceTower.towerType == ETowerType.Generator
-                || sourceTower.towerType != targetTower.towerType
+            if (sourceTower.towerType != targetTower.towerType
                 || sourceTower.towerLevel != targetTower.towerLevel)
                 return false;
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Towers;
 using UnityEngine;
@@ -11,9 +11,11 @@ namespace Project.Scripts.Configs
         [SerializeField] private List<EnemyUnit> _enemies = new();
         [SerializeField] private List<TowerUnit> _towers;
         [SerializeField] private TowerUnit _generatorLevelOne;
+        [SerializeField] private List<TowerUnit> _generators = new();
 
         public List<EnemyUnit> Enemies => _enemies;
         public List<TowerUnit> Towers => _towers;
         public TowerUnit GeneratorLevelOne => _generatorLevelOne;
+        public List<TowerUnit> Generators => _generators;
     }
 }
