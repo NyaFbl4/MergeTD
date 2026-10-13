@@ -58,9 +58,7 @@ namespace Project.Scripts.Gameplay.Run
                 return;
             }
 
-            var startWave = _progressCheckpointUseCase.RestoreCheckpointOrDefaults();
-            _state.MoveToWave(startWave);
-            _playerStatsUseCase.SetWave(_state.CurrentWave);
+            _progressCheckpointUseCase.StartFreshRun();
         }
 
         public void StartWave()
@@ -104,7 +102,6 @@ namespace Project.Scripts.Gameplay.Run
                 return;
 
             _isGameRunning = false;
-            _progressCheckpointUseCase.ClearCheckpoint();
             _gameManagerService.FinishGame();
         }
 

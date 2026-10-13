@@ -4,7 +4,6 @@ using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.System.Audio;
-using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
 using VContainer.Unity;
@@ -17,8 +16,6 @@ namespace Project.Scripts.Gameplay.Run.Cards
         private readonly RunCardCatalog _catalog;
         private readonly RunCardRuntimeState _runtimeState;
         private readonly RunBattleRuntime _runBattleRuntime;
-        private readonly RunState _runState;
-        private readonly ProgressCheckpointUseCase _checkpoint;
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly BaseHealth _baseHealth;
         private readonly BattlefieldContext _battlefield;
@@ -42,8 +39,6 @@ namespace Project.Scripts.Gameplay.Run.Cards
             RunCardCatalog catalog,
             RunCardRuntimeState runtimeState,
             RunBattleRuntime runBattleRuntime,
-            RunState runState,
-            ProgressCheckpointUseCase checkpoint,
             IPlayerStatsUseCase playerStats,
             BaseHealth baseHealth,
             BattlefieldContext battlefield,
@@ -53,8 +48,6 @@ namespace Project.Scripts.Gameplay.Run.Cards
             _catalog = catalog;
             _runtimeState = runtimeState;
             _runBattleRuntime = runBattleRuntime;
-            _runState = runState;
-            _checkpoint = checkpoint;
             _playerStats = playerStats;
             _baseHealth = baseHealth;
             _battlefield = battlefield;
@@ -79,7 +72,6 @@ namespace Project.Scripts.Gameplay.Run.Cards
 
             ApplyImmediateEffects(card);
             _audioManager.PlaySound(ESoundId.UiButtonClick);
-            _checkpoint.SaveCheckpoint(_runState.CurrentWave + 1);
 
             _isActive = false;
             _choices.Clear();
@@ -112,7 +104,6 @@ namespace Project.Scripts.Gameplay.Run.Cards
             {
                 Debug.LogWarning("RunCardChoiceUseCase: no eligible cards. Card choice was skipped.");
                 _isActive = false;
-                _checkpoint.SaveCheckpoint(_runState.CurrentWave + 1);
                 _runBattleRuntime.ContinueToNextPreparation();
             }
 

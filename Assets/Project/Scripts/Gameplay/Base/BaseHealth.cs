@@ -87,7 +87,7 @@ namespace Project.Scripts.Gameplay.Base
 
         public void OnStartGame()
         {
-            // ProgressCheckpointUseCase restores saved/default health on game start.
+            // Run initialization restores full persistent max health.
         }
 
         public void ApplyDamage(int damage)

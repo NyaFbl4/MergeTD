@@ -4,7 +4,6 @@ using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Run;
-using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
 using UnityEngine;
@@ -24,13 +23,11 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly RunState _runState;
-        private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
 
         private bool _isShown;
         private bool _isWaitingAdReward;
         private bool _isAdRewardClaimed;
         private bool _isRewardedAdClosing;
-        private int _currentWaveNumber;
         private int _currentRewardCount;
 
         public EndWaveLoseUseCase(
@@ -40,8 +37,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             IGameManagerService gameManagerService,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            RunState runState,
-            ProgressCheckpointUseCase progressCheckpointUseCase)
+            RunState runState)
         {
             _baseHealth = baseHealth;
             _endWaveLoseUIPresenter = endWaveLoseUIPresenter;
@@ -50,7 +46,6 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
             _runState = runState;
-            _progressCheckpointUseCase = progressCheckpointUseCase;
         }
 
         public void Initialize()
@@ -71,10 +66,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _isWaitingAdReward = false;
             _isAdRewardClaimed = false;
             _isRewardedAdClosing = false;
-            _currentWaveNumber = waveNumber;
             _currentRewardCount = rewardCount;
-
-            _progressCheckpointUseCase.SaveRetryCheckpoint(waveNumber);
 
             _isShown = true;
             _endWaveLoseUIPresenter.SetData(waveNumber, rewardCount);
@@ -123,7 +115,6 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _isAdRewardClaimed = true;
 
             _playerStatsUseCase.AddGold(_currentRewardCount);
-            _progressCheckpointUseCase.SaveRetryCheckpoint(_currentWaveNumber);
         }
 
         private void SubscribeRewardedAdEvents()

@@ -3,7 +3,6 @@ using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Localization;
-using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
 using UnityEngine;
@@ -25,7 +24,6 @@ namespace Project.Scripts.UI.EndWaveUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly ILocalizationService _localizationService;
-        private readonly ProgressCheckpointUseCase _progressCheckpointUseCase;
 
         private bool _isWaitingAdReward;
         private bool _isWaitingReview;
@@ -40,8 +38,7 @@ namespace Project.Scripts.UI.EndWaveUI
             IPlayerStatsUseCase playerStatsUseCase,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            ILocalizationService localizationService,
-            ProgressCheckpointUseCase progressCheckpointUseCase)
+            ILocalizationService localizationService)
         {
             _runBattleRuntime = runBattleRuntime;
             _endWaveUIPresenter = endWaveUIPresenter;
@@ -49,7 +46,6 @@ namespace Project.Scripts.UI.EndWaveUI
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
             _localizationService = localizationService;
-            _progressCheckpointUseCase = progressCheckpointUseCase;
         }
 
         public void Initialize()
@@ -66,7 +62,7 @@ namespace Project.Scripts.UI.EndWaveUI
             switch (phaseAfterComplete)
             {
                 case ERunPhase.Reward:
-                    GrantWaveRewardAndSaveCheckpoint(waveNumber, rewardCount);
+                    GrantWaveReward(rewardCount);
                     ShowRewardPopup(waveNumber, rewardCount);
                     break;
                 case ERunPhase.CardChoice:
@@ -81,10 +77,9 @@ namespace Project.Scripts.UI.EndWaveUI
             }
         }
 
-        private void GrantWaveRewardAndSaveCheckpoint(int waveNumber, int rewardCount)
+        private void GrantWaveReward(int rewardCount)
         {
             _playerStatsUseCase.AddGold(rewardCount);
-            _progressCheckpointUseCase.SaveCheckpoint(waveNumber + 1);
         }
 
         private void ShowRewardPopup(int waveNumber, int rewardCount)
@@ -185,7 +180,6 @@ namespace Project.Scripts.UI.EndWaveUI
             PlayerPrefs.Save();
 
             _playerStatsUseCase.AddGold(_currentRewardCount);
-            _progressCheckpointUseCase.SaveCheckpoint(_currentWaveNumber + 1);
 
             _endWaveUIPresenter.SetAdButtonAdMode();
             ClosePopupAndContinue();
@@ -222,7 +216,6 @@ namespace Project.Scripts.UI.EndWaveUI
             _isWaitingAdReward = false;
 
             _playerStatsUseCase.AddGold(_currentRewardCount);
-            _progressCheckpointUseCase.SaveCheckpoint(_currentWaveNumber + 1);
             ClosePopupAndContinue();
         }
         
