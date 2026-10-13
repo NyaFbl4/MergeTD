@@ -21,6 +21,7 @@ namespace Project.Scripts.System.Save
         public List<UpgradeLevelSaveData> upgrades = new();
         public List<TowerSlotSaveData> towers = new();
         public List<QuestSaveData> quests = new();
+        public List<string> selectedRunCardIds = new();
     }
 
     [Serializable]

@@ -4,6 +4,8 @@ using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.CardChoiceUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,6 +25,7 @@ namespace Project.Scripts.UI.LevelUI
         private Button _settingsButton;
         private Button _nextWaveButton;
         private Button _setSpellsButton;
+        private Button _setTowersButton;
         private Button _weaponBarrageButton;
         private Label _weaponBarrageNameLabel;
         private Label _weaponBarrageStatusLabel;
@@ -46,6 +49,7 @@ namespace Project.Scripts.UI.LevelUI
         private Label _gravityTrapStatusLabel;
         private Label _payTowerLabel;
         private Label _moneyLabel;
+        private Label _gemsLabel;
         private Label _currentBaseHealthLabel;
         private Label _maxBaseHealthLabel;
         private Label _currentWaveLabel;
@@ -59,6 +63,8 @@ namespace Project.Scripts.UI.LevelUI
             new(StringComparer.Ordinal);
         private readonly Dictionary<string, VisualElement> _spellBackgrounds =
             new(StringComparer.Ordinal);
+        private IPurchaseWindowView _purchaseWindowView;
+        private ICardChoiceView _cardChoiceView;
         
         public event Action BuyTowerButtonClicked;
         public event Action BuyGeneratorButtonClicked;
@@ -68,6 +74,7 @@ namespace Project.Scripts.UI.LevelUI
         public event Action SettingsButtonClicked;
         public event Action NextWaveButtonClicked;
         public event Action SetSpellsButtonClicked;
+        public event Action SetTowersButtonClicked;
         public event Action WeaponBarrageButtonClicked;
         public event Action BaseRepairButtonClicked;
         public event Action BarrageProtocolButtonClicked;
@@ -75,6 +82,9 @@ namespace Project.Scripts.UI.LevelUI
         public event Action EmpPulseButtonClicked;
         public event Action OrbitalRailgunButtonClicked;
         public event Action GravityTrapButtonClicked;
+
+        public IPurchaseWindowView PurchaseWindowView => _purchaseWindowView;
+        public ICardChoiceView CardChoiceView => _cardChoiceView;
 
         public override void Awake()
         {
@@ -97,6 +107,7 @@ namespace Project.Scripts.UI.LevelUI
             _settingsButton = _root.Q<Button>("SettingsButton");
             _nextWaveButton = _root.Q<Button>("GoNextWaveButton");
             _setSpellsButton = _root.Q<Button>("SetSpellsButton");
+            _setTowersButton = _root.Q<Button>("SetTowersButton");
             var weaponBarrageElement = _root.Q<VisualElement>("WeaponBarrageSpell");
             _weaponBarrageButton = weaponBarrageElement.Q<Button>("SpellButton");
             _weaponBarrageNameLabel = _weaponBarrageButton.Q<Label>("SpellDamageTypeLabel");
@@ -149,6 +160,7 @@ namespace Project.Scripts.UI.LevelUI
             _adButtonTowerIcon = _adButton?.Q<VisualElement>("TowerIcon");
             _payTowerLabel = _root.Q<Label>("PayTowerLabel");
             _moneyLabel = _root.Q<Label>("GoldLabel") ?? _root.Q<Label>("MoneyLabel");
+            _gemsLabel = _root.Q<Label>("GemLabel");
             _currentBaseHealthLabel =  _root.Q<Label>("CurrentBaseHealthLabel");
             _maxBaseHealthLabel = _root.Q<Label>("MaxBaseHealthLabel");
             _currentWaveLabel =  _root.Q<Label>("WaveLabel");
@@ -166,6 +178,7 @@ namespace Project.Scripts.UI.LevelUI
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked += OnNextWaveButtonClicked;
             _setSpellsButton.clicked += OnSetSpellsButtonClicked;
+            _setTowersButton.clicked += OnSetTowersButtonClicked;
             _weaponBarrageButton.clicked += OnWeaponBarrageButtonClicked;
             _baseRepairButton.clicked += OnBaseRepairButtonClicked;
             _barrageProtocolButton.clicked += OnBarrageProtocolButtonClicked;
@@ -173,6 +186,22 @@ namespace Project.Scripts.UI.LevelUI
             _empPulseButton.clicked += OnEmpPulseButtonClicked;
             _orbitalRailgunButton.clicked += OnOrbitalRailgunButtonClicked;
             _gravityTrapButton.clicked += OnGravityTrapButtonClicked;
+        }
+
+        public void InitializePurchaseWindow(UIElements uiElements)
+        {
+            var purchaseWindowRoot = _root.Q<TemplateContainer>("PurchaseWindow")
+                                     ?? throw new InvalidOperationException(
+                                         "LevelUIView: element 'PurchaseWindow' was not found.");
+            _purchaseWindowView = new PurchaseWindowView(purchaseWindowRoot, uiElements);
+        }
+
+        public void InitializeCardChoice()
+        {
+            var cardChoiceRoot = _root.Q<TemplateContainer>("CardChoiceWindow")
+                                 ?? throw new InvalidOperationException(
+                                     "LevelUIView: element 'CardChoiceWindow' was not found.");
+            _cardChoiceView = new CardChoiceView(cardChoiceRoot);
         }
         
         public void SetPriceTower(int price)
@@ -222,6 +251,11 @@ namespace Project.Scripts.UI.LevelUI
         public void SetMoney(int money)
         {
             UIIntegerAnimationUtility.SetValue(_moneyLabel, Math.Max(0, money));
+        }
+
+        public void SetGems(int gems)
+        {
+            UIIntegerAnimationUtility.SetValue(_gemsLabel, Math.Max(0, gems));
         }
 
         public void SetTowerIcon(Sprite towerIcon)
@@ -277,6 +311,7 @@ namespace Project.Scripts.UI.LevelUI
         {
             _payTowerButton?.SetEnabled(isEnabled);
             _adButton?.SetEnabled(isEnabled);
+            _setTowersButton.SetEnabled(isEnabled);
         }
 
         public void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled)
@@ -388,6 +423,7 @@ namespace Project.Scripts.UI.LevelUI
         private void OnSettingsButtonClicked() => SettingsButtonClicked?.Invoke();
         private void OnNextWaveButtonClicked() => NextWaveButtonClicked?.Invoke();
         private void OnSetSpellsButtonClicked() => SetSpellsButtonClicked?.Invoke();
+        private void OnSetTowersButtonClicked() => SetTowersButtonClicked?.Invoke();
         private void OnWeaponBarrageButtonClicked() => WeaponBarrageButtonClicked?.Invoke();
         private void OnBaseRepairButtonClicked() => BaseRepairButtonClicked?.Invoke();
         private void OnBarrageProtocolButtonClicked() => BarrageProtocolButtonClicked?.Invoke();
@@ -412,6 +448,7 @@ namespace Project.Scripts.UI.LevelUI
             if (_nextWaveButton != null)
                 _nextWaveButton.clicked -= OnNextWaveButtonClicked;
             _setSpellsButton.clicked -= OnSetSpellsButtonClicked;
+            _setTowersButton.clicked -= OnSetTowersButtonClicked;
             _weaponBarrageButton.clicked -= OnWeaponBarrageButtonClicked;
             _baseRepairButton.clicked -= OnBaseRepairButtonClicked;
             _barrageProtocolButton.clicked -= OnBarrageProtocolButtonClicked;
@@ -419,6 +456,9 @@ namespace Project.Scripts.UI.LevelUI
             _empPulseButton.clicked -= OnEmpPulseButtonClicked;
             _orbitalRailgunButton.clicked -= OnOrbitalRailgunButtonClicked;
             _gravityTrapButton.clicked -= OnGravityTrapButtonClicked;
+            _purchaseWindowView?.Dispose();
+            _cardChoiceView?.Dispose();
         }
     }
+
 }

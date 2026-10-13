@@ -1,0 +1,147 @@
+.card-choice-template-host {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.card-choice-overlay {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.65);
+}
+
+.card-choice-overlay--visible {
+    display: flex;
+}
+
+.card-choice-dialog {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-choice-title,
+.card-choice-rarity,
+.card-choice-name,
+.card-choice-description,
+.card-choice-effect,
+.card-choice-reroll-label {
+    color: rgb(255, 255, 255);
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-outline-color: rgb(0, 0, 0);
+    -unity-text-outline-width: 2px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.card-choice-title {
+    height: 80px;
+    font-size: 50px;
+    -unity-font-style: bold;
+}
+
+.card-choice-cards {
+    height: 420px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.card-choice-option-host {
+    width: 300px;
+    height: 400px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.card-choice-card {
+    width: 300px;
+    height: 400px;
+    padding: 20px;
+    align-items: center;
+    background-image: resource("UI/new/BorderFrame_Round03");
+    background-color: rgba(255, 255, 255, 0);
+    -unity-background-image-tint-color: rgb(69, 70, 130);
+    -unity-slice-left: 20;
+    -unity-slice-top: 20;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 20;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.card-choice-rarity {
+    height: 40px;
+    font-size: 25px;
+}
+
+.card-choice-icon {
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.card-choice-name {
+    width: 100%;
+    height: 55px;
+    font-size: 28px;
+    -unity-font-style: bold;
+}
+
+.card-choice-description {
+    width: 100%;
+    flex-grow: 1;
+    font-size: 22px;
+}
+
+.card-choice-effect {
+    width: 100%;
+    height: 55px;
+    font-size: 30px;
+    color: rgb(255, 230, 80);
+}
+
+.card-choice-reroll-button {
+    width: 220px;
+    height: 80px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-image: resource("UI/new/BorderFrame_Round03");
+    background-color: rgba(255, 255, 255, 0);
+    -unity-background-image-tint-color: rgb(69, 70, 130);
+    -unity-slice-left: 20;
+    -unity-slice-top: 20;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 20;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.card-choice-reroll-label {
+    font-size: 28px;
+}
+
+.card-choice-reroll-ad-icon {
+    width: 44px;
+    height: 44px;
+    margin-left: 10px;
+    background-image: resource("UI/new/Icons/Icon_ImageIcon_Ad_00_l");
+    -unity-background-scale-mode: scale-to-fit;
+}

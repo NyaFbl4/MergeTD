@@ -43,6 +43,17 @@ namespace Project.Scripts.Gameplay.Base
             OnCurrentHealthChanged?.Invoke(_currentHealth);
         }
 
+        public void AddTemporaryMaxHealth(int health)
+        {
+            if (health <= 0)
+                return;
+
+            _maxHealth += health;
+            _currentHealth += health;
+            OnMaxHealthChanged?.Invoke(_maxHealth);
+            OnCurrentHealthChanged?.Invoke(_currentHealth);
+        }
+
         public void AddCurrentHealth(int health)
         {
             _currentHealth += health;

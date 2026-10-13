@@ -1,6 +1,9 @@
 ﻿using System;
+using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.CardChoiceUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,6 +19,7 @@ namespace Project.Scripts.UI.LevelUI
         event Action SettingsButtonClicked;
         event Action NextWaveButtonClicked;
         event Action SetSpellsButtonClicked;
+        event Action SetTowersButtonClicked;
         event Action WeaponBarrageButtonClicked;
         event Action BaseRepairButtonClicked;
         event Action BarrageProtocolButtonClicked;
@@ -24,11 +28,17 @@ namespace Project.Scripts.UI.LevelUI
         event Action OrbitalRailgunButtonClicked;
         event Action GravityTrapButtonClicked;
         
+        IPurchaseWindowView PurchaseWindowView { get; }
+        ICardChoiceView CardChoiceView { get; }
+
+        void InitializePurchaseWindow(UIElements uiElements);
+        void InitializeCardChoice();
         void SetPriceTower(int price);
         void SetGeneratorPrice(int price);
         void SetGeneratorPurchaseEnabled(bool isEnabled);
         void SetEnergy(int current, int maximum);
         void SetMoney(int money);
+        void SetGems(int gems);
         void SetTowerIcon(Sprite towerIcon);
         void SetCurrentBaseHealth(int baseHealth);
         void SetMaxBaseHealth(int baseMaxHealth);
@@ -61,4 +71,5 @@ namespace Project.Scripts.UI.LevelUI
             bool isTargeting,
             bool isEnabled);
     }
+
 }

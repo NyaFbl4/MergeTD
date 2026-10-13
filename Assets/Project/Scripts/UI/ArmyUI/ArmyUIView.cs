@@ -19,6 +19,7 @@ namespace Project.Scripts.UI.ArmyUI
         private readonly Label _sellTowerLabel;
         private readonly Button _buyTowerButton;
         private readonly Button _buyGeneratorButton;
+        private readonly Button _setTowersButton;
         private readonly Label _buyTowerLevelLabel;
         private readonly Label _buyGeneratorLevelLabel;
         private readonly Label _towerPriceLabel;
@@ -48,6 +49,7 @@ namespace Project.Scripts.UI.ArmyUI
 
         public event Action BuyTowerButtonClicked;
         public event Action BuyGeneratorButtonClicked;
+        public event Action SetTowersButtonClicked;
         public event Action<int> TowerDragStarted;
         public event Action<int> TowerSellRequested;
         public event Action<int, int> TowerDropped;
@@ -62,6 +64,7 @@ namespace Project.Scripts.UI.ArmyUI
             _sellTowerLabel = _root.Q<Label>("SellTowerLabel");
             _buyTowerButton = _root.Q<Button>("PayTowerButton");
             _buyGeneratorButton = _root.Q<Button>("PayElectricTowerButton");
+            _setTowersButton = _root.Q<Button>("SetTowersButton");
             _buyTowerLevelLabel = _buyTowerButton.Q<Label>("TowerLeveLabel");
             _buyGeneratorLevelLabel = _buyGeneratorButton.Q<Label>("TowerLeveLabel");
             _towerPriceLabel = _buyTowerButton.Q<Label>("PayTowerLabel");
@@ -72,8 +75,10 @@ namespace Project.Scripts.UI.ArmyUI
 
             _buyTowerButton.clicked += OnBuyTowerButtonClicked;
             _buyGeneratorButton.clicked += OnBuyGeneratorButtonClicked;
+            _setTowersButton.clicked += OnSetTowersButtonClicked;
             UIButtonAnimationUtility.EnableDefault(_buyTowerButton);
             UIButtonAnimationUtility.EnableDefault(_buyGeneratorButton);
+            UIButtonAnimationUtility.EnableDefault(_setTowersButton);
 
             _towersSlotContainer.Clear();
             for (var i = 0; i < TowerSlotGrid.SlotCount; i++)
@@ -157,6 +162,7 @@ namespace Project.Scripts.UI.ArmyUI
             CancelDrag(_dragPointerId);
             _buyTowerButton.clicked -= OnBuyTowerButtonClicked;
             _buyGeneratorButton.clicked -= OnBuyGeneratorButtonClicked;
+            _setTowersButton.clicked -= OnSetTowersButtonClicked;
 
             for (var i = 0; i < _towerSlots.Count; i++)
             {
@@ -180,6 +186,7 @@ namespace Project.Scripts.UI.ArmyUI
 
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();
+        private void OnSetTowersButtonClicked() => SetTowersButtonClicked?.Invoke();
 
         private void OnSlotPointerDown(PointerDownEvent evt, int slotIndex)
         {

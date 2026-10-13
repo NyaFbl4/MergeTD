@@ -3,6 +3,7 @@ using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Cards;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using TMPro;
@@ -28,6 +29,7 @@ namespace Project.Scripts.Gameplay.Towers
         [SerializeField] private float _range = 3f;
         private int _damage;
         private float _fireRate;
+        private float _currentRange;
         private float _spellAttackSpeedMultiplier = 1f;
 
         [Header("Tower parametrs")]
@@ -60,6 +62,7 @@ namespace Project.Scripts.Gameplay.Towers
         private Sprite[] _generatorChargeFrames;
         private Sprite _generatorIdleSprite;
         private int _generatorChargeFrameIndex = -1;
+        private RunCardRuntimeState _runCardState;
 
         public void Initialize(IPlayerStatsUseCase playerStats, IAudioManager audioManager)
         {
@@ -73,15 +76,31 @@ namespace Project.Scripts.Gameplay.Towers
                 _playerStats.UpgradesChanged += OnUpgradesChanged;
         }
 
-        public void InitializeRun(RunState runState, RunEnergyService energy)
+        public void InitializeRun(
+            RunState runState,
+            RunEnergyService energy,
+            RunCardRuntimeState runCardState)
         {
             _generatorProduction?.Dispose();
+            if (_runCardState != null)
+                _runCardState.ModifiersChanged -= OnRunCardModifiersChanged;
+
+            _runCardState = runCardState;
+            if (_runCardState != null)
+                _runCardState.ModifiersChanged += OnRunCardModifiersChanged;
+
             if (TowerType == ETowerType.Generator)
             {
                 _generatorProduction = new GeneratorProduction(
-                    runState, energy, _towerConfig.GenerationInterval, _towerConfig.EnergyPerPulse);
+                    runState,
+                    energy,
+                    runCardState,
+                    _towerConfig.GenerationInterval,
+                    _towerConfig.EnergyPerPulse);
                 InitializeGeneratorChargeAnimation();
             }
+
+            RecalculateStats();
         }
 
         public void SetCanFire(bool canFire)
@@ -183,8 +202,10 @@ namespace Project.Scripts.Gameplay.Towers
             if (TowerType == ETowerType.Generator)
                 return;
 
-            var damageBonus = _playerStats?.TowerDamageBonus ?? 0f;
-            var attackSpeedBonus = _playerStats?.TowerAttackSpeedBonus ?? 0f;
+            var damageBonus = (_playerStats?.TowerDamageBonus ?? 0f)
+                              + (_runCardState?.GetTowerDamageBonus(TowerType) ?? 0f);
+            var attackSpeedBonus = (_playerStats?.TowerAttackSpeedBonus ?? 0f)
+                                   + (_runCardState?.TowerAttackSpeedBonus ?? 0f);
             var critDamageBonus = _playerStats?.TowerCritDamageBonus ?? 0f;
 
             _currentCriticalDamageMultiplier = _criticalDamageMultiplier + critDamageBonus;
@@ -193,6 +214,7 @@ namespace Project.Scripts.Gameplay.Towers
                 * (1f + attackSpeedBonus)
                 * _spellAttackSpeedMultiplier;
             _criticalChance = _playerStats?.TowerCritChanceBonus ?? 0f;
+            _currentRange = _range * Mathf.Max(0f, 1f + (_runCardState?.TowerRangeBonus ?? 0f));
 
             var attackSpeedRatio = _towerConfig.StartAttackSpeed <= 0f
                 ? 1f
@@ -247,6 +269,11 @@ namespace Project.Scripts.Gameplay.Towers
         }
 
         private void OnUpgradesChanged()
+        {
+            RecalculateStats();
+        }
+
+        private void OnRunCardModifiersChanged()
         {
             RecalculateStats();
         }
@@ -311,7 +338,7 @@ namespace Project.Scripts.Gameplay.Towers
                 return false;
 
             var sqrDistance = (target.transform.position - transform.position).sqrMagnitude;
-            return sqrDistance <= _range * _range;
+            return sqrDistance <= _currentRange * _currentRange;
         }
 
         private Transform[] GetAvailableFirePoints()
@@ -341,7 +368,7 @@ namespace Project.Scripts.Gameplay.Towers
         {
             var enemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
             EnemyHealth best = null;
-            var bestSqr = _range * _range;
+            var bestSqr = _currentRange * _currentRange;
 
             for (var i = 0; i < enemies.Length; i++)
             {
@@ -364,6 +391,8 @@ namespace Project.Scripts.Gameplay.Towers
             _generatorProduction?.Dispose();
             if (_playerStats != null)
                 _playerStats.UpgradesChanged -= OnUpgradesChanged;
+            if (_runCardState != null)
+                _runCardState.ModifiersChanged -= OnRunCardModifiersChanged;
         }
     }
 }

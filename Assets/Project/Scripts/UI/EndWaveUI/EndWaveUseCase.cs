@@ -70,8 +70,7 @@ namespace Project.Scripts.UI.EndWaveUI
                     ShowRewardPopup(waveNumber, rewardCount);
                     break;
                 case ERunPhase.CardChoice:
-                    // Card selection UI will be added later. Next Wave continues to preparation.
-                    GrantWaveRewardAndSaveCheckpoint(waveNumber, rewardCount);
+                    _playerStatsUseCase.AddGold(rewardCount);
                     break;
                 case ERunPhase.Victory:
                     _playerStatsUseCase.AddGold(rewardCount);

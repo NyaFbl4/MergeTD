@@ -4,6 +4,7 @@ using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Enemies;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Cards;
 using Project.Scripts.System.Save;
 using UnityEngine;
 using VContainer;
@@ -38,6 +39,7 @@ namespace Project.Scripts.Gameplay.Field
             IUnitsCatalog unitsCatalog,
             RunState runState,
             RunEnergyService energy,
+            RunCardRuntimeState runCardState,
             IWorldService world)
         {
             _unitsConfig = unitsConfig;
@@ -60,7 +62,14 @@ namespace Project.Scripts.Gameplay.Field
                     continue;
 
                 var slot = _towerSlots[i];
-                slot.Construct(_unitsCatalog, runState, energy, world, _sellZone, $"slot_{i}");
+                slot.Construct(
+                    _unitsCatalog,
+                    runState,
+                    energy,
+                    runCardState,
+                    world,
+                    _sellZone,
+                    $"slot_{i}");
 
                 if (!persistentIds.Add(slot.PersistentId))
                     throw new global::System.InvalidOperationException(

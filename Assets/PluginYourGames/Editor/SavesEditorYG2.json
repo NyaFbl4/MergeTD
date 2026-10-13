@@ -1,8 +1,8 @@
 {
-    "idSave": 353,
+    "idSave": 420,
     "world": {
         "version": 2,
-        "gold": 2368,
+        "gold": 6412,
         "gems": 5,
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 1,
@@ -171,11 +171,11 @@
         "dailyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 10,
+                "currentValue": 0,
                 "targetValue": 10,
                 "rewardGold": 100,
                 "rewardGems": 0,
-                "isRewardClaimed": true
+                "isRewardClaimed": false
             },
             {
                 "id": "5",
@@ -189,7 +189,7 @@
         "weeklyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 38,
+                "currentValue": 0,
                 "targetValue": 70,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -197,7 +197,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 0,
+                "currentValue": 2,
                 "targetValue": 7,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -207,7 +207,7 @@
         "achievementQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 38,
+                "currentValue": 0,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -215,7 +215,7 @@
             },
             {
                 "id": "DealDamageQuest",
-                "currentValue": 46958,
+                "currentValue": 125000,
                 "targetValue": 125000,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -223,7 +223,7 @@
             },
             {
                 "id": "KillEnemyQuest",
-                "currentValue": 33,
+                "currentValue": 214,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -231,7 +231,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 0,
+                "currentValue": 2,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,

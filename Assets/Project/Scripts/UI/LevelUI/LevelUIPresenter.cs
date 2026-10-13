@@ -1,15 +1,21 @@
+using System;
 using YG;
 using MessagePipe;
 using Project.Scripts.Configs;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Cards;
 using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.Systems.UI.Dtos;
+using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.CardChoiceUI;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.QuestUI;
 using Project.Scripts.UI.SettingsUI;
@@ -25,6 +31,8 @@ namespace Project.Scripts.UI.LevelUI
 
         private readonly ILevelUIUseCase _levelUIUseCase;
         private readonly IBuyTowerUseCase _buyTowerUseCase;
+        private readonly UIElements _uiElements;
+        private readonly IWorldService _world;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly RunBattleRuntime _runBattleRuntime;
         private readonly RunState _runState;
@@ -42,11 +50,16 @@ namespace Project.Scripts.UI.LevelUI
         private readonly EmpPulseUseCase _empPulseUseCase;
         private readonly OrbitalRailgunUseCase _orbitalRailgunUseCase;
         private readonly GravityTrapUseCase _gravityTrapUseCase;
+        private PurchaseWindowPresenter _purchaseWindowPresenter;
+        private CardChoicePresenter _cardChoicePresenter;
+        private readonly RunCardChoiceUseCase _runCardChoiceUseCase;
 
         private bool _isWaitingAdReward;
 
         public LevelUIPresenter(
             IBuyTowerUseCase buyTowerUseCase,
+            UIElements uiElements,
+            IWorldService world,
             IPlayerStatsUseCase playerStatsUseCase,
             RunBattleRuntime runBattleRuntime,
             RunState runState,
@@ -64,9 +77,12 @@ namespace Project.Scripts.UI.LevelUI
             CryoDischargeUseCase cryoDischargeUseCase,
             EmpPulseUseCase empPulseUseCase,
             OrbitalRailgunUseCase orbitalRailgunUseCase,
-            GravityTrapUseCase gravityTrapUseCase)
+            GravityTrapUseCase gravityTrapUseCase,
+            RunCardChoiceUseCase runCardChoiceUseCase)
         {
             _buyTowerUseCase = buyTowerUseCase;
+            _uiElements = uiElements;
+            _world = world;
             _playerStatsUseCase = playerStatsUseCase;
             _runBattleRuntime = runBattleRuntime;
             _runState = runState;
@@ -85,11 +101,25 @@ namespace Project.Scripts.UI.LevelUI
             _empPulseUseCase = empPulseUseCase;
             _orbitalRailgunUseCase = orbitalRailgunUseCase;
             _gravityTrapUseCase = gravityTrapUseCase;
+            _runCardChoiceUseCase = runCardChoiceUseCase;
         }
 
         public override void Initialize()
         {
             base.Initialize();
+
+            _layoutView.InitializePurchaseWindow(_uiElements);
+            _purchaseWindowPresenter = new PurchaseWindowPresenter(
+                _layoutView.PurchaseWindowView,
+                _world,
+                _buyTowerUseCase);
+            _purchaseWindowPresenter.Initialize();
+
+            _layoutView.InitializeCardChoice();
+            _cardChoicePresenter = new CardChoicePresenter(
+                _layoutView.CardChoiceView,
+                _runCardChoiceUseCase);
+            _cardChoicePresenter.Initialize();
 
             _buyTowerUseCase.TowerCostChanged += OnTowerCostChanged;
             _playerStatsUseCase.SelectedTowerLevelChanged += OnSelectedTowerLevelChanged;
@@ -103,7 +133,9 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SettingsButtonClicked += OnSettingsButtonClicked;
             _layoutView.NextWaveButtonClicked += OnNextWaveButtonClicked;
             _layoutView.SetSpellsButtonClicked += OnSetSpellsButtonClicked;
+            _layoutView.SetTowersButtonClicked += OnSetTowersButtonClicked;
             _playerStatsUseCase.OnGoldChanged += OnGoldChanged;
+            _world.GemsChanged += OnGemsChanged;
             _baseHealth.OnMaxHealthChanged += OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage += OnLanguageChanged;
@@ -128,6 +160,7 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SetGeneratorPrice(_buyTowerUseCase.GeneratorCost);
             RefreshEnergy();
             _layoutView.SetMoney(_playerStatsUseCase.Gold);
+            _layoutView.SetGems(_world.Gems);
 
             RefreshWaveText();
             RefreshRunPhaseControls();
@@ -462,6 +495,12 @@ namespace Project.Scripts.UI.LevelUI
             });
         }
 
+        private void OnSetTowersButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _purchaseWindowPresenter.Show();
+        }
+
         private void OnADButtonClicked()
         {
             _audioManager.PlaySound(ESoundId.UiButtonClick);
@@ -508,6 +547,8 @@ namespace Project.Scripts.UI.LevelUI
             RefreshGeneratorPurchase();
         }
 
+        private void OnGemsChanged(int gems) => _layoutView.SetGems(gems);
+
         private void OnSelectedTowerLevelChanged(int level)
         {
             UpdateTowerIcon();
@@ -551,6 +592,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnRunPhaseChanged(ERunPhase phase)
         {
+            _purchaseWindowPresenter.Hide();
             RefreshRunPhaseControls();
         }
 
@@ -634,7 +676,9 @@ namespace Project.Scripts.UI.LevelUI
             _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;
             _layoutView.NextWaveButtonClicked -= OnNextWaveButtonClicked;
             _layoutView.SetSpellsButtonClicked -= OnSetSpellsButtonClicked;
+            _layoutView.SetTowersButtonClicked -= OnSetTowersButtonClicked;
             _playerStatsUseCase.OnGoldChanged -= OnGoldChanged;
+            _world.GemsChanged -= OnGemsChanged;
             _buyTowerUseCase.TowerCostChanged -= OnTowerCostChanged;
             _baseHealth.OnMaxHealthChanged -= OnMaxHealthChanged;
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
@@ -659,7 +703,11 @@ namespace Project.Scripts.UI.LevelUI
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();
 
+            _purchaseWindowPresenter.Dispose();
+            _cardChoicePresenter.Dispose();
+
             base.Dispose();
         }
     }
+
 }

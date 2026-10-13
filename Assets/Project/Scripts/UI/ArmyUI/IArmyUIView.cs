@@ -7,6 +7,7 @@ namespace Project.Scripts.UI.ArmyUI
     {
         event Action BuyTowerButtonClicked;
         event Action BuyGeneratorButtonClicked;
+        event Action SetTowersButtonClicked;
         event Action<int> TowerDragStarted;
         event Action<int> TowerSellRequested;
         event Action<int, int> TowerDropped;

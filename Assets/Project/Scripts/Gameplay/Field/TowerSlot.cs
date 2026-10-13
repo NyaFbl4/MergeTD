@@ -1,6 +1,7 @@
 using System;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Cards;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
@@ -25,6 +26,7 @@ namespace Project.Scripts.Gameplay.Field
         private Collider2D _dropCollider;
         private RunState _runState;
         private RunEnergyService _energy;
+        private RunCardRuntimeState _runCardState;
         private IWorldService _world;
         private TowerSellZone _sellZone;
         private SpriteRenderer _slotRenderer;
@@ -123,6 +125,7 @@ namespace Project.Scripts.Gameplay.Field
             IUnitsCatalog unitsCatalog,
             RunState runState,
             RunEnergyService energy,
+            RunCardRuntimeState runCardState,
             IWorldService world,
             TowerSellZone sellZone,
             string fallbackPersistentId)
@@ -130,6 +133,7 @@ namespace Project.Scripts.Gameplay.Field
             InitializeComponents();
             _unitsCatalog = unitsCatalog;
             _energy = energy;
+            _runCardState = runCardState;
             _world = world;
             _sellZone = sellZone;
 
@@ -149,16 +153,20 @@ namespace Project.Scripts.Gameplay.Field
             IPlayerStatsUseCase playerStats,
             IAudioManager audioManager,
             bool persistWorldChange = true,
-            int purchaseCost = 0)
+            int purchaseCost = 0,
+            bool ignoreRunPhase = false)
         {
-            if (!CanEditTower || IsOccupied || towerPrefab == null)
+            if ((!ignoreRunPhase && !CanEditTower)
+                || !CanPlaceTower
+                || IsOccupied
+                || towerPrefab == null)
                 return false;
 
             _currentTower = Instantiate(towerPrefab, TowerAnchor.position, TowerAnchor.rotation, TowerAnchor);
             _playerStats = playerStats;
             _audioManager = audioManager;
             _currentTower.Initialize(playerStats, audioManager);
-            _currentTower.InitializeRun(_runState, _energy);
+            _currentTower.InitializeRun(_runState, _energy, _runCardState);
             _currentTower.SetPurchaseCost(purchaseCost > 0
                 ? purchaseCost
                 : TowerEconomy.GetDefaultPurchaseCost(_currentTower));
@@ -242,7 +250,7 @@ namespace Project.Scripts.Gameplay.Field
             );
 
             _currentTower.Initialize(_playerStats, _audioManager);
-            _currentTower.InitializeRun(_runState, _energy);
+            _currentTower.InitializeRun(_runState, _energy, _runCardState);
             _currentTower.SetPurchaseCost(mergedPurchaseCost);
             _currentTower.CreateTower();
             BindDragHandler(_currentTower);

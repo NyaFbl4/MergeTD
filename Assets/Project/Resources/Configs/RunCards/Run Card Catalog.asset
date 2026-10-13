@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad741a9a49e4e1db82df716b89bee67, type: 3}
+  m_Name: Run Card Catalog
+  m_EditorClassIdentifier:
+  _cards:
+  - {fileID: 11400000, guid: 6f8d44052de04c9a879c398216fc49b3, type: 2}
+  - {fileID: 11400000, guid: fc525ffada434614b76516af75ea88e4, type: 2}
+  - {fileID: 11400000, guid: 33742b7866fc457f92dc6c0c05ed2832, type: 2}
+  - {fileID: 11400000, guid: 4c9087479d254882a2ad9a5a860de4da, type: 2}
+  - {fileID: 11400000, guid: d3c19a42b1d040608bd4d87f580ebf86, type: 2}
+  - {fileID: 11400000, guid: 753efb9f1e254ad49f67d18f32f6b193, type: 2}
+  - {fileID: 11400000, guid: d77cd0499a394c70924a72400e5fd6e8, type: 2}
+  - {fileID: 11400000, guid: efb8ddad14164b4e8d8294464c1c247c, type: 2}
+  _choiceCount: 3
+  _allowDuplicateSelections: 0
+  _choiceTitle: Выбери награду
+  _rerollButtonText: Обновить
+  _rewardedRerollAdId: card_choice_reroll

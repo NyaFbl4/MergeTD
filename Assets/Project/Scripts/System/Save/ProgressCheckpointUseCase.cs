@@ -5,6 +5,7 @@ using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Quests;
 using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Cards;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace Project.Scripts.System.Save
         private readonly RunEnergyService _energy;
         private readonly RunState _runState;
         private readonly WorldService _world;
+        private readonly RunCardRuntimeState _runCardState;
 
         public ProgressCheckpointUseCase(
             ProgressSaveService saveService,
@@ -38,7 +40,8 @@ namespace Project.Scripts.System.Save
             QuestService questService,
             RunEnergyService energy,
             RunState runState,
-            WorldService world)
+            WorldService world,
+            RunCardRuntimeState runCardState)
         {
             _saveService = saveService;
             _playerStatsUseCase = playerStatsUseCase;
@@ -52,6 +55,7 @@ namespace Project.Scripts.System.Save
             _energy = energy;
             _runState = runState;
             _world = world;
+            _runCardState = runCardState;
         }
 
         public int RestoreCheckpointOrDefaults()
@@ -66,6 +70,7 @@ namespace Project.Scripts.System.Save
             ClearTowers(false);
             ImportLegacyWorld(data);
             _world.ImportLegacyShopProgress(data);
+            _runCardState.Restore(data.selectedRunCardIds);
 
             var wave = ClampWave(data.nextWave);
             _runState.MoveToWave(wave);
@@ -74,7 +79,8 @@ namespace Project.Scripts.System.Save
 
             _questService.RestoreQuests(data.quests);
             _buyTowerUseCase.SetTowerCost(data.towerCost);
-            _baseHealth.SetHealthState(data.currentBaseHealth, _world.MaxBaseHealth);
+            var maxBaseHealth = Mathf.Max(1, _world.MaxBaseHealth + _runCardState.MaxBaseHealthBonus);
+            _baseHealth.SetHealthState(data.currentBaseHealth, maxBaseHealth);
             RestoreWorldTowers();
 
             return wave;
@@ -97,14 +103,15 @@ namespace Project.Scripts.System.Save
 
         private void SaveCheckpointInternal(int nextWave, int currentBaseHealth)
         {
-            var maxBaseHealth = Mathf.Max(1, _world.MaxBaseHealth);
+            var maxBaseHealth = Mathf.Max(1, _world.MaxBaseHealth + _runCardState.MaxBaseHealthBonus);
             var data = new ProgressSaveData
             {
                 nextWave = ClampWave(nextWave),
                 gold = _playerStatsUseCase.Gold,
                 towerCost = _buyTowerUseCase.TowerCost,
                 currentBaseHealth = Mathf.Clamp(currentBaseHealth, 1, maxBaseHealth),
-                maxBaseHealth = maxBaseHealth
+                maxBaseHealth = Mathf.Max(1, _world.MaxBaseHealth),
+                selectedRunCardIds = new List<string>(_runCardState.SelectedCardIds)
             };
 
             data.quests = _questService.CaptureState();
@@ -132,6 +139,7 @@ namespace Project.Scripts.System.Save
         private void RestoreDefaults()
         {
             ClearTowers(false);
+            _runCardState.Reset();
             _runState.Reset();
             _energy.Reset();
             _playerStatsUseCase.ResetState();

@@ -7,6 +7,7 @@ using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.System.Enums;
 using Project.Scripts.System.Save;
+using Project.Scripts.UI.PurchaseWindowUI;
 using UnityEngine;
 
 namespace Project.Scripts.UI.ArmyUI
@@ -116,7 +117,7 @@ namespace Project.Scripts.UI.ArmyUI
         }
     }
 
-    public interface IArmyUIUseCase
+    public interface IArmyUIUseCase : IPurchaseWindowUseCase
     {
         int TowerCost { get; }
         int GeneratorCost { get; }
@@ -159,10 +160,59 @@ namespace Project.Scripts.UI.ArmyUI
         }
 
         public EBuyTowerResult TryBuyTower() =>
-            TryBuy(ETowerType.Combat, _world.SelectedTowerLevel, TowerCost);
+            TryBuyForGold(ETowerType.Combat, _world.SelectedTowerLevel, TowerCost);
 
         public EBuyTowerResult TryBuyGenerator() =>
-            TryBuy(ETowerType.Generator, 1, GeneratorCost);
+            TryBuyForGold(ETowerType.Generator, 1, GeneratorCost);
+
+        public int GetPurchaseCost(ETowerType towerType, int level) =>
+            TowerEconomy.GetTierPurchaseCost(towerType, level);
+
+        public ETowerPurchaseCurrency GetPurchaseCurrency(ETowerType towerType, int level) =>
+            TowerEconomy.GetTierPurchaseCurrency(towerType, level);
+
+        public int GetPurchaseLevelCount(ETowerType towerType)
+        {
+            var count = 0;
+            while (_unitsCatalog.HasTowerLevel(count + 1, towerType))
+                count++;
+
+            return count;
+        }
+
+        public bool CanBuy(ETowerType towerType, int level)
+        {
+            if (!HasFreeSlot() || !_unitsCatalog.HasTowerLevel(level, towerType))
+                return false;
+
+            var cost = GetPurchaseCost(towerType, level);
+            return GetPurchaseCurrency(towerType, level) == ETowerPurchaseCurrency.Gems
+                ? cost > 0 && _world.Gems >= cost
+                : _world.CanSpendGold(cost);
+        }
+
+        public EBuyTowerResult TryBuy(ETowerType towerType, int level)
+        {
+            if (!_unitsCatalog.HasTowerLevel(level, towerType))
+                return EBuyTowerResult.ConfigError;
+
+            var targetSlotId = FindFirstFreeSlotId();
+            if (targetSlotId == null)
+                return EBuyTowerResult.NoFreeSpawnSlot;
+
+            var cost = GetPurchaseCost(towerType, level);
+            var currency = GetPurchaseCurrency(towerType, level);
+            var spent = currency == ETowerPurchaseCurrency.Gems
+                ? _world.TrySpendGems(cost)
+                : _world.TrySpendGold(cost);
+            if (!spent)
+                return EBuyTowerResult.NotEnoughGold;
+
+            var purchaseValue = TowerEconomy.GetTierGoldValue(level);
+            _world.SetTower(targetSlotId, level, towerType, purchaseValue);
+            _towerBoughtPublisher.Publish(new TowerBoughtQuestEventDTO(level, purchaseValue));
+            return EBuyTowerResult.Success;
+        }
 
         public int GetSellRefund(string slotId)
         {
@@ -229,7 +279,7 @@ namespace Project.Scripts.UI.ArmyUI
             return true;
         }
 
-        private EBuyTowerResult TryBuy(ETowerType towerType, int towerLevel, int cost)
+        private EBuyTowerResult TryBuyForGold(ETowerType towerType, int towerLevel, int cost)
         {
             if (!_unitsCatalog.HasTowerLevel(towerLevel, towerType))
                 return EBuyTowerResult.ConfigError;

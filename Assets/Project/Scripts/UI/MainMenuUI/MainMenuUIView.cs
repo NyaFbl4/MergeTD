@@ -2,6 +2,7 @@ using Project.Scripts.Systems.UI;
 using Cysharp.Threading.Tasks;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
+using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.UI.SpellsUI;
 using Project.Scripts.Configs;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private Label _gemsCountLabel;
         private IInBattleUIView _inBattleView;
         private IArmyUIView _armyView;
+        private IPurchaseWindowView _purchaseWindowView;
         private ISpellsPanelUIView _spellsPanelView;
         private Button[] _sectionButtons;
         private VisualElement[] _sectionIcons;
@@ -40,6 +42,7 @@ namespace Project.Scripts.UI.MainMenuUI
         public event Action<MainMenuSection> SectionClicked;
         public IInBattleUIView InBattleView => _inBattleView;
         public IArmyUIView ArmyView => _armyView;
+        public IPurchaseWindowView PurchaseWindowView => _purchaseWindowView;
         public ISpellsPanelUIView SpellsPanelView => _spellsPanelView;
 
         public override void Awake()
@@ -82,6 +85,14 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             var armyRoot = _root.Q<TemplateContainer>("ArmyPanel");
             _armyView = new ArmyUIView(armyRoot, uiElements);
+        }
+
+        public void InitializePurchaseWindow(UIElements uiElements)
+        {
+            var purchaseWindowRoot = _root.Q<TemplateContainer>("PurchaseWindow")
+                                     ?? throw new InvalidOperationException(
+                                         "MainMenuUIView: element 'PurchaseWindow' was not found.");
+            _purchaseWindowView = new PurchaseWindowView(purchaseWindowRoot, uiElements);
         }
 
         public void InitializeSpells(UIElements uiElements)
@@ -204,6 +215,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _sectionAnimationVersion++;
             _inBattleView.Dispose();
             _armyView.Dispose();
+            _purchaseWindowView.Dispose();
             _spellsPanelView.Dispose();
 
             for (var i = 0; i < _sectionButtons.Length; i++)

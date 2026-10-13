@@ -16,6 +16,7 @@ using Project.Scripts.System.Reward.RewardConfigs;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.Gameplay.Run.Cards;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.EndWaveLoseUI;
 using Project.Scripts.UI.LevelUI;
@@ -50,6 +51,8 @@ namespace Installers
         [SerializeField] private RunCatalog _runCatalog;
         [SerializeField] private UIElements _uiElements;
         [SerializeField] private SpellCatalog _spellCatalog;
+        [SerializeField] private DailyRewards _dailyRewards;
+        [SerializeField] private RunCardCatalog _runCardCatalog;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -129,6 +132,7 @@ namespace Installers
             builder.RegisterEntryPoint<EnemyDeathUseCase>();
             builder.RegisterEntryPoint<LevelUIUseCase>().As<ILevelUIUseCase>();
             builder.RegisterEntryPoint<EndWaveUseCase>();
+            builder.RegisterEntryPoint<RunCardChoiceUseCase>().AsSelf();
             builder.RegisterEntryPoint<EndWaveLoseUseCase>();
             builder.RegisterEntryPoint<QuestDamageEventsUseCase>();
             builder.RegisterEntryPoint<QuestWaveEventsUseCase>();
@@ -143,6 +147,7 @@ namespace Installers
             builder.Register<RunSelectionService>(Lifetime.Singleton).As<IRunSelectionService>();
             builder.Register<RunState>(Lifetime.Singleton);
             builder.Register<RunEnergyService>(Lifetime.Singleton);
+            builder.Register<RunCardRuntimeState>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WeaponBarrageUseCase>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BaseRepairUseCase>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BarrageProtocolUseCase>(Lifetime.Singleton).AsSelf();
@@ -182,17 +187,15 @@ namespace Installers
             builder.RegisterInstance(_enemyConfig);
             builder.RegisterInstance(_questCatalog);
             builder.RegisterInstance(_runCatalog);
+            /*var runCardCatalog = _runCardCatalog != null
+                ? _runCardCatalog
+                : Resources.Load<RunCardCatalog>("Configs/RunCards/Run Card Catalog")
+                  ?? throw new InvalidOperationException(
+                      "Run card catalog was not found at Resources/Configs/RunCards/Run Card Catalog.");*/
+            builder.RegisterInstance(_runCardCatalog);
             builder.RegisterInstance(_uiElements);
             builder.RegisterInstance(_spellCatalog);
-            builder.RegisterInstance(
-                Resources.Load<DailyRewards>("Daily Rewards")
-                ?? throw new InvalidOperationException(
-                    "Daily rewards config was not found at Resources/Daily Rewards."));
+            builder.RegisterInstance(_dailyRewards);
         }
-    }
-
-    // Backward compatibility for scenes that already reference GameLifetimeScope.
-    public class GameLifetimeScope : ProjectLifetimeScope
-    {
     }
 }

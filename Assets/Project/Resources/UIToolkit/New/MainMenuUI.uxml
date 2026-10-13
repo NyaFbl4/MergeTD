@@ -2,6 +2,8 @@
     <ui:Template name="ArmyPanel" src="project://database/Assets/Project/Resources/UIToolkit/New/ArmyPanel.uxml?fileID=9197481963319205126&amp;guid=94e86a50830bfa2479e01b60fd900afe&amp;type=3#ArmyPanel"/>
     <ui:Template name="InBattlePanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/InBattlePanel.uxml?fileID=9197481963319205126&amp;guid=34cfc351c81e1c54b825581bca0f511d&amp;type=3#InBattlePanel"/>
     <ui:Template name="SpellsPanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/SpellsPanel.uxml?fileID=9197481963319205126&amp;guid=f58d8253033568441930b1764a916116&amp;type=3#SpellsPanel"/>
+    <ui:Template name="PurchaseWindowTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindow.uxml?fileID=9197481963319205126&amp;guid=d75c0b3e2cb44a0e9134a7c2fcd2b0a1&amp;type=3#PurchaseWindow"/>
+    <ui:Style src="PurchaseWindow.uss"/>
     <ui:VisualElement name="Layout" style="flex-grow: 1;">
         <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&quot;exec-3857d5d4-a61d-4425-901c-e1216a7ac466&quot;);"/>
         <ui:VisualElement name="HeaderPanel" style="flex-grow: 1; width: 100%; min-width: 100%; max-width: 100%; height: 150px; min-height: 150px; max-height: 150px; justify-content: flex-end; flex-direction: row-reverse; align-self: center; align-items: center;">
@@ -45,5 +47,6 @@
                 <ui:Label text="БАЗА" name="ButtonLabel" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 30px; width: 100%;"/>
             </ui:Button>
         </ui:VisualElement>
+        <ui:Instance template="PurchaseWindowTemplate" name="PurchaseWindow" picking-mode="Ignore" class="purchase-window-template-host"/>
     </ui:VisualElement>
 </ui:UXML>

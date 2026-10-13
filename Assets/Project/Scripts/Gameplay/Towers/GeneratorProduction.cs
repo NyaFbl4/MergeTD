@@ -1,5 +1,7 @@
 using System;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Cards;
+using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Towers
 {
@@ -7,6 +9,7 @@ namespace Project.Scripts.Gameplay.Towers
     {
         private readonly RunState _runState;
         private readonly RunEnergyService _energy;
+        private readonly RunCardRuntimeState _runCardState;
         private readonly double _interval;
         private readonly int _amount;
         private double _elapsed;
@@ -14,7 +17,12 @@ namespace Project.Scripts.Gameplay.Towers
 
         public float NormalizedProgress => (float)(_elapsed / _interval);
 
-        public GeneratorProduction(RunState runState, RunEnergyService energy, float interval, int amount)
+        public GeneratorProduction(
+            RunState runState,
+            RunEnergyService energy,
+            RunCardRuntimeState runCardState,
+            float interval,
+            int amount)
         {
             if (interval <= 0f || float.IsNaN(interval) || float.IsInfinity(interval))
                 throw new ArgumentOutOfRangeException(nameof(interval));
@@ -23,6 +31,7 @@ namespace Project.Scripts.Gameplay.Towers
 
             _runState = runState;
             _energy = energy;
+            _runCardState = runCardState;
             _interval = interval;
             _amount = amount;
             _runState.PhaseChanged += OnPhaseChanged;
@@ -40,7 +49,9 @@ namespace Project.Scripts.Gameplay.Towers
             while (_elapsed >= _interval)
             {
                 _elapsed -= _interval;
-                _energy.Add(_amount);
+                var amount = Mathf.Max(1, Mathf.RoundToInt(
+                    _amount * (_runCardState?.GeneratorEnergyMultiplier ?? 1f)));
+                _energy.Add(amount);
             }
 
             return true;

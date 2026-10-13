@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="PurchaseWindow.uss"/>
+    <ui:Button name="PurchaseOptionButton" class="purchase-window-card">
+        <ui:VisualElement name="UnitIcon" class="purchase-window-unit-icon"/>
+        <ui:Label name="UnitName" text="Башня T1" class="purchase-window-unit-name"/>
+        <ui:VisualElement name="PriceBar" class="purchase-window-price">
+            <ui:VisualElement name="CurrencyIcon" class="purchase-window-currency"/>
+            <ui:Label name="PriceLabel" text="100" class="purchase-window-price-label"/>
+        </ui:VisualElement>
+    </ui:Button>
+</ui:UXML>

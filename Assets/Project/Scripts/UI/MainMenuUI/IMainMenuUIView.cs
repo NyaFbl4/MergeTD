@@ -4,6 +4,7 @@ using Project.Scripts.Configs;
 using System;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
+using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.UI.SpellsUI;
 
 namespace Project.Scripts.UI.MainMenuUI
@@ -23,9 +24,11 @@ namespace Project.Scripts.UI.MainMenuUI
 
         IInBattleUIView InBattleView { get; }
         IArmyUIView ArmyView { get; }
+        IPurchaseWindowView PurchaseWindowView { get; }
         ISpellsPanelUIView SpellsPanelView { get; }
 
         void InitializeArmy(UIElements uiElements);
+        void InitializePurchaseWindow(UIElements uiElements);
         void InitializeSpells(UIElements uiElements);
         void SetGoldCount(int goldCount);
         void SetDiamondCount(int diamondCount);

@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="PurchaseWindow.uss"/>
+    <ui:VisualElement name="PurchaseWindowRoot" class="purchase-window-overlay">
+        <ui:VisualElement class="purchase-window-scrim"/>
+        <ui:VisualElement class="purchase-window-dialog">
+            <ui:VisualElement class="purchase-window-header">
+                <ui:Label text="Войска" class="purchase-window-title"/>
+                <ui:Button name="PurchaseCloseButton" text="×" class="purchase-window-close"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="purchase-window-column-headers">
+                <ui:Label text="БАШНИ" class="purchase-window-column-title purchase-window-column-title--left"/>
+                <ui:Label text="ГЕНЕРАТОРЫ" class="purchase-window-column-title purchase-window-column-title--right"/>
+            </ui:VisualElement>
+            <ui:ScrollView name="PurchaseScrollView" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto" class="purchase-window-scroll">
+                <ui:VisualElement name="PurchaseRows" class="purchase-window-rows"/>
+            </ui:ScrollView>
+            <ui:Button name="PurchaseFooterCloseButton" text="Закрыть" class="purchase-window-footer-close"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

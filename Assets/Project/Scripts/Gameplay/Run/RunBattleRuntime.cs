@@ -21,8 +21,7 @@ namespace Project.Scripts.Gameplay.Run
 
         public event Action<int, int, ERunPhase> WaveCompleted;
         public bool CanUseNextWaveButton => _isGameRunning
-                                           && (_state.Phase == ERunPhase.Preparation
-                                               || _state.Phase == ERunPhase.CardChoice);
+                                           && _state.Phase == ERunPhase.Preparation;
 
         public RunBattleRuntime(
             RunState state,

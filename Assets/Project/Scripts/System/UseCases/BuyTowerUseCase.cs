@@ -7,6 +7,7 @@ using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Enums;
+using Project.Scripts.System.Save;
 
 namespace Project.Scripts.System.UseCases
 {
@@ -15,6 +16,7 @@ namespace Project.Scripts.System.UseCases
         private readonly BattlefieldContext _battlefieldContext;
         private readonly IUnitsCatalog _unitsCatalog;
         private readonly IPlayerStatsUseCase _playerStats;
+        private readonly IWorldService _world;
         private readonly IPublisher<TowerBoughtQuestEventDTO> _publisherBoughtQuestEventDTO;
         private readonly IAudioManager _audioManager;
         private readonly RunState _runState;
@@ -26,6 +28,7 @@ namespace Project.Scripts.System.UseCases
         public BuyTowerUseCase(
             BattlefieldContext battlefieldContext,
             IPlayerStatsUseCase playerStatsUseCase,
+            IWorldService world,
             IUnitsCatalog unitsCatalog,
             IPublisher<TowerBoughtQuestEventDTO> publisherBoughtQuestEventDTO,
             IAudioManager audioManager,
@@ -33,6 +36,7 @@ namespace Project.Scripts.System.UseCases
         {
             _battlefieldContext = battlefieldContext;
             _playerStats = playerStatsUseCase;
+            _world = world;
             _unitsCatalog = unitsCatalog;
             _publisherBoughtQuestEventDTO = publisherBoughtQuestEventDTO;
             _audioManager = audioManager;
@@ -40,12 +44,69 @@ namespace Project.Scripts.System.UseCases
         }
 
         public EBuyTowerResult TryBuyTower() =>
-            TryBuy(ETowerType.Combat, _playerStats.SelectedTowerLevel, TowerCost);
+            TryBuyInternal(
+                ETowerType.Combat,
+                _playerStats.SelectedTowerLevel,
+                TowerCost,
+                ETowerPurchaseCurrency.Gold,
+                TowerCost);
 
         public EBuyTowerResult TryBuyGenerator() =>
-            TryBuy(ETowerType.Generator, 1, GeneratorCost);
+            TryBuyInternal(
+                ETowerType.Generator,
+                1,
+                GeneratorCost,
+                ETowerPurchaseCurrency.Gold,
+                GeneratorCost);
 
-        private EBuyTowerResult TryBuy(ETowerType towerType, int level, int cost)
+        public int GetPurchaseCost(ETowerType towerType, int level) =>
+            TowerEconomy.GetTierPurchaseCost(towerType, level);
+
+        public ETowerPurchaseCurrency GetPurchaseCurrency(ETowerType towerType, int level) =>
+            TowerEconomy.GetTierPurchaseCurrency(towerType, level);
+
+        public int GetPurchaseLevelCount(ETowerType towerType)
+        {
+            var count = 0;
+            while (_unitsCatalog.HasTowerLevel(count + 1, towerType))
+                count++;
+
+            return count;
+        }
+
+        public bool CanBuy(ETowerType towerType, int level)
+        {
+            if (!_runState.CanEditDefense
+                || _battlefieldContext.FindFirstFreePlaceableSlot() == null
+                || _unitsCatalog.GetTowerPrefabByLevel(level, towerType) == null)
+                return false;
+
+            var cost = GetPurchaseCost(towerType, level);
+            return GetPurchaseCurrency(towerType, level) == ETowerPurchaseCurrency.Gems
+                ? cost > 0 && _world.Gems >= cost
+                : _playerStats.CanSpend(cost);
+        }
+
+        public EBuyTowerResult TryBuy(ETowerType towerType, int level)
+        {
+            if (_unitsCatalog.GetTowerPrefabByLevel(level, towerType) == null)
+                return EBuyTowerResult.ConfigError;
+
+            var cost = GetPurchaseCost(towerType, level);
+            return TryBuyInternal(
+                towerType,
+                level,
+                cost,
+                GetPurchaseCurrency(towerType, level),
+                TowerEconomy.GetTierGoldValue(level));
+        }
+
+        private EBuyTowerResult TryBuyInternal(
+            ETowerType towerType,
+            int level,
+            int cost,
+            ETowerPurchaseCurrency currency,
+            int purchaseValue)
         {
             if (!_runState.CanEditDefense)
                 return EBuyTowerResult.RunPhaseLocked;
@@ -54,7 +115,10 @@ namespace Project.Scripts.System.UseCases
             if (slot == null)
                 return EBuyTowerResult.NoFreeSpawnSlot;
 
-            if (!_playerStats.CanSpend(cost))
+            var canSpend = currency == ETowerPurchaseCurrency.Gems
+                ? cost > 0 && _world.Gems >= cost
+                : _playerStats.CanSpend(cost);
+            if (!canSpend)
                 return EBuyTowerResult.NotEnoughGold;
 
             var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(level, towerType);
@@ -62,15 +126,21 @@ namespace Project.Scripts.System.UseCases
             if (towerPrefab == null)
                 return EBuyTowerResult.PlaceFailed;
 
-            if (!slot.TryPlaceTower(towerPrefab, _playerStats, _audioManager, true, cost))
+            if (!slot.TryPlaceTower(towerPrefab, _playerStats, _audioManager, true, purchaseValue))
                 return EBuyTowerResult.PlaceFailed;
 
-            var purchasedCost = cost;
+            var spent = currency == ETowerPurchaseCurrency.Gems
+                ? _world.TrySpendGems(cost)
+                : _playerStats.TrySpend(cost);
+            if (!spent)
+            {
+                slot.ClearTower();
+                return EBuyTowerResult.NotEnoughGold;
+            }
 
-            _playerStats.TrySpend(purchasedCost);
             _publisherBoughtQuestEventDTO.Publish(new TowerBoughtQuestEventDTO(
                 level,
-                purchasedCost));
+                purchaseValue));
             return EBuyTowerResult.Success;
         }
 

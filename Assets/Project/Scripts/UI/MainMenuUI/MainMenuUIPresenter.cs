@@ -8,6 +8,7 @@ using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.UI.InBattleUI;
+using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Reward;
@@ -33,6 +34,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly ILocalizationService _localizationService;
         private IInBattleUIPresenter _inBattlePresenter;
         private IArmyUIPresenter _armyPresenter;
+        private PurchaseWindowPresenter _purchaseWindowPresenter;
         private SpellsPanelUIPresenter _spellsPanelPresenter;
 
         public MainMenuUIPresenter(
@@ -72,6 +74,14 @@ namespace Project.Scripts.UI.MainMenuUI
             _armyPresenter = new ArmyUIPresenter(_layoutView.ArmyView, _world, _armyUIUseCase);
             _armyPresenter.Initialize();
 
+            _layoutView.InitializePurchaseWindow(_uiElements);
+            _purchaseWindowPresenter = new PurchaseWindowPresenter(
+                _layoutView.PurchaseWindowView,
+                _world,
+                _armyUIUseCase);
+            _purchaseWindowPresenter.Initialize();
+            _layoutView.ArmyView.SetTowersButtonClicked += OnSetTowersButtonClicked;
+
             _layoutView.InitializeSpells(_uiElements);
             _spellsPanelPresenter = new SpellsPanelUIPresenter(
                 _layoutView.SpellsPanelView,
@@ -110,8 +120,19 @@ namespace Project.Scripts.UI.MainMenuUI
             _layoutView.SetDiamondCount(value);
         }
 
-        private void OnActiveSectionChanged(MainMenuSection section) => _layoutView.SetActiveSection(section);
-        private void OnSectionClicked(MainMenuSection section) => _menuUIUseCase.SelectSection(section);
+        private void OnActiveSectionChanged(MainMenuSection section)
+        {
+            _layoutView.SetActiveSection(section);
+            _purchaseWindowPresenter.Hide();
+        }
+
+        private void OnSectionClicked(MainMenuSection section)
+        {
+            _menuUIUseCase.SelectSection(section);
+            _purchaseWindowPresenter.Hide();
+        }
+
+        private void OnSetTowersButtonClicked() => _purchaseWindowPresenter.Show();
 
         public override void Dispose()
         {
@@ -119,7 +140,9 @@ namespace Project.Scripts.UI.MainMenuUI
             _menuUIUseCase.GemsChanged -= OnGemsChanged;
             _menuUIUseCase.ActiveSectionChanged -= OnActiveSectionChanged;
             _layoutView.SectionClicked -= OnSectionClicked;
+            _layoutView.ArmyView.SetTowersButtonClicked -= OnSetTowersButtonClicked;
             _inBattlePresenter.Dispose();
+            _purchaseWindowPresenter.Dispose();
             _armyPresenter.Dispose();
             _spellsPanelPresenter.Dispose();
 
