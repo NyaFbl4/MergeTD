@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Systems.UI;
 
 namespace Project.Scripts.UI.EndWaveUI
@@ -7,15 +9,10 @@ namespace Project.Scripts.UI.EndWaveUI
     {
         event Action CloseButtonClicked;
         event Action ADButtonClicked;
-        event Action ReviewButtonClicked;
-        
+
         void SetTitle(string title);
-        void SetRewardCount(int rewardCount);
-        void SetRewardLabel(string text);
+        void SetRewards(IReadOnlyList<WaveRewardConfig> rewards);
         void SetAdButtonText(string text);
-        void SetReviewButtonText(string text);
         void SetCloseButtonText(string text);
-        void ShowAdButtonOnly();
-        void ShowReviewButtonOnly();
     }
 }

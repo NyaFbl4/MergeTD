@@ -9,7 +9,6 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         event Action ADButtonClicked;
 
         void SetTitle(string title);
-        void SetDescription(string description);
         void SetAdButtonText(string text);
         void SetCloseButtonText(string text);
     }

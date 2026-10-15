@@ -98,8 +98,21 @@ namespace Project.Scripts.Gameplay.Systems
         public void OnFinishGame()
         {
             _isGameRunning = false;
+
+            if (_runState.Phase == ERunPhase.Defeat)
+                return;
+
             _isWaveRunning = false;
             _sequenceRuntimes.Clear();
+        }
+
+        public bool TryResumeDefeatedWave()
+        {
+            if (_runState.Phase != ERunPhase.Defeat || !_isWaveRunning)
+                return false;
+
+            _isGameRunning = true;
+            return true;
         }
 
         public void OnUpdate(float deltaTime)

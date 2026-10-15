@@ -7,11 +7,9 @@ namespace Project.Scripts.UI.EndWaveLoseUI
     public class EndWaveLoseUIView : LayoutViewBase, IEndWaveLoseUIView
     {
         private Button _adButton;
-        private Button _closeButton;
-        private Label _titleLabel;
-        private Label _descriptionLabel;
-        private Label _adButtonLabel;
-        private Label _closeButtonLabel;
+        private Button _goNextButton;
+        private Label _headerLabel;
+        private VisualElement _rewardPanel;
 
         public event Action CloseButtonClicked;
         public event Action ADButtonClicked;
@@ -20,49 +18,44 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         {
             base.Awake();
 
-            _adButton = _root.Q<Button>("ADButton");
-            _closeButton = _root.Q<Button>("CloseButton");
-            _titleLabel = _root.Q<Label>("EndWaveTitleLabel");
-            _descriptionLabel = _root.Q<Label>("EndWaveDescription");
-            _adButtonLabel = _root.Q<Label>("ADButtonLabel");
-            _closeButtonLabel = _root.Q<Label>("CloseButtonLabel");
+            _adButton = Require<Button>("ADButton");
+            _goNextButton = Require<Button>("GoNextButton");
+            _headerLabel = Require<Label>("HeaderLabel");
+            _rewardPanel = Require<VisualElement>("RewardPanel");
 
-            if (_adButton != null)
-                _adButton.clicked += OnADButtonClicked;
-            if (_closeButton != null)
-                _closeButton.clicked += OnCloseButtonClicked;
+            _rewardPanel.style.display = DisplayStyle.None;
+            _adButton.clicked += OnADButtonClicked;
+            _goNextButton.clicked += OnCloseButtonClicked;
+            UIButtonAnimationUtility.EnableDefault(_adButton);
+            UIButtonAnimationUtility.EnableDefault(_goNextButton);
         }
 
         public void SetTitle(string title)
         {
-            if (_titleLabel != null)
-                _titleLabel.text = title;
-        }
-
-        public void SetDescription(string description)
-        {
-            if (_descriptionLabel != null)
-                _descriptionLabel.text = description;
+            _headerLabel.text = title;
         }
 
         public void SetAdButtonText(string text)
         {
-            if (_adButtonLabel != null)
-                _adButtonLabel.text = text;
+            _adButton.text = text;
         }
 
         public void SetCloseButtonText(string text)
         {
-            if (_closeButtonLabel != null)
-                _closeButtonLabel.text = text;
+            _goNextButton.text = text;
+        }
+
+        private T Require<T>(string elementName) where T : VisualElement
+        {
+            return _root.Q<T>(elementName)
+                   ?? throw new InvalidOperationException(
+                       $"{nameof(EndWaveLoseUIView)}: element '{elementName}' was not found.");
         }
 
         private void OnDestroy()
         {
-            if (_adButton != null)
-                _adButton.clicked -= OnADButtonClicked;
-            if (_closeButton != null)
-                _closeButton.clicked -= OnCloseButtonClicked;
+            _adButton.clicked -= OnADButtonClicked;
+            _goNextButton.clicked -= OnCloseButtonClicked;
         }
 
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();

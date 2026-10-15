@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.EmpPulseConfig
   _spellId: emp_pulse
   _displayName: ЭМИ-импульс
-  _description: Мгновенно оглушает всех врагов в выбранной области. Не наносит урон.
+  _description: Оглушает врагов без урона. Нажмите способность, затем укажите область на поле.
   _icon: {fileID: -8683594438223814369, guid: 07eb0cc7976e903458406e38affc2ad4, type: 3}
   _background: {fileID: 4977526221841929852, guid: 83fc82f110364614fbec332a148a404a, type: 3}
   _cooldown: 20

@@ -1,11 +1,11 @@
 using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
-using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Run;
-using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
+using Project.Scripts.UI.LevelUI;
+using Project.Scripts.UI.MainMenuUI;
 using UnityEngine;
 using VContainer.Unity;
 using YG;
@@ -14,35 +14,31 @@ namespace Project.Scripts.UI.EndWaveLoseUI
 {
     public class EndWaveLoseUseCase : IInitializable, IDisposable
     {
-        private const string RetryWaveRewardAdId = "end_wave_lose_reward";
+        private const string ReviveCurrentWaveAdId = "end_wave_lose_reward";
 
         private readonly BaseHealth _baseHealth;
         private readonly IEndWaveLoseUIPresenter _endWaveLoseUIPresenter;
-        private readonly IPlayerStatsUseCase _playerStatsUseCase;
-        private readonly IGameManagerService _gameManagerService;
+        private readonly RunBattleRuntime _runBattleRuntime;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly RunState _runState;
 
         private bool _isShown;
         private bool _isWaitingAdReward;
-        private bool _isAdRewardClaimed;
+        private bool _isReviveGranted;
         private bool _isRewardedAdClosing;
-        private int _currentRewardCount;
 
         public EndWaveLoseUseCase(
             BaseHealth baseHealth,
             IEndWaveLoseUIPresenter endWaveLoseUIPresenter,
-            IPlayerStatsUseCase playerStatsUseCase,
-            IGameManagerService gameManagerService,
+            RunBattleRuntime runBattleRuntime,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
             RunState runState)
         {
             _baseHealth = baseHealth;
             _endWaveLoseUIPresenter = endWaveLoseUIPresenter;
-            _playerStatsUseCase = playerStatsUseCase;
-            _gameManagerService = gameManagerService;
+            _runBattleRuntime = runBattleRuntime;
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
             _runState = runState;
@@ -60,25 +56,16 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             if (_isShown)
                 return;
 
-            var waveNumber = _playerStatsUseCase.Wave;
-            var rewardCount = GetWaveReward();
-
             _isWaitingAdReward = false;
-            _isAdRewardClaimed = false;
+            _isReviveGranted = false;
             _isRewardedAdClosing = false;
-            _currentRewardCount = rewardCount;
 
             _isShown = true;
-            _endWaveLoseUIPresenter.SetData(waveNumber, rewardCount);
+            _endWaveLoseUIPresenter.SetData(_runState.CurrentWave);
             _showPopupPublisher.Publish(new ShowPopupDto
             {
                 TargetPopUpType = typeof(IEndWaveLoseUIPresenter)
             });
-        }
-
-        private int GetWaveReward()
-        {
-            return _runState.CurrentWaveConfig.CompleteRewardGold;
         }
 
         private void OnCloseRequested()
@@ -86,35 +73,22 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             if (_isWaitingAdReward)
                 return;
 
-            ClosePopupAndRestart();
+            ClosePopupAndOpenMenu();
         }
 
         private void OnAdRequested()
         {
-            if (_isWaitingAdReward || _isAdRewardClaimed)
+            if (_isWaitingAdReward || _isReviveGranted)
                 return;
 
-            if (_currentRewardCount <= 0)
-                return;
-
-            ShowRewardedAdForRetryReward();
+            ShowRewardedAdForRevive();
         }
 
-        private void ShowRewardedAdForRetryReward()
+        private void ShowRewardedAdForRevive()
         {
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
-            YG2.RewardedAdvShow(RetryWaveRewardAdId);
-        }
-
-        private void GrantAdReward()
-        {
-            if (_isAdRewardClaimed)
-                return;
-
-            _isAdRewardClaimed = true;
-
-            _playerStatsUseCase.AddGold(_currentRewardCount);
+            YG2.RewardedAdvShow(ReviveCurrentWaveAdId);
         }
 
         private void SubscribeRewardedAdEvents()
@@ -133,10 +107,10 @@ namespace Project.Scripts.UI.EndWaveLoseUI
 
         private void OnRewardedAdReward(string rewardId)
         {
-            if (!_isWaitingAdReward || rewardId != RetryWaveRewardAdId)
+            if (!_isWaitingAdReward || rewardId != ReviveCurrentWaveAdId)
                 return;
 
-            GrantAdReward();
+            _isReviveGranted = true;
         }
 
         private void OnRewardedAdClosed()
@@ -144,9 +118,9 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             if (!_isWaitingAdReward)
                 return;
 
-            if (_isAdRewardClaimed)
+            if (_isReviveGranted)
             {
-                ClosePopupAndRestartAfterAdPauseAsync().Forget();
+                ClosePopupAndReviveAfterAdPauseAsync().Forget();
                 return;
             }
 
@@ -170,7 +144,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             UnsubscribeRewardedAdEvents();
         }
 
-        private async UniTaskVoid ClosePopupAndRestartAfterAdPauseAsync()
+        private async UniTaskVoid ClosePopupAndReviveAfterAdPauseAsync()
         {
             if (_isRewardedAdClosing)
                 return;
@@ -182,22 +156,36 @@ namespace Project.Scripts.UI.EndWaveLoseUI
 
             _isWaitingAdReward = false;
             _isRewardedAdClosing = false;
-            ClosePopupAndRestart();
+            ClosePopupAndRevive();
         }
 
-        private void ClosePopupAndRestart()
+        private void ClosePopupAndRevive()
         {
             ClosePopup();
-            TryShowInterstitialAd();
-            _gameManagerService.StartGame();
-        }
 
-        private void TryShowInterstitialAd()
-        {
-            if (YG2.nowAdsShow)
+            if (_runBattleRuntime.TryReviveCurrentWave())
                 return;
 
-            YG2.InterstitialAdvShow();
+            Debug.LogWarning("EndWaveLoseUseCase: current wave revive failed.");
+            OpenMainMenu();
+        }
+
+        private void ClosePopupAndOpenMenu()
+        {
+            ClosePopup();
+            OpenMainMenu();
+        }
+
+        private void OpenMainMenu()
+        {
+            _hidePopupPublisher.Publish(new HidePopupDto
+            {
+                TargetPopUpType = typeof(ILevelUIPresenter)
+            });
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(IMainMenuUIPresenter)
+            });
         }
 
         private void ClosePopup()

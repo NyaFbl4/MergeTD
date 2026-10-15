@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using MessagePipe;
 using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.System;
 using VContainer.Unity;
 
@@ -30,7 +32,10 @@ namespace Project.Scripts.System.UseCases
             _runBattleRuntime.WaveCompleted -= OnWaveCompleted;
         }
 
-        private void OnWaveCompleted(int waveNumber, int rewardCount, ERunPhase phaseAfterComplete)
+        private void OnWaveCompleted(
+            int waveNumber,
+            IReadOnlyList<WaveRewardConfig> _,
+            ERunPhase phaseAfterComplete)
         {
             _waveCompletedPublisher.Publish(new WaveCompletedQuestEventDTO(
                 waveNumber,

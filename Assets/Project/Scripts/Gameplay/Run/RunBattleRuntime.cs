@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Systems;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
@@ -19,7 +21,7 @@ namespace Project.Scripts.Gameplay.Run
 
         private bool _isGameRunning;
 
-        public event Action<int, int, ERunPhase> WaveCompleted;
+        public event Action<int, IReadOnlyList<WaveRewardConfig>, ERunPhase> WaveCompleted;
         public bool CanUseNextWaveButton => _isGameRunning
                                            && _state.Phase == ERunPhase.Preparation;
 
@@ -105,6 +107,23 @@ namespace Project.Scripts.Gameplay.Run
             _gameManagerService.FinishGame();
         }
 
+        public bool TryReviveCurrentWave()
+        {
+            if (_state.Phase != ERunPhase.Defeat)
+                return false;
+
+            if (!_battlefieldRuntime.TryResumeDefeatedWave())
+                return false;
+
+            if (!_state.TryResumeCurrentWave())
+                return false;
+
+            _baseHealth.ResetToStartHealth();
+            _isGameRunning = true;
+            _gameManagerService.ResumeGame();
+            return _state.Phase == ERunPhase.Wave;
+        }
+
         public void OnFinishGame()
         {
             _isGameRunning = false;
@@ -118,7 +137,7 @@ namespace Project.Scripts.Gameplay.Run
 
             var runWave = _state.CurrentWaveConfig;
             _state.CompleteWave();
-            WaveCompleted?.Invoke(completedWaveNumber, runWave.CompleteRewardGold, _state.Phase);
+            WaveCompleted?.Invoke(completedWaveNumber, runWave.Rewards, _state.Phase);
         }
 
         private void OnBaseDestroyed()

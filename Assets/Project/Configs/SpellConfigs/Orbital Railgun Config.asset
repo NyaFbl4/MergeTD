@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.OrbitalRailgunConfig
   _spellId: orbital_railgun
   _displayName: Орбитальный рельсотрон
-  _description: После короткой задержки наносит огромный урон всем врагам вдоль выбранной линии.
+  _description: Наносит огромный урон вдоль линии. Нажмите способность, проведите линию и отпустите.
   _icon: {fileID: 5176572134045062995, guid: bda9cc22aae71ba4b81eeba19d6d2bc9, type: 3}
   _background: {fileID: 3552237782043751338, guid: 42d9ddac7d10f1441a6333221d11cfac, type: 3}
   _cooldown: 35

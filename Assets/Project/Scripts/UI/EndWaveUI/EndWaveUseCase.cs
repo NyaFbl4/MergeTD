@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using MessagePipe;
-using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.System.Localization;
+using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
 using UnityEngine;
@@ -11,31 +13,27 @@ using YG;
 
 namespace Project.Scripts.UI.EndWaveUI
 {
-    public class EndWaveUseCase : IInitializable, IDisposable, IGameUpdateListener
+    public class EndWaveUseCase : IInitializable, IDisposable
     {
         private const string DoubleWaveRewardAdId = "end_wave_double_reward";
-        private const int ReviewAvailableAfterWave = 3;
-        private const string PlayerRatedKey = "player_rated_game";
-        private const float ReviewRequestTimeout = 30f;
 
         private readonly RunBattleRuntime _runBattleRuntime;
         private readonly IEndWaveUIPresenter _endWaveUIPresenter;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
+        private readonly IWorldService _worldService;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly ILocalizationService _localizationService;
 
+        private IReadOnlyList<WaveRewardConfig> _currentRewards = Array.Empty<WaveRewardConfig>();
         private bool _isWaitingAdReward;
-        private bool _isWaitingReview;
         private bool _isAdRewardClaimed;
-        private float _reviewRequestTimer;
-        private int _currentWaveNumber;
-        private int _currentRewardCount;
 
         public EndWaveUseCase(
             RunBattleRuntime runBattleRuntime,
             IEndWaveUIPresenter endWaveUIPresenter,
             IPlayerStatsUseCase playerStatsUseCase,
+            IWorldService worldService,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
             ILocalizationService localizationService)
@@ -43,6 +41,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _runBattleRuntime = runBattleRuntime;
             _endWaveUIPresenter = endWaveUIPresenter;
             _playerStatsUseCase = playerStatsUseCase;
+            _worldService = worldService;
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
             _localizationService = localizationService;
@@ -50,26 +49,27 @@ namespace Project.Scripts.UI.EndWaveUI
 
         public void Initialize()
         {
-            IGameListener.Register(this);
             _runBattleRuntime.WaveCompleted += OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested += OnCloseRequested;
             _endWaveUIPresenter.AdRequested += OnAdRequested;
-            _endWaveUIPresenter.ReviewRequested += OnReviewRequested;
         }
 
-        private void OnWaveCompleted(int waveNumber, int rewardCount, ERunPhase phaseAfterComplete)
+        private void OnWaveCompleted(
+            int waveNumber,
+            IReadOnlyList<WaveRewardConfig> rewards,
+            ERunPhase phaseAfterComplete)
         {
             switch (phaseAfterComplete)
             {
                 case ERunPhase.Reward:
-                    GrantWaveReward(rewardCount);
-                    ShowRewardPopup(waveNumber, rewardCount);
+                    GrantWaveRewards(rewards);
+                    ShowRewardPopup(waveNumber, rewards);
                     break;
                 case ERunPhase.CardChoice:
-                    _playerStatsUseCase.AddGold(rewardCount);
+                    GrantWaveRewards(rewards);
                     break;
                 case ERunPhase.Victory:
-                    _playerStatsUseCase.AddGold(rewardCount);
+                    GrantWaveRewards(rewards);
                     _runBattleRuntime.FinishVictory();
                     break;
                 case ERunPhase.Defeat:
@@ -77,45 +77,45 @@ namespace Project.Scripts.UI.EndWaveUI
             }
         }
 
-        private void GrantWaveReward(int rewardCount)
+        private void GrantWaveRewards(IReadOnlyList<WaveRewardConfig> rewards)
         {
-            _playerStatsUseCase.AddGold(rewardCount);
+            for (var i = 0; i < rewards.Count; i++)
+            {
+                var reward = rewards[i];
+                switch (reward.Type)
+                {
+                    case EWaveRewardType.Gold:
+                        _playerStatsUseCase.AddGold(reward.Amount);
+                        break;
+                    case EWaveRewardType.Gems:
+                        _worldService.AddGems(reward.Amount);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(reward.Type), reward.Type, null);
+                }
+            }
         }
 
-        private void ShowRewardPopup(int waveNumber, int rewardCount)
+        private void ShowRewardPopup(int waveNumber, IReadOnlyList<WaveRewardConfig> rewards)
         {
             _isWaitingAdReward = false;
-            _isWaitingReview = false;
-            _reviewRequestTimer = 0f;
             _isAdRewardClaimed = false;
-            _currentWaveNumber = waveNumber;
-            _currentRewardCount = rewardCount;
+            _currentRewards = rewards;
 
-            if (ShouldShowReviewButton())
-                _endWaveUIPresenter.SetAdButtonReviewMode(rewardCount);
-            else
-                _endWaveUIPresenter.SetAdButtonAdMode();
-            
-            _endWaveUIPresenter.SetData(
-                _localizationService.Format(LocalizationKeys.EndWaveTitleFormat, waveNumber),
-                rewardCount);
+            var title = _localizationService
+                .Format(LocalizationKeys.EndWaveTitleFormat, waveNumber)
+                .ToUpperInvariant();
+            _endWaveUIPresenter.SetData(title, rewards);
 
             _showPopupPublisher.Publish(new ShowPopupDto
             {
                 TargetPopUpType = typeof(IEndWaveUIPresenter)
             });
         }
-        
-        private bool ShouldShowReviewButton()
-        {
-            return _currentWaveNumber >= ReviewAvailableAfterWave
-                   && PlayerPrefs.GetInt(PlayerRatedKey, 0) == 0
-                   && YG2.reviewCanShow;
-        }
 
         private void OnCloseRequested()
         {
-            if (_isWaitingAdReward || _isWaitingReview)
+            if (_isWaitingAdReward)
                 return;
 
             ClosePopupAndContinue();
@@ -123,88 +123,23 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private void OnAdRequested()
         {
-            if (_isWaitingAdReward || _isWaitingReview || _isAdRewardClaimed)
+            if (_isWaitingAdReward || _isAdRewardClaimed || !HasPositiveReward())
                 return;
 
-            if (_currentRewardCount <= 0)
-                return;
-
-            ShowRewardedAdForWaveReward();
-        }
-
-        private void OnReviewRequested()
-        {
-            if (_isWaitingAdReward || _isWaitingReview || _isAdRewardClaimed)
-                return;
-
-            if (_currentRewardCount <= 0)
-                return;
-
-            if (!ShouldShowReviewButton())
-            {
-                _endWaveUIPresenter.SetAdButtonAdMode();
-                return;
-            }
-
-            ShowReviewForReward();
-        }
-        
-        private void ShowRewardedAdForWaveReward()
-        {
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
             YG2.RewardedAdvShow(DoubleWaveRewardAdId);
         }
-        
-        private void ShowReviewForReward()
-        {
-            _isWaitingReview = true;
-            _reviewRequestTimer = ReviewRequestTimeout;
-            YG2.reviewCanShow = false;
-            YG2.onReviewSent += OnReviewSent;
-            YG2.ReviewShow();
-        }
-        
-        private void OnReviewSent(bool feedbackSent)
-        {
-            _isWaitingReview = false;
-            YG2.onReviewSent -= OnReviewSent;
 
-            if (!feedbackSent)
+        private bool HasPositiveReward()
+        {
+            for (var i = 0; i < _currentRewards.Count; i++)
             {
-                _endWaveUIPresenter.SetAdButtonAdMode();
-                return;
+                if (_currentRewards[i].Amount > 0)
+                    return true;
             }
 
-            PlayerPrefs.SetInt(PlayerRatedKey, 1);
-            PlayerPrefs.Save();
-
-            _playerStatsUseCase.AddGold(_currentRewardCount);
-
-            _endWaveUIPresenter.SetAdButtonAdMode();
-            ClosePopupAndContinue();
-        }
-
-        public void OnUpdate(float deltaTime)
-        {
-            if (!_isWaitingReview)
-                return;
-
-            _reviewRequestTimer -= deltaTime;
-
-            if (_reviewRequestTimer > 0f)
-                return;
-
-            CancelReviewRequest("EndWaveUseCase: review request timed out.");
-        }
-
-        private void CancelReviewRequest(string reason)
-        {
-            _isWaitingReview = false;
-            _reviewRequestTimer = 0f;
-            YG2.onReviewSent -= OnReviewSent;
-            _endWaveUIPresenter.SetAdButtonAdMode();
-            Debug.LogWarning(reason);
+            return false;
         }
 
         private void GrantAdRewardAndContinue()
@@ -214,11 +149,10 @@ namespace Project.Scripts.UI.EndWaveUI
 
             _isAdRewardClaimed = true;
             _isWaitingAdReward = false;
-
-            _playerStatsUseCase.AddGold(_currentRewardCount);
+            GrantWaveRewards(_currentRewards);
             ClosePopupAndContinue();
         }
-        
+
         private void SubscribeRewardedAdEvents()
         {
             YG2.onRewardAdv += OnRewardedAdReward;
@@ -270,11 +204,10 @@ namespace Project.Scripts.UI.EndWaveUI
             });
 
             TryShowInterstitialAd();
-
             _runBattleRuntime.ContinueToNextPreparation();
         }
 
-        private void TryShowInterstitialAd()
+        private static void TryShowInterstitialAd()
         {
             if (YG2.nowAdsShow)
                 return;
@@ -287,14 +220,9 @@ namespace Project.Scripts.UI.EndWaveUI
             _runBattleRuntime.WaveCompleted -= OnWaveCompleted;
             _endWaveUIPresenter.CloseRequested -= OnCloseRequested;
             _endWaveUIPresenter.AdRequested -= OnAdRequested;
-            _endWaveUIPresenter.ReviewRequested -= OnReviewRequested;
-            IGameListener.Unregister(this);
-            
+
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();
-
-            if (_isWaitingReview)
-                YG2.onReviewSent -= OnReviewSent;
-        }        
+        }
     }
 }

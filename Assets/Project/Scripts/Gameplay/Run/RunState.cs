@@ -81,6 +81,15 @@ namespace Project.Scripts.Gameplay.Run
             SetPhase(ERunPhase.Defeat);
         }
 
+        public bool TryResumeCurrentWave()
+        {
+            if (_phase != ERunPhase.Defeat)
+                return false;
+
+            SetPhase(ERunPhase.Wave);
+            return true;
+        }
+
         private void SetPhase(ERunPhase phase)
         {
             if (_phase == phase)

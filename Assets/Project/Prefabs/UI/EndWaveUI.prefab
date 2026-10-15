@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: c212ed35802064c4797212e7d4b1437f, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 0ccf61c3bc3a8a74d8741e3257021024, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: be3a70284c4bfae41a5a42211bee3201, type: 3}
   m_SortingOrder: 1
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -68,5 +68,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a20489d1e74c899427b52015674999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.UI.EndWaveUI.EndWaveUIView
-  _adButtonSprite: {fileID: -4614560448437920579, guid: 431a46382b80dc345918f36aa7e9f8ce, type: 3}
-  _reviewButtonSprite: {fileID: 3793781107737361745, guid: 750f7908bcf221b4481eb7f1a8f839e7, type: 3}
+  _rewardPanelTemplate: {fileID: 9197481963319205126, guid: ab54deb197bb40e48a92b435d7d9b15e, type: 3}

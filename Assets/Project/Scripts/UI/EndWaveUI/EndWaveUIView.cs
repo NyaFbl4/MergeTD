@@ -1,116 +1,120 @@
 using System;
+using System.Collections.Generic;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Systems.UI;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.EndWaveUI
 {
     public class EndWaveUIView : LayoutViewBase, IEndWaveUIView
     {
+        private const string GoldIconPath = "UI/new/Icons/Icon_Gold";
+        private const string GemsIconPath = "UI/new/Icons/Icon_Gem03_Diamond_Purple 1";
+
+        [SerializeField] private VisualTreeAsset _rewardPanelTemplate;
+
         private Button _adButton;
-        private Button _reviewButton;
-        private Button _closeButton;
-        
-        private Label _titleLabel;
-        private Label _rewardLabel;
-        private Label _rewardCountLabel;
-        private Label _adButtonLabel;
-        private Label _reviewButtonLabel;
-        private Label _closeButtonLabel;
-        
+        private Button _goNextButton;
+        private Label _headerLabel;
+        private VisualElement _rewardContainer;
+        private StyleBackground _goldIcon;
+        private StyleBackground _gemsIcon;
+
         public event Action CloseButtonClicked;
         public event Action ADButtonClicked;
-        public event Action ReviewButtonClicked;
 
         public override void Awake()
         {
             base.Awake();
-            
-            _adButton = _root.Q<Button>("ADButton");
-            _reviewButton = _root.Q<Button>("ADButton1");
-            _closeButton = _root.Q<Button>("CloseButton");
-            _titleLabel = _root.Q<Label>("EndWavePanelTitleLabel");
-            _rewardLabel = _root.Q<Label>("WaveRewardLabel");
-            _rewardCountLabel = _root.Q<Label>("CountRewardLabel");
-            _adButtonLabel = _adButton?.Q<Label>("ADButtonLabel");
-            _reviewButtonLabel = _reviewButton?.Q<Label>("ADButtonLabel");
-            _closeButtonLabel = _root.Q<Label>("CloseButtonLabel");
-            
-            if (_adButton != null)
-                _adButton.clicked += OnADButtonClicked;
-            if (_reviewButton != null)
-                _reviewButton.clicked += OnReviewButtonClicked;
-            if (_closeButton != null)
-                _closeButton.clicked += OnCloseButtonClicked;
 
-            ShowAdButtonOnly();
+            _adButton = Require<Button>("ADButton");
+            _goNextButton = Require<Button>("GoNextButton");
+            _headerLabel = Require<Label>("HeaderLabel");
+            _rewardContainer = Require<VisualElement>("RewardPanel");
+            _goldIcon = LoadSingleSprite(GoldIconPath);
+            _gemsIcon = LoadSingleSprite(GemsIconPath);
+
+            _rewardContainer.Clear();
+            _adButton.clicked += OnADButtonClicked;
+            _goNextButton.clicked += OnCloseButtonClicked;
+            UIButtonAnimationUtility.EnableDefault(_adButton);
+            UIButtonAnimationUtility.EnableDefault(_goNextButton);
         }
 
         public void SetTitle(string title)
         {
-            if (_titleLabel != null)
-                _titleLabel.text = title;
+            _headerLabel.text = title;
         }
 
-        public void SetRewardCount(int rewardCount)
+        public void SetRewards(IReadOnlyList<WaveRewardConfig> rewards)
         {
-            if (_rewardCountLabel != null)
-                _rewardCountLabel.text = rewardCount.ToString();
-        }
+            _rewardContainer.Clear();
 
-        public void SetRewardLabel(string text)
-        {
-            if (_rewardLabel != null)
-                _rewardLabel.text = text;
+            for (var i = 0; i < rewards.Count; i++)
+            {
+                var reward = rewards[i];
+                var rewardPanel = _rewardPanelTemplate.Instantiate();
+                var rewardIcon = RequireFrom<VisualElement>(rewardPanel, "RewardIcon");
+                var rewardCountLabel = RequireFrom<Label>(rewardPanel, "RewardCountLabel");
+
+                rewardIcon.style.backgroundImage = GetRewardIcon(reward.Type);
+                rewardCountLabel.text = reward.Amount.ToString();
+                _rewardContainer.Add(rewardPanel);
+            }
         }
 
         public void SetAdButtonText(string text)
         {
-            if (_adButtonLabel != null)
-                _adButtonLabel.text = text;
-        }
-
-        public void SetReviewButtonText(string text)
-        {
-            if (_reviewButtonLabel != null)
-                _reviewButtonLabel.text = text;
+            _adButton.text = text;
         }
 
         public void SetCloseButtonText(string text)
         {
-            if (_closeButtonLabel != null)
-                _closeButtonLabel.text = text;
+            _goNextButton.text = text;
         }
 
-        public void ShowAdButtonOnly()
+        private StyleBackground GetRewardIcon(EWaveRewardType rewardType)
         {
-            SetDisplay(_adButton, true);
-            SetDisplay(_reviewButton, false);
+            return rewardType switch
+            {
+                EWaveRewardType.Gold => _goldIcon,
+                EWaveRewardType.Gems => _gemsIcon,
+                _ => throw new ArgumentOutOfRangeException(nameof(rewardType), rewardType, null)
+            };
         }
 
-        public void ShowReviewButtonOnly()
+        private static StyleBackground LoadSingleSprite(string resourcePath)
         {
-            SetDisplay(_adButton, false);
-            SetDisplay(_reviewButton, true);
+            var sprites = Resources.LoadAll<Sprite>(resourcePath);
+            if (sprites.Length != 1)
+                throw new InvalidOperationException(
+                    $"Expected one sprite at Resources/{resourcePath}, found {sprites.Length}.");
+
+            return new StyleBackground(sprites[0]);
         }
 
-        private static void SetDisplay(VisualElement element, bool visible)
+        private T Require<T>(string elementName) where T : VisualElement
         {
-            if (element != null)
-                element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            return _root.Q<T>(elementName)
+                   ?? throw new InvalidOperationException(
+                       $"{nameof(EndWaveUIView)}: element '{elementName}' was not found.");
+        }
+
+        private static T RequireFrom<T>(VisualElement root, string elementName) where T : VisualElement
+        {
+            return root.Q<T>(elementName)
+                   ?? throw new InvalidOperationException(
+                       $"{nameof(EndWaveUIView)}: reward element '{elementName}' was not found.");
         }
 
         private void OnDestroy()
         {
-            if (_adButton != null)
-                _adButton.clicked -= OnADButtonClicked;
-            if (_reviewButton != null)
-                _reviewButton.clicked -= OnReviewButtonClicked;
-            if (_closeButton != null)
-                _closeButton.clicked -= OnCloseButtonClicked;
+            _adButton.clicked -= OnADButtonClicked;
+            _goNextButton.clicked -= OnCloseButtonClicked;
         }
-        
+
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();
         private void OnADButtonClicked() => ADButtonClicked?.Invoke();
-        private void OnReviewButtonClicked() => ReviewButtonClicked?.Invoke();
     }
 }

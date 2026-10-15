@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
@@ -90,7 +91,7 @@ namespace Project.Scripts.Gameplay.Run.Cards
             YG2.RewardedAdvShow(_catalog.RewardedRerollAdId);
         }
 
-        private void OnWaveCompleted(int _, int __, ERunPhase phase)
+        private void OnWaveCompleted(int _, IReadOnlyList<WaveRewardConfig> __, ERunPhase phase)
         {
             if (phase != ERunPhase.CardChoice)
                 return;
