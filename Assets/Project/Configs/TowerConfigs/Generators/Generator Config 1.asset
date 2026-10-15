@@ -15,7 +15,7 @@ MonoBehaviour:
   _icon: {fileID: -5838201558316246991, guid: 6965b68df94aee148b26c938d7793d33, type: 3}
   _towerLevel: 1
   _towerType: 1
-  _generationInterval: 3
+  _generationInterval: 10
   _energyPerPulse: 1
   _startPrice: 100
   _startDamage: 0

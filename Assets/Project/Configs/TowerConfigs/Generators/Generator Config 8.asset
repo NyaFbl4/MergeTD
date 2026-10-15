@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd9736acdde14150880b63f2c624e44b, type: 3}
-  m_Name: Tower Config 11
+  m_Name: Generator Config 8
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.TowerConfig
-  _icon: {fileID: 2467257474254069040, guid: 9be541a65643e694e848b3d01e32511b, type: 3}
-  _towerLevel: 11
-  _startPrice: 10
-  _startDamage: 250
-  _startAttackSpeed: 1
+  _icon: {fileID: -5838201558316246991, guid: 6965b68df94aee148b26c938d7793d33, type: 3}
+  _towerLevel: 1
+  _towerType: 1
+  _generationInterval: 3.7
+  _energyPerPulse: 3
+  _startPrice: 100
+  _startDamage: 0
+  _startAttackSpeed: 0
   _animationSpeed: 1
   _updatePrice: 10
   _updateDamage: 100

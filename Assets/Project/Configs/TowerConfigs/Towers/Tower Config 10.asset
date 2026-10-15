@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.TowerConfig
   _icon: {fileID: 6648719631037923154, guid: 90748c5e227c0054a9eee055248b4d8f, type: 3}
   _towerLevel: 10
+  _towerType: 0
+  _generationInterval: 3
+  _energyPerPulse: 5
   _startPrice: 10
-  _startDamage: 225
-  _startAttackSpeed: 1
-  _animationSpeed: 1
+  _startDamage: 5131
+  _startAttackSpeed: 1.4
+  _animationSpeed: 1.4
   _updatePrice: 10
   _updateDamage: 100
   _updateAttackSpeed: 1
