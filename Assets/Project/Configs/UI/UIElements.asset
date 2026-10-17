@@ -27,15 +27,6 @@ MonoBehaviour:
   - {fileID: 8018528669636757146, guid: fc91ba00403045d43ac8a703833f2380, type: 3}
   - {fileID: 9077095721173853532, guid: 1aa7f4821cabed84aa4891051d1e916d, type: 3}
   - {fileID: 6648719631037923154, guid: 90748c5e227c0054a9eee055248b4d8f, type: 3}
-  - {fileID: 2467257474254069040, guid: 9be541a65643e694e848b3d01e32511b, type: 3}
-  - {fileID: 8937071769642865339, guid: 414615c1240ca9a428843711d842e907, type: 3}
-  - {fileID: 5872530482939010565, guid: d2f973b99d6c72d4ab3d2551277ba932, type: 3}
-  - {fileID: 4075274922023927729, guid: 8e68d38d26a6a094a8b0d0de9f3e8bca, type: 3}
-  - {fileID: -5226889055005543415, guid: d3c8a4537ba00c94c8ec1e4a524209d9, type: 3}
-  - {fileID: 6661267127144323732, guid: 09be369bce46e7242918441228394d01, type: 3}
-  - {fileID: 6274477817223741028, guid: 4b388096b6a49d8478029e78d0a07bbb, type: 3}
-  - {fileID: 7691596433448163429, guid: 57c969816e2ee5f44910b6ee6994b548, type: 3}
-  - {fileID: -3779750424519434450, guid: fdbf4fc06d60d6e46adc5fbf8755a301, type: 3}
   _generatorIcons:
   - {fileID: -5838201558316246991, guid: 6965b68df94aee148b26c938d7793d33, type: 3}
   - {fileID: -5838201558316246991, guid: f309dee975624e798004d91e9f6d283b, type: 3}
@@ -47,3 +38,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ea3f8f359804f3d4cb92b0892cc48cab, type: 3}
   - {fileID: 21300000, guid: bea9c15407c8d604cbac1348cf63167d, type: 3}
   - {fileID: 21300000, guid: e6c408a69986e3e448ca64ab51e3cc8f, type: 3}
+  _towerPanel: {fileID: 9197481963319205126, guid: ee0fda5c87458f243b2da57b2950f0b1, type: 3}
+  _goldIcon: {fileID: 5765688439934630445, guid: 8b1a6839df1ba3841b26c1a58236e753, type: 3}
+  _gemsIcon: {fileID: 8263698601183877077, guid: fffcf6984de81b94391dbe8bbd56d0a1, type: 3}
+  _goldPriceBackground: {fileID: 7569198331679980289, guid: 4274602a3c64f3748848e3d67ed4dbb8, type: 3}
+  _gemsPriceBackground: {fileID: 4977526221841929852, guid: 83fc82f110364614fbec332a148a404a, type: 3}

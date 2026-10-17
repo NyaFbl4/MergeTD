@@ -1,8 +1,8 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Style src="PurchaseWindow.uss"/>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindow.uss?fileID=11400000&amp;guid=1e6d40d4bbd44736a0267017630ba408&amp;type=3#PurchaseWindow"/>
     <ui:VisualElement name="PurchaseWindowRoot" class="purchase-window-overlay">
         <ui:VisualElement class="purchase-window-scrim"/>
-        <ui:VisualElement class="purchase-window-dialog">
+        <ui:VisualElement class="purchase-window-dialog" style="display: flex;">
             <ui:VisualElement class="purchase-window-header">
                 <ui:Label text="Войска" class="purchase-window-title"/>
                 <ui:Button name="PurchaseCloseButton" text="×" class="purchase-window-close"/>

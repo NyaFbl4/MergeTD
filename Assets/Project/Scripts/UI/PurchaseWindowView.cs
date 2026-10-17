@@ -24,7 +24,7 @@ namespace Project.Scripts.UI.PurchaseWindowUI
 
     public sealed class PurchaseWindowView : IPurchaseWindowView
     {
-        private const string OptionTemplateResourcePath = "UIToolkit/New/PurchaseOption";
+        private const string OptionTemplateResourcePath = "UIToolkit/New/Новая папка/TowerPanel";
 
         private readonly UIElements _uiElements;
         private readonly VisualElement _window;
@@ -34,6 +34,9 @@ namespace Project.Scripts.UI.PurchaseWindowUI
         private readonly Button _footerCloseButton;
         private readonly VisualTreeAsset _optionTemplate;
         private readonly List<PurchaseOptionView> _options = new();
+        
+        private readonly Sprite _goldIcon;
+        private readonly Sprite _gemsIcon;
 
         public event Action<ETowerType, int> PurchaseRequested;
 
@@ -45,15 +48,16 @@ namespace Project.Scripts.UI.PurchaseWindowUI
             _rowsContainer = RequireFrom<VisualElement>(_window, "PurchaseRows");
             _closeButton = RequireFrom<Button>(_window, "PurchaseCloseButton");
             _footerCloseButton = RequireFrom<Button>(_window, "PurchaseFooterCloseButton");
-            _optionTemplate = Resources.Load<VisualTreeAsset>(OptionTemplateResourcePath)
-                              ?? throw new InvalidOperationException(
-                                  $"PurchaseWindowView: Resources/{OptionTemplateResourcePath} was not found.");
+            _optionTemplate = _uiElements.TowerPanel;
 
             _closeButton.clicked += Close;
             _footerCloseButton.clicked += Close;
             UIButtonAnimationUtility.EnableDefault(_closeButton);
             UIButtonAnimationUtility.EnableDefault(_footerCloseButton);
             SetVisible(false);
+
+            _goldIcon = _uiElements.GoldIcon;
+            _gemsIcon = _uiElements.GemsIcon;
         }
 
         public void SetOptions(int towerLevelCount, int generatorLevelCount)
@@ -86,17 +90,15 @@ namespace Project.Scripts.UI.PurchaseWindowUI
             bool canBuy)
         {
             var option = GetOption(towerType, level);
-            option.NameLabel.text = towerType == ETowerType.Generator
-                ? $"Генератор T{level}"
-                : $"Башня T{level}";
+            option.NameLabel.text = towerType == ETowerType.Generator ? $"Генератор T{level}" : $"Башня T{level}";
             option.PriceLabel.text = cost.ToString();
             option.Button.SetEnabled(canBuy);
-            option.PriceBar.EnableInClassList(
-                "purchase-window-price--gems",
-                currency == ETowerPurchaseCurrency.Gems);
-            option.CurrencyIcon.EnableInClassList(
-                "purchase-window-currency--gems",
-                currency == ETowerPurchaseCurrency.Gems);
+            var usesGems = currency == ETowerPurchaseCurrency.Gems;
+
+            option.CurrencyIcon.style.backgroundImage = new StyleBackground(
+                usesGems
+                    ? _uiElements.GemsIcon
+                    : _uiElements.GoldIcon);
             option.UnitIcon.style.backgroundImage = new StyleBackground(
                 GetTowerIcon(towerType, level));
         }
@@ -123,7 +125,7 @@ namespace Project.Scripts.UI.PurchaseWindowUI
             var host = _optionTemplate.Instantiate();
             host.AddToClassList("purchase-option-host");
 
-            var button = RequireFrom<Button>(host, "PurchaseOptionButton");
+            var button = RequireFrom<Button>(host, "ByTowerButton");
             button.name = towerType == ETowerType.Generator
                 ? $"GeneratorPurchaseT{level}"
                 : $"TowerPurchaseT{level}";
@@ -135,10 +137,9 @@ namespace Project.Scripts.UI.PurchaseWindowUI
                 towerType,
                 level,
                 button,
-                RequireFrom<VisualElement>(host, "UnitIcon"),
-                RequireFrom<Label>(host, "UnitName"),
-                RequireFrom<VisualElement>(host, "PriceBar"),
-                RequireFrom<VisualElement>(host, "CurrencyIcon"),
+                RequireFrom<VisualElement>(host, "TowerIcon"),
+                RequireFrom<Label>(host, "TowerDescriptionLabel"),
+                RequireFrom<VisualElement>(host, "ByTowerButtonIcon"),
                 RequireFrom<Label>(host, "PriceLabel"),
                 clickHandler));
             return host;
@@ -201,7 +202,6 @@ namespace Project.Scripts.UI.PurchaseWindowUI
             public Button Button { get; }
             public VisualElement UnitIcon { get; }
             public Label NameLabel { get; }
-            public VisualElement PriceBar { get; }
             public VisualElement CurrencyIcon { get; }
             public Label PriceLabel { get; }
             public Action ClickHandler { get; }
@@ -212,7 +212,6 @@ namespace Project.Scripts.UI.PurchaseWindowUI
                 Button button,
                 VisualElement unitIcon,
                 Label nameLabel,
-                VisualElement priceBar,
                 VisualElement currencyIcon,
                 Label priceLabel,
                 Action clickHandler)
@@ -222,7 +221,6 @@ namespace Project.Scripts.UI.PurchaseWindowUI
                 Button = button;
                 UnitIcon = unitIcon;
                 NameLabel = nameLabel;
-                PriceBar = priceBar;
                 CurrencyIcon = currencyIcon;
                 PriceLabel = priceLabel;
                 ClickHandler = clickHandler;

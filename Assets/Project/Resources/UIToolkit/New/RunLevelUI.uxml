@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="SpellButton" src="project://database/Assets/Project/Resources/UIToolkit/New/%D0%9D%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BF%D0%B0%D0%BF%D0%BA%D0%B0/SpellButton.uxml?fileID=9197481963319205126&amp;guid=290c677105eae334abb1a2452ac79b4e&amp;type=3#SpellButton"/>
-    <ui:Template name="PurchaseWindowTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindow.uxml?fileID=9197481963319205126&amp;guid=d75c0b3e2cb44a0e9134a7c2fcd2b0a1&amp;type=3#PurchaseWindow"/>
+    <ui:Template name="PurchaseWindowTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindowPreview.uxml?fileID=9197481963319205126&amp;guid=6f78f3413aef45d68c42bbf728d3d9af&amp;type=3#PurchaseWindowPreview"/>
     <ui:Template name="CardChoiceWindowTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/CardChoiceUI.uxml?fileID=9197481963319205126&amp;guid=f9cbaa700685d1d49b0849cfc33ce643&amp;type=3#CardChoiceUI"/>
     <ui:Style src="PurchaseWindow.uss"/>
     <ui:VisualElement name="Layout" picking-mode="Ignore" style="flex-grow: 1; left: auto; background-position-x: center;">

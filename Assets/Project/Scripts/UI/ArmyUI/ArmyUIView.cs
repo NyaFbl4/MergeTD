@@ -20,6 +20,7 @@ namespace Project.Scripts.UI.ArmyUI
         private readonly Button _buyTowerButton;
         private readonly Button _buyGeneratorButton;
         private readonly Button _setTowersButton;
+        private readonly Button _setSpellsButton;
         private readonly Label _buyTowerLevelLabel;
         private readonly Label _buyGeneratorLevelLabel;
         private readonly Label _towerPriceLabel;
@@ -50,6 +51,7 @@ namespace Project.Scripts.UI.ArmyUI
         public event Action BuyTowerButtonClicked;
         public event Action BuyGeneratorButtonClicked;
         public event Action SetTowersButtonClicked;
+        public event Action SetSpellsButtonClicked;
         public event Action<int> TowerDragStarted;
         public event Action<int> TowerSellRequested;
         public event Action<int, int> TowerDropped;
@@ -65,6 +67,7 @@ namespace Project.Scripts.UI.ArmyUI
             _buyTowerButton = _root.Q<Button>("PayTowerButton");
             _buyGeneratorButton = _root.Q<Button>("PayElectricTowerButton");
             _setTowersButton = _root.Q<Button>("SetTowersButton");
+            _setSpellsButton = _root.Q<Button>("SetSpellsButton");
             _buyTowerLevelLabel = _buyTowerButton.Q<Label>("TowerLeveLabel");
             _buyGeneratorLevelLabel = _buyGeneratorButton.Q<Label>("TowerLeveLabel");
             _towerPriceLabel = _buyTowerButton.Q<Label>("PayTowerLabel");
@@ -73,9 +76,11 @@ namespace Project.Scripts.UI.ArmyUI
             _buyGeneratorIcon = _buyGeneratorButton.Q<VisualElement>("TowerIcon");
             _sellTowerZoneContainer.style.display = DisplayStyle.None;
 
+            _setSpellsButton.clicked += OnSetSpellsButtonClicked;
             _buyTowerButton.clicked += OnBuyTowerButtonClicked;
             _buyGeneratorButton.clicked += OnBuyGeneratorButtonClicked;
             _setTowersButton.clicked += OnSetTowersButtonClicked;
+            UIButtonAnimationUtility.EnableDefault(_setSpellsButton);
             UIButtonAnimationUtility.EnableDefault(_buyTowerButton);
             UIButtonAnimationUtility.EnableDefault(_buyGeneratorButton);
             UIButtonAnimationUtility.EnableDefault(_setTowersButton);
@@ -151,7 +156,7 @@ namespace Project.Scripts.UI.ArmyUI
 
         public void ShowSellZone(int refund)
         {
-            _sellTowerLabel.text = $"Продать за {refund}";
+            _sellTowerLabel.text = refund.ToString();
             _sellTowerZone.style.unityBackgroundImageTintColor = Color.white;
             _sellTowerZoneContainer.style.display = DisplayStyle.Flex;
             _sellTowerZoneContainer.BringToFront();
@@ -163,6 +168,7 @@ namespace Project.Scripts.UI.ArmyUI
             _buyTowerButton.clicked -= OnBuyTowerButtonClicked;
             _buyGeneratorButton.clicked -= OnBuyGeneratorButtonClicked;
             _setTowersButton.clicked -= OnSetTowersButtonClicked;
+            _setSpellsButton.clicked -= OnSetSpellsButtonClicked;
 
             for (var i = 0; i < _towerSlots.Count; i++)
             {
@@ -184,6 +190,7 @@ namespace Project.Scripts.UI.ArmyUI
             _pointerCancelCallbacks.Clear();
         }
 
+        private void OnSetSpellsButtonClicked() => SetSpellsButtonClicked?.Invoke();
         private void OnBuyTowerButtonClicked() => BuyTowerButtonClicked?.Invoke();
         private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();
         private void OnSetTowersButtonClicked() => SetTowersButtonClicked?.Invoke();

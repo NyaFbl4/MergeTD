@@ -1,4 +1,5 @@
 using Project.Scripts.Gameplay.Towers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private Canvas _canvas;
         [SerializeField] private Image _background;
-        [SerializeField] private Text _label;
+        [SerializeField] private TMP_Text _label;
 
         [Header("View")]
         [SerializeField] private Vector3 _worldOffset = new(0f, 0.35f, 0f);
@@ -31,7 +32,7 @@ namespace Project.Scripts.Gameplay.Field
         public void Show(TowerUnit tower)
         {
             CurrentRefund = TowerEconomy.GetSellRefund(tower.PurchaseCost);
-            _label.text = $"Продать за {CurrentRefund}";
+            _label.text = CurrentRefund.ToString();
             _background.color = _idleColor;
             gameObject.SetActive(true);
         }

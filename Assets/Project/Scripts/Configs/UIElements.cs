@@ -13,7 +13,17 @@ namespace Project.Scripts.Configs
         [SerializeField] private VisualTreeAsset _spellInfo;
         [SerializeField] private List<Sprite> _towerIcons;
         [SerializeField] private List<Sprite> _generatorIcons;
-        
+        [SerializeField] private VisualTreeAsset _towerPanel;
+        [SerializeField] private Sprite _goldIcon;
+        [SerializeField] private Sprite _gemsIcon;
+        [SerializeField] private Sprite _goldPriceBackground;
+        [SerializeField] private Sprite _gemsPriceBackground;
+
+        public VisualTreeAsset TowerPanel => _towerPanel;
+        public Sprite GoldIcon => _goldIcon;
+        public Sprite GemsIcon => _gemsIcon;
+        public Sprite GoldPriceBackground => _goldPriceBackground;
+        public Sprite GemsPriceBackground => _gemsPriceBackground;
         public VisualTreeAsset TowerSlotPanel => _towerSlotPanel;
         public VisualTreeAsset SpellPanel => _spellPanel;
         public VisualTreeAsset SpellButton => _spellButton;

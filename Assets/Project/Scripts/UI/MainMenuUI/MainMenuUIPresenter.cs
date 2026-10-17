@@ -81,6 +81,7 @@ namespace Project.Scripts.UI.MainMenuUI
                 _armyUIUseCase);
             _purchaseWindowPresenter.Initialize();
             _layoutView.ArmyView.SetTowersButtonClicked += OnSetTowersButtonClicked;
+            _layoutView.ArmyView.SetSpellsButtonClicked += OnSetSpellsButtonClicked;
 
             _layoutView.InitializeSpells(_uiElements);
             _spellsPanelPresenter = new SpellsPanelUIPresenter(
@@ -133,6 +134,7 @@ namespace Project.Scripts.UI.MainMenuUI
         }
 
         private void OnSetTowersButtonClicked() => _purchaseWindowPresenter.Show();
+        private void OnSetSpellsButtonClicked() => OnSectionClicked(MainMenuSection.Spells);
 
         public override void Dispose()
         {
@@ -141,6 +143,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _menuUIUseCase.ActiveSectionChanged -= OnActiveSectionChanged;
             _layoutView.SectionClicked -= OnSectionClicked;
             _layoutView.ArmyView.SetTowersButtonClicked -= OnSetTowersButtonClicked;
+            _layoutView.ArmyView.SetSpellsButtonClicked -= OnSetSpellsButtonClicked;
             _inBattlePresenter.Dispose();
             _purchaseWindowPresenter.Dispose();
             _armyPresenter.Dispose();

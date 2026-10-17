@@ -108,7 +108,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         public void SetDiamondCount(int diamondCount)
         {
-            _gemsCountLabel.text = Math.Max(0, diamondCount).ToString();
+            UIIntegerAnimationUtility.SetValue(_gemsCountLabel, Math.Max(0, diamondCount));
         }
 
         public void SetActiveSection(MainMenuSection section)
