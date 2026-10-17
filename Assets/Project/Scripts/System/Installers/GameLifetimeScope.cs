@@ -39,6 +39,7 @@ namespace Installers
         [SerializeField] private GameManagerHelper _gameManagerHelper;
         [SerializeField] private BattlefieldContext _battlefieldContext;
         [SerializeField] private BaseHealth _baseHealth;
+        [SerializeField] private RunBackgroundView _runBackgroundView;
 
         [Header("Configs")]
         [SerializeField] private LayoutsRepository _layoutsRepository;
@@ -83,6 +84,7 @@ namespace Installers
             builder.Register<WorldService>(Lifetime.Singleton).As<IWorldService>().AsSelf();
             builder.Register<YGDailyRewardTimeProvider>(Lifetime.Singleton).As<IDailyRewardTimeProvider>();
             builder.Register<DailyRewardService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<RunBackgroundRuntime>(Lifetime.Singleton);
             
             // UI core
             builder.RegisterEntryPoint<UIController>(Lifetime.Singleton).As<IUIController>();
@@ -108,6 +110,7 @@ namespace Installers
 
             if (_baseHealth != null)
                 builder.RegisterComponent(_baseHealth).As<IBaseHealth>().AsSelf();
+            builder.RegisterComponent(_runBackgroundView);
         }
 
         private void RegisterPresenters(IContainerBuilder builder)

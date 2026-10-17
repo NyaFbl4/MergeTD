@@ -1,8 +1,8 @@
 {
-    "idSave": 582,
+    "idSave": 614,
     "world": {
         "version": 2,
-        "gold": 8000,
+        "gold": 8500,
         "gems": 15,
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 1,
@@ -205,7 +205,7 @@
             },
             {
                 "id": "KillEnemyQuest",
-                "currentValue": 378,
+                "currentValue": 463,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -213,7 +213,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 8,
+                "currentValue": 10,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,

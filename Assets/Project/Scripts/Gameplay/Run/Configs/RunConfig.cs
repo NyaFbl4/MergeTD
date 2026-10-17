@@ -8,12 +8,14 @@ namespace Project.Scripts.Gameplay.Run.Configs
     {
         [SerializeField] private string _id;
         [SerializeField] private Sprite _icon;
+        [SerializeField] private Sprite _background;
         [SerializeField] private string _displayName;
         [SerializeField, TextArea] private string _description;
         [SerializeField] private List<RunWaveConfig> _waves;
         
         public string Id => _id;
         public Sprite Icon => _icon;
+        public Sprite Background => _background;
         public string DisplayName => _displayName;
         public string Description => _description;
         public IReadOnlyList<RunWaveConfig> Waves => _waves;

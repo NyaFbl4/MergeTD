@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Run.Configs.RunConfig
   _id: default-run-3
   _icon: {fileID: 3892847976994157271, guid: a6ef2b74c592e3540abaa877ec7ee68b, type: 3}
+  _background: {fileID: 4072096090417338993, guid: 4e744659629bf8249831d0a6f2303da8, type: 3}
   _displayName: "\u0417\u0430\u0431\u0440\u043E\u0448\u0435\u043D\u043D\u044B\u0439
     \u0441\u0435\u043A\u0442\u043E\u0440"
   _description: Default 20-wave run converted from Level Config.
