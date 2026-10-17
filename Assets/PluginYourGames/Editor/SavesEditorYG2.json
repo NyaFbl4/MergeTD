@@ -1,5 +1,5 @@
 {
-    "idSave": 614,
+    "idSave": 619,
     "world": {
         "version": 2,
         "gold": 8500,
@@ -205,7 +205,7 @@
             },
             {
                 "id": "KillEnemyQuest",
-                "currentValue": 463,
+                "currentValue": 470,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
