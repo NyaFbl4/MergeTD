@@ -19,6 +19,9 @@ namespace Project.Scripts.UI.SettingsUI
         private Button _ruLanguageButton;
         private Button _enLanguageButton;
         private Button _resetProgressButton;
+        
+        private VisualElement _musicIcon;
+        private VisualElement _soundIcon;
 
         [SerializeField] private Sprite _activeButton;
         [SerializeField] private Sprite _inactiveButton;
@@ -59,6 +62,8 @@ namespace Project.Scripts.UI.SettingsUI
             if (_resetProgressButton != null)
                 _resetProgressButton.clicked += OnResetProgressButtonClicked;
             
+            _musicIcon = _musicButton.Q<VisualElement>("Icon");
+            _soundIcon = _soundButton.Q<VisualElement>("Icon");
             _titleLabel = _root.Q<Label>("TitleLabel");
             _musicLabel = _root.Q<Label>("MusicLabel");
             _soundLabel = _root.Q<Label>("SoundLabel");
@@ -68,12 +73,12 @@ namespace Project.Scripts.UI.SettingsUI
 
         public void SetMusicEnabled(bool enabled)
         {
-            _musicButton.style.backgroundImage = new StyleBackground(enabled ? _activeButton : _inactiveButton);
+            _musicIcon.style.backgroundImage = new StyleBackground(enabled ? _activeButton : _inactiveButton);
         }
         
         public void SetSoundEnabled(bool enabled)
         {
-            _soundButton.style.backgroundImage = new StyleBackground(enabled ? _activeButton : _inactiveButton);
+            _soundIcon.style.backgroundImage = new StyleBackground(enabled ? _activeButton : _inactiveButton);
         }
         
         public void SetTitle(string title)
