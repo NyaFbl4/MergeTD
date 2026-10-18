@@ -6,6 +6,7 @@ using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.UI.CardChoiceUI;
+using Project.Scripts.System.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -196,7 +197,9 @@ namespace Project.Scripts.UI.LevelUI
             if (!_spellManaLabels.TryGetValue(spellId, out var label))
                 throw new ArgumentException($"Unknown spell id '{spellId}'.", nameof(spellId));
 
-            label.text = $"{manaCost} маны";
+            label.text = LocalizationService.Format(
+                LocalizationKeys.SpellsManaFormat,
+                manaCost);
         }
         
         public void SetPriceTower(int price)
@@ -312,7 +315,10 @@ namespace Project.Scripts.UI.LevelUI
         public void SetWeaponBarrageState(int cooldownSeconds, bool isTargeting, bool isEnabled)
         {
             _weaponBarrageButton.SetEnabled(isEnabled);
-            _weaponBarrageNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ЗАЛП";
+            _weaponBarrageNameLabel.text = LocalizationService.Get(
+                isTargeting
+                    ? LocalizationKeys.LevelSelectTarget
+                    : LocalizationKeys.LevelWeaponBarrage);
         }
 
         public void SetBaseRepairState(
@@ -323,7 +329,7 @@ namespace Project.Scripts.UI.LevelUI
             bool isEnabled)
         {
             _baseRepairButton.SetEnabled(isEnabled);
-            _baseRepairNameLabel.text = displayName;
+            _baseRepairNameLabel.text = LocalizationService.Get(displayName);
         }
 
         public void SetBarrageProtocolState(
@@ -334,19 +340,26 @@ namespace Project.Scripts.UI.LevelUI
             bool isEnabled)
         {
             _barrageProtocolButton.SetEnabled(isEnabled);
-            _barrageProtocolNameLabel.text = "ШКВАЛ";
+            _barrageProtocolNameLabel.text = LocalizationService.Get(
+                LocalizationKeys.LevelBarrageProtocol);
         }
 
         public void SetCryoDischargeState(int cooldownSeconds, bool isTargeting, bool isEnabled)
         {
             _cryoDischargeButton.SetEnabled(isEnabled);
-            _cryoDischargeNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "КРИО";
+            _cryoDischargeNameLabel.text = LocalizationService.Get(
+                isTargeting
+                    ? LocalizationKeys.LevelSelectTarget
+                    : LocalizationKeys.LevelCryoDischarge);
         }
 
         public void SetEmpPulseState(int cooldownSeconds, bool isTargeting, bool isEnabled)
         {
             _empPulseButton.SetEnabled(isEnabled);
-            _empPulseNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ЭМИ";
+            _empPulseNameLabel.text = LocalizationService.Get(
+                isTargeting
+                    ? LocalizationKeys.LevelSelectTarget
+                    : LocalizationKeys.LevelEmpPulse);
         }
 
         public void SetOrbitalRailgunState(
@@ -356,7 +369,10 @@ namespace Project.Scripts.UI.LevelUI
             bool isEnabled)
         {
             _orbitalRailgunButton.SetEnabled(isEnabled);
-            _orbitalRailgunNameLabel.text = isTargeting ? "ПРОВЕДИ ЛИНИЮ" : "РЕЛЬС";
+            _orbitalRailgunNameLabel.text = LocalizationService.Get(
+                isTargeting
+                    ? LocalizationKeys.LevelDrawLine
+                    : LocalizationKeys.LevelOrbitalRailgun);
         }
 
         public void SetGravityTrapState(
@@ -366,7 +382,10 @@ namespace Project.Scripts.UI.LevelUI
             bool isEnabled)
         {
             _gravityTrapButton.SetEnabled(isEnabled);
-            _gravityTrapNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ГРАВИ";
+            _gravityTrapNameLabel.text = LocalizationService.Get(
+                isTargeting
+                    ? LocalizationKeys.LevelSelectTarget
+                    : LocalizationKeys.LevelGravityTrap);
         }
 
         private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Project.Scripts.System.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,6 +12,9 @@ namespace Project.Scripts.Systems.UI
     {
         protected UIDocument _uiDocument;
         protected VisualElement _root;
+        private LocalizedVisualTreeBinding _localizationBinding;
+
+        protected ILocalizationService LocalizationService { get; private set; }
 
         public virtual void Awake()
         {
@@ -47,6 +51,70 @@ namespace Project.Scripts.Systems.UI
         public void Show()
         {
             Visible = true;
+        }
+
+        public void ApplyLocalization(ILocalizationService localizationService)
+        {
+            LocalizationService = localizationService;
+            _localizationBinding ??= new LocalizedVisualTreeBinding(_root);
+            _localizationBinding.Apply(localizationService);
+        }
+    }
+
+    public sealed class LocalizedVisualTreeBinding
+    {
+        private readonly VisualElement _root;
+        private readonly Dictionary<TextElement, string> _keys = new();
+        private readonly List<TextElement> _detachedElements = new();
+
+        public LocalizedVisualTreeBinding(VisualElement root)
+        {
+            _root = root;
+        }
+
+        public void Apply(ILocalizationService localizationService)
+        {
+            _detachedElements.Clear();
+            foreach (var pair in _keys)
+            {
+                if (pair.Key.panel == null)
+                {
+                    _detachedElements.Add(pair.Key);
+                    continue;
+                }
+
+                pair.Key.text = localizationService.Get(pair.Value);
+            }
+
+            for (var i = 0; i < _detachedElements.Count; i++)
+                _keys.Remove(_detachedElements[i]);
+
+            _root.Query<TextElement>().ForEach(element => TryBind(element, localizationService));
+        }
+
+        private void TryBind(TextElement element, ILocalizationService localizationService)
+        {
+            if (_keys.ContainsKey(element) || string.IsNullOrWhiteSpace(element.text))
+                return;
+
+            var key = element.text.Trim();
+            var localizedText = localizationService.Get(key);
+            if (localizedText == key || ContainsFormatArgument(localizedText))
+                return;
+
+            _keys.Add(element, key);
+            element.text = localizedText;
+        }
+
+        private static bool ContainsFormatArgument(string value)
+        {
+            for (var i = 0; i < value.Length - 2; i++)
+            {
+                if (value[i] == '{' && char.IsDigit(value[i + 1]))
+                    return true;
+            }
+
+            return false;
         }
     }
 

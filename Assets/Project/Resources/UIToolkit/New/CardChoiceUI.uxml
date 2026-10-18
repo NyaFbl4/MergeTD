@@ -3,14 +3,14 @@
     <ui:Style src="CardChoiceUI.uss"/>
     <ui:VisualElement name="CardChoiceRoot" class="card-choice-overlay">
         <ui:VisualElement class="card-choice-dialog">
-            <ui:Label name="CardChoiceTitle" text="Выбери награду" class="card-choice-title"/>
+            <ui:Label name="CardChoiceTitle" text="cards.choice_title" class="card-choice-title"/>
             <ui:VisualElement name="CardChoiceCards" class="card-choice-cards">
                 <ui:Instance template="CardChoicePanel" name="CardOption0" class="card-choice-option-host"/>
                 <ui:Instance template="CardChoicePanel" name="CardOption1" class="card-choice-option-host"/>
                 <ui:Instance template="CardChoicePanel" name="CardOption2" class="card-choice-option-host"/>
             </ui:VisualElement>
             <ui:Button name="CardChoiceRerollButton" class="card-choice-reroll-button">
-                <ui:Label name="CardChoiceRerollLabel" text="Обновить" class="card-choice-reroll-label"/>
+                <ui:Label name="CardChoiceRerollLabel" text="cards.reroll" class="card-choice-reroll-label"/>
                 <ui:VisualElement name="CardChoiceRerollAdIcon" class="card-choice-reroll-ad-icon"/>
             </ui:Button>
         </ui:VisualElement>

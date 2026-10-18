@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Orbital Railgun Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.OrbitalRailgunConfig
   _spellId: orbital_railgun
-  _displayName: Орбитальный рельсотрон
-  _description: Наносит огромный урон вдоль линии. Нажмите способность, проведите линию и отпустите.
+  _displayName: spell.orbital_railgun.name
+  _description: spell.orbital_railgun.description
   _icon: {fileID: 5176572134045062995, guid: bda9cc22aae71ba4b81eeba19d6d2bc9, type: 3}
   _background: {fileID: 3552237782043751338, guid: 42d9ddac7d10f1441a6333221d11cfac, type: 3}
   _cooldown: 35
@@ -25,14 +25,14 @@ MonoBehaviour:
   _vfxLifetime: 3
   _upgrades:
   - _level: 2
-    _title: Перегрузка ускорителя
-    _description: Урон увеличивается на 500.
+    _title: spell.orbital_railgun.upgrade_2.title
+    _description: spell.orbital_railgun.upgrade_2.description
   - _level: 3
-    _title: Широкий канал
-    _description: Ширина луча увеличивается на 0,35.
+    _title: spell.orbital_railgun.upgrade_3.title
+    _description: spell.orbital_railgun.upgrade_3.description
   - _level: 4
-    _title: Быстрое наведение
-    _description: Задержка перед ударом уменьшается на 0,4 секунды.
+    _title: spell.orbital_railgun.upgrade_4.title
+    _description: spell.orbital_railgun.upgrade_4.description
   _damage: 1500
   _lineWidth: 0.9
   _minimumLineLength: 1.25

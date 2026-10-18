@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Damage
   m_EditorClassIdentifier:
   _id: damage_20
-  _displayName: Огневая мощь
-  _description: Увеличивает урон всех башен до конца забега.
-  _effectText: +20% урона
+  _displayName: card.damage_20.name
+  _description: card.damage_20.description
+  _effectText: card.damage_20.effect
   _rarity: 0
-  _rarityLabel: Обычная
+  _rarityLabel: cards.rarity.common
   _selectionWeight: 1
   _tint: {r: 0.27, g: 0.45, b: 0.75, a: 1}
   _icon: {fileID: 0}

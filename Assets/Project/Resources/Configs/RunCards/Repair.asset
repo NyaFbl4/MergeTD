@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Repair
   m_EditorClassIdentifier:
   _id: repair_100
-  _displayName: Полевой ремонт
-  _description: Мгновенно восстанавливает здоровье базы.
-  _effectText: +100 HP
+  _displayName: card.repair_100.name
+  _description: card.repair_100.description
+  _effectText: card.repair_100.effect
   _rarity: 0
-  _rarityLabel: Обычная
+  _rarityLabel: cards.rarity.common
   _selectionWeight: 1
   _tint: {r: 0.25, g: 0.68, b: 0.38, a: 1}
   _icon: {fileID: 0}

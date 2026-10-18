@@ -1,9 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Button name="RewardChoicePanel" class="card-choice-card">
-        <ui:Label text="Обычная" name="RewardChoiceRareLabel" class="card-choice-rarity"/>
+        <ui:Label text="cards.rarity.common" name="RewardChoiceRareLabel" class="card-choice-rarity"/>
         <ui:VisualElement name="RewardChoiceIcon" class="card-choice-icon"/>
-        <ui:Label text="Название" name="RewardChoiceNameLabel" class="card-choice-name"/>
-        <ui:Label text="Описание карты" name="RewardChoiceDescriptionLabel" class="card-choice-description"/>
+        <ui:Label text="cards.placeholder_name" name="RewardChoiceNameLabel" class="card-choice-name"/>
+        <ui:Label text="cards.placeholder_description" name="RewardChoiceDescriptionLabel" class="card-choice-description"/>
         <ui:Label text="+20%" name="RewardChoiceBuffLabel" class="card-choice-effect"/>
     </ui:Button>
 </ui:UXML>

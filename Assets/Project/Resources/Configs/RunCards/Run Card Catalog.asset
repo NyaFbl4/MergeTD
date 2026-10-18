@@ -23,6 +23,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: efb8ddad14164b4e8d8294464c1c247c, type: 2}
   _choiceCount: 3
   _allowDuplicateSelections: 0
-  _choiceTitle: Выбери награду
-  _rerollButtonText: Обновить
+  _choiceTitle: cards.choice_title
+  _rerollButtonText: cards.reroll
   _rewardedRerollAdId: card_choice_reroll

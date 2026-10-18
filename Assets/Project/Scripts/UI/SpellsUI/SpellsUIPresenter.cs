@@ -4,6 +4,7 @@ using Project.Scripts.GameManager;
 using Project.Scripts.System.Audio;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.Systems.UI.Dtos;
+using Project.Scripts.System.Localization;
 
 namespace Project.Scripts.UI.SpellsUI
 {
@@ -13,17 +14,20 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly IGameManagerService _gameManagerService;
         private readonly IAudioManager _audioManager;
+        private readonly ILocalizationService _localizationService;
 
         public SpellsUIPresenter(
             ISpellsUIUseCase useCase,
             IPublisher<HidePopupDto> hidePopupPublisher,
             IGameManagerService gameManagerService,
-            IAudioManager audioManager)
+            IAudioManager audioManager,
+            ILocalizationService localizationService)
         {
             _useCase = useCase;
             _hidePopupPublisher = hidePopupPublisher;
             _gameManagerService = gameManagerService;
             _audioManager = audioManager;
+            _localizationService = localizationService;
         }
 
         public override void Initialize()
@@ -31,6 +35,7 @@ namespace Project.Scripts.UI.SpellsUI
             base.Initialize();
             _layoutView.CloseButtonClicked += OnCloseButtonClicked;
             _layoutView.SpellSelectionClicked += OnSpellSelectionClicked;
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
             Refresh();
         }
 
@@ -51,6 +56,7 @@ namespace Project.Scripts.UI.SpellsUI
         {
             _layoutView.CloseButtonClicked -= OnCloseButtonClicked;
             _layoutView.SpellSelectionClicked -= OnSpellSelectionClicked;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
             base.Dispose();
         }
 
@@ -79,5 +85,7 @@ namespace Project.Scripts.UI.SpellsUI
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             Refresh();
         }
+
+        private void OnLanguageChanged(string _) => Refresh();
     }
 }

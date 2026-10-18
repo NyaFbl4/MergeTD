@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Generator Energy
   m_EditorClassIdentifier:
   _id: generator_energy_25
-  _displayName: Энергоэффективность
-  _description: Генераторы производят больше энергии до конца забега.
-  _effectText: +25% энергии
+  _displayName: card.generator_energy_25.name
+  _description: card.generator_energy_25.description
+  _effectText: card.generator_energy_25.effect
   _rarity: 1
-  _rarityLabel: Редкая
+  _rarityLabel: cards.rarity.rare
   _selectionWeight: 0.7
   _tint: {r: 0.2, g: 0.6, b: 0.75, a: 1}
   _icon: {fileID: 0}

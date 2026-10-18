@@ -3,7 +3,7 @@
         <ui:VisualElement name="QuestIcon" style="width: 48px; min-width: 48px; max-width: 48px; height: 48px; min-height: 48px; max-height: 48px; margin-right: 10px; -unity-background-scale-mode: scale-to-fit;" />
         <ui:VisualElement name="QuestInfo" style="width: 485px; min-width: 485px; max-width: 485px; height: 60px; justify-content: center;">
             <ui:VisualElement name="DescriptionRow" style="width: 100%; height: 34px; flex-direction: row; align-items: center; justify-content: center;">
-                <ui:Label text="Задание" name="DescriptionQuestLabel" style="max-width: 390px; height: 34px; -unity-text-align: middle-right; white-space: normal; font-size: 20px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(221, 211, 241);" />
+                <ui:Label text="quest.buy_ten_towers.description" name="DescriptionQuestLabel" style="max-width: 390px; height: 34px; -unity-text-align: middle-right; white-space: normal; font-size: 20px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(221, 211, 241);" />
                 <ui:VisualElement name="RewardIcon" style="width: 22px; min-width: 22px; height: 22px; min-height: 22px; margin-left: 5px; -unity-background-scale-mode: scale-to-fit;" />
                 <ui:Label text="30" name="RewardLabel" style="height: 30px; min-width: 45px; -unity-text-align: middle-left; font-size: 19px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(255, 255, 255);" />
             </ui:VisualElement>

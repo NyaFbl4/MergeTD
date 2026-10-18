@@ -31,7 +31,9 @@ namespace Project.Scripts.UI.MainMenuUI
 
         void InitializeArmy(UIElements uiElements);
         void InitializePurchaseWindow(UIElements uiElements);
-        void InitializeSpells(UIElements uiElements);
+        void InitializeSpells(
+            UIElements uiElements,
+            ILocalizationService localizationService);
         void SetBaseUpgradesTitle(string title);
         void ClearBaseUpgrades();
         void AddBaseUpgrade(

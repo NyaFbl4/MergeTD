@@ -112,13 +112,17 @@ namespace Project.Scripts.UI.LevelUI
             _purchaseWindowPresenter = new PurchaseWindowPresenter(
                 _layoutView.PurchaseWindowView,
                 _world,
-                _buyTowerUseCase);
+                _buyTowerUseCase,
+                _audioManager,
+                _localizationService);
             _purchaseWindowPresenter.Initialize();
 
             _layoutView.InitializeCardChoice();
             _cardChoicePresenter = new CardChoicePresenter(
                 _layoutView.CardChoiceView,
-                _runCardChoiceUseCase);
+                _runCardChoiceUseCase,
+                _audioManager,
+                _localizationService);
             _cardChoicePresenter.Initialize();
 
             _buyTowerUseCase.TowerCostChanged += OnTowerCostChanged;
@@ -184,7 +188,7 @@ namespace Project.Scripts.UI.LevelUI
             var waveText = _localizationService.Format(LocalizationKeys.LevelWaveFormat, _runState.CurrentWave, _runState.MaxWaves);
             var displayName = _runState.CurrentWaveConfig?.DisplayName;
             if (!string.IsNullOrWhiteSpace(displayName))
-                waveText = $"{waveText}: {displayName}";
+                waveText = $"{waveText}: {_localizationService.Get(displayName)}";
 
             _layoutView.SetCurrentWaveText(waveText);
         }
@@ -589,6 +593,14 @@ namespace Project.Scripts.UI.LevelUI
         {
             RefreshWaveText();
             RefreshEnergy();
+            RefreshWeaponBarrage();
+            RefreshBaseRepair();
+            RefreshBarrageProtocol();
+            RefreshCryoDischarge();
+            RefreshEmpPulse();
+            RefreshOrbitalRailgun();
+            RefreshGravityTrap();
+            RefreshActiveSpells();
         }
 
         private void OnRunPhaseChanged(ERunPhase phase)

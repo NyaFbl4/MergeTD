@@ -1,8 +1,8 @@
 {
-    "idSave": 664,
+    "idSave": 668,
     "world": {
         "version": 2,
-        "gold": 7200,
+        "gold": 6950,
         "gems": 15,
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 1,
@@ -43,7 +43,7 @@
             },
             {
                 "id": "base-repair",
-                "level": 1
+                "level": 2
             }
         ],
         "towers": [
@@ -221,7 +221,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 12,
+                "currentValue": 13,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,

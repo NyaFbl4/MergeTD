@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.System.Localization;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.SpellsUI
@@ -14,16 +15,22 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly VisualElement _activeSpellsContainer;
         private readonly VisualElement _spellInfoRoot;
         private readonly SpellInfoView _spellInfoView;
+        private readonly ILocalizationService _localizationService;
+        private readonly LocalizedVisualTreeBinding _localizationBinding;
 
         public event Action<string> SpellSelectionClicked;
         public event Action<string> SpellInfoClicked;
         public event Action<string> SpellUpgradeClicked;
         public event Action SpellInfoClosed;
 
-        public SpellsPanelUIView(VisualElement root, UIElements uiElements)
+        public SpellsPanelUIView(
+            VisualElement root,
+            UIElements uiElements,
+            ILocalizationService localizationService)
         {
             _root = root;
             _uiElements = uiElements;
+            _localizationService = localizationService;
             _spellsContainer = _root.Q<ScrollView>("SpellsContainer");
             _activeSpellsContainer = _root.Q<VisualElement>("ActiveSpellsContainer");
             _spellInfoRoot = _uiElements.SpellInfo.CloneTree();
@@ -37,6 +44,8 @@ namespace Project.Scripts.UI.SpellsUI
             _spellInfoView.CloseClicked += OnSpellInfoClosed;
             _spellInfoView.UpgradeClicked += OnSpellUpgradeClicked;
             _spellInfoView.SelectionClicked += OnSpellSelectionClicked;
+            _localizationBinding = new LocalizedVisualTreeBinding(_root);
+            _localizationBinding.Apply(_localizationService);
         }
 
         public void SetSpells(IReadOnlyList<SpellUIItemData> spells)
@@ -52,12 +61,14 @@ namespace Project.Scripts.UI.SpellsUI
                     spellRoot,
                     OnSpellSelectionClicked,
                     OnSpellInfoClicked);
-                spellView.Bind(spell);
+                spellView.Bind(spell, _localizationService);
                 _spellsContainer.Add(spellRoot);
 
                 if (spell.IsSelected)
                     AddActiveSpell(spell);
             }
+
+            _localizationBinding.Apply(_localizationService);
         }
 
         public void SetVisible(bool visible)
@@ -67,7 +78,8 @@ namespace Project.Scripts.UI.SpellsUI
 
         public void ShowSpellInfo(SpellUIItemData spell)
         {
-            _spellInfoView.Bind(spell);
+            _spellInfoView.Bind(spell, _localizationService);
+            _localizationBinding.Apply(_localizationService);
             _spellInfoView.SetVisible(true);
         }
 
@@ -101,8 +113,10 @@ namespace Project.Scripts.UI.SpellsUI
 
             button.style.backgroundImage = new StyleBackground(spell.Background);
             icon.style.backgroundImage = new StyleBackground(spell.Icon);
-            nameLabel.text = spell.DisplayName;
-            manaLabel.text = $"{spell.ManaCost} маны";
+            nameLabel.text = _localizationService.Get(spell.DisplayName);
+            manaLabel.text = _localizationService.Format(
+                LocalizationKeys.SpellsManaFormat,
+                spell.ManaCost);
             UIButtonAnimationUtility.EnableDefault(button);
             button.clicked += () => OnSpellInfoClicked(spellId);
 

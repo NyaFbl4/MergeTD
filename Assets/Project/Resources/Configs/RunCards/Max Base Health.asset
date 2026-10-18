@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Max Base Health
   m_EditorClassIdentifier:
   _id: max_base_health_100
-  _displayName: Укрепление
-  _description: Повышает максимум здоровья базы до конца забега и лечит её.
-  _effectText: +100 к максимуму HP
+  _displayName: card.max_base_health_100.name
+  _description: card.max_base_health_100.description
+  _effectText: card.max_base_health_100.effect
   _rarity: 1
-  _rarityLabel: Редкая
+  _rarityLabel: cards.rarity.rare
   _selectionWeight: 0.7
   _tint: {r: 0.3, g: 0.55, b: 0.75, a: 1}
   _icon: {fileID: 0}

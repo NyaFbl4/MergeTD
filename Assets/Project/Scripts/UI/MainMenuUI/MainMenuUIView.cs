@@ -113,10 +113,15 @@ namespace Project.Scripts.UI.MainMenuUI
             _purchaseWindowView = new PurchaseWindowView(purchaseWindowRoot, uiElements);
         }
 
-        public void InitializeSpells(UIElements uiElements)
+        public void InitializeSpells(
+            UIElements uiElements,
+            ILocalizationService localizationService)
         {
             var spellsRoot = _root.Q<TemplateContainer>("SpellsPanel");
-            _spellsPanelView = new SpellsPanelUIView(spellsRoot, uiElements);
+            _spellsPanelView = new SpellsPanelUIView(
+                spellsRoot,
+                uiElements,
+                localizationService);
         }
 
         public void SetBaseUpgradesTitle(string title)

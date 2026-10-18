@@ -9,8 +9,8 @@ namespace Project.Scripts.Gameplay.Run.Cards
         [SerializeField] private List<RunCardConfig> _cards = new();
         [SerializeField, Range(1, 3)] private int _choiceCount = 3;
         [SerializeField] private bool _allowDuplicateSelections;
-        [SerializeField] private string _choiceTitle = "Выбери награду";
-        [SerializeField] private string _rerollButtonText = "Обновить";
+        [SerializeField] private string _choiceTitle = "cards.choice_title";
+        [SerializeField] private string _rerollButtonText = "cards.reroll";
         [SerializeField] private string _rewardedRerollAdId = "card_choice_reroll";
 
         public IReadOnlyList<RunCardConfig> Cards => _cards;

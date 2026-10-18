@@ -5,7 +5,7 @@
                 <ui:Label text="222.22k" name="MoneyLabel" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; height: 71px; width: 206px; left: 76px; top: 8px; -unity-text-align: middle-left; font-size: 50px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;);" />
             </ui:VisualElement>
             <ui:VisualElement name="WevePanel" style="flex-grow: 1;">
-                <ui:Label text="WAVE 5" name="WaveLabel" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; -unity-text-align: middle-center; font-size: 50px; height: 119px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;);" />
+                <ui:Label text="level.wave_format" name="WaveLabel" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; -unity-text-align: middle-center; font-size: 50px; height: 119px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;);" />
             </ui:VisualElement>
             <ui:Button name="SettingsButton" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 1px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); background-image: resource(&apos;UI/game play area Ui/settings&apos;); background-color: rgba(255, 255, 255, 0); width: 100px; height: 100px; -unity-background-scale-mode: stretch-to-fill; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; min-height: 100px; max-height: 100px; top: 20px; left: -23px; min-width: 100px; max-width: 100px; background-position-x: left 0; background-position-y: center;" />
         </ui:VisualElement>

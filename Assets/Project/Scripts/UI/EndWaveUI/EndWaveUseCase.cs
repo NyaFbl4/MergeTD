@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using MessagePipe;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Configs;
-using Project.Scripts.System.Localization;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
@@ -23,7 +22,6 @@ namespace Project.Scripts.UI.EndWaveUI
         private readonly IWorldService _worldService;
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
-        private readonly ILocalizationService _localizationService;
 
         private IReadOnlyList<WaveRewardConfig> _currentRewards = Array.Empty<WaveRewardConfig>();
         private bool _isWaitingAdReward;
@@ -35,8 +33,7 @@ namespace Project.Scripts.UI.EndWaveUI
             IPlayerStatsUseCase playerStatsUseCase,
             IWorldService worldService,
             IPublisher<ShowPopupDto> showPopupPublisher,
-            IPublisher<HidePopupDto> hidePopupPublisher,
-            ILocalizationService localizationService)
+            IPublisher<HidePopupDto> hidePopupPublisher)
         {
             _runBattleRuntime = runBattleRuntime;
             _endWaveUIPresenter = endWaveUIPresenter;
@@ -44,7 +41,6 @@ namespace Project.Scripts.UI.EndWaveUI
             _worldService = worldService;
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
-            _localizationService = localizationService;
         }
 
         public void Initialize()
@@ -102,10 +98,7 @@ namespace Project.Scripts.UI.EndWaveUI
             _isAdRewardClaimed = false;
             _currentRewards = rewards;
 
-            var title = _localizationService
-                .Format(LocalizationKeys.EndWaveTitleFormat, waveNumber)
-                .ToUpperInvariant();
-            _endWaveUIPresenter.SetData(title, rewards);
+            _endWaveUIPresenter.SetData(waveNumber, rewards);
 
             _showPopupPublisher.Publish(new ShowPopupDto
             {

@@ -48,7 +48,7 @@ namespace Project.Scripts.Gameplay.Run.Cards
         [SerializeField, TextArea(2, 4)] private string _description;
         [SerializeField] private string _effectText;
         [SerializeField] private ERunCardRarity _rarity;
-        [SerializeField] private string _rarityLabel = "Обычная";
+        [SerializeField] private string _rarityLabel = "cards.rarity.common";
         [SerializeField, Min(0f)] private float _selectionWeight = 1f;
         [SerializeField] private Color _tint = Color.white;
         [SerializeField] private Sprite _icon;

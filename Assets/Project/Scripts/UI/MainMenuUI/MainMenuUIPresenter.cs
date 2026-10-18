@@ -89,23 +89,30 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             base.Initialize();
             _layoutView.InitializeArmy(_uiElements);
-            _armyPresenter = new ArmyUIPresenter(_layoutView.ArmyView, _world, _armyUIUseCase);
+            _armyPresenter = new ArmyUIPresenter(
+                _layoutView.ArmyView,
+                _world,
+                _armyUIUseCase,
+                _audioManager);
             _armyPresenter.Initialize();
 
             _layoutView.InitializePurchaseWindow(_uiElements);
             _purchaseWindowPresenter = new PurchaseWindowPresenter(
                 _layoutView.PurchaseWindowView,
                 _world,
-                _armyUIUseCase);
+                _armyUIUseCase,
+                _audioManager,
+                _localizationService);
             _purchaseWindowPresenter.Initialize();
             _layoutView.ArmyView.SetTowersButtonClicked += OnSetTowersButtonClicked;
             _layoutView.ArmyView.SetSpellsButtonClicked += OnSetSpellsButtonClicked;
 
-            _layoutView.InitializeSpells(_uiElements);
+            _layoutView.InitializeSpells(_uiElements, _localizationService);
             _spellsPanelPresenter = new SpellsPanelUIPresenter(
                 _layoutView.SpellsPanelView,
                 _spellsUIUseCase,
-                _audioManager);
+                _audioManager,
+                _localizationService);
             _spellsPanelPresenter.Initialize();
 
             _baseUpgradeItems = new List<IBaseUpgradeItem>
@@ -124,7 +131,8 @@ namespace Project.Scripts.UI.MainMenuUI
                 _showPopupPublisher,
                 _dailyRewardService,
                 _questService,
-                _localizationService);
+                _localizationService,
+                _audioManager);
             _inBattlePresenter.Initialize();
             
             _menuUIUseCase.GoldChanged += OnGoldChanged;
@@ -159,11 +167,17 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private void OnSectionClicked(MainMenuSection section)
         {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             _menuUIUseCase.SelectSection(section);
             _purchaseWindowPresenter.Hide();
         }
 
-        private void OnSetTowersButtonClicked() => _purchaseWindowPresenter.Show();
+        private void OnSetTowersButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _purchaseWindowPresenter.Show();
+        }
+
         private void OnSetSpellsButtonClicked() => OnSectionClicked(MainMenuSection.Spells);
 
         private void OnPlayerGoldChanged(int _)

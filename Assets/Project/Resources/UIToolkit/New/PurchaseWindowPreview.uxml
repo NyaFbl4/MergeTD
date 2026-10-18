@@ -5,11 +5,11 @@
         <ui:VisualElement class="purchase-window-scrim"/>
         <ui:VisualElement class="purchase-window-dialog">
             <ui:VisualElement class="purchase-window-header">
-                <ui:Label text="Башни" class="purchase-window-title"/>
+                <ui:Label text="purchase.title" class="purchase-window-title"/>
             </ui:VisualElement>
             <ui:VisualElement class="purchase-window-column-headers" style="justify-content: center;">
-                <ui:Label text="БАШНИ" class="purchase-window-column-title purchase-window-column-title--left" style="width: 350px; min-width: 350px; max-width: 350px;"/>
-                <ui:Label text="ГЕНЕРАТОРЫ" class="purchase-window-column-title purchase-window-column-title--right" style="width: 350px; min-width: 350px; max-width: 350px; padding-left: 10px;"/>
+                <ui:Label text="purchase.towers" class="purchase-window-column-title purchase-window-column-title--left" style="width: 350px; min-width: 350px; max-width: 350px;"/>
+                <ui:Label text="purchase.generators" class="purchase-window-column-title purchase-window-column-title--right" style="width: 350px; min-width: 350px; max-width: 350px; padding-left: 10px;"/>
             </ui:VisualElement>
             <ui:ScrollView name="PurchaseScrollView" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" class="purchase-window-scroll">
                 <ui:VisualElement name="PurchaseRows" class="purchase-window-rows">
@@ -31,7 +31,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:ScrollView>
-            <ui:Button name="PurchaseFooterCloseButton" text="Закрыть" class="purchase-window-footer-close" style="background-color: rgba(188, 188, 188, 0); -unity-slice-left: 30; -unity-slice-top: 30; -unity-slice-right: 30; -unity-slice-bottom: 30; display: none;"/>
+            <ui:Button name="PurchaseFooterCloseButton" text="common.close" class="purchase-window-footer-close" style="background-color: rgba(188, 188, 188, 0); -unity-slice-left: 30; -unity-slice-top: 30; -unity-slice-right: 30; -unity-slice-bottom: 30; display: none;"/>
             <ui:Button text="&#10;" name="PurchaseCloseButton" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 1px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); background-image: resource(&quot;UI/new/Buttons/Button_Square03_White&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; width: 100px; min-width: 100px; max-width: 100px; height: 100px; min-height: 100px; max-height: 100px; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-image-tint-color: rgb(241, 69, 69); position: absolute; top: -21px; left: 735px;">
                 <ui:VisualElement name="CloseIcon" style="flex-grow: 1; background-image: resource(&quot;UI/new/Icons/Icon_PictoIcon_Close&quot;); width: 75px; min-width: 75px; max-width: 75px; height: 75px; min-height: 75px; max-height: 75px;"/>
             </ui:Button>

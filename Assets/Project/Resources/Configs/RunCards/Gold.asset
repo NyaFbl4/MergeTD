@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Gold
   m_EditorClassIdentifier:
   _id: gold_500
-  _displayName: Военный бюджет
-  _description: Мгновенно пополняет запас золота.
-  _effectText: +500 золота
+  _displayName: card.gold_500.name
+  _description: card.gold_500.description
+  _effectText: card.gold_500.effect
   _rarity: 0
-  _rarityLabel: Обычная
+  _rarityLabel: cards.rarity.common
   _selectionWeight: 1
   _tint: {r: 0.75, g: 0.58, b: 0.2, a: 1}
   _icon: {fileID: 0}

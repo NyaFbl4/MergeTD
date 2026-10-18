@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Attack Speed
   m_EditorClassIdentifier:
   _id: attack_speed_15
-  _displayName: Перегрузка
-  _description: Увеличивает скорость атаки башен до конца забега.
-  _effectText: +15% скорости
+  _displayName: card.attack_speed_15.name
+  _description: card.attack_speed_15.description
+  _effectText: card.attack_speed_15.effect
   _rarity: 0
-  _rarityLabel: Обычная
+  _rarityLabel: cards.rarity.common
   _selectionWeight: 1
   _tint: {r: 0.25, g: 0.62, b: 0.5, a: 1}
   _icon: {fileID: 0}

@@ -20,7 +20,10 @@ namespace Project.Scripts.UI.InBattleUI
         event Action<IQuestRuntime> DailyQuestClaimClicked;
 
         void SetRun(string displayName, Sprite icon, bool canNavigate);
-        void SetDailyRewards(IReadOnlyList<DailyRewardEntry> rewards, DailyRewardState state);
+        void SetDailyRewards(
+            IReadOnlyList<DailyRewardEntry> rewards,
+            DailyRewardState state,
+            string claimButtonText);
         void SetDailyRewardCountdown(bool visible, string text);
         void ShowDailyRewardOffer(DailyRewardEntry reward);
         void HideDailyRewardOffer();

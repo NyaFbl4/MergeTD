@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.System.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -33,7 +34,10 @@ namespace Project.Scripts.UI.SpellsUI
         {
             if (_selectedCountLabel != null)
                 _selectedCountLabel.text =
-                    $"Выбрано способностей: {Math.Max(0, count)} / {Math.Max(1, maximumCount)}";
+                    LocalizationService.Format(
+                        LocalizationKeys.SpellsSelectedCountFormat,
+                        Math.Max(0, count),
+                        Math.Max(1, maximumCount));
         }
 
         public void SetSpells(IReadOnlyList<SpellUIItemData> spells)
@@ -49,7 +53,7 @@ namespace Project.Scripts.UI.SpellsUI
             {
                 var itemRoot = _spellItemTemplate.Instantiate();
                 var itemView = new SpellItemView(itemRoot, OnSpellSelectionClicked);
-                itemView.Bind(spells[i]);
+                itemView.Bind(spells[i], LocalizationService);
                 _spellsContainer.Add(itemRoot);
             }
         }

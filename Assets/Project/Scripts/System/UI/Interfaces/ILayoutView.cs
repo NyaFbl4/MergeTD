@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Project.Scripts.System.Localization;
 
 namespace Project.Scripts.Systems.UI
 {
@@ -9,5 +10,6 @@ namespace Project.Scripts.Systems.UI
         UniTask HideAsync();
         void Hide();
         void Show();
+        void ApplyLocalization(ILocalizationService localizationService);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.System.Localization;
 using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.SpellsUI
@@ -44,14 +45,20 @@ namespace Project.Scripts.UI.SpellsUI
                 _infoElement.RegisterCallback<ClickEvent>(_ => onInfoClicked(_spellId));
         }
 
-        public void Bind(SpellUIItemData spell)
+        public void Bind(
+            SpellUIItemData spell,
+            ILocalizationService localizationService)
         {
             _spellId = spell.SpellId;
-            _nameLabel.text = spell.DisplayName;
-            _descriptionLabel.text = spell.Description;
-            _levelLabel.text = $"Уровень {spell.Level}";
-            _cooldownLabel.text =
-                $"КД {spell.Cooldown:0.#} секунд, стоит {spell.ManaCost} маны";
+            _nameLabel.text = localizationService.Get(spell.DisplayName);
+            _descriptionLabel.text = localizationService.Get(spell.Description);
+            _levelLabel.text = localizationService.Format(
+                LocalizationKeys.SpellsLevelFormat,
+                spell.Level);
+            _cooldownLabel.text = localizationService.Format(
+                LocalizationKeys.SpellsCooldownFormat,
+                spell.Cooldown,
+                spell.ManaCost);
 
             if (_icon != null)
             {
@@ -63,10 +70,10 @@ namespace Project.Scripts.UI.SpellsUI
 
             if (_selectionLabel != null)
                 _selectionLabel.text = spell.IsSelected
-                    ? "ВЫБРАНО"
+                    ? localizationService.Get(LocalizationKeys.SpellsSelected)
                     : spell.CanSelect
-                        ? "ВЫБРАТЬ"
-                        : "ЛИМИТ";
+                        ? localizationService.Get(LocalizationKeys.SpellsSelect)
+                        : localizationService.Get(LocalizationKeys.SpellsLimit);
 
             _selectedElement.style.display = spell.IsSelected
                 ? DisplayStyle.Flex

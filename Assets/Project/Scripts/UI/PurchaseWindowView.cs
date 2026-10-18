@@ -11,11 +11,13 @@ namespace Project.Scripts.UI.PurchaseWindowUI
     public interface IPurchaseWindowView : IDisposable
     {
         event Action<ETowerType, int> PurchaseRequested;
+        event Action CloseRequested;
 
         void SetOptions(int towerLevelCount, int generatorLevelCount);
         void SetOption(
             ETowerType towerType,
             int level,
+            string displayName,
             int cost,
             ETowerPurchaseCurrency currency,
             bool canBuy);
@@ -39,6 +41,7 @@ namespace Project.Scripts.UI.PurchaseWindowUI
         private readonly Sprite _gemsIcon;
 
         public event Action<ETowerType, int> PurchaseRequested;
+        public event Action CloseRequested;
 
         public PurchaseWindowView(VisualElement root, UIElements uiElements)
         {
@@ -85,12 +88,13 @@ namespace Project.Scripts.UI.PurchaseWindowUI
         public void SetOption(
             ETowerType towerType,
             int level,
+            string displayName,
             int cost,
             ETowerPurchaseCurrency currency,
             bool canBuy)
         {
             var option = GetOption(towerType, level);
-            option.NameLabel.text = towerType == ETowerType.Generator ? $"Генератор T{level}" : $"Башня T{level}";
+            option.NameLabel.text = displayName;
             option.PriceLabel.text = cost.ToString();
             option.Button.SetEnabled(canBuy);
             var usesGems = currency == ETowerPurchaseCurrency.Gems;
@@ -185,7 +189,11 @@ namespace Project.Scripts.UI.PurchaseWindowUI
             _options.Clear();
         }
 
-        private void Close() => SetVisible(false);
+        private void Close()
+        {
+            CloseRequested?.Invoke();
+            SetVisible(false);
+        }
 
         private static T RequireFrom<T>(VisualElement root, string elementName)
             where T : VisualElement

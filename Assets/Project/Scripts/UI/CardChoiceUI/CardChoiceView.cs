@@ -1,6 +1,7 @@
 using System;
 using Project.Scripts.Gameplay.Run.Cards;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.System.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,7 +13,11 @@ namespace Project.Scripts.UI.CardChoiceUI
         event Action RerollRequested;
 
         void SetHeader(string title);
-        void SetCard(int index, RunCardConfig card, bool visible);
+        void SetCard(
+            int index,
+            RunCardConfig card,
+            bool visible,
+            ILocalizationService localizationService);
         void SetReroll(string text, bool enabled);
         void SetVisible(bool visible);
     }
@@ -63,7 +68,11 @@ namespace Project.Scripts.UI.CardChoiceUI
 
         public void SetHeader(string title) => _title.text = title;
 
-        public void SetCard(int index, RunCardConfig card, bool visible)
+        public void SetCard(
+            int index,
+            RunCardConfig card,
+            bool visible,
+            ILocalizationService localizationService)
         {
             if (index < 0 || index >= _cards.Length)
                 throw new ArgumentOutOfRangeException(nameof(index));
@@ -74,10 +83,10 @@ namespace Project.Scripts.UI.CardChoiceUI
             if (!visible || card == null)
                 return;
 
-            view.Rarity.text = card.RarityLabel;
-            view.Name.text = card.DisplayName;
-            view.Description.text = card.Description;
-            view.Effect.text = card.EffectText;
+            view.Rarity.text = localizationService.Get(card.RarityLabel);
+            view.Name.text = localizationService.Get(card.DisplayName);
+            view.Description.text = localizationService.Get(card.Description);
+            view.Effect.text = localizationService.Get(card.EffectText);
             view.Icon.style.display = card.Icon != null ? DisplayStyle.Flex : DisplayStyle.None;
             view.Icon.style.backgroundImage = card.Icon != null
                 ? new StyleBackground(card.Icon)

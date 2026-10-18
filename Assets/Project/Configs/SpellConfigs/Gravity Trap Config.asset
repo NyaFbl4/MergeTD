@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Gravity Trap Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.GravityTrapConfig
   _spellId: gravity_trap
-  _displayName: Гравитационная ловушка
-  _description: Стягивает и удерживает врагов без урона. Нажмите способность, затем укажите точку на поле.
+  _displayName: spell.gravity_trap.name
+  _description: spell.gravity_trap.description
   _icon: {fileID: -8340345365926156504, guid: 7afb94d19a7ef854c8789763b1eb88a3, type: 3}
   _background: {fileID: 7569198331679980289, guid: 4274602a3c64f3748848e3d67ed4dbb8, type: 3}
   _cooldown: 28
@@ -25,14 +25,14 @@ MonoBehaviour:
   _vfxLifetime: 4.2
   _upgrades:
   - _level: 2
-    _title: Усиленный коллапс
-    _description: Скорость стягивания увеличивается на 0,75.
+    _title: spell.gravity_trap.upgrade_2.title
+    _description: spell.gravity_trap.upgrade_2.description
   - _level: 3
-    _title: Широкий горизонт
-    _description: Радиус области увеличивается на 0,75.
+    _title: spell.gravity_trap.upgrade_3.title
+    _description: spell.gravity_trap.upgrade_3.description
   - _level: 4
-    _title: Стабильная сингулярность
-    _description: Длительность ловушки увеличивается на 2 секунды.
+    _title: spell.gravity_trap.upgrade_4.title
+    _description: spell.gravity_trap.upgrade_4.description
   _radius: 3
   _duration: 4
   _pullSpeed: 2.5

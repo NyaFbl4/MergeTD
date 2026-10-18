@@ -2,22 +2,22 @@
     <ui:VisualElement name="Layout" style="flex-grow: 1; justify-content: center; align-items: center;">
         <ui:VisualElement name="Backgound" style="position: absolute; width: 100%; height: 100%; background-image: resource(&apos;UI/Shopping popup/dark background&apos;);" />
         <ui:VisualElement name="QuestPanel" style="background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-background-scale-mode: stretch-to-fill; -unity-slice-left: 30; -unity-slice-top: 30; -unity-slice-right: 30; -unity-slice-bottom: 30; width: 800px; min-width: 800px; max-width: 800px; height: 920px; min-height: 920px; max-height: 920px; align-items: center; padding-top: 20px; padding-right: 35px; padding-bottom: 20px; padding-left: 35px;">
-            <ui:Label text="ЗАДАНИЯ" name="TitleLabel" style="width: 100%; height: 72px; min-height: 72px; max-height: 72px; -unity-text-align: middle-center; font-size: 43px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; color: rgb(255, 242, 179);" />
+            <ui:Label text="quests.title" name="TitleLabel" style="width: 100%; height: 72px; min-height: 72px; max-height: 72px; -unity-text-align: middle-center; font-size: 43px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; color: rgb(255, 242, 179);" />
             <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto" name="ScrollView" style="width: 720px; height: 710px; min-height: 710px; max-height: 710px;">
                 <ui:VisualElement name="DailySection" style="width: 700px; align-self: center;">
-                    <ui:Label text="ДНЕВНЫЕ" name="DailyHeaderLabel" style="width: 100%; height: 45px; -unity-text-align: middle-left; font-size: 27px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(192, 181, 221);" />
+                    <ui:Label text="quests.daily_header_format" name="DailyHeaderLabel" style="width: 100%; height: 45px; -unity-text-align: middle-left; font-size: 27px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(192, 181, 221);" />
                     <ui:VisualElement name="DailyQuestContainer" style="width: 700px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="WeeklySection" style="width: 700px; align-self: center; margin-top: 8px;">
-                    <ui:Label text="НЕДЕЛЬНЫЕ" name="WeeklyHeaderLabel" style="width: 100%; height: 45px; -unity-text-align: middle-left; font-size: 27px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(192, 181, 221);" />
+                    <ui:Label text="quests.weekly_header_format" name="WeeklyHeaderLabel" style="width: 100%; height: 45px; -unity-text-align: middle-left; font-size: 27px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(192, 181, 221);" />
                     <ui:VisualElement name="WeeklyQuestContainer" style="width: 700px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="AchievementSection" style="width: 700px; align-self: center; margin-top: 8px;">
-                    <ui:Label text="ДОСТИЖЕНИЯ" name="AchievementHeaderLabel" style="width: 100%; height: 45px; -unity-text-align: middle-left; font-size: 27px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(192, 181, 221);" />
+                    <ui:Label text="quests.achievement_header_format" name="AchievementHeaderLabel" style="width: 100%; height: 45px; -unity-text-align: middle-left; font-size: 27px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); color: rgb(192, 181, 221);" />
                     <ui:VisualElement name="AchievementQuestContainer" style="width: 700px;" />
                 </ui:VisualElement>
             </ui:ScrollView>
-            <ui:Button text="Закрыть" name="CloseButton" style="width: 220px; height: 75px; min-height: 75px; max-height: 75px; margin-top: 8px; background-image: resource(&quot;UI/new/Buttons/Button01_175_Green&quot;); -unity-slice-left: 30; -unity-slice-top: 30; -unity-slice-right: 30; -unity-slice-bottom: 30; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 30px; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 1px;" />
+            <ui:Button text="quests.close" name="CloseButton" style="width: 220px; height: 75px; min-height: 75px; max-height: 75px; margin-top: 8px; background-image: resource(&quot;UI/new/Buttons/Button01_175_Green&quot;); -unity-slice-left: 30; -unity-slice-top: 30; -unity-slice-right: 30; -unity-slice-bottom: 30; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 30px; -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 1px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

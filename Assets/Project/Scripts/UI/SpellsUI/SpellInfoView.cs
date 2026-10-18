@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Project.Scripts.Systems.UI;
+using Project.Scripts.System.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -77,24 +78,36 @@ namespace Project.Scripts.UI.SpellsUI
             _root.style.display = DisplayStyle.None;
         }
 
-        public void Bind(SpellUIItemData spell)
+        public void Bind(
+            SpellUIItemData spell,
+            ILocalizationService localizationService)
         {
             _spellId = spell.SpellId;
             _iconPanel.style.backgroundImage = new StyleBackground(spell.Background);
             _icon.style.backgroundImage = new StyleBackground(spell.Icon);
-            _nameLabel.text = spell.DisplayName;
-            _levelLabel.text = $"Уровень {spell.Level} / {spell.MaximumLevel}";
-            _descriptionLabel.text = spell.Description;
-            _cooldownLabel.text =
-                $"Перезарядка {spell.Cooldown:0.#} с · мана {spell.ManaCost}";
+            _nameLabel.text = localizationService.Get(spell.DisplayName);
+            _levelLabel.text = localizationService.Format(
+                LocalizationKeys.SpellsInfoLevelFormat,
+                spell.Level,
+                spell.MaximumLevel);
+            _descriptionLabel.text = localizationService.Get(spell.Description);
+            _cooldownLabel.text = localizationService.Format(
+                LocalizationKeys.SpellsInfoCooldownFormat,
+                spell.Cooldown,
+                spell.ManaCost);
 
             if (spell.HasNextUpgrade)
             {
-                _upgradeLevelLabel.text = $"УРОВЕНЬ {spell.Level} / {spell.MaximumLevel}";
-                _nextLevelLabel.text = $"→ {spell.Level + 1}";
-                _upgradeTitleLabel.text = spell.UpgradeTitle;
-                _upgradeDescriptionLabel.text = spell.UpgradeDescription;
-                _upgradeButtonLabel.text = "Прокачать";
+                _upgradeLevelLabel.text = localizationService.Format(
+                    LocalizationKeys.SpellsUpgradeLevelFormat,
+                    spell.Level,
+                    spell.MaximumLevel);
+                _nextLevelLabel.text = localizationService.Format(
+                    LocalizationKeys.SpellsNextLevelFormat,
+                    spell.Level + 1);
+                _upgradeTitleLabel.text = localizationService.Get(spell.UpgradeTitle);
+                _upgradeDescriptionLabel.text = localizationService.Get(spell.UpgradeDescription);
+                _upgradeButtonLabel.text = localizationService.Get(LocalizationKeys.SpellsUpgrade);
                 _upgradePriceLabel.text = spell.UpgradePrice.ToString();
                 _upgradePriceLabel.style.color = spell.CanAffordUpgrade
                     ? Color.white
@@ -105,18 +118,23 @@ namespace Project.Scripts.UI.SpellsUI
             }
             else
             {
-                _upgradeLevelLabel.text = $"УРОВЕНЬ {spell.Level} / {spell.MaximumLevel}";
-                _nextLevelLabel.text = "МАКС.";
-                _upgradeTitleLabel.text = "Максимальный уровень";
-                _upgradeDescriptionLabel.text = "Все доступные усиления уже получены.";
-                _upgradeButtonLabel.text = "Максимум";
+                _upgradeLevelLabel.text = localizationService.Format(
+                    LocalizationKeys.SpellsUpgradeLevelFormat,
+                    spell.Level,
+                    spell.MaximumLevel);
+                _nextLevelLabel.text = localizationService.Get(LocalizationKeys.SpellsMaximumShort);
+                _upgradeTitleLabel.text = localizationService.Get(LocalizationKeys.SpellsMaximumTitle);
+                _upgradeDescriptionLabel.text = localizationService.Get(LocalizationKeys.SpellsMaximumDescription);
+                _upgradeButtonLabel.text = localizationService.Get(LocalizationKeys.SpellsMaximum);
                 _upgradePriceLabel.text = string.Empty;
                 _upgradePricePanel.style.display = DisplayStyle.None;
                 _upgradeButton.SetEnabled(false);
                 _upgradeButton.style.opacity = 1f;
             }
 
-            _selectionButtonLabel.text = spell.IsSelected ? "Убрать" : "Выбрать";
+            _selectionButtonLabel.text = spell.IsSelected
+                ? localizationService.Get(LocalizationKeys.SpellsRemove)
+                : localizationService.Get(LocalizationKeys.SpellsSelect);
             _selectionButton.style.backgroundImage = spell.IsSelected
                 ? _removeBackground
                 : _selectBackground;

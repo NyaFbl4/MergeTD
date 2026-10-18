@@ -5,6 +5,7 @@ using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.QuestEvents;
 using Project.Scripts.Gameplay.Towers;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Enums;
 using Project.Scripts.System.Save;
 using Project.Scripts.UI.PurchaseWindowUI;
@@ -17,12 +18,18 @@ namespace Project.Scripts.UI.ArmyUI
         private readonly IArmyUIView _view;
         private readonly IWorldService _world;
         private readonly IArmyUIUseCase _useCase;
+        private readonly IAudioManager _audioManager;
 
-        public ArmyUIPresenter(IArmyUIView view, IWorldService world, IArmyUIUseCase useCase)
+        public ArmyUIPresenter(
+            IArmyUIView view,
+            IWorldService world,
+            IArmyUIUseCase useCase,
+            IAudioManager audioManager)
         {
             _view = view;
             _world = world;
             _useCase = useCase;
+            _audioManager = audioManager;
         }
 
         public void Initialize()
@@ -85,12 +92,14 @@ namespace Project.Scripts.UI.ArmyUI
 
         private void OnBuyTowerButtonClicked()
         {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             var result = _useCase.TryBuyTower();
             Debug.Log($"ArmyUI BuyTower result: {result}");
         }
 
         private void OnBuyGeneratorButtonClicked()
         {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             var result = _useCase.TryBuyGenerator();
             Debug.Log($"ArmyUI BuyGenerator result: {result}");
         }

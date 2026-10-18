@@ -58,5 +58,39 @@ namespace Project.Scripts.System.Localization
         public const string UpgradeMax = "upgrade.max";
         public const string QuestCompleteWavesDescription = "quest.complete_waves.description";
         public const string EndWaveReviewButtonFormat = "end_wave.review_button_format";
+
+        public const string DailyRewardClaim = "daily_reward.claim";
+        public const string DailyRewardTimeUnavailable = "daily_reward.time_unavailable";
+        public const string DailyRewardNextFormat = "daily_reward.next_format";
+
+        public const string PurchaseTowerFormat = "purchase.tower_format";
+        public const string PurchaseGeneratorFormat = "purchase.generator_format";
+
+        public const string SpellsSelectedCountFormat = "spells.selected_count_format";
+        public const string SpellsManaFormat = "spells.mana_format";
+        public const string SpellsLevelFormat = "spells.level_format";
+        public const string SpellsCooldownFormat = "spells.cooldown_format";
+        public const string SpellsInfoLevelFormat = "spells.info_level_format";
+        public const string SpellsInfoCooldownFormat = "spells.info_cooldown_format";
+        public const string SpellsUpgradeLevelFormat = "spells.upgrade_level_format";
+        public const string SpellsNextLevelFormat = "spells.next_level_format";
+        public const string SpellsSelected = "spells.selected";
+        public const string SpellsSelect = "spells.select";
+        public const string SpellsLimit = "spells.limit";
+        public const string SpellsRemove = "spells.remove";
+        public const string SpellsUpgrade = "spells.upgrade";
+        public const string SpellsMaximum = "spells.maximum";
+        public const string SpellsMaximumShort = "spells.maximum_short";
+        public const string SpellsMaximumTitle = "spells.maximum_title";
+        public const string SpellsMaximumDescription = "spells.maximum_description";
+
+        public const string LevelSelectTarget = "level.spell.select_target";
+        public const string LevelDrawLine = "level.spell.draw_line";
+        public const string LevelWeaponBarrage = "level.spell.weapon_barrage";
+        public const string LevelBarrageProtocol = "level.spell.barrage_protocol";
+        public const string LevelCryoDischarge = "level.spell.cryo_discharge";
+        public const string LevelEmpPulse = "level.spell.emp_pulse";
+        public const string LevelOrbitalRailgun = "level.spell.orbital_railgun";
+        public const string LevelGravityTrap = "level.spell.gravity_trap";
     }
 }

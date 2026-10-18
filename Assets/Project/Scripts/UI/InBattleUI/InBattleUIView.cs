@@ -136,7 +136,10 @@ namespace Project.Scripts.UI.InBattleUI
             _nextRunButton.SetEnabled(canNavigate);
         }
 
-        public void SetDailyRewards(IReadOnlyList<DailyRewardEntry> rewards, DailyRewardState state)
+        public void SetDailyRewards(
+            IReadOnlyList<DailyRewardEntry> rewards,
+            DailyRewardState state,
+            string claimButtonText)
         {
             if (rewards.Count != RewardCellCount)
                 throw new InvalidOperationException($"Expected {RewardCellCount} daily rewards.");
@@ -165,7 +168,7 @@ namespace Project.Scripts.UI.InBattleUI
             }
 
             var canClaim = state.CanClaim && state.IsTimeAvailable;
-            _dailyRewardButton.text = "ЗАБРАТЬ";
+            _dailyRewardButton.text = claimButtonText;
             _dailyRewardButton.style.display = canClaim
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;

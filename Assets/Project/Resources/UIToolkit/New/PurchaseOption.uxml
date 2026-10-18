@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindow.uss?fileID=11400000&amp;guid=1e6d40d4bbd44736a0267017630ba408&amp;type=3#PurchaseWindow"/>
     <ui:Button name="PurchaseOptionButton" class="purchase-window-card">
         <ui:VisualElement name="UnitIcon" class="purchase-window-unit-icon"/>
-        <ui:Label name="UnitName" text="Башня T1" class="purchase-window-unit-name"/>
+        <ui:Label name="UnitName" text="purchase.tower_format" class="purchase-window-unit-name"/>
         <ui:VisualElement name="PriceBar" class="purchase-window-price" style="-unity-slice-left: 35; -unity-slice-top: 35; -unity-slice-right: 35; -unity-slice-bottom: 35; height: 100px; width: 50%; min-width: 50%; max-width: 50%;">
             <ui:VisualElement name="CurrencyIcon" class="purchase-window-currency"/>
             <ui:Label name="PriceLabel" text="100" class="purchase-window-price-label"/>

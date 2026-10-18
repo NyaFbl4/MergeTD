@@ -6,6 +6,7 @@ using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Quests;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.Reward;
 using Project.Scripts.Systems.UI.Dtos;
@@ -28,6 +29,7 @@ namespace Project.Scripts.UI.InBattleUI
         private readonly DailyRewardService _dailyRewardService;
         private readonly QuestService _questService;
         private readonly ILocalizationService _localizationService;
+        private readonly IAudioManager _audioManager;
         private CancellationTokenSource _refreshCancellation;
         private DailyRewardState _dailyRewardState;
         private bool _hasDailyRewardState;
@@ -41,7 +43,8 @@ namespace Project.Scripts.UI.InBattleUI
             IPublisher<ShowPopupDto> showPopupPublisher,
             DailyRewardService dailyRewardService,
             QuestService questService,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            IAudioManager audioManager)
         {
             _view = view;
             _runSelection = runSelection;
@@ -51,6 +54,7 @@ namespace Project.Scripts.UI.InBattleUI
             _dailyRewardService = dailyRewardService;
             _questService = questService;
             _localizationService = localizationService;
+            _audioManager = audioManager;
         }
 
         public void Initialize()
@@ -116,11 +120,21 @@ namespace Project.Scripts.UI.InBattleUI
         }
 
         private void OnRunChanged(RunConfig _) => RefreshRun();
-        private void OnPreviousRunClicked() => _runSelection.SelectPrevious();
-        private void OnNextRunClicked() => _runSelection.SelectNext();
+        private void OnPreviousRunClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _runSelection.SelectPrevious();
+        }
+
+        private void OnNextRunClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _runSelection.SelectNext();
+        }
 
         private void OnPlayClicked()
         {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(IMainMenuUIPresenter)
@@ -130,6 +144,7 @@ namespace Project.Scripts.UI.InBattleUI
 
         private void OnDailyRewardClicked()
         {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             var state = _dailyRewardService.GetState();
             if (!state.CanClaim)
             {
@@ -143,6 +158,7 @@ namespace Project.Scripts.UI.InBattleUI
 
         private void OnDailyRewardNormalClaimClicked()
         {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             _dailyRewardService.TryClaim(1);
             _view.HideDailyRewardOffer();
             RefreshDailyRewards();
@@ -153,6 +169,7 @@ namespace Project.Scripts.UI.InBattleUI
             if (_isWaitingDailyRewardAd || YG2.nowAdsShow)
                 return;
 
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             _isWaitingDailyRewardAd = true;
             _view.SetDailyRewardOfferButtonsEnabled(false);
             SubscribeRewardedAdEvents();
@@ -166,6 +183,7 @@ namespace Project.Scripts.UI.InBattleUI
 
         private void OnDailyQuestsButtonClicked()
         {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
             _showPopupPublisher.Publish(new ShowPopupDto
             {
                 TargetPopUpType = typeof(IQuestUIPresenter)
@@ -173,7 +191,12 @@ namespace Project.Scripts.UI.InBattleUI
         }
 
         private void OnDailyQuestsChanged() => RefreshDailyQuests();
-        private void OnLanguageChanged(string _) => RefreshDailyQuests();
+        private void OnLanguageChanged(string _)
+        {
+            RefreshRun();
+            RefreshDailyRewards();
+            RefreshDailyQuests();
+        }
 
         private void RefreshDailyQuests()
         {
@@ -235,7 +258,10 @@ namespace Project.Scripts.UI.InBattleUI
         private void RefreshRun()
         {
             var run = _runSelection.SelectedRun;
-            _view.SetRun(run.DisplayName, run.Icon, _runSelection.Count > 1);
+            _view.SetRun(
+                _localizationService.Get(run.DisplayName),
+                run.Icon,
+                _runSelection.Count > 1);
         }
 
         private void RefreshDailyRewards()
@@ -249,7 +275,8 @@ namespace Project.Scripts.UI.InBattleUI
             _hasDailyRewardState = true;
             _view.SetDailyRewards(
                 _dailyRewardService.Rewards,
-                state);
+                state,
+                _localizationService.Get(LocalizationKeys.DailyRewardClaim));
             RefreshDailyRewardCountdown(state);
         }
 
@@ -257,7 +284,9 @@ namespace Project.Scripts.UI.InBattleUI
         {
             if (!state.IsTimeAvailable || !state.CanClaim && !state.ClaimedToday)
             {
-                _view.SetDailyRewardCountdown(true, "Время\nнедоступно");
+                _view.SetDailyRewardCountdown(
+                    true,
+                    _localizationService.Get(LocalizationKeys.DailyRewardTimeUnavailable));
                 return;
             }
 
@@ -269,7 +298,9 @@ namespace Project.Scripts.UI.InBattleUI
 
             if (!_dailyRewardService.TryGetTimeUntilNextMoscowDay(out var remaining))
             {
-                _view.SetDailyRewardCountdown(true, "Время\nнедоступно");
+                _view.SetDailyRewardCountdown(
+                    true,
+                    _localizationService.Get(LocalizationKeys.DailyRewardTimeUnavailable));
                 return;
             }
 
@@ -279,7 +310,11 @@ namespace Project.Scripts.UI.InBattleUI
             var seconds = totalSeconds % 60;
             _view.SetDailyRewardCountdown(
                 true,
-                $"Следующая награда\n{hours:00}:{minutes:00}:{seconds:00}");
+                _localizationService.Format(
+                    LocalizationKeys.DailyRewardNextFormat,
+                    hours,
+                    minutes,
+                    seconds));
         }
 
         private static bool HasSameDailyRewardDisplayState(

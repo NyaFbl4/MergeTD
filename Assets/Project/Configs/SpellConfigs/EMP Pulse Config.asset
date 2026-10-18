@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: EMP Pulse Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.EmpPulseConfig
   _spellId: emp_pulse
-  _displayName: ЭМИ-импульс
-  _description: Оглушает врагов без урона. Нажмите способность, затем укажите область на поле.
+  _displayName: spell.emp_pulse.name
+  _description: spell.emp_pulse.description
   _icon: {fileID: -8683594438223814369, guid: 07eb0cc7976e903458406e38affc2ad4, type: 3}
   _background: {fileID: 4977526221841929852, guid: 83fc82f110364614fbec332a148a404a, type: 3}
   _cooldown: 20
@@ -25,14 +25,14 @@ MonoBehaviour:
   _vfxLifetime: 3
   _upgrades:
   - _level: 2
-    _title: Усиленный разряд
-    _description: Длительность оглушения увеличивается на 1 секунду.
+    _title: spell.emp_pulse.upgrade_2.title
+    _description: spell.emp_pulse.upgrade_2.description
   - _level: 3
-    _title: Широкий импульс
-    _description: Радиус области увеличивается на 0,75.
+    _title: spell.emp_pulse.upgrade_3.title
+    _description: spell.emp_pulse.upgrade_3.description
   - _level: 4
-    _title: Быстрая перезарядка
-    _description: Перезарядка уменьшается на 4 секунды.
+    _title: spell.emp_pulse.upgrade_4.title
+    _description: spell.emp_pulse.upgrade_4.description
   _radius: 2.5
   _stunDuration: 3
   _enemyLayer:

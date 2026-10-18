@@ -10,6 +10,6 @@ namespace Project.Scripts.UI.EndWaveUI
         event Action CloseRequested;
         event Action AdRequested;
 
-        void SetData(string title, IReadOnlyList<WaveRewardConfig> rewards);
+        void SetData(int waveNumber, IReadOnlyList<WaveRewardConfig> rewards);
     }
 }

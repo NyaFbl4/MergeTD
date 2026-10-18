@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Free Tower
   m_EditorClassIdentifier:
   _id: free_combat_tower_1
-  _displayName: Подкрепление
-  _description: Размещает бесплатную боевую башню T1 в свободный слот.
-  _effectText: Башня T1
+  _displayName: card.free_combat_tower_1.name
+  _description: card.free_combat_tower_1.description
+  _effectText: card.free_combat_tower_1.effect
   _rarity: 2
-  _rarityLabel: Эпическая
+  _rarityLabel: cards.rarity.epic
   _selectionWeight: 0.4
   _tint: {r: 0.7, g: 0.28, b: 0.65, a: 1}
   _icon: {fileID: 0}

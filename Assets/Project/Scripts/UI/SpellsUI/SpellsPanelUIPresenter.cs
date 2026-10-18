@@ -1,6 +1,7 @@
 using Project.Scripts.System.Audio;
 using System;
 using System.Collections.Generic;
+using Project.Scripts.System.Localization;
 
 namespace Project.Scripts.UI.SpellsUI
 {
@@ -9,16 +10,19 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly ISpellsPanelUIView _view;
         private readonly ISpellsUIUseCase _useCase;
         private readonly IAudioManager _audioManager;
+        private readonly ILocalizationService _localizationService;
         private string _openedSpellId;
 
         public SpellsPanelUIPresenter(
             ISpellsPanelUIView view,
             ISpellsUIUseCase useCase,
-            IAudioManager audioManager)
+            IAudioManager audioManager,
+            ILocalizationService localizationService)
         {
             _view = view;
             _useCase = useCase;
             _audioManager = audioManager;
+            _localizationService = localizationService;
         }
 
         public void Initialize()
@@ -29,6 +33,7 @@ namespace Project.Scripts.UI.SpellsUI
             _view.SpellInfoClosed += OnSpellInfoClosed;
             _useCase.SelectionChanged += Refresh;
             _useCase.GemsChanged += OnGemsChanged;
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
             Refresh();
         }
 
@@ -40,6 +45,7 @@ namespace Project.Scripts.UI.SpellsUI
             _view.SpellInfoClosed -= OnSpellInfoClosed;
             _useCase.SelectionChanged -= Refresh;
             _useCase.GemsChanged -= OnGemsChanged;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
         }
 
         private void OnSpellSelectionClicked(string spellId)
@@ -73,6 +79,7 @@ namespace Project.Scripts.UI.SpellsUI
         }
 
         private void OnGemsChanged(int _) => Refresh();
+        private void OnLanguageChanged(string _) => Refresh();
 
         private void Refresh()
         {

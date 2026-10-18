@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Cryo Discharge Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.CryoDischargeConfig
   _spellId: cryo_discharge
-  _displayName: Криоразряд
-  _description: Замедляет врагов без урона. Нажмите способность, затем укажите область на поле.
+  _displayName: spell.cryo_discharge.name
+  _description: spell.cryo_discharge.description
   _icon: {fileID: 750792369792279797, guid: b84869c1e3625fd47a4906094ac57d48, type: 3}
   _background: {fileID: 7569198331679980289, guid: 4274602a3c64f3748848e3d67ed4dbb8, type: 3}
   _cooldown: 18
@@ -25,14 +25,14 @@ MonoBehaviour:
   _vfxLifetime: 2
   _upgrades:
   - _level: 2
-    _title: Глубокая заморозка
-    _description: Сила замедления увеличивается до 65%.
+    _title: spell.cryo_discharge.upgrade_2.title
+    _description: spell.cryo_discharge.upgrade_2.description
   - _level: 3
-    _title: Расширенный контур
-    _description: Радиус области увеличивается на 0,5.
+    _title: spell.cryo_discharge.upgrade_3.title
+    _description: spell.cryo_discharge.upgrade_3.description
   - _level: 4
-    _title: Криоизоляция
-    _description: Длительность замедления увеличивается на 2 секунды.
+    _title: spell.cryo_discharge.upgrade_4.title
+    _description: spell.cryo_discharge.upgrade_4.description
   _radius: 2
   _moveSpeedMultiplier: 0.5
   _slowDuration: 5

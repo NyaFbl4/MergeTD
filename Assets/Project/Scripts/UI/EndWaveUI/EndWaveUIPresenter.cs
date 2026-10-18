@@ -11,6 +11,8 @@ namespace Project.Scripts.UI.EndWaveUI
     {
         private readonly ILocalizationService _localizationService;
         private readonly IAudioManager _audioManager;
+        private int _waveNumber;
+        private bool _hasData;
 
         public event Action CloseRequested;
         public event Action AdRequested;
@@ -27,15 +29,32 @@ namespace Project.Scripts.UI.EndWaveUI
 
             _layoutView.CloseButtonClicked += OnCloseButtonClicked;
             _layoutView.ADButtonClicked += OnAdButtonClicked;
-            _layoutView.SetAdButtonText(_localizationService.Get(LocalizationKeys.EndWaveAdButton));
-            _layoutView.SetCloseButtonText(_localizationService.Get(LocalizationKeys.EndWaveCloseButton));
+            _localizationService.OnChangeLanguage += OnLanguageChanged;
+            RefreshLocalization();
         }
 
-        public void SetData(string title, IReadOnlyList<WaveRewardConfig> rewards)
+        public void SetData(int waveNumber, IReadOnlyList<WaveRewardConfig> rewards)
         {
-            _layoutView.SetTitle(title);
+            _waveNumber = waveNumber;
+            _hasData = true;
+            RefreshLocalization();
             _layoutView.SetRewards(rewards);
             _audioManager.PlaySound(ESoundId.EndWave);
+        }
+
+        private void OnLanguageChanged(string _) => RefreshLocalization();
+
+        private void RefreshLocalization()
+        {
+            _layoutView.SetAdButtonText(_localizationService.Get(LocalizationKeys.EndWaveAdButton));
+            _layoutView.SetCloseButtonText(_localizationService.Get(LocalizationKeys.EndWaveCloseButton));
+            if (_hasData)
+            {
+                _layoutView.SetTitle(
+                    _localizationService
+                        .Format(LocalizationKeys.EndWaveTitleFormat, _waveNumber)
+                        .ToUpperInvariant());
+            }
         }
 
         private void OnCloseButtonClicked()
@@ -54,6 +73,7 @@ namespace Project.Scripts.UI.EndWaveUI
         {
             _layoutView.CloseButtonClicked -= OnCloseButtonClicked;
             _layoutView.ADButtonClicked -= OnAdButtonClicked;
+            _localizationService.OnChangeLanguage -= OnLanguageChanged;
 
             base.Dispose();
         }

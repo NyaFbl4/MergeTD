@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: default-run-4
   _icon: {fileID: -8951870825014042324, guid: 30c572c4c78d7b1418b7cf6105cd8737, type: 3}
   _background: {fileID: -2998417685254374662, guid: f8a6f972cf05e9d4b80135dd4038fb14, type: 3}
-  _displayName: "\u0413\u043B\u0443\u0431\u0438\u043D\u044B \u0417\u043E\u043D\u044B"
+  _displayName: run.default_4.name
   _description: Default 20-wave run converted from Level Config.
   _waves:
   - _displayName: 
