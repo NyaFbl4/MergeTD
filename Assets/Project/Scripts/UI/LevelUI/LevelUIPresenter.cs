@@ -181,7 +181,7 @@ namespace Project.Scripts.UI.LevelUI
         }
         private void RefreshWaveText()
         {
-            var waveText = _localizationService.Format(LocalizationKeys.LevelWaveFormat, _playerStatsUseCase.Wave);
+            var waveText = _localizationService.Format(LocalizationKeys.LevelWaveFormat, _runState.CurrentWave, _runState.MaxWaves);
             var displayName = _runState.CurrentWaveConfig?.DisplayName;
             if (!string.IsNullOrWhiteSpace(displayName))
                 waveText = $"{waveText}: {displayName}";
@@ -471,6 +471,7 @@ namespace Project.Scripts.UI.LevelUI
             {
                 _layoutView.SetSpellIcon(spells[i].SpellId, spells[i].Icon);
                 _layoutView.SetSpellBackground(spells[i].SpellId, spells[i].Background);
+                _layoutView.SetSpellManaCost(spells[i].SpellId, spells[i].ManaCost);
                 _layoutView.SetSpellVisible(spells[i].SpellId, spells[i].IsSelected);
             }
         }

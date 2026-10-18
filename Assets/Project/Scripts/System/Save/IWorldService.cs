@@ -11,7 +11,10 @@ namespace Project.Scripts.System.Save
         TowerAttackSpeed,
         BaseHealth,
         TowerCritChance,
-        TowerCritDamage
+        TowerCritDamage,
+        BaseRepair,
+        ManaRestoration,
+        MaxEnergy
     }
 
     public interface IWorldService

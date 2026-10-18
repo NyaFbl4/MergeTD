@@ -179,6 +179,20 @@ namespace Project.Scripts.System.Localization
             AddEntry(LocalizationKeys.EndWaveLoseCloseButton, "\u0412\u044b\u0439\u0442\u0438 \u0432 \u043c\u0435\u043d\u044e", "Exit to menu");
             AddEntry(LocalizationKeys.EndWaveLoseAdButton, "\u0412\u043e\u0437\u0440\u043e\u0434\u0438\u0442\u044c\u0441\u044f", "Revive");
             AddEntry(LocalizationKeys.UpgradeTowerLevelDescription, "\u0411\u0430\u0448\u043d\u0438 \u043f\u043e\u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f {0} \u0443\u0440\u043e\u0432\u043d\u044f", "Spawn towers at level {0}");
+            AddEntry(LocalizationKeys.BaseUpgradesTitle, "\u0423\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f \u0431\u0430\u0437\u044b", "Base upgrades");
+            AddEntry(LocalizationKeys.BaseUpgradeLevelFormat, "\u0443\u0440.{0}", "lv.{0}");
+            AddEntry(LocalizationKeys.BaseUpgradeBuy, "\u0423\u043b\u0443\u0447\u0448\u0438\u0442\u044c", "Upgrade");
+            AddEntry(LocalizationKeys.UpgradeBaseHealthTitle, "\u041f\u0440\u043e\u0447\u043d\u043e\u0441\u0442\u044c \u0431\u0430\u0437\u044b", "Base durability");
+            AddEntry(LocalizationKeys.UpgradeBaseHealthDetails, "\u0423\u0432\u0435\u043b\u0438\u0447\u0438\u0432\u0430\u0435\u0442 \u043c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u043e\u0435 \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u0435 \u0431\u0430\u0437\u044b", "Increases maximum base health");
+            AddEntry(LocalizationKeys.UpgradeBaseRepairTitle, "\u0420\u0435\u043c\u043e\u043d\u0442 \u0431\u0430\u0437\u044b", "Base repair");
+            AddEntry(LocalizationKeys.UpgradeBaseRepairDescription, "\u0420\u0435\u043c\u043e\u043d\u0442 \u0431\u0430\u0437\u044b: {0}", "Base repair: {0}");
+            AddEntry(LocalizationKeys.UpgradeBaseRepairDetails, "\u0412\u043e\u0441\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u0435\u0442 \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u0435 \u043f\u043e\u0441\u043b\u0435 \u043f\u043e\u0431\u0435\u0434\u044b \u0432 \u0432\u043e\u043b\u043d\u0435. \u041c\u0430\u043a\u0441\u0438\u043c\u0443\u043c 30%", "Restores health after winning a wave. Maximum 30%");
+            AddEntry(LocalizationKeys.UpgradeManaRestorationTitle, "\u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435 \u043c\u0430\u043d\u044b", "Mana restoration");
+            AddEntry(LocalizationKeys.UpgradeManaRestorationDescription, "\u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435 \u043c\u0430\u043d\u044b: {0}", "Mana restoration: {0}");
+            AddEntry(LocalizationKeys.UpgradeManaRestorationDetails, "\u0412\u043e\u0441\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u0435\u0442 \u043c\u0430\u043d\u0443 \u043f\u043e\u0441\u043b\u0435 \u043f\u043e\u0431\u0435\u0434\u044b \u0432 \u0432\u043e\u043b\u043d\u0435", "Restores mana after winning a wave");
+            AddEntry(LocalizationKeys.UpgradeMaxEnergyTitle, "\u0417\u0430\u043f\u0430\u0441 \u043c\u0430\u043d\u044b", "Mana capacity");
+            AddEntry(LocalizationKeys.UpgradeMaxEnergyDescription, "\u0423\u0432\u0435\u043b\u0438\u0447\u0438\u0442\u044c \u0437\u0430\u043f\u0430\u0441 \u043c\u0430\u043d\u044b \u043d\u0430 {0}", "Increase mana capacity by {0}");
+            AddEntry(LocalizationKeys.UpgradeMaxEnergyDetails, "\u0423\u0432\u0435\u043b\u0438\u0447\u0438\u0432\u0430\u0435\u0442 \u043c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0439 \u0437\u0430\u043f\u0430\u0441 \u043c\u0430\u043d\u044b", "Increases maximum mana capacity");
         }
 
         private void AddEntry(string key, string ru, string en)

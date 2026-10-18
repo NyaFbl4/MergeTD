@@ -3,6 +3,7 @@
     <ui:Template name="InBattlePanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/InBattlePanel.uxml?fileID=9197481963319205126&amp;guid=34cfc351c81e1c54b825581bca0f511d&amp;type=3#InBattlePanel"/>
     <ui:Template name="SpellsPanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/SpellsPanel.uxml?fileID=9197481963319205126&amp;guid=f58d8253033568441930b1764a916116&amp;type=3#SpellsPanel"/>
     <ui:Template name="PurchaseWindowTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindowPreview.uxml?fileID=9197481963319205126&amp;guid=6f78f3413aef45d68c42bbf728d3d9af&amp;type=3#PurchaseWindowPreview"/>
+    <ui:Template name="BaseUpgradeItemTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/BaseUpgradeItem.uxml?fileID=9197481963319205126&amp;guid=b9fdebf6acef410ebc31ec9ce4d0553e&amp;type=3#BaseUpgradeItem"/>
     <ui:Style src="PurchaseWindow.uss"/>
     <ui:VisualElement name="Layout" style="flex-grow: 1;">
         <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&quot;exec-3857d5d4-a61d-4425-901c-e1216a7ac466&quot;);"/>
@@ -19,9 +20,21 @@
         <ui:VisualElement name="Body" style="flex-grow: 1;">
             <ui:VisualElement name="MainPanel" style="flex-grow: 1; justify-content: flex-end; align-items: stretch; align-content: stretch;">
                 <ui:VisualElement name="ContentHost" style="flex-grow: 1; width: 100%; height: 100%; align-self: center; justify-content: center;">
-                    <ui:Instance template="ArmyPanel" name="ArmyPanel" style="display: flex; flex-grow: 1; width: 100%; height: 100%;"/>
+                    <ui:Instance template="ArmyPanel" name="ArmyPanel" style="display: none; flex-grow: 1; width: 100%; height: 100%;"/>
                     <ui:Instance template="InBattlePanelTemplate" name="InBattleContent" style="flex-grow: 1; width: 100%; height: 100%; display: none;"/>
                     <ui:Instance template="SpellsPanelTemplate" name="SpellsPanel" style="flex-grow: 1; width: 100%; height: 100%; display: none;"/>
+                    <ui:VisualElement name="BasePanel" style="display: flex; flex-grow: 1; width: 100%; height: 100%; align-items: center; padding-top: 24px; padding-bottom: 24px;">
+                        <ui:VisualElement name="BaseIcon" picking-mode="Ignore" style="width: 260px; height: 260px; margin-bottom: 14px; background-image: resource(&quot;UI/new/Icons/Icon_Button_Base&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+                        <ui:VisualElement name="BaseUpgradesPanel" style="flex-grow: 1; flex-shrink: 1; width: 820px; min-height: 0; padding-top: 22px; padding-right: 24px; padding-bottom: 22px; padding-left: 24px; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-background-image-tint-color: rgba(51, 43, 79, 0.92); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20;">
+                            <ui:Label text="УЛУЧШЕНИЯ БАЗЫ" name="BaseUpgradesTitleLabel" style="height: 48px; margin-bottom: 8px; color: rgb(202, 190, 232); font-size: 30px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: middle-left;"/>
+                            <ui:ScrollView name="BaseUpgradesScrollView" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto" style="flex-grow: 1; width: 100%;">
+                                <ui:Instance template="BaseUpgradeItemTemplate"/>
+                                <ui:Instance template="BaseUpgradeItemTemplate"/>
+                                <ui:Instance template="BaseUpgradeItemTemplate"/>
+                                <ui:Instance template="BaseUpgradeItemTemplate"/>
+                            </ui:ScrollView>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

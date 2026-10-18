@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6e0e025eea949e490e0373448538692, type: 3}
+  m_Name: Base Repair Upgrade
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
+  _id: base-repair
+  _title: upgrade.base_repair.title
+  _description: upgrade.base_repair.description
+  _details: upgrade.base_repair.details
+  _icon: {fileID: 3880603984668780416, guid: 75c6b17cfd9a91548a13b4ad95545d9d, type: 3}
+  _levels:
+  - _price: 250
+    _value: 0.03
+  - _price: 500
+    _value: 0.03
+  - _price: 1000
+    _value: 0.03
+  - _price: 2000
+    _value: 0.03
+  - _price: 4000
+    _value: 0.03
+  - _price: 8000
+    _value: 0.03
+  - _price: 16000
+    _value: 0.03
+  - _price: 32000
+    _value: 0.03
+  - _price: 64000
+    _value: 0.03
+  - _price: 128000
+    _value: 0.03

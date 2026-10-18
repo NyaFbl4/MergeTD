@@ -75,6 +75,7 @@ namespace Installers
             builder.RegisterEntryPoint<QuestService>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<RunBattleRuntime>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<BaseUpgradeWaveRecoveryUseCase>(Lifetime.Singleton);
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
             builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>().AsSelf();
             builder.Register<LocalizationService>(Lifetime.Singleton).As<ILocalizationService>();
@@ -199,6 +200,7 @@ namespace Installers
             builder.RegisterInstance(_uiElements);
             builder.RegisterInstance(_spellCatalog);
             builder.RegisterInstance(_dailyRewards);
+            builder.RegisterInstance(BaseUpgradeConfigProvider.LoadFromResources());
         }
     }
 }

@@ -6,6 +6,8 @@ using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.UI.SpellsUI;
+using Project.Scripts.Gameplay.UpgradeItem;
+using Project.Scripts.System.Localization;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
@@ -30,6 +32,13 @@ namespace Project.Scripts.UI.MainMenuUI
         void InitializeArmy(UIElements uiElements);
         void InitializePurchaseWindow(UIElements uiElements);
         void InitializeSpells(UIElements uiElements);
+        void SetBaseUpgradesTitle(string title);
+        void ClearBaseUpgrades();
+        void AddBaseUpgrade(
+            IBaseUpgradeItem item,
+            bool canPurchase,
+            Action onBuy,
+            ILocalizationService localizationService);
         void SetGoldCount(int goldCount);
         void SetDiamondCount(int diamondCount);
         void SetActiveSection(MainMenuSection section);

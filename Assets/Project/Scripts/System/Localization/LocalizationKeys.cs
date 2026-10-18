@@ -30,6 +30,20 @@ namespace Project.Scripts.System.Localization
         public const string UpgradeTowerCritChanceDescription = "upgrade.tower_crit_chance.description";
         public const string UpgradeTowerCritDamageDescription = "upgrade.tower_crit_damage.description";
         public const string UpgradeTowerLevelDescription = "upgrade.tower_level.description";
+        public const string BaseUpgradesTitle = "base.upgrades_title";
+        public const string BaseUpgradeLevelFormat = "base.upgrade_level_format";
+        public const string BaseUpgradeBuy = "base.upgrade_buy";
+        public const string UpgradeBaseHealthTitle = "upgrade.base_health.title";
+        public const string UpgradeBaseHealthDetails = "upgrade.base_health.details";
+        public const string UpgradeBaseRepairTitle = "upgrade.base_repair.title";
+        public const string UpgradeBaseRepairDescription = "upgrade.base_repair.description";
+        public const string UpgradeBaseRepairDetails = "upgrade.base_repair.details";
+        public const string UpgradeManaRestorationTitle = "upgrade.mana_restoration.title";
+        public const string UpgradeManaRestorationDescription = "upgrade.mana_restoration.description";
+        public const string UpgradeManaRestorationDetails = "upgrade.mana_restoration.details";
+        public const string UpgradeMaxEnergyTitle = "upgrade.max_energy.title";
+        public const string UpgradeMaxEnergyDescription = "upgrade.max_energy.description";
+        public const string UpgradeMaxEnergyDetails = "upgrade.max_energy.details";
         
         public const string ShopTitle = "shop.title";
         public const string QuestsTitle = "quests.title";

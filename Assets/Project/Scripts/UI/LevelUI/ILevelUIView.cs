@@ -70,6 +70,7 @@ namespace Project.Scripts.UI.LevelUI
             int cooldownSeconds,
             bool isTargeting,
             bool isEnabled);
+        void SetSpellManaCost(string spellId, int manaCost);
     }
 
 }

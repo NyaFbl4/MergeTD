@@ -868,6 +868,14 @@ namespace Project.Scripts.System.Save
                 case EWorldUpgradeType.TowerCritDamage:
                     _data.towerCritDamageBonus += value;
                     break;
+                case EWorldUpgradeType.BaseRepair:
+                case EWorldUpgradeType.ManaRestoration:
+                    break;
+                case EWorldUpgradeType.MaxEnergy:
+                    var energyIncrease = (int)Math.Round(value);
+                    if (energyIncrease > 0)
+                        _data.maxEnergy = AddClamped(_data.maxEnergy, energyIncrease);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type));
             }
@@ -884,6 +892,8 @@ namespace Project.Scripts.System.Save
             GoldChanged?.Invoke(Gold);
             if (type == EWorldUpgradeType.BaseHealth)
                 MaxBaseHealthChanged?.Invoke(MaxBaseHealth);
+            else if (type == EWorldUpgradeType.MaxEnergy)
+                MaxEnergyChanged?.Invoke(MaxEnergy);
             UpgradesChanged?.Invoke();
             return true;
         }

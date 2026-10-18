@@ -5,6 +5,8 @@ using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.UI.SpellsUI;
 using Project.Scripts.Configs;
+using Project.Scripts.Gameplay.UpgradeItem;
+using Project.Scripts.System.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System;
@@ -29,6 +31,10 @@ namespace Project.Scripts.UI.MainMenuUI
         private IArmyUIView _armyView;
         private IPurchaseWindowView _purchaseWindowView;
         private ISpellsPanelUIView _spellsPanelView;
+        private VisualElement _basePanel;
+        private Label _baseUpgradesTitleLabel;
+        private ScrollView _baseUpgradesScrollView;
+        private VisualTreeAsset _baseUpgradeItemTemplate;
         private Button[] _sectionButtons;
         private VisualElement[] _sectionIcons;
         private Label[] _sectionLabels;
@@ -55,6 +61,18 @@ namespace Project.Scripts.UI.MainMenuUI
                                ?? throw new InvalidOperationException(
                                    "MainMenuUIView: element 'InBattleContent' was not found.");
             _inBattleView = new InBattleUIView(inBattleRoot);
+            _basePanel = _root.Q<VisualElement>("BasePanel")
+                         ?? throw new InvalidOperationException(
+                             "MainMenuUIView: element 'BasePanel' was not found.");
+            _baseUpgradesTitleLabel = _root.Q<Label>("BaseUpgradesTitleLabel")
+                                      ?? throw new InvalidOperationException(
+                                          "MainMenuUIView: element 'BaseUpgradesTitleLabel' was not found.");
+            _baseUpgradesScrollView = _root.Q<ScrollView>("BaseUpgradesScrollView")
+                                      ?? throw new InvalidOperationException(
+                                          "MainMenuUIView: element 'BaseUpgradesScrollView' was not found.");
+            _baseUpgradeItemTemplate = Resources.Load<VisualTreeAsset>("UIToolkit/New/BaseUpgradeItem")
+                                       ?? throw new InvalidOperationException(
+                                           "MainMenuUIView: resource 'UIToolkit/New/BaseUpgradeItem' was not found.");
             _sectionButtons = new[]
             {
                 _root.Q<Button>("ShopButton"),
@@ -101,6 +119,28 @@ namespace Project.Scripts.UI.MainMenuUI
             _spellsPanelView = new SpellsPanelUIView(spellsRoot, uiElements);
         }
 
+        public void SetBaseUpgradesTitle(string title)
+        {
+            _baseUpgradesTitleLabel.text = title;
+        }
+
+        public void ClearBaseUpgrades()
+        {
+            _baseUpgradesScrollView.Clear();
+        }
+
+        public void AddBaseUpgrade(
+            IBaseUpgradeItem item,
+            bool canPurchase,
+            Action onBuy,
+            ILocalizationService localizationService)
+        {
+            var itemRoot = _baseUpgradeItemTemplate.Instantiate();
+            var itemView = new BaseUpgradeItemView(itemRoot);
+            itemView.Bind(item, canPurchase, onBuy, localizationService);
+            _baseUpgradesScrollView.Add(itemRoot);
+        }
+
         public void SetGoldCount(int goldCount)
         {
             UIIntegerAnimationUtility.SetValue(_goldCountLabel, Math.Max(0, goldCount));
@@ -119,6 +159,9 @@ namespace Project.Scripts.UI.MainMenuUI
             _inBattleView.SetVisible(section == MainMenuSection.Battle);
             _armyView.SetVisible(section == MainMenuSection.Army);
             _spellsPanelView.SetVisible(section == MainMenuSection.Spells);
+            _basePanel.style.display = section == MainMenuSection.Base
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].style.backgroundImage = i == activeIndex

@@ -4,6 +4,8 @@ using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.Gameplay.Systems;
+using Project.Scripts.Gameplay.UpgradeItem;
+using Project.Scripts.Configs;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using VContainer.Unity;
@@ -150,6 +152,74 @@ namespace Project.Scripts.Gameplay.Run
             _battlefieldRuntime.WaveExecutionCompleted -= OnWaveExecutionCompleted;
             _baseHealth.Destroyed -= OnBaseDestroyed;
             IGameListener.Unregister(this);
+        }
+    }
+
+    public sealed class BaseUpgradeWaveRecoveryUseCase : IInitializable, IDisposable
+    {
+        private readonly RunBattleRuntime _runBattleRuntime;
+        private readonly BaseUpgradeConfigProvider _configs;
+        private readonly IPlayerStatsUseCase _playerStats;
+        private readonly BaseHealth _baseHealth;
+        private readonly RunEnergyService _energy;
+
+        public BaseUpgradeWaveRecoveryUseCase(
+            RunBattleRuntime runBattleRuntime,
+            BaseUpgradeConfigProvider configs,
+            IPlayerStatsUseCase playerStats,
+            BaseHealth baseHealth,
+            RunEnergyService energy)
+        {
+            _runBattleRuntime = runBattleRuntime;
+            _configs = configs;
+            _playerStats = playerStats;
+            _baseHealth = baseHealth;
+            _energy = energy;
+        }
+
+        public void Initialize()
+        {
+            _runBattleRuntime.WaveCompleted += OnWaveCompleted;
+        }
+
+        private void OnWaveCompleted(
+            int _,
+            IReadOnlyList<WaveRewardConfig> __,
+            ERunPhase ___)
+        {
+            RestoreBaseHealth();
+            RestoreEnergy();
+        }
+
+        private void RestoreBaseHealth()
+        {
+            var repairRatio = GetUpgradeValue(_configs.Repair);
+            var repairAmount = repairRatio <= 0f
+                ? 0
+                : Math.Max(1, UnityEngine.Mathf.RoundToInt(_baseHealth.MaxHealth * repairRatio));
+            if (repairAmount > 0)
+                _baseHealth.AddCurrentHealth(repairAmount);
+        }
+
+        private void RestoreEnergy()
+        {
+            var restorationRatio = GetUpgradeValue(_configs.ManaRestoration);
+            var restorationAmount = restorationRatio <= 0f
+                ? 0
+                : Math.Max(1, UnityEngine.Mathf.RoundToInt(_energy.Max * restorationRatio));
+            _energy.Add(restorationAmount);
+        }
+
+        private float GetUpgradeValue(UpgradeItemConfig config)
+        {
+            return BaseUpgradeValueCalculator.GetCumulativeValue(
+                config,
+                _playerStats.GetUpgradeLevel(config.Id));
+        }
+
+        public void Dispose()
+        {
+            _runBattleRuntime.WaveCompleted -= OnWaveCompleted;
         }
     }
 }

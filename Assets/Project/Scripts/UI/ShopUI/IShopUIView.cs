@@ -6,16 +6,19 @@ using Project.Scripts.Systems.UI;
 
 namespace Project.Scripts.UI.ShopUI
 {
-    public interface IShopUIView : ILayoutView
+    public interface IUpgradeConfigProvider
     {
-        event Action CloseButtonClicked;
-        
         UpgradeItemConfig DamageUpgradeConfig { get; }
         UpgradeItemConfig AttackSpeedUpgradeConfig { get; }
         UpgradeItemConfig HealthUpgradeConfig { get; }
         UpgradeItemConfig CritChanceUpgradeConfig { get; }
         UpgradeItemConfig CritDamageUpgradeConfig { get; }
         UpgradeItemConfig TowerLevelUpgradeConfig { get; }
+    }
+
+    public interface IShopUIView : ILayoutView, IUpgradeConfigProvider
+    {
+        event Action CloseButtonClicked;
 
         void SetTitle(string title);
         void ClearItems();

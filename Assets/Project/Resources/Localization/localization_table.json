@@ -8,8 +8,8 @@
     },
     {
       "key": "level.wave_format",
-      "ru": "Волна {0}",
-      "en": "Wave {0}"
+      "ru": "Волна {0} из {1}",
+      "en": "Wave {0} of {1}"
     },
     {
       "key": "end_wave.title_format",
@@ -195,6 +195,76 @@
       "key": "end_wave.review_button_format",
       "ru": "Оцени игру за {0}",
       "en": "Rate game for {0}"
+    },
+    {
+      "key": "base.upgrades_title",
+      "ru": "УЛУЧШЕНИЯ БАЗЫ",
+      "en": "BASE UPGRADES"
+    },
+    {
+      "key": "base.upgrade_level_format",
+      "ru": "ур.{0}",
+      "en": "lv.{0}"
+    },
+    {
+      "key": "base.upgrade_buy",
+      "ru": "Улучшить",
+      "en": "Upgrade"
+    },
+    {
+      "key": "upgrade.base_health.title",
+      "ru": "Прочность базы",
+      "en": "Base durability"
+    },
+    {
+      "key": "upgrade.base_health.details",
+      "ru": "Увеличивает максимальное здоровье базы",
+      "en": "Increases maximum base health"
+    },
+    {
+      "key": "upgrade.base_repair.title",
+      "ru": "Ремонт базы",
+      "en": "Base repair"
+    },
+    {
+      "key": "upgrade.base_repair.description",
+      "ru": "Ремонт базы: {0}",
+      "en": "Base repair: {0}"
+    },
+    {
+      "key": "upgrade.base_repair.details",
+      "ru": "Восстанавливает здоровье после победы в волне. Максимум 30%",
+      "en": "Restores health after winning a wave. Maximum 30%"
+    },
+    {
+      "key": "upgrade.mana_restoration.title",
+      "ru": "Восстановление маны",
+      "en": "Mana restoration"
+    },
+    {
+      "key": "upgrade.mana_restoration.description",
+      "ru": "Восстановление маны: {0}",
+      "en": "Mana restoration: {0}"
+    },
+    {
+      "key": "upgrade.mana_restoration.details",
+      "ru": "Восстанавливает ману после победы в волне",
+      "en": "Restores mana after winning a wave"
+    },
+    {
+      "key": "upgrade.max_energy.title",
+      "ru": "Запас маны",
+      "en": "Mana capacity"
+    },
+    {
+      "key": "upgrade.max_energy.description",
+      "ru": "Увеличить запас маны на {0}",
+      "en": "Increase mana capacity by {0}"
+    },
+    {
+      "key": "upgrade.max_energy.details",
+      "ru": "Увеличивает максимальный запас маны",
+      "en": "Increases maximum mana capacity"
     }
   ]
 }

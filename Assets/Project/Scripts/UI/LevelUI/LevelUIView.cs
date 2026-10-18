@@ -28,25 +28,18 @@ namespace Project.Scripts.UI.LevelUI
         private Button _setTowersButton;
         private Button _weaponBarrageButton;
         private Label _weaponBarrageNameLabel;
-        private Label _weaponBarrageStatusLabel;
         private Button _baseRepairButton;
         private Label _baseRepairNameLabel;
-        private Label _baseRepairStatusLabel;
         private Button _barrageProtocolButton;
         private Label _barrageProtocolNameLabel;
-        private Label _barrageProtocolStatusLabel;
         private Button _cryoDischargeButton;
         private Label _cryoDischargeNameLabel;
-        private Label _cryoDischargeStatusLabel;
         private Button _empPulseButton;
         private Label _empPulseNameLabel;
-        private Label _empPulseStatusLabel;
         private Button _orbitalRailgunButton;
         private Label _orbitalRailgunNameLabel;
-        private Label _orbitalRailgunStatusLabel;
         private Button _gravityTrapButton;
         private Label _gravityTrapNameLabel;
-        private Label _gravityTrapStatusLabel;
         private Label _payTowerLabel;
         private Label _moneyLabel;
         private Label _gemsLabel;
@@ -57,12 +50,10 @@ namespace Project.Scripts.UI.LevelUI
         private VisualElement _adButtonTowerIcon;
         private VisualElement _statePreparation;
         private VisualElement _stateWave;
-        private readonly Dictionary<string, VisualElement> _spellElements =
-            new(StringComparer.Ordinal);
-        private readonly Dictionary<string, VisualElement> _spellIcons =
-            new(StringComparer.Ordinal);
-        private readonly Dictionary<string, VisualElement> _spellBackgrounds =
-            new(StringComparer.Ordinal);
+        private readonly Dictionary<string, VisualElement> _spellElements = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, VisualElement> _spellIcons = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, VisualElement> _spellBackgrounds = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, Label> _spellManaLabels = new(StringComparer.Ordinal);
         private IPurchaseWindowView _purchaseWindowView;
         private ICardChoiceView _cardChoiceView;
         
@@ -111,31 +102,24 @@ namespace Project.Scripts.UI.LevelUI
             var weaponBarrageElement = _root.Q<VisualElement>("WeaponBarrageSpell");
             _weaponBarrageButton = weaponBarrageElement.Q<Button>("SpellButton");
             _weaponBarrageNameLabel = _weaponBarrageButton.Q<Label>("SpellDamageTypeLabel");
-            _weaponBarrageStatusLabel = _weaponBarrageButton.Q<Label>("SpellManaLabel");
             var baseRepairElement = _root.Q<VisualElement>("BaseRepairSpell");
             _baseRepairButton = baseRepairElement.Q<Button>("SpellButton");
             _baseRepairNameLabel = _baseRepairButton.Q<Label>("SpellDamageTypeLabel");
-            _baseRepairStatusLabel = _baseRepairButton.Q<Label>("SpellManaLabel");
             var barrageProtocolElement = _root.Q<VisualElement>("BarrageProtocolSpell");
             _barrageProtocolButton = barrageProtocolElement.Q<Button>("SpellButton");
             _barrageProtocolNameLabel = _barrageProtocolButton.Q<Label>("SpellDamageTypeLabel");
-            _barrageProtocolStatusLabel = _barrageProtocolButton.Q<Label>("SpellManaLabel");
             var cryoDischargeElement = _root.Q<VisualElement>("CryoDischargeSpell");
             _cryoDischargeButton = cryoDischargeElement.Q<Button>("SpellButton");
             _cryoDischargeNameLabel = _cryoDischargeButton.Q<Label>("SpellDamageTypeLabel");
-            _cryoDischargeStatusLabel = _cryoDischargeButton.Q<Label>("SpellManaLabel");
             var empPulseElement = _root.Q<VisualElement>("EmpPulseSpell");
             _empPulseButton = empPulseElement.Q<Button>("SpellButton");
             _empPulseNameLabel = _empPulseButton.Q<Label>("SpellDamageTypeLabel");
-            _empPulseStatusLabel = _empPulseButton.Q<Label>("SpellManaLabel");
             var orbitalRailgunElement = _root.Q<VisualElement>("OrbitalRailgunSpell");
             _orbitalRailgunButton = orbitalRailgunElement.Q<Button>("SpellButton");
             _orbitalRailgunNameLabel = _orbitalRailgunButton.Q<Label>("SpellDamageTypeLabel");
-            _orbitalRailgunStatusLabel = _orbitalRailgunButton.Q<Label>("SpellManaLabel");
             var gravityTrapElement = _root.Q<VisualElement>("GravityTrapSpell");
             _gravityTrapButton = gravityTrapElement.Q<Button>("SpellButton");
             _gravityTrapNameLabel = _gravityTrapButton.Q<Label>("SpellDamageTypeLabel");
-            _gravityTrapStatusLabel = _gravityTrapButton.Q<Label>("SpellManaLabel");
             _spellElements.Add(SpellIds.WeaponBarrage, weaponBarrageElement);
             _spellElements.Add(SpellIds.BaseRepair, baseRepairElement);
             _spellElements.Add(SpellIds.BarrageProtocol, barrageProtocolElement);
@@ -143,6 +127,9 @@ namespace Project.Scripts.UI.LevelUI
             _spellElements.Add(SpellIds.EmpPulse, empPulseElement);
             _spellElements.Add(SpellIds.OrbitalRailgun, orbitalRailgunElement);
             _spellElements.Add(SpellIds.GravityTrap, gravityTrapElement);
+            foreach (var pair in _spellElements)
+                _spellManaLabels.Add(pair.Key, pair.Value.Q<Label>("SpellManaLabel"));
+
             _spellIcons.Add(SpellIds.WeaponBarrage, _weaponBarrageButton.Q<VisualElement>("TowerIcon"));
             _spellIcons.Add(SpellIds.BaseRepair, _baseRepairButton.Q<VisualElement>("TowerIcon"));
             _spellIcons.Add(SpellIds.BarrageProtocol, _barrageProtocolButton.Q<VisualElement>("TowerIcon"));
@@ -202,6 +189,14 @@ namespace Project.Scripts.UI.LevelUI
                                  ?? throw new InvalidOperationException(
                                      "LevelUIView: element 'CardChoiceWindow' was not found.");
             _cardChoiceView = new CardChoiceView(cardChoiceRoot);
+        }
+        
+        public void SetSpellManaCost(string spellId, int manaCost)
+        {
+            if (!_spellManaLabels.TryGetValue(spellId, out var label))
+                throw new ArgumentException($"Unknown spell id '{spellId}'.", nameof(spellId));
+
+            label.text = $"{manaCost} маны";
         }
         
         public void SetPriceTower(int price)
@@ -318,11 +313,6 @@ namespace Project.Scripts.UI.LevelUI
         {
             _weaponBarrageButton.SetEnabled(isEnabled);
             _weaponBarrageNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ЗАЛП";
-            _weaponBarrageStatusLabel.text = isTargeting
-                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
-                : cooldownSeconds > 0
-                    ? $"КД {cooldownSeconds}с"
-                    : "ГОТОВО";
         }
 
         public void SetBaseRepairState(
@@ -334,11 +324,6 @@ namespace Project.Scripts.UI.LevelUI
         {
             _baseRepairButton.SetEnabled(isEnabled);
             _baseRepairNameLabel.text = displayName;
-            _baseRepairStatusLabel.text = isBaseFull
-                ? "БАЗА ЦЕЛА"
-                : cooldownSeconds > 0
-                    ? $"КД {cooldownSeconds}с"
-                    : $"+{healAmount} HP";
         }
 
         public void SetBarrageProtocolState(
@@ -350,35 +335,18 @@ namespace Project.Scripts.UI.LevelUI
         {
             _barrageProtocolButton.SetEnabled(isEnabled);
             _barrageProtocolNameLabel.text = "ШКВАЛ";
-            _barrageProtocolStatusLabel.text = activeSeconds > 0
-                ? $"АКТИВЕН {activeSeconds}с"
-                : !hasCombatTower
-                    ? "НЕТ БАШЕН"
-                    : cooldownSeconds > 0
-                        ? $"КД {cooldownSeconds}с"
-                        : $"+{attackSpeedBonusPercent}%";
         }
 
         public void SetCryoDischargeState(int cooldownSeconds, bool isTargeting, bool isEnabled)
         {
             _cryoDischargeButton.SetEnabled(isEnabled);
             _cryoDischargeNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "КРИО";
-            _cryoDischargeStatusLabel.text = isTargeting
-                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
-                : cooldownSeconds > 0
-                    ? $"КД {cooldownSeconds}с"
-                    : "ГОТОВО";
         }
 
         public void SetEmpPulseState(int cooldownSeconds, bool isTargeting, bool isEnabled)
         {
             _empPulseButton.SetEnabled(isEnabled);
             _empPulseNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ЭМИ";
-            _empPulseStatusLabel.text = isTargeting
-                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
-                : cooldownSeconds > 0
-                    ? $"КД {cooldownSeconds}с"
-                    : "ГОТОВО";
         }
 
         public void SetOrbitalRailgunState(
@@ -389,13 +357,6 @@ namespace Project.Scripts.UI.LevelUI
         {
             _orbitalRailgunButton.SetEnabled(isEnabled);
             _orbitalRailgunNameLabel.text = isTargeting ? "ПРОВЕДИ ЛИНИЮ" : "РЕЛЬС";
-            _orbitalRailgunStatusLabel.text = isTargeting
-                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
-                : isCasting
-                    ? "НАВЕДЕНИЕ"
-                    : cooldownSeconds > 0
-                        ? $"КД {cooldownSeconds}с"
-                        : "ГОТОВО";
         }
 
         public void SetGravityTrapState(
@@ -406,13 +367,6 @@ namespace Project.Scripts.UI.LevelUI
         {
             _gravityTrapButton.SetEnabled(isEnabled);
             _gravityTrapNameLabel.text = isTargeting ? "ВЫБЕРИ ЦЕЛЬ" : "ГРАВИ";
-            _gravityTrapStatusLabel.text = isTargeting
-                ? "НАЖМИ ДЛЯ ОТМЕНЫ"
-                : activeSeconds > 0
-                    ? $"АКТИВНА {activeSeconds}с"
-                    : cooldownSeconds > 0
-                        ? $"КД {cooldownSeconds}с"
-                        : "ГОТОВО";
         }
 
         private void OnBuyGeneratorButtonClicked() => BuyGeneratorButtonClicked?.Invoke();

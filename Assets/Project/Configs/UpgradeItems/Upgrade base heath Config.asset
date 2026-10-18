@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Upgrade base heath Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.UpgradeItemConfig
   _id: 3
+  _title: upgrade.base_health.title
   _description: upgrade.base_health.description
+  _details: upgrade.base_health.details
   _icon: {fileID: -5806125809501813694, guid: bffa08cd2ba7b5b4281ebd7b91f59d33, type: 3}
   _levels:
   - _price: 250
