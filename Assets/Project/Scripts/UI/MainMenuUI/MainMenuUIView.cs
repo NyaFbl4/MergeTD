@@ -27,6 +27,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private Label _goldCountLabel;
         private Label _gemsCountLabel;
+        private Button _settingsButton;
         private IInBattleUIView _inBattleView;
         private IArmyUIView _armyView;
         private IPurchaseWindowView _purchaseWindowView;
@@ -46,6 +47,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private int _sectionAnimationVersion;
 
         public event Action<MainMenuSection> SectionClicked;
+        public event Action SettingsButtonClicked;
         public IInBattleUIView InBattleView => _inBattleView;
         public IArmyUIView ArmyView => _armyView;
         public IPurchaseWindowView PurchaseWindowView => _purchaseWindowView;
@@ -57,6 +59,10 @@ namespace Project.Scripts.UI.MainMenuUI
             
             _goldCountLabel = _root.Q<Label>("GoldLabel");
             _gemsCountLabel = _root.Q<Label>("GemLabel");
+            _settingsButton = _root.Q<Button>("SettingsButton")
+                              ?? throw new InvalidOperationException(
+                                  "MainMenuUIView: element 'SettingsButton' was not found.");
+            _settingsButton.clicked += OnSettingsButtonClicked;
             var inBattleRoot = _root.Q<VisualElement>("InBattleContent")
                                ?? throw new InvalidOperationException(
                                    "MainMenuUIView: element 'InBattleContent' was not found.");
@@ -258,6 +264,8 @@ namespace Project.Scripts.UI.MainMenuUI
                 Mathf.Lerp(NormalFontSize, ActiveFontSize, activeProgress);
         }
 
+        private void OnSettingsButtonClicked() => SettingsButtonClicked?.Invoke();
+
         private void OnDestroy()
         {
             _sectionAnimationVersion++;
@@ -265,6 +273,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _armyView.Dispose();
             _purchaseWindowView.Dispose();
             _spellsPanelView.Dispose();
+            _settingsButton.clicked -= OnSettingsButtonClicked;
 
             for (var i = 0; i < _sectionButtons.Length; i++)
                 _sectionButtons[i].clicked -= _sectionClickHandlers[i];

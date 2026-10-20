@@ -102,6 +102,56 @@
           "en": "Shop"
         },
         {
+          "key": "shop.upgrades_tab",
+          "ru": "Улучшения",
+          "en": "Upgrades"
+        },
+        {
+          "key": "shop.no_offers",
+          "ru": "Нет доступных офферов",
+          "en": "No offers available"
+        },
+        {
+          "key": "shop.offer.limit_format",
+          "ru": "Осталось: {0}/{1}",
+          "en": "Remaining: {0}/{1}"
+        },
+        {
+          "key": "shop.offer.ends_format",
+          "ru": "До конца: {0}",
+          "en": "Ends in: {0}"
+        },
+        {
+          "key": "shop.offer.reset_format",
+          "ru": "Сброс: {0}",
+          "en": "Reset: {0}"
+        },
+        {
+          "key": "shop.offer.time_unavailable",
+          "ru": "Серверное время недоступно",
+          "en": "Server time unavailable"
+        },
+        {
+          "key": "shop.offer.limit_reached",
+          "ru": "Лимит исчерпан",
+          "en": "Limit reached"
+        },
+        {
+          "key": "shop.offer.insufficient_gold",
+          "ru": "Недостаточно золота",
+          "en": "Not enough gold"
+        },
+        {
+          "key": "shop.offer.product_unavailable",
+          "ru": "Товар недоступен",
+          "en": "Product unavailable"
+        },
+        {
+          "key": "shop.offer.purchase_in_progress",
+          "ru": "Покупка выполняется",
+          "en": "Purchase in progress"
+        },
+        {
           "key": "quests.title",
           "ru": "Задания",
           "en": "Quests"
@@ -261,11 +311,26 @@
       "ru": "Увеличивает максимальный запас маны",
       "en": "Increases maximum mana capacity"
     },
+    {
+      "key": "upgrade.start_energy.title",
+      "ru": "Увеличить стартовую ману",
+      "en": "Increase starting mana"
+    },
+    {
+      "key": "upgrade.start_energy.description",
+      "ru": "Стартовая мана: {0}",
+      "en": "Starting mana: {0}"
+    },
+    {
+      "key": "upgrade.start_energy.details",
+      "ru": "Увеличивает количество маны в начале забега",
+      "en": "Increases mana at the start of each run"
+    },
     { "key": "common.close", "ru": "Закрыть", "en": "Close" },
     { "key": "menu.shop", "ru": "МАГАЗИН", "en": "SHOP" },
     { "key": "menu.army", "ru": "АРМИЯ", "en": "ARMY" },
     { "key": "menu.battle", "ru": "В БОЙ", "en": "BATTLE" },
-    { "key": "menu.spells", "ru": "СПОСОБНОСТИ", "en": "SPELLS" },
+    { "key": "menu.spells", "ru": "СПЕЛЫ", "en": "SPELLS" },
     { "key": "menu.base", "ru": "БАЗА", "en": "BASE" },
     { "key": "army.power", "ru": "Сила: 200", "en": "Power: 200" },
     { "key": "army.sell_for", "ru": "Продать за", "en": "Sell for" },
@@ -289,8 +354,8 @@
     { "key": "cards.rarity.epic", "ru": "Эпическая", "en": "Epic" },
     { "key": "cards.placeholder_name", "ru": "Название", "en": "Name" },
     { "key": "cards.placeholder_description", "ru": "Описание карты", "en": "Card description" },
-    { "key": "spells.title", "ru": "Способности", "en": "Spells" },
-    { "key": "spells.selected_count_format", "ru": "Выбрано способностей: {0} / {1}", "en": "Selected spells: {0} / {1}" },
+    { "key": "spells.title", "ru": "Спелы", "en": "Spells" },
+    { "key": "spells.selected_count_format", "ru": "Выбрано спелов: {0} / {1}", "en": "Selected spells: {0} / {1}" },
     { "key": "spells.mana_format", "ru": "{0} маны", "en": "{0} mana" },
     { "key": "spells.level_format", "ru": "Уровень {0}", "en": "Level {0}" },
     { "key": "spells.cooldown_format", "ru": "КД {0:0.#} секунд, стоит {1} маны", "en": "Cooldown {0:0.#} sec, costs {1} mana" },
@@ -346,7 +411,7 @@
     { "key": "card.repair_100.description", "ru": "Мгновенно восстанавливает здоровье базы.", "en": "Instantly restores base health." },
     { "key": "card.repair_100.effect", "ru": "+100 HP", "en": "+100 HP" },
     { "key": "spell.weapon_barrage.name", "ru": "Оружейный залп", "en": "Weapon Barrage" },
-    { "key": "spell.weapon_barrage.description", "ru": "Наносит урон врагам в области. Нажмите способность, затем укажите область на поле.", "en": "Deals damage to enemies in an area. Activate the ability, then select an area on the battlefield." },
+    { "key": "spell.weapon_barrage.description", "ru": "Наносит урон врагам в области. Нажмите спел, затем укажите область на поле.", "en": "Deals damage to enemies in an area. Activate the ability, then select an area on the battlefield." },
     { "key": "spell.weapon_barrage.upgrade_2.title", "ru": "Усиленные боеприпасы", "en": "Enhanced Ammunition" },
     { "key": "spell.weapon_barrage.upgrade_2.description", "ru": "Урон залпа увеличивается на 25%.", "en": "Barrage damage increases by 25%." },
     { "key": "spell.weapon_barrage.upgrade_3.title", "ru": "Расширенный пакет", "en": "Expanded Payload" },
@@ -354,7 +419,7 @@
     { "key": "spell.weapon_barrage.upgrade_4.title", "ru": "Быстрая перезарядка", "en": "Rapid Reload" },
     { "key": "spell.weapon_barrage.upgrade_4.description", "ru": "Перезарядка сокращается на 3 секунды.", "en": "Cooldown is reduced by 3 seconds." },
     { "key": "spell.base_repair.name", "ru": "Ремонт базы", "en": "Base Repair" },
-    { "key": "spell.base_repair.description", "ru": "Лечит базу. Нажмите способность — она сработает сразу.", "en": "Repairs the base. Activate the ability to use it immediately." },
+    { "key": "spell.base_repair.description", "ru": "Лечит базу. Нажмите спел — она сработает сразу.", "en": "Repairs the base. Activate the ability to use it immediately." },
     { "key": "spell.base_repair.upgrade_2.title", "ru": "Усиленный ремонт", "en": "Enhanced Repair" },
     { "key": "spell.base_repair.upgrade_2.description", "ru": "Восстанавливает ещё 2 HP.", "en": "Restores 2 additional HP." },
     { "key": "spell.base_repair.upgrade_3.title", "ru": "Резервные наноботы", "en": "Reserve Nanobots" },
@@ -362,7 +427,7 @@
     { "key": "spell.base_repair.upgrade_4.title", "ru": "Аварийный протокол", "en": "Emergency Protocol" },
     { "key": "spell.base_repair.upgrade_4.description", "ru": "При низком HP базы восстанавливает ещё 3 HP.", "en": "Restores 3 additional HP when base health is low." },
     { "key": "spell.barrage_protocol.name", "ru": "Протокол «Шквал»", "en": "Barrage Protocol" },
-    { "key": "spell.barrage_protocol.description", "ru": "Временно ускоряет атаки башен. Нажмите способность — эффект включится сразу.", "en": "Temporarily speeds up tower attacks. Activate the ability to apply the effect immediately." },
+    { "key": "spell.barrage_protocol.description", "ru": "Временно ускоряет атаки башен. Нажмите спел — эффект включится сразу.", "en": "Temporarily speeds up tower attacks. Activate the ability to apply the effect immediately." },
     { "key": "spell.barrage_protocol.upgrade_2.title", "ru": "Усиленный разгон", "en": "Enhanced Acceleration" },
     { "key": "spell.barrage_protocol.upgrade_2.description", "ru": "Бонус скорости атаки увеличивается до 70%.", "en": "The attack speed bonus increases to 70%." },
     { "key": "spell.barrage_protocol.upgrade_3.title", "ru": "Продлённый протокол", "en": "Extended Protocol" },
@@ -370,7 +435,7 @@
     { "key": "spell.barrage_protocol.upgrade_4.title", "ru": "Нулевая задержка", "en": "Zero Delay" },
     { "key": "spell.barrage_protocol.upgrade_4.description", "ru": "Перезарядка сокращается на 5 секунд.", "en": "Cooldown is reduced by 5 seconds." },
     { "key": "spell.cryo_discharge.name", "ru": "Криоразряд", "en": "Cryo Discharge" },
-    { "key": "spell.cryo_discharge.description", "ru": "Замедляет врагов без урона. Нажмите способность, затем укажите область на поле.", "en": "Slows enemies without dealing damage. Activate the ability, then select an area on the battlefield." },
+    { "key": "spell.cryo_discharge.description", "ru": "Замедляет врагов без урона. Нажмите спел, затем укажите область на поле.", "en": "Slows enemies without dealing damage. Activate the ability, then select an area on the battlefield." },
     { "key": "spell.cryo_discharge.upgrade_2.title", "ru": "Глубокая заморозка", "en": "Deep Freeze" },
     { "key": "spell.cryo_discharge.upgrade_2.description", "ru": "Сила замедления увеличивается до 65%.", "en": "Slow strength increases to 65%." },
     { "key": "spell.cryo_discharge.upgrade_3.title", "ru": "Расширенный контур", "en": "Expanded Contour" },
@@ -378,7 +443,7 @@
     { "key": "spell.cryo_discharge.upgrade_4.title", "ru": "Криоизоляция", "en": "Cryo Insulation" },
     { "key": "spell.cryo_discharge.upgrade_4.description", "ru": "Длительность замедления увеличивается на 2 секунды.", "en": "Slow duration increases by 2 seconds." },
     { "key": "spell.emp_pulse.name", "ru": "ЭМИ-импульс", "en": "EMP Pulse" },
-    { "key": "spell.emp_pulse.description", "ru": "Оглушает врагов без урона. Нажмите способность, затем укажите область на поле.", "en": "Stuns enemies without dealing damage. Activate the ability, then select an area on the battlefield." },
+    { "key": "spell.emp_pulse.description", "ru": "Оглушает врагов без урона. Нажмите спел, затем укажите область на поле.", "en": "Stuns enemies without dealing damage. Activate the ability, then select an area on the battlefield." },
     { "key": "spell.emp_pulse.upgrade_2.title", "ru": "Усиленный разряд", "en": "Enhanced Discharge" },
     { "key": "spell.emp_pulse.upgrade_2.description", "ru": "Длительность оглушения увеличивается на 1 секунду.", "en": "Stun duration increases by 1 second." },
     { "key": "spell.emp_pulse.upgrade_3.title", "ru": "Широкий импульс", "en": "Wide Pulse" },
@@ -386,7 +451,7 @@
     { "key": "spell.emp_pulse.upgrade_4.title", "ru": "Быстрая перезарядка", "en": "Rapid Reload" },
     { "key": "spell.emp_pulse.upgrade_4.description", "ru": "Перезарядка уменьшается на 4 секунды.", "en": "Cooldown is reduced by 4 seconds." },
     { "key": "spell.orbital_railgun.name", "ru": "Орбитальный рельсотрон", "en": "Orbital Railgun" },
-    { "key": "spell.orbital_railgun.description", "ru": "Наносит огромный урон вдоль линии. Нажмите способность, проведите линию и отпустите.", "en": "Deals massive damage along a line. Activate the ability, draw a line, then release." },
+    { "key": "spell.orbital_railgun.description", "ru": "Наносит огромный урон вдоль линии. Нажмите спел, проведите линию и отпустите.", "en": "Deals massive damage along a line. Activate the ability, draw a line, then release." },
     { "key": "spell.orbital_railgun.upgrade_2.title", "ru": "Перегрузка ускорителя", "en": "Accelerator Overload" },
     { "key": "spell.orbital_railgun.upgrade_2.description", "ru": "Урон увеличивается на 500.", "en": "Damage increases by 500." },
     { "key": "spell.orbital_railgun.upgrade_3.title", "ru": "Широкий канал", "en": "Wide Channel" },
@@ -394,7 +459,7 @@
     { "key": "spell.orbital_railgun.upgrade_4.title", "ru": "Быстрое наведение", "en": "Rapid Targeting" },
     { "key": "spell.orbital_railgun.upgrade_4.description", "ru": "Задержка перед ударом уменьшается на 0,4 секунды.", "en": "Strike delay is reduced by 0.4 seconds." },
     { "key": "spell.gravity_trap.name", "ru": "Гравитационная ловушка", "en": "Gravity Trap" },
-    { "key": "spell.gravity_trap.description", "ru": "Стягивает и удерживает врагов без урона. Нажмите способность, затем укажите точку на поле.", "en": "Pulls and holds enemies without dealing damage. Activate the ability, then select a point on the battlefield." },
+    { "key": "spell.gravity_trap.description", "ru": "Стягивает и удерживает врагов без урона. Нажмите спел, затем укажите точку на поле.", "en": "Pulls and holds enemies without dealing damage. Activate the ability, then select a point on the battlefield." },
     { "key": "spell.gravity_trap.upgrade_2.title", "ru": "Усиленный коллапс", "en": "Enhanced Collapse" },
     { "key": "spell.gravity_trap.upgrade_2.description", "ru": "Скорость стягивания увеличивается на 0,75.", "en": "Pull speed increases by 0.75." },
     { "key": "spell.gravity_trap.upgrade_3.title", "ru": "Широкий горизонт", "en": "Wide Horizon" },

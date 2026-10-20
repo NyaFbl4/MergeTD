@@ -71,6 +71,7 @@ namespace Project.Scripts.System.Save
         public event Action TowersChanged;
         public event Action TowerSlotsChanged;
         public event Action SpellsChanged;
+        public event Action ShopOfferProgressChanged;
 
         public WorldService(WorldSaveService saveService)
         {
@@ -245,6 +246,110 @@ namespace Project.Scripts.System.Save
             _data.gems -= amount;
             Save();
             GemsChanged?.Invoke(Gems);
+            return true;
+        }
+
+        public int GetShopOfferPurchasesToday(string offerId, long utcDay)
+        {
+            if (string.IsNullOrWhiteSpace(offerId))
+                throw new ArgumentException("An offer id is required.", nameof(offerId));
+
+            if (utcDay < 0)
+                throw new ArgumentOutOfRangeException(nameof(utcDay));
+
+            var progress = FindShopOfferProgress(offerId);
+            return progress != null && progress.utcDay == utcDay
+                ? progress.purchasesToday
+                : 0;
+        }
+
+        public bool TryApplyShopOfferPurchase(
+            string offerId,
+            int goldPrice,
+            int rewardGold,
+            int rewardGems,
+            string spellId,
+            long utcDay,
+            int dailyLimit)
+        {
+            if (string.IsNullOrWhiteSpace(offerId))
+                throw new ArgumentException("An offer id is required.", nameof(offerId));
+
+            if (goldPrice < 0)
+                throw new ArgumentOutOfRangeException(nameof(goldPrice));
+
+            if (rewardGold < 0)
+                throw new ArgumentOutOfRangeException(nameof(rewardGold));
+
+            if (rewardGems < 0)
+                throw new ArgumentOutOfRangeException(nameof(rewardGems));
+
+            if (dailyLimit < 0)
+                throw new ArgumentOutOfRangeException(nameof(dailyLimit));
+
+            if (rewardGold == 0 && rewardGems == 0 && string.IsNullOrWhiteSpace(spellId))
+                throw new ArgumentException("An offer requires at least one reward.", nameof(offerId));
+
+            if (dailyLimit > 0 && utcDay < 0)
+                return false;
+
+            if (Gold < goldPrice)
+                return false;
+
+            if (goldPrice > 0
+                && !string.IsNullOrWhiteSpace(spellId)
+                && IsSpellUnlocked(spellId))
+                return false;
+
+            ShopOfferProgressSaveData progress = null;
+            var purchasesToday = 0;
+            if (dailyLimit > 0)
+            {
+                progress = FindShopOfferProgress(offerId);
+                if (progress != null && progress.utcDay == utcDay)
+                    purchasesToday = progress.purchasesToday;
+
+                if (purchasesToday >= dailyLimit)
+                    return false;
+            }
+
+            _data.gold -= goldPrice;
+            _data.gold = AddClamped(_data.gold, rewardGold);
+            _data.gems = AddClamped(_data.gems, rewardGems);
+
+            if (!string.IsNullOrWhiteSpace(spellId))
+            {
+                var spell = GetOrCreateSpell(spellId);
+                spell.isUnlocked = true;
+                spell.level = Math.Max(1, spell.level);
+            }
+
+            if (dailyLimit > 0)
+            {
+                if (progress == null)
+                {
+                    progress = new ShopOfferProgressSaveData(offerId, utcDay, 0);
+                    _data.shopOffers.Add(progress);
+                }
+
+                progress.utcDay = utcDay;
+                progress.purchasesToday = purchasesToday + 1;
+            }
+
+            Save();
+
+            if (goldPrice > 0 || rewardGold > 0)
+                GoldChanged?.Invoke(Gold);
+
+            if (rewardGems > 0)
+                GemsChanged?.Invoke(Gems);
+
+            if (!string.IsNullOrWhiteSpace(spellId))
+                SpellsChanged?.Invoke();
+
+            if (dailyLimit > 0)
+                ShopOfferProgressChanged?.Invoke();
+
             return true;
         }
 
@@ -520,6 +625,7 @@ namespace Project.Scripts.System.Save
             TowersChanged?.Invoke();
             TowerSlotsChanged?.Invoke();
             SpellsChanged?.Invoke();
+            ShopOfferProgressChanged?.Invoke();
         }
 
         private WorldSaveData CreateDefaults()
@@ -590,6 +696,7 @@ namespace Project.Scripts.System.Save
             _data.towerSlots ??= new List<WorldTowerSlotSaveData>();
             _data.spells ??= new List<SpellProgressSaveData>();
             _data.activeSpellIds ??= new List<string>();
+            _data.shopOffers ??= new List<ShopOfferProgressSaveData>();
 
             NormalizeQuests(_data.dailyQuests);
             NormalizeQuests(_data.weeklyQuests);
@@ -655,6 +762,22 @@ namespace Project.Scripts.System.Save
                 _data.activeSpellIds.RemoveRange(
                     MaximumActiveSpellCount,
                     _data.activeSpellIds.Count - MaximumActiveSpellCount);
+            }
+
+            var offerIds = new HashSet<string>();
+            for (var i = _data.shopOffers.Count - 1; i >= 0; i--)
+            {
+                var progress = _data.shopOffers[i];
+                if (progress == null
+                    || string.IsNullOrWhiteSpace(progress.offerId)
+                    || !offerIds.Add(progress.offerId))
+                {
+                    _data.shopOffers.RemoveAt(i);
+                    continue;
+                }
+
+                progress.utcDay = Math.Max(-1, progress.utcDay);
+                progress.purchasesToday = Math.Max(0, progress.purchasesToday);
             }
 
             SortTowerData();
@@ -801,6 +924,17 @@ namespace Project.Scripts.System.Save
             return null;
         }
 
+        private ShopOfferProgressSaveData FindShopOfferProgress(string offerId)
+        {
+            for (var i = 0; i < _data.shopOffers.Count; i++)
+            {
+                if (string.Equals(_data.shopOffers[i].offerId, offerId, StringComparison.Ordinal))
+                    return _data.shopOffers[i];
+            }
+
+            return null;
+        }
+
         private SpellProgressSaveData GetOrCreateSpell(string spellId)
         {
             var spell = FindSpell(spellId);
@@ -823,6 +957,7 @@ namespace Project.Scripts.System.Save
         {
             _data.towers.Sort((left, right) => string.CompareOrdinal(left.slotId, right.slotId));
             _data.towerSlots.Sort((left, right) => string.CompareOrdinal(left.slotId, right.slotId));
+            _data.shopOffers.Sort((left, right) => string.CompareOrdinal(left.offerId, right.offerId));
         }
 
         public int GetUpgradeLevel(string upgradeId)
@@ -870,6 +1005,7 @@ namespace Project.Scripts.System.Save
                     break;
                 case EWorldUpgradeType.BaseRepair:
                 case EWorldUpgradeType.ManaRestoration:
+                case EWorldUpgradeType.StartEnergy:
                     break;
                 case EWorldUpgradeType.MaxEnergy:
                     var energyIncrease = (int)Math.Round(value);

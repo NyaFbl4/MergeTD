@@ -33,8 +33,8 @@ namespace Project.Scripts.Gameplay.Systems
                 transform,
                 icon,
                 Color.white,
-                new Vector3(0f, 0.95f, 0f),
-                0.42f,
+                new Vector3(0.3f, 0.5f, 0f),
+                0.6f,
                 7f,
                 0.08f);
         }

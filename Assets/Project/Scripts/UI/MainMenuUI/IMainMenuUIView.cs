@@ -23,6 +23,7 @@ namespace Project.Scripts.UI.MainMenuUI
     public interface IMainMenuUIView : ILayoutView
     {
         event Action<MainMenuSection> SectionClicked;
+        event Action SettingsButtonClicked;
 
         IInBattleUIView InBattleView { get; }
         IArmyUIView ArmyView { get; }

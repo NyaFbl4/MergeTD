@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="ShopUI.uss" />
+    <ui:VisualElement name="OfferCard" class="shop-offer-card">
+        <ui:VisualElement class="shop-offer-icon-panel">
+            <ui:VisualElement name="MainIcon" class="shop-offer-main-icon" />
+        </ui:VisualElement>
+        <ui:VisualElement class="shop-offer-content">
+            <ui:Label name="TitleLabel" class="shop-offer-title" />
+            <ui:Label name="DescriptionLabel" class="shop-offer-description" />
+            <ui:VisualElement class="shop-offer-rewards">
+                <ui:VisualElement name="PrimaryReward" class="shop-offer-reward">
+                    <ui:VisualElement name="PrimaryRewardIcon" class="shop-offer-reward-icon" />
+                    <ui:Label name="PrimaryRewardLabel" class="shop-offer-reward-label" />
+                </ui:VisualElement>
+                <ui:VisualElement name="SecondaryReward" class="shop-offer-reward">
+                    <ui:VisualElement name="SecondaryRewardIcon" class="shop-offer-reward-icon" />
+                    <ui:Label name="SecondaryRewardLabel" class="shop-offer-reward-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="shop-offer-meta">
+                <ui:Label name="LimitLabel" class="shop-offer-meta-label" />
+                <ui:Label name="TimerLabel" class="shop-offer-meta-label" />
+            </ui:VisualElement>
+            <ui:Label name="StatusLabel" class="shop-offer-status" />
+        </ui:VisualElement>
+        <ui:Button name="BuyButton" class="shop-offer-buy-button">
+            <ui:VisualElement name="PriceIcon" class="shop-offer-price-icon" />
+            <ui:Label name="PriceLabel" class="shop-offer-price-label" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

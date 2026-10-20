@@ -17,6 +17,9 @@ MonoBehaviour:
   _description: spell.emp_pulse.description
   _icon: {fileID: -8683594438223814369, guid: 07eb0cc7976e903458406e38affc2ad4, type: 3}
   _background: {fileID: 4977526221841929852, guid: 83fc82f110364614fbec332a148a404a, type: 3}
+  _unlockType: 0
+  _unlockGemPrice: 0
+  _paymentProductId:
   _cooldown: 20
   _manaCost: 5
   _vfxPrefab: {fileID: 1814315751473787963, guid: e9459def1a517a24ba482f9e639df7ff, type: 3}

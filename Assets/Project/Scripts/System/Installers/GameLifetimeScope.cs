@@ -14,6 +14,7 @@ using Project.Scripts.System.Localization;
 using Project.Scripts.System.Reward;
 using Project.Scripts.System.Reward.RewardConfigs;
 using Project.Scripts.System.Save;
+using Project.Scripts.System.Shop;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.Gameplay.Run.Cards;
@@ -85,6 +86,7 @@ namespace Installers
             builder.Register<WorldService>(Lifetime.Singleton).As<IWorldService>().AsSelf();
             builder.Register<YGDailyRewardTimeProvider>(Lifetime.Singleton).As<IDailyRewardTimeProvider>();
             builder.Register<DailyRewardService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<ShopOfferService>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<RunBackgroundRuntime>(Lifetime.Singleton);
             
             // UI core
@@ -200,6 +202,7 @@ namespace Installers
             builder.RegisterInstance(_uiElements);
             builder.RegisterInstance(_spellCatalog);
             builder.RegisterInstance(_dailyRewards);
+            builder.RegisterInstance(ShopOfferCatalog.LoadFromResources());
             builder.RegisterInstance(BaseUpgradeConfigProvider.LoadFromResources());
         }
     }

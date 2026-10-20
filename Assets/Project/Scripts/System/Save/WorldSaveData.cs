@@ -27,6 +27,7 @@ namespace Project.Scripts.System.Save
         public List<WorldTowerSlotSaveData> towerSlots = new();
         public List<SpellProgressSaveData> spells = new();
         public List<string> activeSpellIds = new();
+        public List<ShopOfferProgressSaveData> shopOffers = new();
         public List<QuestSaveData> dailyQuests = new();
         public List<QuestSaveData> weeklyQuests = new();
         public List<QuestSaveData> achievementQuests = new();
@@ -110,6 +111,25 @@ namespace Project.Scripts.System.Save
             this.spellId = spellId;
             this.isUnlocked = isUnlocked;
             this.level = level;
+        }
+    }
+
+    [Serializable]
+    public sealed class ShopOfferProgressSaveData
+    {
+        public string offerId;
+        public long utcDay = -1;
+        public int purchasesToday;
+
+        public ShopOfferProgressSaveData()
+        {
+        }
+
+        public ShopOfferProgressSaveData(string offerId, long utcDay, int purchasesToday)
+        {
+            this.offerId = offerId;
+            this.utcDay = utcDay;
+            this.purchasesToday = purchasesToday;
         }
     }
 }

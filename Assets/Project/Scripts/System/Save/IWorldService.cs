@@ -14,7 +14,8 @@ namespace Project.Scripts.System.Save
         TowerCritDamage,
         BaseRepair,
         ManaRestoration,
-        MaxEnergy
+        MaxEnergy,
+        StartEnergy
     }
 
     public interface IWorldService
@@ -51,6 +52,7 @@ namespace Project.Scripts.System.Save
         event Action TowersChanged;
         event Action TowerSlotsChanged;
         event Action SpellsChanged;
+        event Action ShopOfferProgressChanged;
 
         bool CanSpendGold(int amount);
         bool TrySpendGold(int amount);
@@ -65,6 +67,15 @@ namespace Project.Scripts.System.Save
             IReadOnlyList<QuestSaveData> weeklyQuests,
             IReadOnlyList<QuestSaveData> achievementQuests);
         bool TrySpendGems(int amount);
+        int GetShopOfferPurchasesToday(string offerId, long utcDay);
+        bool TryApplyShopOfferPurchase(
+            string offerId,
+            int goldPrice,
+            int rewardGold,
+            int rewardGems,
+            string spellId,
+            long utcDay,
+            int dailyLimit);
         void SetMaxBaseHealth(int value);
         void SetMaxEnergy(int value);
         int GetUpgradeLevel(string upgradeId);

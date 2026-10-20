@@ -3,8 +3,8 @@
         <ui:VisualElement name="UpgradeIcon" picking-mode="Ignore" style="width: 92px; height: 92px; margin-right: 18px; flex-shrink: 0; background-image: resource(&quot;UI/Shopping popup/shield icon&quot;); -unity-background-scale-mode: scale-to-fit;"/>
         <ui:VisualElement name="UpgradeContent" style="flex-grow: 1; flex-shrink: 1; min-width: 0; padding-right: 12px;">
             <ui:VisualElement name="UpgradeTitleRow" style="flex-direction: row; align-items: center; top: -9px;">
-                <ui:Label text="upgrade.base_health.title" name="UpgradeTitleLabel" style="color: rgb(136, 55, 250); font-size: 28px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-font-style: bold;"/>
-                <ui:Label text="base.upgrade_level_format" name="UpgradeLevelLabel" style="margin-left: 7px; color: rgb(136, 55, 250); font-size: 23px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-font-style: bold;"/>
+                <ui:Label text="upgrade.base_health.title" name="UpgradeTitleLabel" style="color: rgb(136, 55, 250); font-size: 28px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-font-style: bold; height: auto; -unity-text-auto-size: best-fit 10px 35px; width: 350px;"/>
+                <ui:Label text="base.upgrade_level_format" name="UpgradeLevelLabel" style="margin-left: 7px; color: rgb(136, 55, 250); font-size: 23px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-font-style: bold; width: 160px;"/>
             </ui:VisualElement>
             <ui:VisualElement name="UpgradeValueRow" style="min-height: 34px; flex-direction: row; align-items: center; top: -16px;">
                 <ui:Label text="10" name="CurrentValueLabel" style="color: rgb(135, 97, 236); font-size: 24px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;);"/>

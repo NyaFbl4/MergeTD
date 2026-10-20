@@ -2,6 +2,7 @@ Authorization v1.023
 AutoTranslateLangs v1.003
 InterstitialAdv v1.02
 Localization v1.02
+Payments v1.02
 Review v1.0
 RewardedAdv v1.011
 ServerTime v1.02

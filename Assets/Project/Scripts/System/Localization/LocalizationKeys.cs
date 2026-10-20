@@ -44,8 +44,21 @@ namespace Project.Scripts.System.Localization
         public const string UpgradeMaxEnergyTitle = "upgrade.max_energy.title";
         public const string UpgradeMaxEnergyDescription = "upgrade.max_energy.description";
         public const string UpgradeMaxEnergyDetails = "upgrade.max_energy.details";
+        public const string UpgradeStartEnergyTitle = "upgrade.start_energy.title";
+        public const string UpgradeStartEnergyDescription = "upgrade.start_energy.description";
+        public const string UpgradeStartEnergyDetails = "upgrade.start_energy.details";
         
         public const string ShopTitle = "shop.title";
+        public const string ShopUpgradesTab = "shop.upgrades_tab";
+        public const string ShopNoOffers = "shop.no_offers";
+        public const string ShopOfferLimitFormat = "shop.offer.limit_format";
+        public const string ShopOfferEndsFormat = "shop.offer.ends_format";
+        public const string ShopOfferResetFormat = "shop.offer.reset_format";
+        public const string ShopOfferTimeUnavailable = "shop.offer.time_unavailable";
+        public const string ShopOfferLimitReached = "shop.offer.limit_reached";
+        public const string ShopOfferInsufficientGold = "shop.offer.insufficient_gold";
+        public const string ShopOfferProductUnavailable = "shop.offer.product_unavailable";
+        public const string ShopOfferPurchaseInProgress = "shop.offer.purchase_in_progress";
         public const string QuestsTitle = "quests.title";
         public const string QuestsDailyTitle = "quests.daily_title";
         public const string QuestsButton = "quests.button";

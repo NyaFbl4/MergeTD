@@ -19,6 +19,7 @@ using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.UI.ShopUI;
+using Project.Scripts.UI.SettingsUI;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
@@ -120,7 +121,8 @@ namespace Project.Scripts.UI.MainMenuUI
                 new BaseHealthUpgradeItem(_upgradeConfigs.HealthUpgradeConfig, _playerStats, _baseHealth),
                 new BaseRepairUpgradeItem(_baseUpgradeConfigs.Repair, _playerStats),
                 new ManaRestorationUpgradeItem(_baseUpgradeConfigs.ManaRestoration, _playerStats),
-                new MaxEnergyUpgradeItem(_baseUpgradeConfigs.MaxEnergy, _playerStats, _world)
+                new MaxEnergyUpgradeItem(_baseUpgradeConfigs.MaxEnergy, _playerStats, _world),
+                new StartEnergyUpgradeItem(_baseUpgradeConfigs.StartEnergy, _playerStats)
             };
 
             _inBattlePresenter = new InBattleUIPresenter(
@@ -139,6 +141,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _menuUIUseCase.GemsChanged += OnGemsChanged;
             _menuUIUseCase.ActiveSectionChanged += OnActiveSectionChanged;
             _layoutView.SectionClicked += OnSectionClicked;
+            _layoutView.SettingsButtonClicked += OnSettingsButtonClicked;
             _playerStats.OnGoldChanged += OnPlayerGoldChanged;
             _playerStats.UpgradesChanged += OnUpgradesChanged;
             _localizationService.OnChangeLanguage += OnLanguageChanged;
@@ -179,6 +182,15 @@ namespace Project.Scripts.UI.MainMenuUI
         }
 
         private void OnSetSpellsButtonClicked() => OnSectionClicked(MainMenuSection.Spells);
+
+        private void OnSettingsButtonClicked()
+        {
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(ISettingsUIPresenter)
+            });
+        }
 
         private void OnPlayerGoldChanged(int _)
         {
@@ -221,6 +233,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _menuUIUseCase.GemsChanged -= OnGemsChanged;
             _menuUIUseCase.ActiveSectionChanged -= OnActiveSectionChanged;
             _layoutView.SectionClicked -= OnSectionClicked;
+            _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;
             _layoutView.ArmyView.SetTowersButtonClicked -= OnSetTowersButtonClicked;
             _layoutView.ArmyView.SetSpellsButtonClicked -= OnSetSpellsButtonClicked;
             _playerStats.OnGoldChanged -= OnPlayerGoldChanged;

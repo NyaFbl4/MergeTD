@@ -29,15 +29,18 @@ namespace Project.Scripts.Configs
         public UpgradeItemConfig Repair { get; }
         public UpgradeItemConfig ManaRestoration { get; }
         public UpgradeItemConfig MaxEnergy { get; }
+        public UpgradeItemConfig StartEnergy { get; }
 
         private BaseUpgradeConfigProvider(
             UpgradeItemConfig repair,
             UpgradeItemConfig manaRestoration,
-            UpgradeItemConfig maxEnergy)
+            UpgradeItemConfig maxEnergy,
+            UpgradeItemConfig startEnergy)
         {
             Repair = repair;
             ManaRestoration = manaRestoration;
             MaxEnergy = maxEnergy;
+            StartEnergy = startEnergy;
         }
 
         public static BaseUpgradeConfigProvider LoadFromResources()
@@ -45,7 +48,8 @@ namespace Project.Scripts.Configs
             return new BaseUpgradeConfigProvider(
                 Load("Base Repair Upgrade"),
                 Load("Mana Restoration Upgrade"),
-                Load("Max Energy Upgrade"));
+                Load("Max Energy Upgrade"),
+                Load("Start Energy Upgrade"));
         }
 
         private static UpgradeItemConfig Load(string assetName)

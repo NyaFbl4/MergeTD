@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Project.Scripts.Configs;
 using Project.Scripts.Gameplay;
 using Project.Scripts.Gameplay.Base;
 using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Cards;
+using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.UseCases;
 
@@ -13,6 +15,7 @@ namespace Project.Scripts.System.Save
     {
         private readonly ProgressSaveService _saveService;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
+        private readonly BaseUpgradeConfigProvider _baseUpgradeConfigs;
         private readonly IBuyTowerUseCase _buyTowerUseCase;
         private readonly BattlefieldContext _battlefieldContext;
         private readonly BaseHealth _baseHealth;
@@ -26,6 +29,7 @@ namespace Project.Scripts.System.Save
         public ProgressCheckpointUseCase(
             ProgressSaveService saveService,
             IPlayerStatsUseCase playerStatsUseCase,
+            BaseUpgradeConfigProvider baseUpgradeConfigs,
             IBuyTowerUseCase buyTowerUseCase,
             BattlefieldContext battlefieldContext,
             BaseHealth baseHealth,
@@ -38,6 +42,7 @@ namespace Project.Scripts.System.Save
         {
             _saveService = saveService;
             _playerStatsUseCase = playerStatsUseCase;
+            _baseUpgradeConfigs = baseUpgradeConfigs;
             _buyTowerUseCase = buyTowerUseCase;
             _battlefieldContext = battlefieldContext;
             _baseHealth = baseHealth;
@@ -67,10 +72,18 @@ namespace Project.Scripts.System.Save
             ClearTowers(false);
             _runCardState.Reset();
             _runState.Reset();
-            _energy.Reset();
+            _energy.Restore(GetStartEnergy());
             _playerStatsUseCase.ResetState();
             _buyTowerUseCase.ResetTowerCost();
             _baseHealth.SetHealthState(_world.MaxBaseHealth, _world.MaxBaseHealth);
+        }
+
+        private int GetStartEnergy()
+        {
+            var config = _baseUpgradeConfigs.StartEnergy;
+            var level = _playerStatsUseCase.GetUpgradeLevel(config.Id);
+            return UnityEngine.Mathf.RoundToInt(
+                BaseUpgradeValueCalculator.GetCumulativeValue(config, level));
         }
 
         private void RestoreWorldTowers()

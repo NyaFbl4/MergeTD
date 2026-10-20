@@ -17,6 +17,9 @@ MonoBehaviour:
   _description: spell.orbital_railgun.description
   _icon: {fileID: 5176572134045062995, guid: bda9cc22aae71ba4b81eeba19d6d2bc9, type: 3}
   _background: {fileID: 3552237782043751338, guid: 42d9ddac7d10f1441a6333221d11cfac, type: 3}
+  _unlockType: 0
+  _unlockGemPrice: 0
+  _paymentProductId:
   _cooldown: 35
   _manaCost: 10
   _vfxPrefab: {fileID: 5904719056005892913, guid: 7a1f5c2344e7b8046b22ca0e8ffce4c1, type: 3}

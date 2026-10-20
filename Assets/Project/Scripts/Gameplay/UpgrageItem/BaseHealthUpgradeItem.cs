@@ -123,4 +123,18 @@ namespace Project.Scripts.Gameplay.UpgradeItem
             _world = world;
         }
     }
+
+    public sealed class StartEnergyUpgradeItem : BaseUpgradeItem
+    {
+        protected override EWorldUpgradeType UpgradeType => EWorldUpgradeType.StartEnergy;
+
+        public override float CurrentValue => GetCumulativeValue();
+        public override EBaseUpgradeValueFormat ValueFormat => EBaseUpgradeValueFormat.Number;
+
+        public StartEnergyUpgradeItem(
+            UpgradeItemConfig config,
+            IPlayerStatsUseCase playerStats) : base(config, playerStats)
+        {
+        }
+    }
 }
