@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UIToolkit/ShopUI.uss?fileID=11400000&amp;guid=2804ea254394429283042a052bab0302&amp;type=3#ShopUI"/>
+    <ui:VisualElement name="GemOfferCard" class="shop-gem-card" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+        <ui:VisualElement name="CardBackground" source="project://database/Assets/Project/Resources/UI/new/CardFrame08_Single_Purple.png?fileID=1425670357654502379&amp;guid=5350e80ca05eec7428eb528e09999b18&amp;type=3#CardFrame08_Single_Purple_0" scale-mode="StretchToFill" picking-mode="Ignore" class="shop-gem-card-background" style="-unity-slice-left: 40; -unity-slice-top: 40; -unity-slice-right: 40; -unity-slice-bottom: 40; background-image: resource(&quot;UI/new/CardFrame08_Single_Purple&quot;);"/>
+        <ui:VisualElement name="BonusBadge" class="shop-gem-badge" style="display: flex; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 25; -unity-slice-top: 25; -unity-slice-right: 25; -unity-slice-bottom: 25; -unity-background-image-tint-color: rgb(245, 245, 27);">
+            <ui:VisualElement name="BonusBackground" source="project://database/Assets/Project/Resources/UI/new/Buttons/Button01_175_Yellow.png?fileID=1081048443063510728&amp;guid=ab4d29c1f5173534a834b87b58c79749&amp;type=3#Button01_175_Yellow_0" scale-mode="ScaleToFit" picking-mode="Ignore" uv="0,0,1,1" class="shop-gem-badge-background" style="-unity-background-image-tint-color: rgb(142, 142, 142);"/>
+            <ui:Label name="BonusLabel" text="+25%" class="shop-gem-badge-label"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="GemIcons" class="shop-gem-icons shop-gem-icons--one">
+            <ui:VisualElement name="GemIconPrimary" source="project://database/Assets/Project/Resources/UI/new/Icons/Icon_Gem03_Diamond_Purple%201.png?fileID=8263698601183877077&amp;guid=fffcf6984de81b94391dbe8bbd56d0a1&amp;type=3#Icon_Gem03_Diamond_Purple%201_0" scale-mode="ScaleToFit" class="shop-gem-icon shop-gem-icon--primary" style="background-image: resource(&quot;UI/new/Icons/Icon_Gem03_Diamond_Purple 1&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+            <ui:VisualElement name="GemIconSecondary" scale-mode="ScaleToFit" class="shop-gem-icon shop-gem-icon--secondary"/>
+            <ui:VisualElement name="GemIconTertiary" scale-mode="ScaleToFit" class="shop-gem-icon shop-gem-icon--tertiary"/>
+        </ui:VisualElement>
+        <ui:Label name="AmountLabel" text="×80" class="shop-gem-amount"/>
+        <ui:Button name="BuyButton" class="shop-gem-buy-button" style="-unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; top: -9px;">
+            <ui:VisualElement name="BuyButtonBackground" source="project://database/Assets/Project/Resources/UI/new/Buttons/Button01_175_Green.png?fileID=8916753236450727188&amp;guid=85963750d2ffe1f4db6f815ed6a1762a&amp;type=3#Button01_175_Green_0" scale-mode="StretchToFill" picking-mode="Ignore" class="shop-gem-buy-background" style="background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 45; -unity-slice-top: 45; -unity-slice-right: 45; -unity-slice-bottom: 45; -unity-background-image-tint-color: rgb(39, 192, 46);"/>
+            <ui:Label name="PriceLabel" text="79 RUB" class="shop-gem-price"/>
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

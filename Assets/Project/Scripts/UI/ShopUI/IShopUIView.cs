@@ -17,9 +17,8 @@ namespace Project.Scripts.UI.ShopUI
         UpgradeItemConfig TowerLevelUpgradeConfig { get; }
     }
 
-    public interface IShopUIView : ILayoutView, IUpgradeConfigProvider
+    public interface IShopContentView : IUpgradeConfigProvider
     {
-        event Action CloseButtonClicked;
         event Action<string> TabClicked;
         event Action<string> OfferPurchaseClicked;
 
@@ -27,7 +26,20 @@ namespace Project.Scripts.UI.ShopUI
         void SetTabs(IReadOnlyList<ShopTabUIData> tabs, string selectedTabId);
         void ClearItems();
         void AddItem(IUpgradeItem item, Action onBuy, ILocalizationService localizationService);
-        void SetOffers(IReadOnlyList<ShopOfferUIData> offers);
+        void SetOffers(
+            IReadOnlyList<ShopOfferUIData> offers,
+            EShopOfferPlacementLayout layout);
         void ShowEmptyState(string text);
+    }
+
+    public interface IShopUIView : ILayoutView, IShopContentView
+    {
+        event Action CloseButtonClicked;
+    }
+
+    public interface IShopPanelUIView : IShopContentView
+    {
+        void SetVisible(bool visible);
+        void Dispose();
     }
 }

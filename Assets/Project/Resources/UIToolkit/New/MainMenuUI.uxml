@@ -4,6 +4,7 @@
     <ui:Template name="InBattlePanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/InBattlePanel.uxml?fileID=9197481963319205126&amp;guid=34cfc351c81e1c54b825581bca0f511d&amp;type=3#InBattlePanel"/>
     <ui:Template name="PurchaseWindowTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindowPreview.uxml?fileID=9197481963319205126&amp;guid=6f78f3413aef45d68c42bbf728d3d9af&amp;type=3#PurchaseWindowPreview"/>
     <ui:Template name="SpellsPanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/SpellsPanel.uxml?fileID=9197481963319205126&amp;guid=f58d8253033568441930b1764a916116&amp;type=3#SpellsPanel"/>
+    <ui:Template name="ShopPanelTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/ShopPanel.uxml"/>
     <Style src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindow.uss?fileID=11400000&amp;guid=1e6d40d4bbd44736a0267017630ba408&amp;type=3#PurchaseWindow"/>
     <ui:VisualElement name="Layout" style="flex-grow: 1;">
         <ui:VisualElement name="Background" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; background-image: resource(&quot;exec-3857d5d4-a61d-4425-901c-e1216a7ac466&quot;);"/>
@@ -25,6 +26,7 @@
         <ui:VisualElement name="Body" style="flex-grow: 1;">
             <ui:VisualElement name="MainPanel" style="flex-grow: 1; justify-content: flex-end; align-items: stretch; align-content: stretch;">
                 <ui:VisualElement name="ContentHost" style="flex-grow: 1; width: 100%; height: 100%; align-self: center; justify-content: center;">
+                    <ui:Instance template="ShopPanelTemplate" name="ShopPanel" style="display: none; flex-grow: 1; width: 100%; height: 100%;"/>
                     <ui:Instance template="ArmyPanel" name="ArmyPanel" style="display: none; flex-grow: 1; width: 100%; height: 100%;"/>
                     <ui:Instance template="InBattlePanelTemplate" name="InBattleContent" style="flex-grow: 1; width: 100%; height: 100%; display: flex;"/>
                     <ui:Instance template="SpellsPanelTemplate" name="SpellsPanel" style="flex-grow: 1; width: 100%; height: 100%; display: none;"/>

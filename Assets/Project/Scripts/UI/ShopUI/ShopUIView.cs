@@ -12,6 +12,7 @@ namespace Project.Scripts.UI.ShopUI
     public class ShopUIView : LayoutViewBase, IShopUIView
     {
         private const string OfferTemplateResourcePath = "UIToolkit/ShopOfferCard";
+        private const string GemOfferTemplateResourcePath = "UIToolkit/New/ShopGemOfferCard";
 
         [SerializeField] private VisualTreeAsset _shopItemTemplate;
         [SerializeField] private UpgradeItemConfig _damageUpgradeConfig;
@@ -22,9 +23,11 @@ namespace Project.Scripts.UI.ShopUI
         [SerializeField] private UpgradeItemConfig _towerLevelUpgradeConfig;
 
         private readonly List<string> _offerOrder = new();
-        private readonly Dictionary<string, ShopOfferItemView> _offerViews = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, IShopOfferItemView> _offerViews = new(StringComparer.Ordinal);
 
         private VisualTreeAsset _offerItemTemplate;
+        private VisualTreeAsset _gemOfferItemTemplate;
+        private EShopOfferPlacementLayout? _offerLayout;
         private Label _titleLabel;
         private Label _emptyLabel;
         private Button _closeButton;
@@ -64,6 +67,9 @@ namespace Project.Scripts.UI.ShopUI
             _offerItemTemplate = Resources.Load<VisualTreeAsset>(OfferTemplateResourcePath)
                                  ?? throw new MissingReferenceException(
                                      $"Shop offer template was not found at Resources/{OfferTemplateResourcePath}.");
+            _gemOfferItemTemplate = Resources.Load<VisualTreeAsset>(GemOfferTemplateResourcePath)
+                                    ?? throw new MissingReferenceException(
+                                        $"Shop gem offer template was not found at Resources/{GemOfferTemplateResourcePath}.");
 
             _closeButton.clicked += OnCloseButtonClicked;
         }
@@ -94,6 +100,8 @@ namespace Project.Scripts.UI.ShopUI
             _scrollView.Clear();
             _offerOrder.Clear();
             _offerViews.Clear();
+            _offerLayout = null;
+            _scrollView.contentContainer.EnableInClassList("shop-offer-grid", false);
             _emptyLabel.style.display = DisplayStyle.None;
         }
 
@@ -108,11 +116,13 @@ namespace Project.Scripts.UI.ShopUI
             _scrollView.Add(itemRoot);
         }
 
-        public void SetOffers(IReadOnlyList<ShopOfferUIData> offers)
+        public void SetOffers(
+            IReadOnlyList<ShopOfferUIData> offers,
+            EShopOfferPlacementLayout layout)
         {
             _emptyLabel.style.display = DisplayStyle.None;
-            if (RequiresOfferRebuild(offers))
-                RebuildOffers(offers);
+            if (RequiresOfferRebuild(offers, layout))
+                RebuildOffers(offers, layout);
 
             for (var i = 0; i < offers.Count; i++)
                 _offerViews[offers[i].Id].Bind(offers[i]);
@@ -125,9 +135,11 @@ namespace Project.Scripts.UI.ShopUI
             _emptyLabel.style.display = DisplayStyle.Flex;
         }
 
-        private bool RequiresOfferRebuild(IReadOnlyList<ShopOfferUIData> offers)
+        private bool RequiresOfferRebuild(
+            IReadOnlyList<ShopOfferUIData> offers,
+            EShopOfferPlacementLayout layout)
         {
-            if (_offerOrder.Count != offers.Count)
+            if (_offerLayout != layout || _offerOrder.Count != offers.Count)
                 return true;
 
             for (var i = 0; i < offers.Count; i++)
@@ -139,17 +151,32 @@ namespace Project.Scripts.UI.ShopUI
             return false;
         }
 
-        private void RebuildOffers(IReadOnlyList<ShopOfferUIData> offers)
+        private void RebuildOffers(
+            IReadOnlyList<ShopOfferUIData> offers,
+            EShopOfferPlacementLayout layout)
         {
             _scrollView.Clear();
             _offerOrder.Clear();
             _offerViews.Clear();
+            _offerLayout = layout;
+            var useGemGrid = layout == EShopOfferPlacementLayout.GemGrid;
+            _scrollView.contentContainer.EnableInClassList("shop-offer-grid", useGemGrid);
 
             for (var i = 0; i < offers.Count; i++)
             {
                 var offer = offers[i];
-                var offerRoot = _offerItemTemplate.Instantiate();
-                var offerView = new ShopOfferItemView(offerRoot, OnOfferPurchaseClicked);
+                var offerRoot = (useGemGrid ? _gemOfferItemTemplate : _offerItemTemplate).Instantiate();
+                IShopOfferItemView offerView;
+                if (useGemGrid)
+                {
+                    offerRoot.AddToClassList("shop-gem-card-container");
+                    offerView = new ShopGemOfferItemView(offerRoot, OnOfferPurchaseClicked);
+                }
+                else
+                {
+                    offerView = new ShopOfferItemView(offerRoot, OnOfferPurchaseClicked);
+                }
+
                 _offerOrder.Add(offer.Id);
                 _offerViews.Add(offer.Id, offerView);
                 _scrollView.Add(offerRoot);

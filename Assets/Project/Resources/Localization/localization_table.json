@@ -107,6 +107,16 @@
           "en": "Upgrades"
         },
         {
+          "key": "shop.gems_tab",
+          "ru": "Самоцветы",
+          "en": "Gems"
+        },
+        {
+          "key": "shop.gems_offer.title",
+          "ru": "Самоцветы",
+          "en": "Gems"
+        },
+        {
           "key": "shop.no_offers",
           "ru": "Нет доступных офферов",
           "en": "No offers available"

@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace Project.Scripts.UI.ShopUI
 {
+    public interface IShopOfferItemView
+    {
+        void Bind(ShopOfferUIData offer);
+    }
+
     public sealed class ShopTabUIData
     {
         public string Id { get; }
@@ -36,6 +41,8 @@ namespace Project.Scripts.UI.ShopUI
         public IReadOnlyList<ShopOfferRewardUIData> Rewards { get; }
         public Sprite PriceIcon { get; }
         public string Price { get; }
+        public string Badge { get; }
+        public int VisualIconCount { get; }
         public string Limit { get; }
         public string Timer { get; }
         public string Status { get; }
@@ -49,6 +56,8 @@ namespace Project.Scripts.UI.ShopUI
             IReadOnlyList<ShopOfferRewardUIData> rewards,
             Sprite priceIcon,
             string price,
+            string badge,
+            int visualIconCount,
             string limit,
             string timer,
             string status,
@@ -61,6 +70,8 @@ namespace Project.Scripts.UI.ShopUI
             Rewards = rewards;
             PriceIcon = priceIcon;
             Price = price;
+            Badge = badge;
+            VisualIconCount = visualIconCount;
             Limit = limit;
             Timer = timer;
             Status = status;

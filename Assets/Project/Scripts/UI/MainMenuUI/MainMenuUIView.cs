@@ -4,6 +4,7 @@ using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.UI.SpellsUI;
+using Project.Scripts.UI.ShopUI;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.Localization;
@@ -32,6 +33,7 @@ namespace Project.Scripts.UI.MainMenuUI
         private IArmyUIView _armyView;
         private IPurchaseWindowView _purchaseWindowView;
         private ISpellsPanelUIView _spellsPanelView;
+        private IShopPanelUIView _shopView;
         private VisualElement _basePanel;
         private Label _baseUpgradesTitleLabel;
         private ScrollView _baseUpgradesScrollView;
@@ -52,6 +54,7 @@ namespace Project.Scripts.UI.MainMenuUI
         public IArmyUIView ArmyView => _armyView;
         public IPurchaseWindowView PurchaseWindowView => _purchaseWindowView;
         public ISpellsPanelUIView SpellsPanelView => _spellsPanelView;
+        public IShopPanelUIView ShopView => _shopView;
 
         public override void Awake()
         {
@@ -109,6 +112,14 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             var armyRoot = _root.Q<TemplateContainer>("ArmyPanel");
             _armyView = new ArmyUIView(armyRoot, uiElements);
+        }
+
+        public void InitializeShop(IUpgradeConfigProvider upgradeConfigs)
+        {
+            var shopRoot = _root.Q<TemplateContainer>("ShopPanel")
+                           ?? throw new InvalidOperationException(
+                               "MainMenuUIView: element 'ShopPanel' was not found.");
+            _shopView = new ShopPanelUIView(shopRoot, upgradeConfigs);
         }
 
         public void InitializePurchaseWindow(UIElements uiElements)
@@ -170,6 +181,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _inBattleView.SetVisible(section == MainMenuSection.Battle);
             _armyView.SetVisible(section == MainMenuSection.Army);
             _spellsPanelView.SetVisible(section == MainMenuSection.Spells);
+            _shopView.SetVisible(section == MainMenuSection.Shop);
             _basePanel.style.display = section == MainMenuSection.Base
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
@@ -273,6 +285,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _armyView.Dispose();
             _purchaseWindowView.Dispose();
             _spellsPanelView.Dispose();
+            _shopView.Dispose();
             _settingsButton.clicked -= OnSettingsButtonClicked;
 
             for (var i = 0; i < _sectionButtons.Length; i++)

@@ -17,15 +17,23 @@ namespace Project.Scripts.Configs
         Spell = 2
     }
 
+    public enum EShopOfferPlacementLayout
+    {
+        List = 0,
+        GemGrid = 1
+    }
+
     [Serializable]
     public sealed class ShopOfferPrice
     {
         [SerializeField] private EShopOfferPriceType _type;
         [SerializeField] private string _productId;
+        [SerializeField] private string _previewPrice;
         [SerializeField, Min(1)] private int _goldAmount = 1;
 
         public EShopOfferPriceType Type => _type;
         public string ProductId => _productId;
+        public string PreviewPrice => _previewPrice;
         public int GoldAmount => _goldAmount;
 
         public void Validate(string offerId)
@@ -89,32 +97,6 @@ namespace Project.Scripts.Configs
     }
 
     [CreateAssetMenu(
-        fileName = "Shop Offer Placement",
-        menuName = "Project/Configs/Shop/Offer Placement")]
-    public sealed class ShopOfferPlacementConfig : ScriptableObject
-    {
-        [SerializeField] private string _id;
-        [SerializeField] private string _title;
-        [SerializeField] private int _order;
-
-        public string Id => _id;
-        public string Title => _title;
-        public int Order => _order;
-
-        public void Validate()
-        {
-            if (string.IsNullOrWhiteSpace(_id))
-                throw new InvalidOperationException($"Shop offer placement '{name}' requires an id.");
-
-            if (string.IsNullOrWhiteSpace(_title))
-            {
-                throw new InvalidOperationException(
-                    $"Shop offer placement '{_id}' requires a localization key.");
-            }
-        }
-    }
-
-    [CreateAssetMenu(
         fileName = "Shop Offer",
         menuName = "Project/Configs/Shop/Offer")]
     public sealed class ShopOfferConfig : ScriptableObject
@@ -129,6 +111,8 @@ namespace Project.Scripts.Configs
         [SerializeField] private string _title;
         [SerializeField, TextArea(2, 4)] private string _description;
         [SerializeField] private Sprite _mainIcon;
+        [SerializeField] private string _badge;
+        [SerializeField, Range(1, 3)] private int _visualIconCount = 1;
 
         [Header("Purchase")]
         [SerializeField] private ShopOfferPrice _price = new();
@@ -147,6 +131,8 @@ namespace Project.Scripts.Configs
         public string Title => _title;
         public string Description => _description;
         public Sprite MainIcon => _mainIcon;
+        public string Badge => _badge;
+        public int VisualIconCount => _visualIconCount;
         public ShopOfferPrice Price => _price;
         public IReadOnlyList<ShopOfferReward> Rewards => _rewards;
         public bool IsTimed => _isTimed;
@@ -166,6 +152,12 @@ namespace Project.Scripts.Configs
 
             if (string.IsNullOrWhiteSpace(_title))
                 throw new InvalidOperationException($"Shop offer '{_id}' requires a title key.");
+
+            if (_visualIconCount is < 1 or > 3)
+            {
+                throw new InvalidOperationException(
+                    $"Shop offer '{_id}' visual icon count must be between 1 and 3.");
+            }
 
             if (_price == null)
                 throw new InvalidOperationException($"Shop offer '{_id}' requires a price.");
@@ -316,6 +308,18 @@ namespace Project.Scripts.Configs
             }
 
             throw new InvalidOperationException($"Unknown shop offer id '{offerId}'.");
+        }
+
+        public ShopOfferPlacementConfig GetPlacement(string placementId)
+        {
+            for (var i = 0; i < _placements.Length; i++)
+            {
+                if (string.Equals(_placements[i].Id, placementId, StringComparison.Ordinal))
+                    return _placements[i];
+            }
+
+            throw new InvalidOperationException(
+                $"Unknown shop offer placement id '{placementId}'.");
         }
 
         private static int CompareOffers(ShopOfferConfig left, ShopOfferConfig right)

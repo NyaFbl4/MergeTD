@@ -6,6 +6,7 @@ using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.PurchaseWindowUI;
 using Project.Scripts.UI.SpellsUI;
+using Project.Scripts.UI.ShopUI;
 using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.Localization;
 
@@ -29,7 +30,9 @@ namespace Project.Scripts.UI.MainMenuUI
         IArmyUIView ArmyView { get; }
         IPurchaseWindowView PurchaseWindowView { get; }
         ISpellsPanelUIView SpellsPanelView { get; }
+        IShopPanelUIView ShopView { get; }
 
+        void InitializeShop(IUpgradeConfigProvider upgradeConfigs);
         void InitializeArmy(UIElements uiElements);
         void InitializePurchaseWindow(UIElements uiElements);
         void InitializeSpells(

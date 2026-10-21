@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UIToolkit/ShopUI.uss?fileID=11400000&amp;guid=2804ea254394429283042a052bab0302&amp;type=3#ShopUI"/>
+    <ui:VisualElement name="ShopSection" style="display: flex; flex-grow: 1; width: 100%; height: 100%; min-height: 0; align-items: center; padding-top: 10px; padding-bottom: 10px;">
+        <ui:VisualElement name="ShopContent" style="display: flex; flex-grow: 1; width: 950px; min-width: 950px; max-width: 950px; min-height: 0; align-items: center; background-image: none; -unity-background-scale-mode: stretch-to-fill;">
+            <ui:Label text="shop.title" name="TitleLabel" style="width: 700px; height: 76px; color: rgb(255, 255, 255); font-size: 48px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; -unity-text-align: middle-center; display: none;"/>
+            <ui:VisualElement name="TabsContainer" class="shop-tabs" style="position: relative; top: auto; left: auto; width: 700px; height: 62px; min-height: 62px; display: none;"/>
+            <ui:ScrollView name="ScrollView" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-grow: 1; width: 850px; min-height: 0;">
+                <ui:VisualElement name="OfferPanel" style="flex-grow: 1;">
+                    <ui:Label text="Предложения" name="OfferLabel" style="font-size: 75px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: upper-center;"/>
+                    <ui:VisualElement name="OfferContainer" style="flex-grow: 1; align-self: stretch; justify-content: center; align-items: center;"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="GemPanel" style="flex-grow: 1;">
+                    <ui:Label text="Гемы" name="GemLabel" style="font-size: 75px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: upper-center;"/>
+                    <ui:VisualElement name="GemContainer" style="flex-grow: 1; align-self: stretch; justify-content: center; align-items: center;"/>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:Label name="EmptyLabel" class="shop-empty-label"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

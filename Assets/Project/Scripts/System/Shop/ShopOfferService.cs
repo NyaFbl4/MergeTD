@@ -147,6 +147,9 @@ namespace Project.Scripts.System.Shop
             return result;
         }
 
+        public ShopOfferPlacementConfig GetPlacement(string placementId) =>
+            _catalog.GetPlacement(placementId);
+
         public bool TryPurchase(string offerId)
         {
             var config = _catalog.GetOffer(offerId);

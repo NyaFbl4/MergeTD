@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Project.Scripts.UI.ShopUI
 {
-    public sealed class ShopOfferItemView
+    public sealed class ShopOfferItemView : IShopOfferItemView
     {
         private readonly VisualElement _root;
         private readonly VisualElement _mainIcon;

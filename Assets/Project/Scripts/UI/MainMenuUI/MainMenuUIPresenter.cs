@@ -20,10 +20,12 @@ using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.UI.ShopUI;
 using Project.Scripts.UI.SettingsUI;
+using Project.Scripts.System.Shop;
+using VContainer.Unity;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
-    public class MainMenuUIPresenter : LayoutPresenterBase<IMainMenuUIView>, IMainMenuUIPresenter
+    public class MainMenuUIPresenter : LayoutPresenterBase<IMainMenuUIView>, IMainMenuUIPresenter, ITickable
     {
         private readonly MainMenuUIUseCase _menuUIUseCase;
         private readonly UIElements _uiElements;
@@ -42,10 +44,12 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly BaseUpgradeConfigProvider _baseUpgradeConfigs;
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly BaseHealth _baseHealth;
+        private readonly ShopOfferService _shopOfferService;
         private IInBattleUIPresenter _inBattlePresenter;
         private IArmyUIPresenter _armyPresenter;
         private PurchaseWindowPresenter _purchaseWindowPresenter;
         private SpellsPanelUIPresenter _spellsPanelPresenter;
+        private ShopContentPresenter _shopPresenter;
         private List<IBaseUpgradeItem> _baseUpgradeItems;
 
         public MainMenuUIPresenter(
@@ -65,7 +69,8 @@ namespace Project.Scripts.UI.MainMenuUI
             IUpgradeConfigProvider upgradeConfigs,
             BaseUpgradeConfigProvider baseUpgradeConfigs,
             IPlayerStatsUseCase playerStats,
-            BaseHealth baseHealth)
+            BaseHealth baseHealth,
+            ShopOfferService shopOfferService)
         {
             _menuUIUseCase = menuUIUseCase;
             _uiElements = uiElements;
@@ -84,11 +89,24 @@ namespace Project.Scripts.UI.MainMenuUI
             _baseUpgradeConfigs = baseUpgradeConfigs;
             _playerStats = playerStats;
             _baseHealth = baseHealth;
+            _shopOfferService = shopOfferService;
         }
         
         public override void Initialize()
         {
             base.Initialize();
+            _layoutView.InitializeShop(_upgradeConfigs);
+            _shopPresenter = new ShopContentPresenter(
+                _layoutView.ShopView,
+                _localizationService,
+                _playerStats,
+                _baseHealth,
+                _audioManager,
+                _shopOfferService,
+                _uiElements,
+                () => _menuUIUseCase.ActiveSection == MainMenuSection.Shop);
+            _shopPresenter.Initialize();
+
             _layoutView.InitializeArmy(_uiElements);
             _armyPresenter = new ArmyUIPresenter(
                 _layoutView.ArmyView,
@@ -166,7 +184,11 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             _layoutView.SetActiveSection(section);
             _purchaseWindowPresenter.Hide();
+            if (section == MainMenuSection.Shop)
+                _shopPresenter.Refresh();
         }
+
+        public void Tick() => _shopPresenter.Tick();
 
         private void OnSectionClicked(MainMenuSection section)
         {
@@ -243,6 +265,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _purchaseWindowPresenter.Dispose();
             _armyPresenter.Dispose();
             _spellsPanelPresenter.Dispose();
+            _shopPresenter.Dispose();
 
             base.Dispose();
         }

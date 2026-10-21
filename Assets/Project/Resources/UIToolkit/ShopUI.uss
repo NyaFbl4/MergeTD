@@ -193,3 +193,156 @@
 .shop-offer-buy-button:disabled {
     -unity-background-image-tint-color: var(--shop-disabled);
 }
+
+.shop-offer-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 14px;
+    padding-right: 4px;
+    padding-bottom: 18px;
+    padding-left: 4px;
+}
+
+.shop-gem-card-container {
+    width: 226px;
+    height: 292px;
+    margin-top: 7px;
+    margin-right: 2px;
+    margin-bottom: 7px;
+    margin-left: 2px;
+}
+
+.shop-gem-card {
+    width: 218px;
+    height: 282px;
+    padding-top: 18px;
+    padding-right: 14px;
+    padding-bottom: 16px;
+    padding-left: 14px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.shop-gem-card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.shop-gem-card--disabled {
+    opacity: 0.82;
+}
+
+.shop-gem-badge {
+    position: absolute;
+    top: -12px;
+    right: -9px;
+    min-width: 76px;
+    height: 38px;
+    padding-right: 10px;
+    padding-left: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-gem-badge-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.shop-gem-badge-label {
+    color: rgb(49, 35, 22);
+    font-size: 23px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-align: middle-center;
+}
+
+.shop-gem-icons {
+    position: relative;
+    width: 162px;
+    height: 104px;
+    margin-bottom: 8px;
+}
+
+.shop-gem-icon {
+    position: absolute;
+    top: 4px;
+    width: 94px;
+    height: 94px;
+}
+
+.shop-gem-icons--one > .shop-gem-icon--primary {
+    left: 34px;
+}
+
+.shop-gem-icons--two > .shop-gem-icon--primary {
+    left: 63px;
+}
+
+.shop-gem-icons--two > .shop-gem-icon--secondary {
+    left: 7px;
+}
+
+.shop-gem-icons--three > .shop-gem-icon--primary {
+    left: 34px;
+}
+
+.shop-gem-icons--three > .shop-gem-icon--secondary {
+    left: -7px;
+}
+
+.shop-gem-icons--three > .shop-gem-icon--tertiary {
+    left: 75px;
+}
+
+.shop-gem-amount {
+    width: 100%;
+    height: 42px;
+    margin-bottom: 15px;
+    color: rgb(255, 225, 105);
+    font-size: 30px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-outline-color: rgb(54, 36, 27);
+    -unity-text-outline-width: 1px;
+    -unity-text-align: middle-center;
+}
+
+.shop-gem-buy-button {
+    width: 168px;
+    height: 52px;
+    padding-top: 0;
+    padding-right: 10px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.shop-gem-buy-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.shop-gem-price {
+    color: rgb(255, 255, 255);
+    font-size: 27px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-outline-color: rgb(29, 68, 27);
+    -unity-text-outline-width: 1px;
+    -unity-text-align: middle-center;
+}
