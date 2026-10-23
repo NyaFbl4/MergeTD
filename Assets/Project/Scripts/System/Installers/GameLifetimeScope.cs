@@ -83,7 +83,7 @@ namespace Installers
             builder.Register<ProgressSaveService>(Lifetime.Singleton).AsSelf();
             builder.Register<ProgressCheckpointUseCase>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<WorldSaveService>(Lifetime.Singleton).AsSelf();
-            builder.Register<WorldService>(Lifetime.Singleton).As<IWorldService>().AsSelf();
+            builder.Register<WorldService>(Lifetime.Singleton).As<IWorldService>().As<IPlayerEnergyStore>().AsSelf();
             builder.Register<YGDailyRewardTimeProvider>(Lifetime.Singleton).As<IDailyRewardTimeProvider>();
             builder.Register<DailyRewardService>(Lifetime.Singleton);
             builder.RegisterEntryPoint<ShopOfferService>(Lifetime.Singleton).AsSelf();
@@ -153,6 +153,7 @@ namespace Installers
             builder.Register<RunSelectionService>(Lifetime.Singleton).As<IRunSelectionService>();
             builder.Register<RunState>(Lifetime.Singleton);
             builder.Register<RunEnergyService>(Lifetime.Singleton);
+            builder.Register<PlayerEnergyService>(Lifetime.Singleton);
             builder.Register<RunCardRuntimeState>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WeaponBarrageUseCase>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BaseRepairUseCase>(Lifetime.Singleton).AsSelf();

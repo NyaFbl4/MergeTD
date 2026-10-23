@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d639cfa00af436497ab611a4df38e36, type: 3}
+  m_Name: Energy Gems
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.ShopOfferConfig
+  _id: energy_gems_5
+  _placement: {fileID: 11400000, guid: 5bc4ed2c228045218e6229f9667949ff, type: 2}
+  _order: 1
+  _enabled: 1
+  _title: shop.energy_gems.title
+  _description:
+  _mainIcon: {fileID: 21300000, guid: eae0f201c6e1d4af9ae2b649b462739d, type: 3}
+  _badge:
+  _visualIconCount: 2
+  _price:
+    _type: 2
+    _productId:
+    _previewPrice:
+    _goldAmount: 1
+    _gemsAmount: 40
+  _rewards:
+  - _type: 3
+    _amount: 5
+    _spell: {fileID: 0}
+  _isTimed: 0
+  _startUnixMilliseconds: 0
+  _endUnixMilliseconds: 0
+  _dailyPurchaseLimit: 0

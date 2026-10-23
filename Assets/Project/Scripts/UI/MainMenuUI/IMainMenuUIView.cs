@@ -47,6 +47,7 @@ namespace Project.Scripts.UI.MainMenuUI
             ILocalizationService localizationService);
         void SetGoldCount(int goldCount);
         void SetDiamondCount(int diamondCount);
+        void SetPlayerEnergy(int current, int max, string countdown);
         void SetActiveSection(MainMenuSection section);
     }
 }

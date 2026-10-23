@@ -22,6 +22,9 @@ using Project.Scripts.UI.ShopUI;
 using Project.Scripts.UI.SettingsUI;
 using Project.Scripts.System.Shop;
 using VContainer.Unity;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using System;
 
 namespace Project.Scripts.UI.MainMenuUI
 {
@@ -45,6 +48,8 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly BaseHealth _baseHealth;
         private readonly ShopOfferService _shopOfferService;
+        private readonly PlayerEnergyService _playerEnergy;
+        private float _nextEnergyRefreshAt;
         private IInBattleUIPresenter _inBattlePresenter;
         private IArmyUIPresenter _armyPresenter;
         private PurchaseWindowPresenter _purchaseWindowPresenter;
@@ -70,7 +75,8 @@ namespace Project.Scripts.UI.MainMenuUI
             BaseUpgradeConfigProvider baseUpgradeConfigs,
             IPlayerStatsUseCase playerStats,
             BaseHealth baseHealth,
-            ShopOfferService shopOfferService)
+            ShopOfferService shopOfferService,
+            PlayerEnergyService playerEnergy)
         {
             _menuUIUseCase = menuUIUseCase;
             _uiElements = uiElements;
@@ -90,6 +96,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _playerStats = playerStats;
             _baseHealth = baseHealth;
             _shopOfferService = shopOfferService;
+            _playerEnergy = playerEnergy;
         }
         
         public override void Initialize()
@@ -152,7 +159,8 @@ namespace Project.Scripts.UI.MainMenuUI
                 _dailyRewardService,
                 _questService,
                 _localizationService,
-                _audioManager);
+                _audioManager,
+                _playerEnergy);
             _inBattlePresenter.Initialize();
             
             _menuUIUseCase.GoldChanged += OnGoldChanged;
@@ -166,6 +174,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
             _layoutView.SetGoldCount(_menuUIUseCase.Gold);
             _layoutView.SetDiamondCount(_menuUIUseCase.Gems);
+            RefreshPlayerEnergy();
             _layoutView.SetActiveSection(_menuUIUseCase.ActiveSection);
             RefreshBaseUpgrades();
         }
@@ -188,7 +197,43 @@ namespace Project.Scripts.UI.MainMenuUI
                 _shopPresenter.Refresh();
         }
 
-        public void Tick() => _shopPresenter.Tick();
+        public override UniTask ActivateAsync()
+        {
+            _inBattlePresenter.OnMenuShown();
+            RefreshPlayerEnergy();
+            return base.ActivateAsync();
+        }
+
+        public void Tick()
+        {
+            _shopPresenter.Tick();
+            if (Time.unscaledTime < _nextEnergyRefreshAt)
+                return;
+
+            _nextEnergyRefreshAt = Time.unscaledTime + 1f;
+            RefreshPlayerEnergy();
+        }
+
+        private void RefreshPlayerEnergy()
+        {
+            var state = _playerEnergy.GetState();
+            var countdown = string.Empty;
+            if (state.Current < state.Max)
+            {
+                if (state.IsTimeAvailable)
+                {
+                    var seconds = (long)Math.Ceiling(state.TimeUntilNextRestore.TotalSeconds);
+                    countdown = $"{seconds / 3600:00}:{seconds % 3600 / 60:00}:{seconds % 60:00}";
+                }
+                else
+                {
+                    countdown = "--:--:--";
+                }
+            }
+
+            _layoutView.SetPlayerEnergy(state.Current, state.Max, countdown);
+            _layoutView.InBattleView.SetPlayButtonEnabled(state.Current > 0);
+        }
 
         private void OnSectionClicked(MainMenuSection section)
         {

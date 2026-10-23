@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Reward;
 using Project.Scripts.System.Save;
 using VContainer.Unity;
@@ -15,7 +16,10 @@ namespace Project.Scripts.System.Shop
         DailyLimitReached = 2,
         InsufficientGold = 3,
         ProductUnavailable = 4,
-        PurchaseInProgress = 5
+        PurchaseInProgress = 5,
+        InsufficientGems = 6,
+        AdUnavailable = 7,
+        EnergyStorageFull = 8
     }
 
     public readonly struct ShopOfferState
@@ -70,6 +74,16 @@ namespace Project.Scripts.System.Shop
 
         public static bool IsActive(long unixMilliseconds, long start, long end) =>
             unixMilliseconds >= start && unixMilliseconds < end;
+
+        public static long GetPurchaseDay(EShopOfferPriceType priceType, long unixMilliseconds) =>
+            priceType == EShopOfferPriceType.RewardedAd
+                ? DailyRewardDayCalculator.FromUnixMilliseconds(unixMilliseconds)
+                : GetUtcDay(unixMilliseconds);
+
+        public static TimeSpan TimeUntilPurchaseLimitReset(EShopOfferPriceType priceType, long unixMilliseconds) =>
+            priceType == EShopOfferPriceType.RewardedAd
+                ? DailyRewardDayCalculator.TimeUntilNextMoscowDay(unixMilliseconds)
+                : TimeUntilNextUtcDay(unixMilliseconds);
     }
 
     public sealed class ShopOfferService : IInitializable, IDisposable
@@ -77,9 +91,13 @@ namespace Project.Scripts.System.Shop
         private readonly ShopOfferCatalog _catalog;
         private readonly IWorldService _world;
         private readonly IDailyRewardTimeProvider _timeProvider;
+        private readonly PlayerEnergyService _playerEnergy;
 
         private ShopOfferConfig _pendingPaymentOffer;
         private long _pendingPaymentUtcDay = -1;
+        private const string RewardedAdPrefix = "shop_offer_";
+        private ShopOfferConfig _pendingRewardedAdOffer;
+        private long _pendingRewardedAdDay = -1;
 
         public IReadOnlyList<ShopOfferPlacementConfig> Placements => _catalog.Placements;
 
@@ -90,11 +108,13 @@ namespace Project.Scripts.System.Shop
         public ShopOfferService(
             ShopOfferCatalog catalog,
             IWorldService world,
-            IDailyRewardTimeProvider timeProvider)
+            IDailyRewardTimeProvider timeProvider,
+            PlayerEnergyService playerEnergy)
         {
             _catalog = catalog;
             _world = world;
             _timeProvider = timeProvider;
+            _playerEnergy = playerEnergy;
         }
 
         public void Initialize()
@@ -102,7 +122,11 @@ namespace Project.Scripts.System.Shop
             YG2.onGetPayments += OnPaymentsLoaded;
             YG2.onPurchaseSuccess += OnPaymentSucceeded;
             YG2.onPurchaseFailed += OnPaymentFailed;
+            YG2.onRewardAdv += OnRewardedAdReward;
+            YG2.onCloseRewardedAdv += OnRewardedAdClosed;
+            YG2.onErrorRewardedAdv += OnRewardedAdError;
             _world.GoldChanged += OnGoldChanged;
+            _world.GemsChanged += OnGoldChanged;
             _world.SpellsChanged += OnWorldStateChanged;
             _world.ShopOfferProgressChanged += OnWorldStateChanged;
             RecoverUnconsumedPayments();
@@ -113,7 +137,11 @@ namespace Project.Scripts.System.Shop
             YG2.onGetPayments -= OnPaymentsLoaded;
             YG2.onPurchaseSuccess -= OnPaymentSucceeded;
             YG2.onPurchaseFailed -= OnPaymentFailed;
+            YG2.onRewardAdv -= OnRewardedAdReward;
+            YG2.onCloseRewardedAdv -= OnRewardedAdClosed;
+            YG2.onErrorRewardedAdv -= OnRewardedAdError;
             _world.GoldChanged -= OnGoldChanged;
+            _world.GemsChanged -= OnGoldChanged;
             _world.SpellsChanged -= OnWorldStateChanged;
             _world.ShopOfferProgressChanged -= OnWorldStateChanged;
         }
@@ -134,12 +162,10 @@ namespace Project.Scripts.System.Shop
         public List<ShopOfferState> GetVisibleOffers(string placementId)
         {
             var result = new List<ShopOfferState>();
-            for (var i = 0; i < _catalog.Offers.Count; i++)
+            var placement = _catalog.GetPlacement(placementId);
+            for (var i = 0; i < placement.Offers.Count; i++)
             {
-                var config = _catalog.Offers[i];
-                if (!string.Equals(config.Placement.Id, placementId, StringComparison.Ordinal))
-                    continue;
-
+                var config = placement.Offers[i];
                 if (TryGetState(config, out var state))
                     result.Add(state);
             }
@@ -165,8 +191,19 @@ namespace Project.Scripts.System.Shop
                 return true;
             }
 
+            if (config.Price.Type == EShopOfferPriceType.RewardedAd)
+            {
+                _pendingRewardedAdOffer = config;
+                _pendingRewardedAdDay = ResolvePurchaseDay(config);
+                StateChanged?.Invoke();
+                YG2.RewardedAdvShow(RewardedAdPrefix + config.Id);
+                return true;
+            }
+
             var currentDay = ResolvePurchaseDay(config);
-            if (!TryApplyPurchase(config, config.Price.GoldAmount, currentDay))
+            var goldPrice = config.Price.Type == EShopOfferPriceType.Gold ? config.Price.GoldAmount : 0;
+            var gemsPrice = config.Price.Type == EShopOfferPriceType.Gems ? config.Price.GemsAmount : 0;
+            if (!TryApplyPurchase(config, goldPrice, currentDay, gemsPrice))
                 return false;
 
             PurchaseSucceeded?.Invoke(config.Id);
@@ -176,11 +213,10 @@ namespace Project.Scripts.System.Shop
 
         private bool HasVisibleOffer(string placementId)
         {
-            for (var i = 0; i < _catalog.Offers.Count; i++)
+            var placement = _catalog.GetPlacement(placementId);
+            for (var i = 0; i < placement.Offers.Count; i++)
             {
-                var config = _catalog.Offers[i];
-                if (string.Equals(config.Placement.Id, placementId, StringComparison.Ordinal)
-                    && TryGetState(config, out _))
+                if (TryGetState(placement.Offers[i], out _))
                     return true;
             }
 
@@ -193,7 +229,8 @@ namespace Project.Scripts.System.Shop
             if (!config.Enabled || ContainsOwnedSpell(config))
                 return false;
 
-            var hasTime = _timeProvider.TryGetCurrentUnixMilliseconds(out var unixMilliseconds);
+            var hasTime = _timeProvider.TryGetCurrentUnixMilliseconds(out var unixMilliseconds)
+                          && unixMilliseconds > 0;
             if (config.IsTimed)
             {
                 if (!hasTime
@@ -221,10 +258,10 @@ namespace Project.Scripts.System.Shop
                 }
                 else
                 {
-                    var utcDay = ShopOfferTime.GetUtcDay(unixMilliseconds);
+                    var utcDay = ShopOfferTime.GetPurchaseDay(config.Price.Type, unixMilliseconds);
                     purchasesToday = _world.GetShopOfferPurchasesToday(config.Id, utcDay);
                     remainingPurchases = Math.Max(0, config.DailyPurchaseLimit - purchasesToday);
-                    timeUntilReset = ShopOfferTime.TimeUntilNextUtcDay(unixMilliseconds);
+                    timeUntilReset = ShopOfferTime.TimeUntilPurchaseLimitReset(config.Price.Type, unixMilliseconds);
                     if (remainingPurchases == 0)
                         blockReason = EShopOfferBlockReason.DailyLimitReached;
                 }
@@ -247,11 +284,37 @@ namespace Project.Scripts.System.Shop
                 if (_pendingPaymentOffer != null && blockReason == EShopOfferBlockReason.None)
                     blockReason = EShopOfferBlockReason.PurchaseInProgress;
             }
-            else if (!_world.CanSpendGold(config.Price.GoldAmount)
+            else if (config.Price.Type == EShopOfferPriceType.Gold
+                     && !_world.CanSpendGold(config.Price.GoldAmount)
                      && blockReason == EShopOfferBlockReason.None)
             {
                 blockReason = EShopOfferBlockReason.InsufficientGold;
             }
+
+            else if (config.Price.Type == EShopOfferPriceType.Gems
+                     && _world.Gems < config.Price.GemsAmount
+                     && blockReason == EShopOfferBlockReason.None)
+            {
+                blockReason = EShopOfferBlockReason.InsufficientGems;
+            }
+            else if (config.Price.Type == EShopOfferPriceType.RewardedAd
+                     && YG2.nowAdsShow
+                     && blockReason == EShopOfferBlockReason.None)
+            {
+                blockReason = EShopOfferBlockReason.AdUnavailable;
+            }
+
+            for (var i = 0; i < config.Rewards.Count; i++)
+            {
+                if (config.Rewards[i].Type == EShopOfferRewardType.Energy
+                    && config.Rewards[i].Amount > int.MaxValue - _world.PlayerEnergy
+                    && blockReason == EShopOfferBlockReason.None)
+                    blockReason = EShopOfferBlockReason.EnergyStorageFull;
+            }
+
+            if ((_pendingPaymentOffer != null || _pendingRewardedAdOffer != null)
+                && blockReason == EShopOfferBlockReason.None)
+                blockReason = EShopOfferBlockReason.PurchaseInProgress;
 
             state = new ShopOfferState(
                 config,
@@ -270,16 +333,17 @@ namespace Project.Scripts.System.Shop
             if (config.DailyPurchaseLimit <= 0)
                 return -1;
 
-            if (!_timeProvider.TryGetCurrentUnixMilliseconds(out var unixMilliseconds))
+            if (!_timeProvider.TryGetCurrentUnixMilliseconds(out var unixMilliseconds) || unixMilliseconds <= 0)
                 return -1;
 
-            return ShopOfferTime.GetUtcDay(unixMilliseconds);
+            return ShopOfferTime.GetPurchaseDay(config.Price.Type, unixMilliseconds);
         }
 
-        private bool TryApplyPurchase(ShopOfferConfig config, int goldPrice, long utcDay)
+        private bool TryApplyPurchase(ShopOfferConfig config, int goldPrice, long utcDay, int gemsPrice = 0)
         {
             var rewardGold = 0;
             var rewardGems = 0;
+            var rewardEnergy = 0;
             var spellId = string.Empty;
 
             for (var i = 0; i < config.Rewards.Count; i++)
@@ -296,10 +360,16 @@ namespace Project.Scripts.System.Shop
                     case EShopOfferRewardType.Spell:
                         spellId = reward.Spell.SpellId;
                         break;
+                    case EShopOfferRewardType.Energy:
+                        rewardEnergy = AddClamped(rewardEnergy, reward.Amount);
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
+
+            if (rewardEnergy > 0)
+                _playerEnergy.GetState();
 
             return _world.TryApplyShopOfferPurchase(
                 config.Id,
@@ -308,7 +378,45 @@ namespace Project.Scripts.System.Shop
                 rewardGems,
                 spellId,
                 utcDay,
-                config.DailyPurchaseLimit);
+                config.DailyPurchaseLimit,
+                gemsPrice,
+                rewardEnergy);
+        }
+
+        private void OnRewardedAdReward(string rewardId)
+        {
+            if (_pendingRewardedAdOffer == null
+                || rewardId != RewardedAdPrefix + _pendingRewardedAdOffer.Id)
+                return;
+
+            var config = _pendingRewardedAdOffer;
+            var currentDay = ResolvePurchaseDay(config);
+            if (currentDay < 0)
+                currentDay = _pendingRewardedAdDay;
+
+            _pendingRewardedAdOffer = null;
+            _pendingRewardedAdDay = -1;
+            if (TryApplyPurchase(config, 0, currentDay))
+                PurchaseSucceeded?.Invoke(config.Id);
+            else
+                PurchaseFailed?.Invoke(config.Id);
+
+            StateChanged?.Invoke();
+        }
+
+        private void OnRewardedAdClosed() => CancelRewardedAd();
+        private void OnRewardedAdError() => CancelRewardedAd();
+
+        private void CancelRewardedAd()
+        {
+            if (_pendingRewardedAdOffer == null)
+                return;
+
+            var offerId = _pendingRewardedAdOffer.Id;
+            _pendingRewardedAdOffer = null;
+            _pendingRewardedAdDay = -1;
+            PurchaseFailed?.Invoke(offerId);
+            StateChanged?.Invoke();
         }
 
         private bool ContainsOwnedSpell(ShopOfferConfig config)

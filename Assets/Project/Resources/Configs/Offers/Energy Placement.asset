@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7354298797384c62937bf10d6ddf100e, type: 3}
+  m_Name: Energy Placement
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.ShopOfferPlacementConfig
+  _id: energy
+  _title: shop.energy_tab
+  _order: 2
+  _layout: 2
+  _offers:
+  - {fileID: 11400000, guid: bb5e47daa7a8412a9542e23efb61a9c1, type: 2}
+  - {fileID: 11400000, guid: ed9136da259f44f79bef428130572081, type: 2}
+  - {fileID: 11400000, guid: 826b0a5c9dc842e58d44c160f19ee961, type: 2}

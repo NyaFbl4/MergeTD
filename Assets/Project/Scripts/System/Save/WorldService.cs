@@ -40,6 +40,8 @@ namespace Project.Scripts.System.Save
 
         public int Gold => _data.gold;
         public int Gems => _data.gems;
+        public int PlayerEnergy => _data.playerEnergy.current;
+        public long PlayerEnergyNextRestoreUnixMilliseconds => _data.playerEnergy.nextRestoreUnixMilliseconds;
         public long DailyRewardLastClaimDay => _data.dailyRewardLastClaimDay;
         public int DailyRewardIndex => _data.dailyRewardIndex;
         public long DailyQuestDay => _data.dailyQuestDay;
@@ -87,6 +89,25 @@ namespace Project.Scripts.System.Save
 
             if (HasPersistedData)
                 _saveService.Save(_data);
+        }
+
+        public void SavePlayerEnergy(int current, long nextRestoreUnixMilliseconds)
+        {
+            if (current < 0)
+                throw new ArgumentOutOfRangeException(nameof(current));
+
+            if (nextRestoreUnixMilliseconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(nextRestoreUnixMilliseconds));
+
+            if (PlayerEnergy == current
+                && PlayerEnergyNextRestoreUnixMilliseconds == nextRestoreUnixMilliseconds)
+                return;
+
+            _data.playerEnergy.current = current;
+            _data.playerEnergy.nextRestoreUnixMilliseconds = current >= PlayerEnergySaveData.Capacity
+                ? 0
+                : nextRestoreUnixMilliseconds;
+            Save();
         }
 
         public bool CanSpendGold(int amount) => amount > 0 && Gold >= amount;
@@ -270,7 +291,9 @@ namespace Project.Scripts.System.Save
             int rewardGems,
             string spellId,
             long utcDay,
-            int dailyLimit)
+            int dailyLimit,
+            int gemsPrice = 0,
+            int rewardEnergy = 0)
         {
             if (string.IsNullOrWhiteSpace(offerId))
                 throw new ArgumentException("An offer id is required.", nameof(offerId));
@@ -284,16 +307,25 @@ namespace Project.Scripts.System.Save
             if (rewardGems < 0)
                 throw new ArgumentOutOfRangeException(nameof(rewardGems));
 
+            if (gemsPrice < 0)
+                throw new ArgumentOutOfRangeException(nameof(gemsPrice));
+
+            if (rewardEnergy < 0)
+                throw new ArgumentOutOfRangeException(nameof(rewardEnergy));
+
             if (dailyLimit < 0)
                 throw new ArgumentOutOfRangeException(nameof(dailyLimit));
 
-            if (rewardGold == 0 && rewardGems == 0 && string.IsNullOrWhiteSpace(spellId))
+            if (rewardGold == 0 && rewardGems == 0 && rewardEnergy == 0 && string.IsNullOrWhiteSpace(spellId))
                 throw new ArgumentException("An offer requires at least one reward.", nameof(offerId));
 
             if (dailyLimit > 0 && utcDay < 0)
                 return false;
 
-            if (Gold < goldPrice)
+            if (Gold < goldPrice || Gems < gemsPrice)
+                return false;
+
+            if (rewardEnergy > int.MaxValue - PlayerEnergy)
                 return false;
 
             if (goldPrice > 0
@@ -315,7 +347,13 @@ namespace Project.Scripts.System.Save
 
             _data.gold -= goldPrice;
             _data.gold = AddClamped(_data.gold, rewardGold);
-            _data.gems = AddClamped(_data.gems, rewardGems);
+            _data.gems = AddClamped(_data.gems - gemsPrice, rewardGems);
+            if (rewardEnergy > 0)
+            {
+                _data.playerEnergy.current += rewardEnergy;
+                if (PlayerEnergy >= PlayerEnergySaveData.Capacity)
+                    _data.playerEnergy.nextRestoreUnixMilliseconds = 0;
+            }
 
             if (!string.IsNullOrWhiteSpace(spellId))
             {
@@ -341,7 +379,7 @@ namespace Project.Scripts.System.Save
             if (goldPrice > 0 || rewardGold > 0)
                 GoldChanged?.Invoke(Gold);
 
-            if (rewardGems > 0)
+            if (gemsPrice > 0 || rewardGems > 0)
                 GemsChanged?.Invoke(Gems);
 
             if (!string.IsNullOrWhiteSpace(spellId))
@@ -636,6 +674,7 @@ namespace Project.Scripts.System.Save
                 version = 1,
                 gold = InitialGold,
                 gems = 0,
+                playerEnergy = new PlayerEnergySaveData(),
                 dailyQuestDay = -1,
                 dailyQuestCycleDay = -1,
                 weeklyQuestWeek = -1,
@@ -650,6 +689,7 @@ namespace Project.Scripts.System.Save
         {
             _data.gold = Math.Max(0, _data.gold);
             _data.gems = Math.Max(0, _data.gems);
+            _data.playerEnergy = PlayerEnergySaveData.Normalize(_data.playerEnergy);
             if (_data.dailyRewardLastClaimDay <= 0)
             {
                 _data.dailyRewardLastClaimDay = -1;

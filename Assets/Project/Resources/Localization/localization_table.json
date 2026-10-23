@@ -1,6 +1,15 @@
 {
   "defaultLanguage": "ru",
   "entries": [
+    { "key": "shop.energy_tab", "ru": "Энергия", "en": "Energy" },
+    { "key": "shop.energy_ad.title", "ru": "Ежедневный заряд", "en": "Daily Charge" },
+    { "key": "shop.energy_gems.title", "ru": "Запас энергии", "en": "Energy Reserve" },
+    { "key": "shop.energy_cash.title", "ru": "Большой запас", "en": "Large Reserve" },
+    { "key": "shop.energy.ad_badge", "ru": "1 в день", "en": "Once a day" },
+    { "key": "shop.energy.watch_ad", "ru": "Смотреть", "en": "Watch" },
+    { "key": "shop.offer.insufficient_gems", "ru": "Недостаточно алмазов", "en": "Not enough gems" },
+    { "key": "shop.offer.ad_unavailable", "ru": "Реклама уже открыта", "en": "An ad is already playing" },
+    { "key": "shop.offer.energy_storage_full", "ru": "Запас энергии заполнен", "en": "Energy storage is full" },
     {
       "key": "level.energy_format",
       "ru": "Энергия: {0}",
@@ -110,6 +119,41 @@
           "key": "shop.gems_tab",
           "ru": "Самоцветы",
           "en": "Gems"
+        },
+        {
+          "key": "shop.offers_tab",
+          "ru": "Предложения",
+          "en": "Offers"
+        },
+        {
+          "key": "shop.gold_offer.title",
+          "ru": "Запас золота",
+          "en": "Gold reserve"
+        },
+        {
+          "key": "shop.gold_offer.description",
+          "ru": "Золото для улучшений",
+          "en": "Gold for upgrades"
+        },
+        {
+          "key": "shop.gold_gems_offer.title",
+          "ru": "Набор командира",
+          "en": "Commander pack"
+        },
+        {
+          "key": "shop.gold_gems_offer.description",
+          "ru": "Золото и самоцветы",
+          "en": "Gold and gems"
+        },
+        {
+          "key": "shop.gems_bundle_offer.title",
+          "ru": "Запас самоцветов",
+          "en": "Gem reserve"
+        },
+        {
+          "key": "shop.gems_bundle_offer.description",
+          "ru": "Самоцветы для покупок",
+          "en": "Gems for purchases"
         },
         {
           "key": "shop.gems_offer.title",

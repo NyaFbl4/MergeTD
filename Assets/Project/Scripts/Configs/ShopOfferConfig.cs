@@ -7,20 +7,24 @@ namespace Project.Scripts.Configs
     public enum EShopOfferPriceType
     {
         RealMoney = 0,
-        Gold = 1
+        Gold = 1,
+        Gems = 2,
+        RewardedAd = 3
     }
 
     public enum EShopOfferRewardType
     {
         Gold = 0,
         Gems = 1,
-        Spell = 2
+        Spell = 2,
+        Energy = 3
     }
 
     public enum EShopOfferPlacementLayout
     {
         List = 0,
-        GemGrid = 1
+        GemGrid = 1,
+        EnergyGrid = 2
     }
 
     [Serializable]
@@ -30,11 +34,13 @@ namespace Project.Scripts.Configs
         [SerializeField] private string _productId;
         [SerializeField] private string _previewPrice;
         [SerializeField, Min(1)] private int _goldAmount = 1;
+        [SerializeField, Min(1)] private int _gemsAmount = 1;
 
         public EShopOfferPriceType Type => _type;
         public string ProductId => _productId;
         public string PreviewPrice => _previewPrice;
         public int GoldAmount => _goldAmount;
+        public int GemsAmount => _gemsAmount;
 
         public void Validate(string offerId)
         {
@@ -53,6 +59,12 @@ namespace Project.Scripts.Configs
                         throw new InvalidOperationException(
                             $"Shop offer '{offerId}' requires a positive gold price.");
                     }
+                    break;
+                case EShopOfferPriceType.Gems:
+                    if (_gemsAmount <= 0)
+                        throw new InvalidOperationException($"Shop offer '{offerId}' requires a positive gem price.");
+                    break;
+                case EShopOfferPriceType.RewardedAd:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(_type), _type, null);
@@ -77,6 +89,7 @@ namespace Project.Scripts.Configs
             {
                 case EShopOfferRewardType.Gold:
                 case EShopOfferRewardType.Gems:
+                case EShopOfferRewardType.Energy:
                     if (_amount <= 0)
                     {
                         throw new InvalidOperationException(
@@ -103,8 +116,8 @@ namespace Project.Scripts.Configs
     {
         [Header("Identity")]
         [SerializeField] private string _id;
-        [SerializeField] private ShopOfferPlacementConfig _placement;
-        [SerializeField] private int _order;
+        [SerializeField, HideInInspector] private ShopOfferPlacementConfig _placement;
+        [SerializeField, HideInInspector] private int _order;
         [SerializeField] private bool _enabled = true;
 
         [Header("Presentation")]
@@ -144,11 +157,6 @@ namespace Project.Scripts.Configs
         {
             if (string.IsNullOrWhiteSpace(_id))
                 throw new InvalidOperationException($"Shop offer asset '{name}' requires an id.");
-
-            if (_placement == null)
-                throw new InvalidOperationException($"Shop offer '{_id}' requires a placement.");
-
-            _placement.Validate();
 
             if (string.IsNullOrWhiteSpace(_title))
                 throw new InvalidOperationException($"Shop offer '{_id}' requires a title key.");
@@ -204,6 +212,17 @@ namespace Project.Scripts.Configs
 
         private void ValidateRewardComposition(HashSet<EShopOfferRewardType> rewardTypes)
         {
+            if (_price.Type == EShopOfferPriceType.Gems || _price.Type == EShopOfferPriceType.RewardedAd)
+            {
+                if (_rewards.Count != 1 || !rewardTypes.Contains(EShopOfferRewardType.Energy))
+                    throw new InvalidOperationException($"Energy offer '{_id}' must reward only player energy.");
+
+                if (_price.Type == EShopOfferPriceType.RewardedAd && _dailyPurchaseLimit != 1)
+                    throw new InvalidOperationException($"Rewarded energy offer '{_id}' must allow one claim per day.");
+
+                return;
+            }
+
             if (_price.Type == EShopOfferPriceType.Gold)
             {
                 if (_rewards.Count != 1 || !rewardTypes.Contains(EShopOfferRewardType.Gems))
@@ -260,43 +279,59 @@ namespace Project.Scripts.Configs
 
         public static ShopOfferCatalog LoadFromResources()
         {
-            var offers = Resources.LoadAll<ShopOfferConfig>(ResourceRoot);
+            var placements = Resources.LoadAll<ShopOfferPlacementConfig>(ResourceRoot);
+            Array.Sort(placements, ComparePlacements);
+            var offers = new List<ShopOfferConfig>();
             var offerIds = new HashSet<string>(StringComparer.Ordinal);
             var productIds = new HashSet<string>(StringComparer.Ordinal);
-            var placementsById = new Dictionary<string, ShopOfferPlacementConfig>(StringComparer.Ordinal);
+            var placementIds = new HashSet<string>(StringComparer.Ordinal);
 
-            for (var i = 0; i < offers.Length; i++)
+            for (var i = 0; i < placements.Length; i++)
             {
-                var offer = offers[i];
-                offer.Validate();
-
-                if (!offerIds.Add(offer.Id))
-                    throw new InvalidOperationException($"Duplicate shop offer id '{offer.Id}'.");
-
-                if (offer.Price.Type == EShopOfferPriceType.RealMoney
-                    && !productIds.Add(offer.Price.ProductId))
-                {
-                    throw new InvalidOperationException(
-                        $"Duplicate shop payment product id '{offer.Price.ProductId}'.");
-                }
-
-                var placement = offer.Placement;
-                if (placementsById.TryGetValue(placement.Id, out var existing)
-                    && existing != placement)
-                {
+                var placement = placements[i];
+                placement.Validate();
+                if (!placementIds.Add(placement.Id))
                     throw new InvalidOperationException(
                         $"Duplicate shop offer placement id '{placement.Id}'.");
-                }
 
-                placementsById[placement.Id] = placement;
+                for (var j = 0; j < placement.Offers.Count; j++)
+                {
+                    var offer = placement.Offers[j]
+                                ?? throw new InvalidOperationException(
+                                    $"Shop section '{placement.Id}' contains an empty offer.");
+                    offer.Validate();
+
+                    if (!offerIds.Add(offer.Id))
+                        throw new InvalidOperationException($"Duplicate shop offer id '{offer.Id}'.");
+
+                    if (offer.Price.Type == EShopOfferPriceType.RealMoney
+                        && !productIds.Add(offer.Price.ProductId))
+                    {
+                        throw new InvalidOperationException(
+                            $"Duplicate shop payment product id '{offer.Price.ProductId}'.");
+                    }
+
+                    if (placement.Layout == EShopOfferPlacementLayout.GemGrid
+                        && (offer.Rewards.Count != 1
+                            || offer.Rewards[0].Type != EShopOfferRewardType.Gems))
+                    {
+                        throw new InvalidOperationException(
+                            $"Gem section '{placement.Id}' requires offers with only a gem reward.");
+                    }
+
+                    if (placement.Layout == EShopOfferPlacementLayout.EnergyGrid
+                        && (offer.Rewards.Count != 1
+                            || offer.Rewards[0].Type != EShopOfferRewardType.Energy))
+                    {
+                        throw new InvalidOperationException(
+                            $"Energy section '{placement.Id}' requires offers with only an energy reward.");
+                    }
+
+                    offers.Add(offer);
+                }
             }
 
-            Array.Sort(offers, CompareOffers);
-
-            var placements = new ShopOfferPlacementConfig[placementsById.Count];
-            placementsById.Values.CopyTo(placements, 0);
-            Array.Sort(placements, ComparePlacements);
-            return new ShopOfferCatalog(offers, placements);
+            return new ShopOfferCatalog(offers.ToArray(), placements);
         }
 
         public ShopOfferConfig GetOffer(string offerId)
@@ -320,16 +355,6 @@ namespace Project.Scripts.Configs
 
             throw new InvalidOperationException(
                 $"Unknown shop offer placement id '{placementId}'.");
-        }
-
-        private static int CompareOffers(ShopOfferConfig left, ShopOfferConfig right)
-        {
-            var placementOrder = ComparePlacements(left.Placement, right.Placement);
-            if (placementOrder != 0)
-                return placementOrder;
-
-            var order = left.Order.CompareTo(right.Order);
-            return order != 0 ? order : string.CompareOrdinal(left.Id, right.Id);
         }
 
         private static int ComparePlacements(

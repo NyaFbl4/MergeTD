@@ -9,6 +9,8 @@ namespace Project.Scripts.UI.ShopUI
     {
         private readonly VisualElement _root;
         private readonly VisualElement _mainIcon;
+        private readonly VisualElement _badge;
+        private readonly Label _badgeLabel;
         private readonly Label _titleLabel;
         private readonly Label _descriptionLabel;
         private readonly VisualElement[] _rewardPanels;
@@ -27,7 +29,9 @@ namespace Project.Scripts.UI.ShopUI
         {
             _root = root.Q<VisualElement>("OfferCard")
                     ?? throw new InvalidOperationException("Shop offer template requires 'OfferCard'.");
-            _mainIcon = Require<VisualElement>("MainIcon");
+            _mainIcon = Require<VisualElement>("OfferIcon");
+            _badge = Require<VisualElement>("BonusBadge");
+            _badgeLabel = Require<Label>("BonusLabel");
             _titleLabel = Require<Label>("TitleLabel");
             _descriptionLabel = Require<Label>("DescriptionLabel");
             _priceIcon = Require<VisualElement>("PriceIcon");
@@ -59,9 +63,17 @@ namespace Project.Scripts.UI.ShopUI
         public void Bind(ShopOfferUIData offer)
         {
             _offerId = offer.Id;
+            _root.tooltip = offer.Status;
             _titleLabel.text = offer.Title;
             _descriptionLabel.text = offer.Description;
-            _priceLabel.text = offer.Price;
+            _descriptionLabel.style.display = string.IsNullOrWhiteSpace(offer.Description)
+                ? DisplayStyle.None
+                : DisplayStyle.Flex;
+            _priceLabel.text = string.IsNullOrWhiteSpace(offer.Price) ? "—" : offer.Price;
+            _badgeLabel.text = offer.Badge;
+            _badge.style.display = string.IsNullOrWhiteSpace(offer.Badge)
+                ? DisplayStyle.None
+                : DisplayStyle.Flex;
             _limitLabel.text = offer.Limit;
             _timerLabel.text = offer.Timer;
             _statusLabel.text = offer.Status;

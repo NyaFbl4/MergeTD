@@ -59,6 +59,10 @@ namespace Project.Scripts.System.Localization
         public const string ShopOfferInsufficientGold = "shop.offer.insufficient_gold";
         public const string ShopOfferProductUnavailable = "shop.offer.product_unavailable";
         public const string ShopOfferPurchaseInProgress = "shop.offer.purchase_in_progress";
+        public const string ShopWatchAd = "shop.energy.watch_ad";
+        public const string ShopOfferInsufficientGems = "shop.offer.insufficient_gems";
+        public const string ShopOfferAdUnavailable = "shop.offer.ad_unavailable";
+        public const string ShopOfferEnergyStorageFull = "shop.offer.energy_storage_full";
         public const string QuestsTitle = "quests.title";
         public const string QuestsDailyTitle = "quests.daily_title";
         public const string QuestsButton = "quests.button";

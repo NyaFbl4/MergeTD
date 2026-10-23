@@ -21,6 +21,11 @@
                     <ui:VisualElement name="IconGold" style="flex-grow: 1; background-image: resource(&quot;UI/new/Icons/Icon_Gold&quot;); width: 100px; height: 100px; min-height: 100px; max-height: 100px; min-width: 100px; max-width: 100px; top: -10px; left: -40px;"/>
                     <ui:Label text="500" name="GoldLabel" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); width: 177px; top: auto; left: -35px; -unity-text-align: middle-left; font-size: 50px;"/>
                 </ui:VisualElement>
+                <ui:VisualElement name="EnergyPanel" picking-mode="Ignore" style="flex-shrink: 0; flex-direction: row; width: 230px; height: 80px; margin-left: 40px; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; -unity-background-image-tint-color: rgb(120, 108, 108);">
+                    <ui:VisualElement name="IconEnergy" picking-mode="Ignore" style="position: absolute; left: -40px; top: -10px; width: 100px; height: 100px; background-image: resource(&quot;UI/new/Icons/Icon_Energy&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+                    <ui:Label text="10/10" name="EnergyLabel" picking-mode="Ignore" style="flex-grow: 1; margin-left: 45px; margin-right: 4px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 44px; color: white; -unity-text-outline-color: black; -unity-text-outline-width: 2px; -unity-text-align: middle-center;"/>
+                    <ui:Label text="" name="EnergyCountdownLabel" picking-mode="Ignore" style="position: absolute; top: 80px; left: 20px; right: 0; height: 32px; margin-top: 0; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 25px; color: white; -unity-text-outline-color: black; -unity-text-outline-width: 2px; -unity-text-align: middle-center;"/>
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Body" style="flex-grow: 1;">

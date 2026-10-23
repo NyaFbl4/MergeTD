@@ -1,97 +1,33 @@
 {
-    "idSave": 801,
+    "idSave": 837,
     "world": {
         "version": 2,
-        "gold": 3576,
-        "gems": 15,
-        "dailyRewardLastClaimDay": 20731,
-        "dailyRewardIndex": 1,
+        "gold": 150,
+        "gems": 0,
+        "playerEnergy": {
+            "version": 1,
+            "current": 9,
+            "nextRestoreUnixMilliseconds": 1791196295125
+        },
+        "dailyRewardLastClaimDay": -1,
+        "dailyRewardIndex": -1,
         "dailyQuestDay": 20731,
         "dailyQuestCycleDay": 0,
         "weeklyQuestWeek": 2962,
-        "maxBaseHealth": 30,
-        "maxEnergy": 14,
+        "maxBaseHealth": 10,
+        "maxEnergy": 12,
         "selectedTowerLevel": 1,
-        "towerDamageBonus": 0.30000001192092898,
-        "towerAttackSpeedBonus": 0.20000000298023225,
-        "towerCritChanceBonus": 0.20000000298023225,
-        "towerCritDamageBonus": 0.5,
-        "upgrades": [
-            {
-                "id": "1",
-                "level": 2
-            },
-            {
-                "id": "4",
-                "level": 2
-            },
-            {
-                "id": "2",
-                "level": 2
-            },
-            {
-                "id": "5",
-                "level": 2
-            },
-            {
-                "id": "3",
-                "level": 2
-            },
-            {
-                "id": "max-energy",
-                "level": 1
-            },
-            {
-                "id": "base-repair",
-                "level": 2
-            },
-            {
-                "id": "start-energy",
-                "level": 4
-            }
-        ],
+        "towerDamageBonus": 0.0,
+        "towerAttackSpeedBonus": 0.0,
+        "towerCritChanceBonus": 0.0,
+        "towerCritDamageBonus": 0.0,
+        "upgrades": [],
         "towers": [
             {
-                "slotId": "12",
-                "towerLevel": 4,
+                "slotId": "11",
+                "towerLevel": 1,
                 "towerType": 0,
-                "purchaseCost": 800
-            },
-            {
-                "slotId": "13",
-                "towerLevel": 6,
-                "towerType": 0,
-                "purchaseCost": 3200
-            },
-            {
-                "slotId": "21",
-                "towerLevel": 3,
-                "towerType": 1,
-                "purchaseCost": 400
-            },
-            {
-                "slotId": "22",
-                "towerLevel": 3,
-                "towerType": 1,
-                "purchaseCost": 400
-            },
-            {
-                "slotId": "23",
-                "towerLevel": 3,
-                "towerType": 1,
-                "purchaseCost": 400
-            },
-            {
-                "slotId": "24",
-                "towerLevel": 3,
-                "towerType": 1,
-                "purchaseCost": 400
-            },
-            {
-                "slotId": "25",
-                "towerLevel": 2,
-                "towerType": 1,
-                "purchaseCost": 200
+                "purchaseCost": 100
             }
         ],
         "towerSlots": [
@@ -101,43 +37,43 @@
             },
             {
                 "slotId": "12",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "13",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "14",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "15",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "21",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "22",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "23",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "24",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "25",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "31",
-                "unlockedSlot": 0
+                "unlockedSlot": 1
             },
             {
                 "slotId": "32",
@@ -157,34 +93,30 @@
             }
         ],
         "spells": [],
-        "activeSpellIds": [
-            "emp_pulse",
-            "orbital_railgun",
-            "gravity_trap"
-        ],
+        "activeSpellIds": [],
         "shopOffers": [],
         "dailyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 10,
+                "currentValue": 1,
                 "targetValue": 10,
                 "rewardGold": 100,
                 "rewardGems": 0,
-                "isRewardClaimed": true
+                "isRewardClaimed": false
             },
             {
                 "id": "5",
-                "currentValue": 10,
+                "currentValue": 2,
                 "targetValue": 10,
                 "rewardGold": 125,
                 "rewardGems": 0,
-                "isRewardClaimed": true
+                "isRewardClaimed": false
             }
         ],
         "weeklyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 51,
+                "currentValue": 1,
                 "targetValue": 70,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -192,17 +124,17 @@
             },
             {
                 "id": "2",
-                "currentValue": 7,
+                "currentValue": 0,
                 "targetValue": 7,
                 "rewardGold": 0,
                 "rewardGems": 10,
-                "isRewardClaimed": true
+                "isRewardClaimed": false
             }
         ],
         "achievementQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 51,
+                "currentValue": 52,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,

@@ -8,18 +8,6 @@ namespace Project.Scripts.UI.ShopUI
         void Bind(ShopOfferUIData offer);
     }
 
-    public sealed class ShopTabUIData
-    {
-        public string Id { get; }
-        public string Title { get; }
-
-        public ShopTabUIData(string id, string title)
-        {
-            Id = id;
-            Title = title;
-        }
-    }
-
     public sealed class ShopOfferRewardUIData
     {
         public Sprite Icon { get; }

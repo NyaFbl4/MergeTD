@@ -12,28 +12,31 @@ namespace Project.Scripts.UI.ShopUI
     public sealed class ShopPanelUIView : IShopPanelUIView
     {
         private const string UpgradeTemplateResourcePath = "UIToolkit/UpgradeObjectUI";
-        private const string OfferTemplateResourcePath = "UIToolkit/ShopOfferCard";
+        private const string OfferTemplateResourcePath = "UIToolkit/New/ShopOfferCard";
         private const string GemOfferTemplateResourcePath = "UIToolkit/New/ShopGemOfferCard";
+        private const string EnergyOfferTemplateResourcePath = "UIToolkit/New/ShopEnergyOfferCard";
 
         private readonly VisualElement _root;
         private readonly IUpgradeConfigProvider _upgradeConfigs;
         private readonly VisualTreeAsset _shopItemTemplate;
         private readonly VisualTreeAsset _offerItemTemplate;
         private readonly VisualTreeAsset _gemOfferItemTemplate;
+        private readonly VisualTreeAsset _energyOfferItemTemplate;
         private readonly Label _titleLabel;
         private readonly Label _emptyLabel;
-        private readonly VisualElement _tabsContainer;
         private readonly ScrollView _scrollView;
         private readonly VisualElement _offerPanel;
         private readonly VisualElement _offerContainer;
         private readonly VisualElement _gemPanel;
         private readonly VisualElement _gemContainer;
+        private readonly VisualElement _energyPanel;
+        private readonly VisualElement _energyContainer;
         private readonly List<VisualElement> _upgradeItemRoots = new();
         private readonly List<string> _offerOrder = new();
+        private readonly List<string> _gemOfferOrder = new();
+        private readonly List<string> _energyOfferOrder = new();
         private readonly Dictionary<string, IShopOfferItemView> _offerViews =
             new(StringComparer.Ordinal);
-
-        private EShopOfferPlacementLayout? _offerLayout;
 
         public UpgradeItemConfig DamageUpgradeConfig => _upgradeConfigs.DamageUpgradeConfig;
         public UpgradeItemConfig AttackSpeedUpgradeConfig => _upgradeConfigs.AttackSpeedUpgradeConfig;
@@ -42,26 +45,28 @@ namespace Project.Scripts.UI.ShopUI
         public UpgradeItemConfig CritDamageUpgradeConfig => _upgradeConfigs.CritDamageUpgradeConfig;
         public UpgradeItemConfig TowerLevelUpgradeConfig => _upgradeConfigs.TowerLevelUpgradeConfig;
 
-        public event Action<string> TabClicked;
         public event Action<string> OfferPurchaseClicked;
 
         public ShopPanelUIView(
             VisualElement root,
-            IUpgradeConfigProvider upgradeConfigs)
+            IUpgradeConfigProvider upgradeConfigs,
+            VisualTreeAsset upgradeItemTemplate = null)
         {
             _root = root;
             _upgradeConfigs = upgradeConfigs;
             _titleLabel = Require<Label>("TitleLabel");
-            _tabsContainer = Require<VisualElement>("TabsContainer");
             _scrollView = Require<ScrollView>("ScrollView");
             _offerPanel = Require<VisualElement>("OfferPanel");
             _offerContainer = Require<VisualElement>("OfferContainer");
             _gemPanel = Require<VisualElement>("GemPanel");
             _gemContainer = Require<VisualElement>("GemContainer");
+            _energyPanel = Require<VisualElement>("EnergyOffersPanel");
+            _energyContainer = Require<VisualElement>("EnergyContainer");
             _emptyLabel = Require<Label>("EmptyLabel");
-            _shopItemTemplate = LoadTemplate(UpgradeTemplateResourcePath);
+            _shopItemTemplate = upgradeItemTemplate ?? LoadTemplate(UpgradeTemplateResourcePath);
             _offerItemTemplate = LoadTemplate(OfferTemplateResourcePath);
             _gemOfferItemTemplate = LoadTemplate(GemOfferTemplateResourcePath);
+            _energyOfferItemTemplate = LoadTemplate(EnergyOfferTemplateResourcePath);
         }
 
         public void SetVisible(bool visible)
@@ -70,25 +75,6 @@ namespace Project.Scripts.UI.ShopUI
         }
 
         public void SetTitle(string title) => _titleLabel.text = title;
-
-        public void SetTabs(IReadOnlyList<ShopTabUIData> tabs, string selectedTabId)
-        {
-            _tabsContainer.Clear();
-            for (var i = 0; i < tabs.Count; i++)
-            {
-                var tab = tabs[i];
-                var tabButton = new Button(() => TabClicked?.Invoke(tab.Id))
-                {
-                    text = tab.Title
-                };
-                tabButton.AddToClassList("shop-tab-button");
-                tabButton.EnableInClassList(
-                    "shop-tab-button--selected",
-                    string.Equals(tab.Id, selectedTabId, StringComparison.Ordinal));
-                UIButtonAnimationUtility.EnableDefault(tabButton);
-                _tabsContainer.Add(tabButton);
-            }
-        }
 
         public void ClearItems()
         {
@@ -113,6 +99,13 @@ namespace Project.Scripts.UI.ShopUI
             EShopOfferPlacementLayout layout)
         {
             _emptyLabel.style.display = DisplayStyle.None;
+            var panel = layout switch
+            {
+                EShopOfferPlacementLayout.GemGrid => _gemPanel,
+                EShopOfferPlacementLayout.EnergyGrid => _energyPanel,
+                _ => _offerPanel
+            };
+            panel.style.display = offers.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
             if (RequiresOfferRebuild(offers, layout))
                 RebuildOffers(offers, layout);
 
@@ -129,9 +122,7 @@ namespace Project.Scripts.UI.ShopUI
 
         public void Dispose()
         {
-            _tabsContainer.Clear();
             ClearRenderedItems();
-            TabClicked = null;
             OfferPurchaseClicked = null;
         }
 
@@ -139,12 +130,13 @@ namespace Project.Scripts.UI.ShopUI
             IReadOnlyList<ShopOfferUIData> offers,
             EShopOfferPlacementLayout layout)
         {
-            if (_offerLayout != layout || _offerOrder.Count != offers.Count)
+            var order = GetOfferOrder(layout);
+            if (order.Count != offers.Count)
                 return true;
 
             for (var i = 0; i < offers.Count; i++)
             {
-                if (!string.Equals(_offerOrder[i], offers[i].Id, StringComparison.Ordinal))
+                if (!string.Equals(order[i], offers[i].Id, StringComparison.Ordinal))
                     return true;
             }
 
@@ -155,23 +147,27 @@ namespace Project.Scripts.UI.ShopUI
             IReadOnlyList<ShopOfferUIData> offers,
             EShopOfferPlacementLayout layout)
         {
-            ClearRenderedItems();
-            _offerLayout = layout;
             var useGemGrid = layout == EShopOfferPlacementLayout.GemGrid;
-            var targetPanel = useGemGrid ? _gemPanel : _offerPanel;
-            var targetContainer = useGemGrid ? _gemContainer : _offerContainer;
-            targetPanel.style.display = offers.Count > 0
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
-            targetContainer.EnableInClassList("shop-offer-grid", useGemGrid);
+            var useEnergyGrid = layout == EShopOfferPlacementLayout.EnergyGrid;
+            var targetContainer = useEnergyGrid ? _energyContainer : useGemGrid ? _gemContainer : _offerContainer;
+            var order = GetOfferOrder(layout);
+            for (var i = 0; i < order.Count; i++)
+                _offerViews.Remove(order[i]);
+
+            order.Clear();
+            targetContainer.Clear();
 
             for (var i = 0; i < offers.Count; i++)
             {
                 var offer = offers[i];
-                var offerRoot = (useGemGrid ? _gemOfferItemTemplate : _offerItemTemplate)
+                var offerRoot = (useEnergyGrid ? _energyOfferItemTemplate : useGemGrid ? _gemOfferItemTemplate : _offerItemTemplate)
                     .Instantiate();
                 IShopOfferItemView offerView;
-                if (useGemGrid)
+                if (useEnergyGrid)
+                {
+                    offerView = new ShopEnergyOfferItemView(offerRoot, OnOfferPurchaseClicked);
+                }
+                else if (useGemGrid)
                 {
                     offerRoot.AddToClassList("shop-gem-card-container");
                     offerView = new ShopGemOfferItemView(offerRoot, OnOfferPurchaseClicked);
@@ -181,7 +177,7 @@ namespace Project.Scripts.UI.ShopUI
                     offerView = new ShopOfferItemView(offerRoot, OnOfferPurchaseClicked);
                 }
 
-                _offerOrder.Add(offer.Id);
+                order.Add(offer.Id);
                 _offerViews.Add(offer.Id, offerView);
                 targetContainer.Add(offerRoot);
             }
@@ -195,14 +191,23 @@ namespace Project.Scripts.UI.ShopUI
             _upgradeItemRoots.Clear();
             _offerContainer.Clear();
             _gemContainer.Clear();
-            _offerContainer.EnableInClassList("shop-offer-grid", false);
-            _gemContainer.EnableInClassList("shop-offer-grid", false);
+            _energyContainer.Clear();
             _offerPanel.style.display = DisplayStyle.None;
             _gemPanel.style.display = DisplayStyle.None;
+            _energyPanel.style.display = DisplayStyle.None;
             _offerOrder.Clear();
+            _gemOfferOrder.Clear();
+            _energyOfferOrder.Clear();
             _offerViews.Clear();
-            _offerLayout = null;
         }
+
+        private List<string> GetOfferOrder(EShopOfferPlacementLayout layout) =>
+            layout switch
+            {
+                EShopOfferPlacementLayout.GemGrid => _gemOfferOrder,
+                EShopOfferPlacementLayout.EnergyGrid => _energyOfferOrder,
+                _ => _offerOrder
+            };
 
         private T Require<T>(string elementName) where T : VisualElement
         {

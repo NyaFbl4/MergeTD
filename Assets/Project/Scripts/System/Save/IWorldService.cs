@@ -18,7 +18,14 @@ namespace Project.Scripts.System.Save
         StartEnergy
     }
 
-    public interface IWorldService
+    public interface IPlayerEnergyStore
+    {
+        int PlayerEnergy { get; }
+        long PlayerEnergyNextRestoreUnixMilliseconds { get; }
+        void SavePlayerEnergy(int current, long nextRestoreUnixMilliseconds);
+    }
+
+    public interface IWorldService : IPlayerEnergyStore
     {
         int Gold { get; }
         int Gems { get; }
@@ -75,7 +82,9 @@ namespace Project.Scripts.System.Save
             int rewardGems,
             string spellId,
             long utcDay,
-            int dailyLimit);
+            int dailyLimit,
+            int gemsPrice = 0,
+            int rewardEnergy = 0);
         void SetMaxBaseHealth(int value);
         void SetMaxEnergy(int value);
         int GetUpgradeLevel(string upgradeId);

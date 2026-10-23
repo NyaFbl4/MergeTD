@@ -28,6 +28,8 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private Label _goldCountLabel;
         private Label _gemsCountLabel;
+        private Label _energyCountLabel;
+        private Label _energyCountdownLabel;
         private Button _settingsButton;
         private IInBattleUIView _inBattleView;
         private IArmyUIView _armyView;
@@ -62,6 +64,12 @@ namespace Project.Scripts.UI.MainMenuUI
             
             _goldCountLabel = _root.Q<Label>("GoldLabel");
             _gemsCountLabel = _root.Q<Label>("GemLabel");
+            _energyCountLabel = _root.Q<Label>("EnergyLabel")
+                                ?? throw new InvalidOperationException(
+                                    "MainMenuUIView: element 'EnergyLabel' was not found.");
+            _energyCountdownLabel = _root.Q<Label>("EnergyCountdownLabel")
+                                    ?? throw new InvalidOperationException(
+                                        "MainMenuUIView: element 'EnergyCountdownLabel' was not found.");
             _settingsButton = _root.Q<Button>("SettingsButton")
                               ?? throw new InvalidOperationException(
                                   "MainMenuUIView: element 'SettingsButton' was not found.");
@@ -171,6 +179,12 @@ namespace Project.Scripts.UI.MainMenuUI
         public void SetDiamondCount(int diamondCount)
         {
             UIIntegerAnimationUtility.SetValue(_gemsCountLabel, Math.Max(0, diamondCount));
+        }
+
+        public void SetPlayerEnergy(int current, int max, string countdown)
+        {
+            _energyCountLabel.text = $"{current}/{max}";
+            _energyCountdownLabel.text = countdown;
         }
 
         public void SetActiveSection(MainMenuSection section)

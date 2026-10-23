@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d639cfa00af436497ab611a4df38e36, type: 3}
+  m_Name: Energy Ads
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.ShopOfferConfig
+  _id: energy_ad_2
+  _placement: {fileID: 11400000, guid: 5bc4ed2c228045218e6229f9667949ff, type: 2}
+  _order: 0
+  _enabled: 1
+  _title: shop.energy_ad.title
+  _description:
+  _mainIcon: {fileID: 21300000, guid: eae0f201c6e1d4af9ae2b649b462739d, type: 3}
+  _badge: shop.energy.ad_badge
+  _visualIconCount: 1
+  _price:
+    _type: 3
+    _productId:
+    _previewPrice:
+    _goldAmount: 1
+    _gemsAmount: 1
+  _rewards:
+  - _type: 3
+    _amount: 2
+    _spell: {fileID: 0}
+  _isTimed: 0
+  _startUnixMilliseconds: 0
+  _endUnixMilliseconds: 0
+  _dailyPurchaseLimit: 1

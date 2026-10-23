@@ -19,11 +19,9 @@ namespace Project.Scripts.UI.ShopUI
 
     public interface IShopContentView : IUpgradeConfigProvider
     {
-        event Action<string> TabClicked;
         event Action<string> OfferPurchaseClicked;
 
         void SetTitle(string title);
-        void SetTabs(IReadOnlyList<ShopTabUIData> tabs, string selectedTabId);
         void ClearItems();
         void AddItem(IUpgradeItem item, Action onBuy, ILocalizationService localizationService);
         void SetOffers(

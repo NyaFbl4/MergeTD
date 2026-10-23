@@ -10,6 +10,7 @@ namespace Project.Scripts.System.Save
         public int version = 1;
         public int gold;
         public int gems;
+        public PlayerEnergySaveData playerEnergy;
         public long dailyRewardLastClaimDay = -1;
         public int dailyRewardIndex = -1;
         public long dailyQuestDay = -1;
@@ -31,6 +32,27 @@ namespace Project.Scripts.System.Save
         public List<QuestSaveData> dailyQuests = new();
         public List<QuestSaveData> weeklyQuests = new();
         public List<QuestSaveData> achievementQuests = new();
+    }
+
+    [Serializable]
+    public sealed class PlayerEnergySaveData
+    {
+        public const int Capacity = 10;
+        public int version = 1;
+        public int current = Capacity;
+        public long nextRestoreUnixMilliseconds;
+
+        public static PlayerEnergySaveData Normalize(PlayerEnergySaveData data)
+        {
+            if (data == null || data.version < 1)
+                return new PlayerEnergySaveData();
+
+            data.current = Math.Max(0, data.current);
+            data.nextRestoreUnixMilliseconds = data.current >= Capacity
+                ? 0
+                : Math.Max(0, data.nextRestoreUnixMilliseconds);
+            return data;
+        }
     }
 
     [Serializable]

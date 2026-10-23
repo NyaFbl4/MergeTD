@@ -126,6 +126,8 @@ namespace Project.Scripts.UI.InBattleUI
                 UIButtonAnimationUtility.EnableDefault(_dailyQuestClaimButtons[i]);
         }
 
+        public void SetPlayButtonEnabled(bool enabled) => _playButton.SetEnabled(enabled);
+
         public void SetRun(string displayName, Sprite icon, bool canNavigate)
         {
             _levelNameLabel.text = displayName;

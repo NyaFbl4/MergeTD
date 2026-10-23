@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UIToolkit/ShopUI.uss?fileID=11400000&amp;guid=2804ea254394429283042a052bab0302&amp;type=3#ShopUI"/>
+    <ui:VisualElement name="OfferCard" class="shop-gem-card" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; width: 900px; height: 200px; min-height: 200px; max-height: 200px; min-width: 900px; max-width: 900px; flex-direction: row; justify-content: flex-start; background-image: resource(&quot;UI/new/CardFrame08_Single_Purple&quot;); -unity-slice-scale: 1px; background-position-x: center; -unity-background-scale-mode: stretch-to-fill; -unity-slice-left: 30; -unity-slice-top: 30; -unity-slice-right: 30; -unity-slice-bottom: 30; padding-bottom: 22px; padding-left: 22px;">
+        <ui:VisualElement name="BonusBadge" class="shop-gem-badge" style="display: flex; background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 25; -unity-slice-top: 25; -unity-slice-right: 25; -unity-slice-bottom: 25; -unity-background-image-tint-color: rgb(245, 245, 27); height: 50px; min-width: 100px; width: 100px; max-width: 100px; min-height: 50px; max-height: 50px; top: -22px; right: -20px;">
+            <ui:VisualElement name="BonusBackground" source="project://database/Assets/Project/Resources/UI/new/Buttons/Button01_175_Yellow.png?fileID=1081048443063510728&amp;guid=ab4d29c1f5173534a834b87b58c79749&amp;type=3#Button01_175_Yellow_0" scale-mode="ScaleToFit" picking-mode="Ignore" uv="0,0,1,1" class="shop-gem-badge-background" style="-unity-background-image-tint-color: rgb(142, 142, 142);"/>
+            <ui:Label name="BonusLabel" text="+25%" class="shop-gem-badge-label" style="font-size: 30px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="OfferIcon" style="flex-grow: 1; width: 155px; min-width: 155px; max-width: 155px; height: 155px; min-height: 155px; max-height: 155px; background-image: resource(&quot;UI/new/Icons/Icon_Gold&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+        <ui:VisualElement name="RewardsContainer" style="flex-grow: 1; min-width: 0; margin-left: 18px; margin-right: 18px; justify-content: center;">
+            <ui:Label name="TitleLabel" text="Запас золота" class="shop-offer-title" style="height: 34px; color: rgb(255, 255, 255); -unity-text-outline-color: rgb(54, 36, 27); -unity-text-outline-width: 1px; overflow: hidden; text-overflow: ellipsis;"/>
+            <ui:Label name="DescriptionLabel" text="Золото для улучшений" class="shop-offer-description" style="height: 24px; min-height: 24px; color: rgb(255, 255, 255); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+            <ui:VisualElement name="RewardItems" class="shop-offer-rewards">
+                <ui:VisualElement name="PrimaryReward" class="shop-offer-reward">
+                    <ui:VisualElement name="PrimaryRewardIcon" class="shop-offer-reward-icon" style="background-image: resource(&quot;UI/new/Icons/Icon_Gold&quot;);"/>
+                    <ui:Label name="PrimaryRewardLabel" text="3000" class="shop-offer-reward-label" style="color: rgb(255, 225, 105);"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="SecondaryReward" class="shop-offer-reward" style="display: none;">
+                    <ui:VisualElement name="SecondaryRewardIcon" class="shop-offer-reward-icon" style="background-image: resource(&quot;UI/new/Icons/Icon_Gem03_Diamond_Purple 1&quot;);"/>
+                    <ui:Label name="SecondaryRewardLabel" text="100" class="shop-offer-reward-label" style="color: rgb(255, 225, 105);"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="OfferMeta" class="shop-offer-meta" style="min-height: 24px;">
+                <ui:Label name="LimitLabel" class="shop-offer-meta-label" style="display: none; color: rgb(255, 255, 255);"/>
+                <ui:Label name="TimerLabel" text="До конца: 168:00:00" class="shop-offer-meta-label" style="color: rgb(255, 255, 255);"/>
+            </ui:VisualElement>
+            <ui:Label name="StatusLabel" class="shop-offer-status" style="display: none; min-height: 22px; color: rgb(255, 225, 105); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+        </ui:VisualElement>
+        <ui:Button name="BuyButton" class="shop-gem-buy-button" style="-unity-slice-left: 20; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 20; top: auto; width: 175px; height: 100px; flex-shrink: 0; flex-direction: row;">
+            <ui:VisualElement name="BuyButtonBackground" source="project://database/Assets/Project/Resources/UI/new/Buttons/Button01_175_Green.png?fileID=8916753236450727188&amp;guid=85963750d2ffe1f4db6f815ed6a1762a&amp;type=3#Button01_175_Green_0" scale-mode="StretchToFill" picking-mode="Ignore" class="shop-gem-buy-background" style="background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 45; -unity-slice-top: 45; -unity-slice-right: 45; -unity-slice-bottom: 45; -unity-background-image-tint-color: rgb(39, 192, 46);"/>
+            <ui:VisualElement name="PriceIcon" picking-mode="Ignore" class="shop-offer-price-icon" style="display: none;"/>
+            <ui:Label name="PriceLabel" text="99 RUB" class="shop-gem-price"/>
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

@@ -16,3 +16,10 @@ MonoBehaviour:
   _title: shop.gems_tab
   _order: 0
   _layout: 1
+  _offers:
+  - {fileID: 11400000, guid: 201fb378a4e44439b0dd71a1211e4a80, type: 2}
+  - {fileID: 11400000, guid: c8f8c98f79364d9fbd227f82e28cf1cd, type: 2}
+  - {fileID: 11400000, guid: edcfd1e0d675485d82a1780d2c788e47, type: 2}
+  - {fileID: 11400000, guid: a74ff15f2aa44d048ef6bc296b593773, type: 2}
+  - {fileID: 11400000, guid: e6f5eb184ab84af3aa366b9108ddd31e, type: 2}
+  - {fileID: 11400000, guid: 519a26aac3f142da90e46b855e54f89f, type: 2}

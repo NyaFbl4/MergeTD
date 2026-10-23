@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Base;
-using Project.Scripts.Gameplay.UpgradeItem;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.Shop;
@@ -13,20 +12,18 @@ namespace Project.Scripts.UI.ShopUI
 {
     public sealed class ShopContentPresenter : IDisposable
     {
-        private const string UpgradeTabId = "upgrades";
         private const float TimerRefreshIntervalSeconds = 1f;
 
         private readonly IShopContentView _view;
         private readonly ILocalizationService _localizationService;
         private readonly IPlayerStatsUseCase _playerStats;
-        private readonly BaseHealth _baseHealth;
         private readonly IAudioManager _audioManager;
         private readonly ShopOfferService _offerService;
         private readonly UIElements _uiElements;
         private readonly Func<bool> _isActive;
+        private readonly Sprite _energyIcon;
+        private readonly Sprite _rewardedAdIcon;
 
-        private List<IUpgradeItem> _upgradeItems;
-        private string _selectedTabId;
         private float _nextTimerRefreshAt;
 
         public ShopContentPresenter(
@@ -42,26 +39,16 @@ namespace Project.Scripts.UI.ShopUI
             _view = view;
             _localizationService = localizationService;
             _playerStats = playerStats;
-            _baseHealth = baseHealth;
             _audioManager = audioManager;
             _offerService = offerService;
             _uiElements = uiElements;
             _isActive = isActive;
+            _energyIcon = LoadSingleSprite("UI/new/Icons/Icon_Energy");
+            _rewardedAdIcon = LoadSingleSprite("UI/new/Icons/Icon_ImageIcon_Ad_00_l");
         }
 
         public void Initialize()
         {
-            _upgradeItems = new List<IUpgradeItem>
-            {
-                new TowerLevelUpgradeItem(_view.TowerLevelUpgradeConfig, _playerStats),
-                new TowerDamageUpgradeItem(_view.DamageUpgradeConfig, _playerStats),
-                new TowerAttackSpeedUpgradeItem(_view.AttackSpeedUpgradeConfig, _playerStats),
-                new BaseHealthUpgradeItem(_view.HealthUpgradeConfig, _playerStats, _baseHealth),
-                new TowerCritChanceUpgradeItem(_view.CritChanceUpgradeConfig, _playerStats),
-                new TowerCritDamageUpgradeItem(_view.CritDamageUpgradeConfig, _playerStats)
-            };
-
-            _view.TabClicked += OnTabClicked;
             _view.OfferPurchaseClicked += OnOfferPurchaseClicked;
             _playerStats.OnGoldChanged += OnGoldChanged;
             _playerStats.UpgradesChanged += OnUpgradesChanged;
@@ -77,43 +64,34 @@ namespace Project.Scripts.UI.ShopUI
             _nextTimerRefreshAt = Time.unscaledTime + TimerRefreshIntervalSeconds;
             _view.SetTitle(_localizationService.Get(LocalizationKeys.ShopTitle));
 
-            var placements = _offerService.GetVisiblePlacements();
-            var tabs = new List<ShopTabUIData>(placements.Count + 1)
-            {
-                new(UpgradeTabId, _localizationService.Get(LocalizationKeys.ShopUpgradesTab))
-            };
-
-            var selectedTabExists = string.Equals(
-                _selectedTabId,
-                UpgradeTabId,
-                StringComparison.Ordinal);
+            var offers = new List<ShopOfferUIData>();
+            var gemOffers = new List<ShopOfferUIData>();
+            var energyOffers = new List<ShopOfferUIData>();
+            var placements = _offerService.Placements;
             for (var i = 0; i < placements.Count; i++)
             {
                 var placement = placements[i];
-                tabs.Add(new ShopTabUIData(
-                    placement.Id,
-                    _localizationService.Get(placement.Title)));
-
-                if (string.Equals(placement.Id, _selectedTabId, StringComparison.Ordinal))
-                    selectedTabExists = true;
+                var target = placement.Layout switch
+                {
+                    EShopOfferPlacementLayout.GemGrid => gemOffers,
+                    EShopOfferPlacementLayout.EnergyGrid => energyOffers,
+                    _ => offers
+                };
+                var states = _offerService.GetVisibleOffers(placement.Id);
+                for (var j = 0; j < states.Count; j++)
+                    target.Add(CreateUIData(states[j]));
             }
 
-            if (string.IsNullOrWhiteSpace(_selectedTabId))
-                _selectedTabId = placements.Count > 0 ? placements[0].Id : UpgradeTabId;
-            else if (!selectedTabExists)
-                _selectedTabId = UpgradeTabId;
-
-            _view.SetTabs(tabs, _selectedTabId);
-            if (string.Equals(_selectedTabId, UpgradeTabId, StringComparison.Ordinal))
-                RefreshUpgrades();
-            else
-                RefreshOffers();
+            _view.SetOffers(offers, EShopOfferPlacementLayout.List);
+            _view.SetOffers(gemOffers, EShopOfferPlacementLayout.GemGrid);
+            _view.SetOffers(energyOffers, EShopOfferPlacementLayout.EnergyGrid);
+            if (offers.Count == 0 && gemOffers.Count == 0 && energyOffers.Count == 0)
+                _view.ShowEmptyState(_localizationService.Get(LocalizationKeys.ShopNoOffers));
         }
 
         public void Tick()
         {
             if (!_isActive()
-                || string.Equals(_selectedTabId, UpgradeTabId, StringComparison.Ordinal)
                 || Time.unscaledTime < _nextTimerRefreshAt)
                 return;
 
@@ -122,7 +100,6 @@ namespace Project.Scripts.UI.ShopUI
 
         public void Dispose()
         {
-            _view.TabClicked -= OnTabClicked;
             _view.OfferPurchaseClicked -= OnOfferPurchaseClicked;
             _playerStats.OnGoldChanged -= OnGoldChanged;
             _playerStats.UpgradesChanged -= OnUpgradesChanged;
@@ -131,54 +108,27 @@ namespace Project.Scripts.UI.ShopUI
             _offerService.PurchaseSucceeded -= OnOfferPurchaseSucceeded;
         }
 
-        private void RefreshUpgrades()
-        {
-            _view.ClearItems();
-            for (var i = 0; i < _upgradeItems.Count; i++)
-            {
-                var item = _upgradeItems[i];
-                _view.AddItem(item, () =>
-                {
-                    if (!item.TryUpgrade())
-                        return;
-
-                    _audioManager.PlaySound(ESoundId.AddUpgrade);
-                    Refresh();
-                }, _localizationService);
-            }
-        }
-
-        private void RefreshOffers()
-        {
-            var placement = _offerService.GetPlacement(_selectedTabId);
-            var states = _offerService.GetVisibleOffers(_selectedTabId);
-            if (states.Count == 0)
-            {
-                _view.ShowEmptyState(
-                    _localizationService.Get(LocalizationKeys.ShopNoOffers));
-                return;
-            }
-
-            var offers = new List<ShopOfferUIData>(states.Count);
-            for (var i = 0; i < states.Count; i++)
-                offers.Add(CreateUIData(states[i]));
-
-            _view.SetOffers(offers, placement.Layout);
-        }
-
         private ShopOfferUIData CreateUIData(ShopOfferState state)
         {
             var config = state.Config;
             var rewards = CreateRewards(config);
             var mainIcon = config.MainIcon ?? ResolveMainIcon(config, rewards);
-            var priceIcon = config.Price.Type == EShopOfferPriceType.Gold
-                ? _uiElements.GoldIcon
-                : null;
-            var price = config.Price.Type == EShopOfferPriceType.Gold
-                ? config.Price.GoldAmount.ToString()
-                : string.IsNullOrWhiteSpace(state.PaymentPrice)
+            var priceIcon = config.Price.Type switch
+            {
+                EShopOfferPriceType.Gold => _uiElements.GoldIcon,
+                EShopOfferPriceType.Gems => _uiElements.GemsIcon,
+                EShopOfferPriceType.RewardedAd => _rewardedAdIcon,
+                _ => null
+            };
+            var price = config.Price.Type switch
+            {
+                EShopOfferPriceType.Gold => config.Price.GoldAmount.ToString(),
+                EShopOfferPriceType.Gems => config.Price.GemsAmount.ToString(),
+                EShopOfferPriceType.RewardedAd => _localizationService.Get(LocalizationKeys.ShopWatchAd),
+                _ => string.IsNullOrWhiteSpace(state.PaymentPrice)
                     ? config.Price.PreviewPrice
-                    : state.PaymentPrice;
+                    : state.PaymentPrice
+            };
             var limit = config.DailyPurchaseLimit > 0
                 ? _localizationService.Format(
                     LocalizationKeys.ShopOfferLimitFormat,
@@ -198,7 +148,7 @@ namespace Project.Scripts.UI.ShopUI
                 rewards,
                 priceIcon,
                 price,
-                config.Badge,
+                string.IsNullOrWhiteSpace(config.Badge) ? string.Empty : _localizationService.Get(config.Badge),
                 config.VisualIconCount,
                 limit,
                 timer,
@@ -228,6 +178,9 @@ namespace Project.Scripts.UI.ShopUI
                         result.Add(new ShopOfferRewardUIData(
                             reward.Spell.Icon,
                             _localizationService.Get(reward.Spell.DisplayName)));
+                        break;
+                    case EShopOfferRewardType.Energy:
+                        result.Add(new ShopOfferRewardUIData(_energyIcon, reward.Amount.ToString()));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -286,6 +239,12 @@ namespace Project.Scripts.UI.ShopUI
                     _localizationService.Get(LocalizationKeys.ShopOfferProductUnavailable),
                 EShopOfferBlockReason.PurchaseInProgress =>
                     _localizationService.Get(LocalizationKeys.ShopOfferPurchaseInProgress),
+                EShopOfferBlockReason.InsufficientGems =>
+                    _localizationService.Get(LocalizationKeys.ShopOfferInsufficientGems),
+                EShopOfferBlockReason.AdUnavailable =>
+                    _localizationService.Get(LocalizationKeys.ShopOfferAdUnavailable),
+                EShopOfferBlockReason.EnergyStorageFull =>
+                    _localizationService.Get(LocalizationKeys.ShopOfferEnergyStorageFull),
                 _ => throw new ArgumentOutOfRangeException(nameof(reason), reason, null)
             };
         }
@@ -296,14 +255,16 @@ namespace Project.Scripts.UI.ShopUI
             return $"{totalHours:00}:{duration.Minutes:00}:{duration.Seconds:00}";
         }
 
-        private void OnLanguageChanged(string _) => Refresh();
-
-        private void OnTabClicked(string tabId)
+        private static Sprite LoadSingleSprite(string path)
         {
-            _selectedTabId = tabId;
-            _audioManager.PlaySound(ESoundId.UiButtonClick);
-            Refresh();
+            var sprites = Resources.LoadAll<Sprite>(path);
+            if (sprites.Length != 1)
+                throw new MissingReferenceException($"Expected one sprite at Resources/{path}.");
+
+            return sprites[0];
         }
+
+        private void OnLanguageChanged(string _) => Refresh();
 
         private void OnOfferPurchaseClicked(string offerId)
         {

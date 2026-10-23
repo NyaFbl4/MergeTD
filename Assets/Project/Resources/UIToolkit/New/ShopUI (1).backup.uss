@@ -1,0 +1,348 @@
+:root {
+    --shop-text: rgb(255, 255, 255);
+    --shop-muted: rgb(214, 218, 230);
+    --shop-disabled: rgb(130, 130, 140);
+}
+
+.shop-tabs {
+    position: absolute;
+    top: 112px;
+    left: 50px;
+    width: 700px;
+    height: 62px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.shop-tab-button {
+    min-width: 150px;
+    height: 54px;
+    margin-right: 6px;
+    margin-left: 6px;
+    padding-right: 18px;
+    padding-left: 18px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-image: resource("UI/Shopping popup/btn store pressed");
+    background-color: rgba(255, 255, 255, 0);
+    color: var(--shop-muted);
+    font-size: 24px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-align: middle-center;
+}
+
+.shop-tab-button--selected {
+    color: var(--shop-text);
+    -unity-background-image-tint-color: rgb(255, 230, 94);
+}
+
+.shop-empty-label {
+    position: absolute;
+    top: 300px;
+    width: 650px;
+    color: var(--shop-text);
+    font-size: 34px;
+    white-space: normal;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-align: middle-center;
+    display: none;
+}
+
+.shop-offer-card {
+    width: 700px;
+    min-height: 220px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 14px;
+    padding-right: 16px;
+    padding-bottom: 14px;
+    padding-left: 16px;
+    flex-direction: row;
+    align-items: center;
+    background-image: resource("UI/Shopping popup/bg icon store bar");
+    -unity-slice-left: 20;
+    -unity-slice-top: 20;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 20;
+}
+
+.shop-offer-card--disabled {
+    opacity: 0.76;
+}
+
+.shop-offer-icon-panel {
+    width: 130px;
+    height: 130px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    background-image: resource("UI/Shopping popup/bg icon 03");
+}
+
+.shop-offer-main-icon {
+    width: 104px;
+    height: 104px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-offer-content {
+    flex-grow: 1;
+    min-width: 0;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.shop-offer-title {
+    height: 38px;
+    color: rgb(40, 26, 55);
+    font-size: 30px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-align: middle-left;
+}
+
+.shop-offer-description {
+    min-height: 34px;
+    color: rgb(55, 45, 67);
+    font-size: 21px;
+    white-space: normal;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+}
+
+.shop-offer-rewards {
+    min-height: 52px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.shop-offer-reward {
+    min-width: 112px;
+    height: 48px;
+    margin-right: 12px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.shop-offer-reward-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-offer-reward-label {
+    margin-left: 6px;
+    color: rgb(40, 26, 55);
+    font-size: 23px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+}
+
+.shop-offer-meta {
+    min-height: 27px;
+    flex-direction: row;
+}
+
+.shop-offer-meta-label {
+    margin-right: 12px;
+    color: rgb(71, 58, 86);
+    font-size: 17px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+}
+
+.shop-offer-status {
+    min-height: 25px;
+    color: rgb(160, 48, 48);
+    font-size: 18px;
+    white-space: normal;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+}
+
+.shop-offer-buy-button {
+    width: 150px;
+    height: 90px;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-image: resource("UI/Shopping popup/btn store pressed");
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.shop-offer-price-icon {
+    width: 34px;
+    height: 34px;
+    margin-right: 6px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-offer-price-label {
+    color: var(--shop-text);
+    font-size: 24px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    -unity-text-outline-width: 1px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-align: middle-center;
+}
+
+.shop-offer-buy-button:disabled {
+    -unity-background-image-tint-color: var(--shop-disabled);
+}
+
+.shop-offer-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 14px;
+    padding-right: 4px;
+    padding-bottom: 18px;
+    padding-left: 4px;
+}
+
+.shop-gem-card-container {
+    width: 226px;
+    height: 292px;
+    margin-top: 7px;
+    margin-right: 2px;
+    margin-bottom: 7px;
+    margin-left: 2px;
+}
+
+.shop-gem-card {
+    width: 218px;
+    height: 282px;
+    padding-top: 18px;
+    padding-right: 14px;
+    padding-bottom: 16px;
+    padding-left: 14px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.shop-gem-card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.shop-gem-card--disabled {
+    opacity: 0.82;
+}
+
+.shop-gem-badge {
+    position: absolute;
+    top: -12px;
+    right: -9px;
+    min-width: 76px;
+    height: 38px;
+    padding-right: 10px;
+    padding-left: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-gem-badge-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.shop-gem-badge-label {
+    color: rgb(49, 35, 22);
+    font-size: 23px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-align: middle-center;
+}
+
+.shop-gem-icons {
+    position: relative;
+    width: 162px;
+    height: 104px;
+    margin-bottom: 8px;
+}
+
+.shop-gem-icon {
+    position: absolute;
+    top: 4px;
+    width: 94px;
+    height: 94px;
+}
+
+.shop-gem-icons--one > .shop-gem-icon--primary {
+    left: 34px;
+}
+
+.shop-gem-icons--two > .shop-gem-icon--primary {
+    left: 63px;
+}
+
+.shop-gem-icons--two > .shop-gem-icon--secondary {
+    left: 7px;
+}
+
+.shop-gem-icons--three > .shop-gem-icon--primary {
+    left: 34px;
+}
+
+.shop-gem-icons--three > .shop-gem-icon--secondary {
+    left: -7px;
+}
+
+.shop-gem-icons--three > .shop-gem-icon--tertiary {
+    left: 75px;
+}
+
+.shop-gem-amount {
+    width: 100%;
+    height: 42px;
+    margin-bottom: 15px;
+    color: rgb(255, 225, 105);
+    font-size: 30px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-outline-color: rgb(54, 36, 27);
+    -unity-text-outline-width: 1px;
+    -unity-text-align: middle-center;
+}
+
+.shop-gem-buy-button {
+    width: 168px;
+    height: 52px;
+    padding-top: 0;
+    padding-right: 10px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.shop-gem-buy-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.shop-gem-price {
+    color: rgb(255, 255, 255);
+    font-size: 27px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-outline-color: rgb(29, 68, 27);
+    -unity-text-outline-width: 1px;
+    -unity-text-align: middle-center;
+}

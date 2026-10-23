@@ -30,6 +30,8 @@ namespace Project.Scripts.UI.InBattleUI
         private readonly QuestService _questService;
         private readonly ILocalizationService _localizationService;
         private readonly IAudioManager _audioManager;
+        private readonly PlayerEnergyService _playerEnergy;
+        private bool _isStartingRun;
         private CancellationTokenSource _refreshCancellation;
         private DailyRewardState _dailyRewardState;
         private bool _hasDailyRewardState;
@@ -44,7 +46,8 @@ namespace Project.Scripts.UI.InBattleUI
             DailyRewardService dailyRewardService,
             QuestService questService,
             ILocalizationService localizationService,
-            IAudioManager audioManager)
+            IAudioManager audioManager,
+            PlayerEnergyService playerEnergy)
         {
             _view = view;
             _runSelection = runSelection;
@@ -55,6 +58,7 @@ namespace Project.Scripts.UI.InBattleUI
             _questService = questService;
             _localizationService = localizationService;
             _audioManager = audioManager;
+            _playerEnergy = playerEnergy;
         }
 
         public void Initialize()
@@ -77,6 +81,12 @@ namespace Project.Scripts.UI.InBattleUI
             RefreshDailyQuests();
             _refreshCancellation = new CancellationTokenSource();
             RefreshDailyRewardsLoopAsync(_refreshCancellation.Token).Forget();
+        }
+
+        public void OnMenuShown()
+        {
+            _isStartingRun = false;
+            _view.SetPlayButtonEnabled(_playerEnergy.GetState().Current > 0);
         }
 
         public void Dispose()
@@ -134,6 +144,17 @@ namespace Project.Scripts.UI.InBattleUI
 
         private void OnPlayClicked()
         {
+            if (_isStartingRun)
+                return;
+
+            if (!_playerEnergy.TrySpendForRun())
+            {
+                _view.SetPlayButtonEnabled(false);
+                return;
+            }
+
+            _isStartingRun = true;
+            _view.SetPlayButtonEnabled(false);
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _hidePopupPublisher.Publish(new HidePopupDto
             {
