@@ -17,7 +17,8 @@ MonoBehaviour:
   _description: spell.base_repair.description
   _icon: {fileID: 3880603984668780416, guid: 75c6b17cfd9a91548a13b4ad95545d9d, type: 3}
   _background: {fileID: -188937609493885072, guid: fd154c096b87efc4d85a0fd923884cf1, type: 3}
-  _unlockType: 0
+  _unlockType: 3
+  _unlockGoldPrice: 1500
   _unlockGemPrice: 0
   _paymentProductId:
   _cooldown: 20

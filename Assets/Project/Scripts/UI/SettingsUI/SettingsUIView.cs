@@ -12,6 +12,7 @@ namespace Project.Scripts.UI.SettingsUI
         private Label _soundLabel;
         private Label _languageLabel;
         private Label _resetButtonLabel;
+        private Label _goToMenuButtonLabel;
         
         private Button _closeButton;
         private Button _musicButton;
@@ -19,6 +20,7 @@ namespace Project.Scripts.UI.SettingsUI
         private Button _ruLanguageButton;
         private Button _enLanguageButton;
         private Button _resetProgressButton;
+        private Button _goToMenuButton;
         
         private VisualElement _musicIcon;
         private VisualElement _soundIcon;
@@ -32,6 +34,7 @@ namespace Project.Scripts.UI.SettingsUI
         public event Action RuButtonClicked;
         public event Action EnButtonClicked;
         public event Action ResetProgressButtonClicked;
+        public event Action GoToMenuButtonClicked;
 
         public override void Awake()
         {
@@ -61,6 +64,9 @@ namespace Project.Scripts.UI.SettingsUI
 
             if (_resetProgressButton != null)
                 _resetProgressButton.clicked += OnResetProgressButtonClicked;
+
+            _goToMenuButton = _root.Q<Button>("GoToMenuButton");
+            _goToMenuButton.clicked += OnGoToMenuButtonClicked;
             
             _musicIcon = _musicButton.Q<VisualElement>("Icon");
             _soundIcon = _soundButton.Q<VisualElement>("Icon");
@@ -69,6 +75,7 @@ namespace Project.Scripts.UI.SettingsUI
             _soundLabel = _root.Q<Label>("SoundLabel");
             _languageLabel = _root.Q<Label>("LanguageLabel");
             _resetButtonLabel = _root.Q<Label>("ResetProgressButtonLabel");
+            _goToMenuButtonLabel = _goToMenuButton.Q<Label>("GoToMenuButtonLabel");
         }
 
         public void SetMusicEnabled(bool enabled)
@@ -105,6 +112,11 @@ namespace Project.Scripts.UI.SettingsUI
         {
             _resetButtonLabel.text = label;
         }
+
+        public void SetGoToMenuButtonLabel(string label)
+        {
+            _goToMenuButtonLabel.text = label;
+        }
         
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();
         private void OnMusicButtonClicked() => MusicButtonClicked?.Invoke();
@@ -112,5 +124,6 @@ namespace Project.Scripts.UI.SettingsUI
         private void OnRuLanguageButtonClicked() => RuButtonClicked?.Invoke();
         private void OnEnLanguageButtonClicked() => EnButtonClicked?.Invoke();
         private void OnResetProgressButtonClicked() => ResetProgressButtonClicked?.Invoke();
+        private void OnGoToMenuButtonClicked() => GoToMenuButtonClicked?.Invoke();
     }
 }

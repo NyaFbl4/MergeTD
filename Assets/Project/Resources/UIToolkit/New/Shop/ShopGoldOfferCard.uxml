@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UIToolkit/ShopUI.uss?fileID=11400000&amp;guid=2804ea254394429283042a052bab0302&amp;type=3#ShopUI"/>
+    <ui:VisualElement name="GoldOfferCard" class="shop-gem-card" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+        <ui:VisualElement name="CardBackground" picking-mode="Ignore" class="shop-gem-card-background" style="background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 40; -unity-slice-top: 40; -unity-slice-right: 40; -unity-slice-bottom: 40; -unity-background-image-tint-color: rgb(255, 189, 67);"/>
+        <ui:VisualElement name="BonusBadge" class="shop-gem-badge" style="background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 25; -unity-slice-top: 25; -unity-slice-right: 25; -unity-slice-bottom: 25; -unity-background-image-tint-color: rgb(245, 245, 27);">
+            <ui:Label name="BonusLabel" text="+25%" class="shop-gem-badge-label"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="GoldIcons" style="position: relative; width: 162px; height: 104px; margin-bottom: 8px;">
+            <ui:VisualElement name="GoldIcon" picking-mode="Ignore" style="width: 162px; height: 104px; background-image: resource(&quot;UI/new/Icons/Shop/ShopItem_Coin_2&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+        </ui:VisualElement>
+        <ui:Label name="AmountLabel" text="×1000" class="shop-gem-amount" style="color: rgb(62, 39, 15); -unity-text-outline-width: 0;"/>
+        <ui:Button name="BuyButton" class="shop-gem-buy-button" style="flex-direction: row; top: -9px;">
+            <ui:VisualElement name="BuyButtonBackground" picking-mode="Ignore" class="shop-gem-buy-background" style="background-image: resource(&quot;UI/new/BorderFrame_Round03&quot;); -unity-slice-left: 45; -unity-slice-top: 45; -unity-slice-right: 45; -unity-slice-bottom: 45; -unity-background-image-tint-color: rgb(39, 192, 46);"/>
+            <ui:VisualElement name="PriceIcon" picking-mode="Ignore" style="width: 34px; height: 34px; flex-shrink: 0; margin-right: 6px; background-image: resource(&quot;UI/new/Icons/Icon_Gem03_Diamond_Purple 1&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+            <ui:Label name="PriceLabel" text="50" picking-mode="Ignore" class="shop-gem-price"/>
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

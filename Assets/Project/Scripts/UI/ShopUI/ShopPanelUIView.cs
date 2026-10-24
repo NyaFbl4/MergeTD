@@ -12,9 +12,6 @@ namespace Project.Scripts.UI.ShopUI
     public sealed class ShopPanelUIView : IShopPanelUIView
     {
         private const string UpgradeTemplateResourcePath = "UIToolkit/UpgradeObjectUI";
-        private const string OfferTemplateResourcePath = "UIToolkit/New/ShopOfferCard";
-        private const string GemOfferTemplateResourcePath = "UIToolkit/New/ShopGemOfferCard";
-        private const string EnergyOfferTemplateResourcePath = "UIToolkit/New/ShopEnergyOfferCard";
 
         private readonly VisualElement _root;
         private readonly IUpgradeConfigProvider _upgradeConfigs;
@@ -22,6 +19,7 @@ namespace Project.Scripts.UI.ShopUI
         private readonly VisualTreeAsset _offerItemTemplate;
         private readonly VisualTreeAsset _gemOfferItemTemplate;
         private readonly VisualTreeAsset _energyOfferItemTemplate;
+        private readonly VisualTreeAsset _goldOfferItemTemplate;
         private readonly Label _titleLabel;
         private readonly Label _emptyLabel;
         private readonly ScrollView _scrollView;
@@ -31,10 +29,13 @@ namespace Project.Scripts.UI.ShopUI
         private readonly VisualElement _gemContainer;
         private readonly VisualElement _energyPanel;
         private readonly VisualElement _energyContainer;
+        private readonly VisualElement _goldPanel;
+        private readonly VisualElement _goldContainer;
         private readonly List<VisualElement> _upgradeItemRoots = new();
         private readonly List<string> _offerOrder = new();
         private readonly List<string> _gemOfferOrder = new();
         private readonly List<string> _energyOfferOrder = new();
+        private readonly List<string> _goldOfferOrder = new();
         private readonly Dictionary<string, IShopOfferItemView> _offerViews =
             new(StringComparer.Ordinal);
 
@@ -50,6 +51,7 @@ namespace Project.Scripts.UI.ShopUI
         public ShopPanelUIView(
             VisualElement root,
             IUpgradeConfigProvider upgradeConfigs,
+            UIElements uiElements,
             VisualTreeAsset upgradeItemTemplate = null)
         {
             _root = root;
@@ -62,11 +64,14 @@ namespace Project.Scripts.UI.ShopUI
             _gemContainer = Require<VisualElement>("GemContainer");
             _energyPanel = Require<VisualElement>("EnergyOffersPanel");
             _energyContainer = Require<VisualElement>("EnergyContainer");
+            _goldPanel = Require<VisualElement>("GoldPanel");
+            _goldContainer = Require<VisualElement>("GoldContainer");
             _emptyLabel = Require<Label>("EmptyLabel");
             _shopItemTemplate = upgradeItemTemplate ?? LoadTemplate(UpgradeTemplateResourcePath);
-            _offerItemTemplate = LoadTemplate(OfferTemplateResourcePath);
-            _gemOfferItemTemplate = LoadTemplate(GemOfferTemplateResourcePath);
-            _energyOfferItemTemplate = LoadTemplate(EnergyOfferTemplateResourcePath);
+            _offerItemTemplate = uiElements.ShopOfferCard;
+            _gemOfferItemTemplate = uiElements.ShopGemOfferCard;
+            _energyOfferItemTemplate = uiElements.ShopEnergyOfferCard;
+            _goldOfferItemTemplate = uiElements.ShopGoldOfferCard;
         }
 
         public void SetVisible(bool visible)
@@ -103,6 +108,7 @@ namespace Project.Scripts.UI.ShopUI
             {
                 EShopOfferPlacementLayout.GemGrid => _gemPanel,
                 EShopOfferPlacementLayout.EnergyGrid => _energyPanel,
+                EShopOfferPlacementLayout.GoldGrid => _goldPanel,
                 _ => _offerPanel
             };
             panel.style.display = offers.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
@@ -149,7 +155,21 @@ namespace Project.Scripts.UI.ShopUI
         {
             var useGemGrid = layout == EShopOfferPlacementLayout.GemGrid;
             var useEnergyGrid = layout == EShopOfferPlacementLayout.EnergyGrid;
-            var targetContainer = useEnergyGrid ? _energyContainer : useGemGrid ? _gemContainer : _offerContainer;
+            var useGoldGrid = layout == EShopOfferPlacementLayout.GoldGrid;
+            var targetContainer = layout switch
+            {
+                EShopOfferPlacementLayout.GemGrid => _gemContainer,
+                EShopOfferPlacementLayout.EnergyGrid => _energyContainer,
+                EShopOfferPlacementLayout.GoldGrid => _goldContainer,
+                _ => _offerContainer
+            };
+            var template = layout switch
+            {
+                EShopOfferPlacementLayout.GemGrid => _gemOfferItemTemplate,
+                EShopOfferPlacementLayout.EnergyGrid => _energyOfferItemTemplate,
+                EShopOfferPlacementLayout.GoldGrid => _goldOfferItemTemplate,
+                _ => _offerItemTemplate
+            };
             var order = GetOfferOrder(layout);
             for (var i = 0; i < order.Count; i++)
                 _offerViews.Remove(order[i]);
@@ -160,8 +180,7 @@ namespace Project.Scripts.UI.ShopUI
             for (var i = 0; i < offers.Count; i++)
             {
                 var offer = offers[i];
-                var offerRoot = (useEnergyGrid ? _energyOfferItemTemplate : useGemGrid ? _gemOfferItemTemplate : _offerItemTemplate)
-                    .Instantiate();
+                var offerRoot = template.Instantiate();
                 IShopOfferItemView offerView;
                 if (useEnergyGrid)
                 {
@@ -171,6 +190,11 @@ namespace Project.Scripts.UI.ShopUI
                 {
                     offerRoot.AddToClassList("shop-gem-card-container");
                     offerView = new ShopGemOfferItemView(offerRoot, OnOfferPurchaseClicked);
+                }
+                else if (useGoldGrid)
+                {
+                    offerRoot.AddToClassList("shop-gem-card-container");
+                    offerView = new ShopGoldOfferItemView(offerRoot, OnOfferPurchaseClicked);
                 }
                 else
                 {
@@ -192,12 +216,15 @@ namespace Project.Scripts.UI.ShopUI
             _offerContainer.Clear();
             _gemContainer.Clear();
             _energyContainer.Clear();
+            _goldContainer.Clear();
             _offerPanel.style.display = DisplayStyle.None;
             _gemPanel.style.display = DisplayStyle.None;
             _energyPanel.style.display = DisplayStyle.None;
+            _goldPanel.style.display = DisplayStyle.None;
             _offerOrder.Clear();
             _gemOfferOrder.Clear();
             _energyOfferOrder.Clear();
+            _goldOfferOrder.Clear();
             _offerViews.Clear();
         }
 
@@ -206,6 +233,7 @@ namespace Project.Scripts.UI.ShopUI
             {
                 EShopOfferPlacementLayout.GemGrid => _gemOfferOrder,
                 EShopOfferPlacementLayout.EnergyGrid => _energyOfferOrder,
+                EShopOfferPlacementLayout.GoldGrid => _goldOfferOrder,
                 _ => _offerOrder
             };
 

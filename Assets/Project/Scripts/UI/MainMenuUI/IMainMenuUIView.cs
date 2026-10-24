@@ -32,7 +32,7 @@ namespace Project.Scripts.UI.MainMenuUI
         ISpellsPanelUIView SpellsPanelView { get; }
         IShopPanelUIView ShopView { get; }
 
-        void InitializeShop(IUpgradeConfigProvider upgradeConfigs);
+        void InitializeShop(IUpgradeConfigProvider upgradeConfigs, UIElements uiElements);
         void InitializeArmy(UIElements uiElements);
         void InitializePurchaseWindow(UIElements uiElements);
         void InitializeSpells(

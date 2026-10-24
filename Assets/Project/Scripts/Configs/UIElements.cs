@@ -11,6 +11,10 @@ namespace Project.Scripts.Configs
         [SerializeField] private VisualTreeAsset _spellPanel;
         [SerializeField] private VisualTreeAsset _spellButton;
         [SerializeField] private VisualTreeAsset _spellInfo;
+        [SerializeField] private VisualTreeAsset _shopOfferCard;
+        [SerializeField] private VisualTreeAsset _shopGemOfferCard;
+        [SerializeField] private VisualTreeAsset _shopEnergyOfferCard;
+        [SerializeField] private VisualTreeAsset _shopGoldOfferCard;
         [SerializeField] private List<Sprite> _towerIcons;
         [SerializeField] private List<Sprite> _generatorIcons;
         [SerializeField] private VisualTreeAsset _towerPanel;
@@ -28,6 +32,10 @@ namespace Project.Scripts.Configs
         public VisualTreeAsset SpellPanel => _spellPanel;
         public VisualTreeAsset SpellButton => _spellButton;
         public VisualTreeAsset SpellInfo => _spellInfo;
+        public VisualTreeAsset ShopOfferCard => _shopOfferCard;
+        public VisualTreeAsset ShopGemOfferCard => _shopGemOfferCard;
+        public VisualTreeAsset ShopEnergyOfferCard => _shopEnergyOfferCard;
+        public VisualTreeAsset ShopGoldOfferCard => _shopGoldOfferCard;
         public List<Sprite> TowerIcons => _towerIcons;
         public List<Sprite> GeneratorIcons => _generatorIcons;
     }

@@ -18,7 +18,7 @@ MonoBehaviour:
   _enabled: 1
   _title: shop.gems_offer.title
   _description: 
-  _mainIcon: {fileID: 8263698601183877077, guid: fffcf6984de81b94391dbe8bbd56d0a1, type: 3}
+  _mainIcon: {fileID: 21300000, guid: 4299c4d628c70d344bc490e08cf7cf8b, type: 3}
   _badge: +25%
   _visualIconCount: 1
   _price:

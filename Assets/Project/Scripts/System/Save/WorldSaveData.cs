@@ -27,6 +27,8 @@ namespace Project.Scripts.System.Save
         public List<WorldTowerSaveData> towers = new();
         public List<WorldTowerSlotSaveData> towerSlots = new();
         public List<SpellProgressSaveData> spells = new();
+        public int spellProgressionVersion;
+        public List<string> completedRunIds = new();
         public List<string> activeSpellIds = new();
         public List<ShopOfferProgressSaveData> shopOffers = new();
         public List<QuestSaveData> dailyQuests = new();
@@ -123,6 +125,7 @@ namespace Project.Scripts.System.Save
         public string spellId;
         public bool isUnlocked;
         public int level;
+        public bool keepUnlockedOnReset;
 
         public SpellProgressSaveData()
         {

@@ -19,6 +19,7 @@ namespace Project.Scripts.System.Localization
         public const string SettingsSound = "settings.sound";
         public const string SettingsLanguage = "settings.language";
         public const string SettingsResetProgress = "settings.reset_progress";
+        public const string SettingsGoToMenu = "settings.go_to_menu";
 
         public const string QuestBuyTenTowersDescription = "quest.buy_ten_towers.description";
         public const string QuestDealOneThousandDamageDescription = "quest.deal_one_thousand_damage.description";
@@ -100,6 +101,18 @@ namespace Project.Scripts.System.Localization
         public const string SpellsMaximumShort = "spells.maximum_short";
         public const string SpellsMaximumTitle = "spells.maximum_title";
         public const string SpellsMaximumDescription = "spells.maximum_description";
+        public const string SpellsLocked = "spells.locked";
+        public const string SpellsDetails = "spells.details";
+        public const string SpellsUnlockGoldFormat = "spells.unlock_gold_format";
+        public const string SpellsUnlockGemsFormat = "spells.unlock_gems_format";
+        public const string SpellsUnlockRunFormat = "spells.unlock_run_format";
+        public const string SpellsUnlockOffer = "spells.unlock_offer";
+        public const string SpellsUnlockSection = "spells.unlock_section";
+        public const string SpellsUnlockCondition = "spells.unlock_condition";
+        public const string SpellsInsufficientCurrency = "spells.insufficient_currency";
+        public const string SpellsGoToShop = "spells.go_to_shop";
+        public const string SpellsUnlock = "spells.unlock";
+        public const string SpellsCompletionReward = "spells.completion_reward";
 
         public const string LevelSelectTarget = "level.spell.select_target";
         public const string LevelDrawLine = "level.spell.draw_line";

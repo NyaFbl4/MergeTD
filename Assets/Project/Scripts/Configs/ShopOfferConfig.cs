@@ -24,7 +24,8 @@ namespace Project.Scripts.Configs
     {
         List = 0,
         GemGrid = 1,
-        EnergyGrid = 2
+        EnergyGrid = 2,
+        GoldGrid = 3
     }
 
     [Serializable]
@@ -212,12 +213,25 @@ namespace Project.Scripts.Configs
 
         private void ValidateRewardComposition(HashSet<EShopOfferRewardType> rewardTypes)
         {
-            if (_price.Type == EShopOfferPriceType.Gems || _price.Type == EShopOfferPriceType.RewardedAd)
+            if (_price.Type == EShopOfferPriceType.Gems)
+            {
+                if (_rewards.Count != 1
+                    || (!rewardTypes.Contains(EShopOfferRewardType.Energy)
+                        && !rewardTypes.Contains(EShopOfferRewardType.Gold)))
+                {
+                    throw new InvalidOperationException(
+                        $"Gem-priced offer '{_id}' must reward only gold or player energy.");
+                }
+
+                return;
+            }
+
+            if (_price.Type == EShopOfferPriceType.RewardedAd)
             {
                 if (_rewards.Count != 1 || !rewardTypes.Contains(EShopOfferRewardType.Energy))
                     throw new InvalidOperationException($"Energy offer '{_id}' must reward only player energy.");
 
-                if (_price.Type == EShopOfferPriceType.RewardedAd && _dailyPurchaseLimit != 1)
+                if (_dailyPurchaseLimit != 1)
                     throw new InvalidOperationException($"Rewarded energy offer '{_id}' must allow one claim per day.");
 
                 return;
@@ -325,6 +339,15 @@ namespace Project.Scripts.Configs
                     {
                         throw new InvalidOperationException(
                             $"Energy section '{placement.Id}' requires offers with only an energy reward.");
+                    }
+
+                    if (placement.Layout == EShopOfferPlacementLayout.GoldGrid
+                        && (offer.Rewards.Count != 1
+                            || offer.Rewards[0].Type != EShopOfferRewardType.Gold
+                            || offer.Price.Type != EShopOfferPriceType.Gems))
+                    {
+                        throw new InvalidOperationException(
+                            $"Gold section '{placement.Id}' requires a gold reward purchased with gems.");
                     }
 
                     offers.Add(offer);

@@ -7,7 +7,7 @@
             <ui:Label name="BonusLabel" text="+25%" class="shop-gem-badge-label"/>
         </ui:VisualElement>
         <ui:VisualElement name="GemIcons" class="shop-gem-icons shop-gem-icons--one">
-            <ui:VisualElement name="GemIconPrimary" source="project://database/Assets/Project/Resources/UI/new/Icons/Icon_Gem03_Diamond_Purple%201.png?fileID=8263698601183877077&amp;guid=fffcf6984de81b94391dbe8bbd56d0a1&amp;type=3#Icon_Gem03_Diamond_Purple%201_0" scale-mode="ScaleToFit" class="shop-gem-icon shop-gem-icon--primary" style="background-image: resource(&quot;UI/new/Icons/Icon_Gem03_Diamond_Purple 1&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+            <ui:VisualElement name="GemIconPrimary" source="project://database/Assets/Project/Resources/UI/new/Icons/Shop/ShopItem_Gem_Purple_1.png?fileID=21300000&amp;guid=69f8598750214d24a9d8de149c032efd&amp;type=3#ShopItem_Gem_Purple_1" scale-mode="ScaleToFit" class="shop-gem-icon shop-gem-icon--primary" style="background-image: resource(&quot;UI/new/Icons/Shop/ShopItem_Gem_Purple_1&quot;); -unity-background-scale-mode: scale-to-fit; width: 162px; height: 104px; left: 0; top: 0;"/>
             <ui:VisualElement name="GemIconSecondary" scale-mode="ScaleToFit" class="shop-gem-icon shop-gem-icon--secondary"/>
             <ui:VisualElement name="GemIconTertiary" scale-mode="ScaleToFit" class="shop-gem-icon shop-gem-icon--tertiary"/>
         </ui:VisualElement>

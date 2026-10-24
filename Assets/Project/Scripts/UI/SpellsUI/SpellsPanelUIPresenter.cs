@@ -2,6 +2,7 @@ using Project.Scripts.System.Audio;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.System.Localization;
+using Project.Scripts.Configs;
 
 namespace Project.Scripts.UI.SpellsUI
 {
@@ -11,18 +12,21 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly ISpellsUIUseCase _useCase;
         private readonly IAudioManager _audioManager;
         private readonly ILocalizationService _localizationService;
+        private readonly Action _openShop;
         private string _openedSpellId;
 
         public SpellsPanelUIPresenter(
             ISpellsPanelUIView view,
             ISpellsUIUseCase useCase,
             IAudioManager audioManager,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            Action openShop)
         {
             _view = view;
             _useCase = useCase;
             _audioManager = audioManager;
             _localizationService = localizationService;
+            _openShop = openShop;
         }
 
         public void Initialize()
@@ -30,9 +34,11 @@ namespace Project.Scripts.UI.SpellsUI
             _view.SpellSelectionClicked += OnSpellSelectionClicked;
             _view.SpellInfoClicked += OnSpellInfoClicked;
             _view.SpellUpgradeClicked += OnSpellUpgradeClicked;
+            _view.SpellUnlockClicked += OnSpellUnlockClicked;
             _view.SpellInfoClosed += OnSpellInfoClosed;
             _useCase.SelectionChanged += Refresh;
             _useCase.GemsChanged += OnGemsChanged;
+            _useCase.GoldChanged += OnGemsChanged;
             _localizationService.OnChangeLanguage += OnLanguageChanged;
             Refresh();
         }
@@ -42,14 +48,23 @@ namespace Project.Scripts.UI.SpellsUI
             _view.SpellSelectionClicked -= OnSpellSelectionClicked;
             _view.SpellInfoClicked -= OnSpellInfoClicked;
             _view.SpellUpgradeClicked -= OnSpellUpgradeClicked;
+            _view.SpellUnlockClicked -= OnSpellUnlockClicked;
             _view.SpellInfoClosed -= OnSpellInfoClosed;
             _useCase.SelectionChanged -= Refresh;
             _useCase.GemsChanged -= OnGemsChanged;
+            _useCase.GoldChanged -= OnGemsChanged;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
         }
 
         private void OnSpellSelectionClicked(string spellId)
         {
+            var spell = FindSpell(_useCase.GetSpells(), spellId);
+            if (spell != null && !spell.IsUnlocked)
+            {
+                OnSpellInfoClicked(spellId);
+                return;
+            }
+
             if (!_useCase.ToggleSelection(spellId))
                 return;
 
@@ -69,6 +84,24 @@ namespace Project.Scripts.UI.SpellsUI
                 return;
 
             _audioManager.PlaySound(ESoundId.UiButtonClick);
+        }
+
+        private void OnSpellUnlockClicked(string spellId)
+        {
+            var spell = FindSpell(_useCase.GetSpells(), spellId);
+            if (spell == null || spell.IsUnlocked)
+                return;
+
+            if (spell.UnlockType == ESpellUnlockType.Payment)
+            {
+                _openedSpellId = null;
+                _view.HideSpellInfo();
+                _openShop();
+                return;
+            }
+
+            if (_useCase.TryUnlock(spellId))
+                _audioManager.PlaySound(ESoundId.AddUpgrade);
         }
 
         private void OnSpellInfoClosed()

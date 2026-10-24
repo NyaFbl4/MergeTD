@@ -102,7 +102,7 @@ namespace Project.Scripts.UI.MainMenuUI
         public override void Initialize()
         {
             base.Initialize();
-            _layoutView.InitializeShop(_upgradeConfigs);
+            _layoutView.InitializeShop(_upgradeConfigs, _uiElements);
             _shopPresenter = new ShopContentPresenter(
                 _layoutView.ShopView,
                 _localizationService,
@@ -138,7 +138,8 @@ namespace Project.Scripts.UI.MainMenuUI
                 _layoutView.SpellsPanelView,
                 _spellsUIUseCase,
                 _audioManager,
-                _localizationService);
+                _localizationService,
+                () => _menuUIUseCase.SelectSection(MainMenuSection.Shop));
             _spellsPanelPresenter.Initialize();
 
             _baseUpgradeItems = new List<IBaseUpgradeItem>

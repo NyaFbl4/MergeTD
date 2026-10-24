@@ -33,6 +33,8 @@ namespace Project.Scripts.UI.ShopUI
     public interface IShopUIView : ILayoutView, IShopContentView
     {
         event Action CloseButtonClicked;
+
+        void InitializeShop(UIElements uiElements);
     }
 
     public interface IShopPanelUIView : IShopContentView

@@ -16,6 +16,10 @@ MonoBehaviour:
   _spellPanel: {fileID: 9197481963319205126, guid: 923b582f7c3502740930a27e17ab925b, type: 3}
   _spellButton: {fileID: 9197481963319205126, guid: 290c677105eae334abb1a2452ac79b4e, type: 3}
   _spellInfo: {fileID: 9197481963319205126, guid: 38c4031819d2fb44babd505119fd58a9, type: 3}
+  _shopOfferCard: {fileID: 9197481963319205126, guid: 868d2481e8507c14ea09131872a95ccf, type: 3}
+  _shopGemOfferCard: {fileID: 9197481963319205126, guid: 4eb47eb74f6d4d91bb9ad76ad0626e9a, type: 3}
+  _shopEnergyOfferCard: {fileID: 9197481963319205126, guid: 72d4d9d00090a2d4b8ee48ff0919fe97, type: 3}
+  _shopGoldOfferCard: {fileID: 9197481963319205126, guid: 674e3dd43f9736a4aa846928c12cbf25, type: 3}
   _towerIcons:
   - {fileID: -3090903425614839014, guid: 7dcc00c47aa0c4f4b8318cac27279bca, type: 3}
   - {fileID: -2710602050473076177, guid: c19c698714c9d4346bd18f0581fcee07, type: 3}

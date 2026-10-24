@@ -2,6 +2,7 @@ using System;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.System.Localization;
 using UnityEngine.UIElements;
+using Project.Scripts.Configs;
 
 namespace Project.Scripts.UI.SpellsUI
 {
@@ -16,6 +17,8 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly Button _selectionButton;
         private readonly Label _selectionLabel;
         private readonly VisualElement _infoElement;
+        private readonly VisualElement _lockIcon;
+        private readonly bool _canShowInfo;
 
         private string _spellId;
 
@@ -33,6 +36,8 @@ namespace Project.Scripts.UI.SpellsUI
             _selectionButton = root.Q<Button>("SetSpellButton");
             _selectionLabel = _selectionButton?.Q<Label>();
             _infoElement = root.Q<VisualElement>("TowerPanel");
+            _lockIcon = root.Q<VisualElement>("SpellLockIcon");
+            _canShowInfo = onInfoClicked != null;
             UIButtonAnimationUtility.EnableDefault(_selectionButton);
 
             if (_selectionButton != null)
@@ -52,10 +57,14 @@ namespace Project.Scripts.UI.SpellsUI
             _spellId = spell.SpellId;
             _nameLabel.text = localizationService.Get(spell.DisplayName);
             _descriptionLabel.text = localizationService.Get(spell.Description);
-            _levelLabel.text = localizationService.Format(
+            _levelLabel.text = !spell.IsUnlocked
+                ? localizationService.Get(LocalizationKeys.SpellsLocked)
+                : localizationService.Format(
                 LocalizationKeys.SpellsLevelFormat,
                 spell.Level);
-            _cooldownLabel.text = localizationService.Format(
+            _cooldownLabel.text = !spell.IsUnlocked
+                ? SpellUnlockText.Get(spell, localizationService)
+                : localizationService.Format(
                 LocalizationKeys.SpellsCooldownFormat,
                 spell.Cooldown,
                 spell.ManaCost);
@@ -69,7 +78,9 @@ namespace Project.Scripts.UI.SpellsUI
             }
 
             if (_selectionLabel != null)
-                _selectionLabel.text = spell.IsSelected
+                _selectionLabel.text = !spell.IsUnlocked
+                    ? localizationService.Get(_canShowInfo ? LocalizationKeys.SpellsDetails : LocalizationKeys.SpellsLocked)
+                    : spell.IsSelected
                     ? localizationService.Get(LocalizationKeys.SpellsSelected)
                     : spell.CanSelect
                         ? localizationService.Get(LocalizationKeys.SpellsSelect)
@@ -79,8 +90,22 @@ namespace Project.Scripts.UI.SpellsUI
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
 
-            _selectionButton.SetEnabled(spell.IsSelected || spell.CanSelect);
+            if (_lockIcon != null)
+                _lockIcon.style.display = spell.IsUnlocked ? DisplayStyle.None : DisplayStyle.Flex;
+            _selectionButton.SetEnabled(spell.IsSelected || spell.CanSelect || (!spell.IsUnlocked && _canShowInfo));
             _selectionButton.style.opacity = 1f;
         }
+    }
+
+    public static class SpellUnlockText
+    {
+        public static string Get(SpellUIItemData spell, ILocalizationService localization) => spell.UnlockType switch
+        {
+            ESpellUnlockType.Gold => localization.Format(LocalizationKeys.SpellsUnlockGoldFormat, spell.UnlockPrice),
+            ESpellUnlockType.Gems => localization.Format(LocalizationKeys.SpellsUnlockGemsFormat, spell.UnlockPrice),
+            ESpellUnlockType.RunCompletion => localization.Format(LocalizationKeys.SpellsUnlockRunFormat, spell.UnlockLocationNumber),
+            ESpellUnlockType.Payment => localization.Get(LocalizationKeys.SpellsUnlockOffer),
+            _ => localization.Get(LocalizationKeys.SpellsLocked)
+        };
     }
 }

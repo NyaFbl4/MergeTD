@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d639cfa00af436497ab611a4df38e36, type: 3}
+  m_Name: Gravity Trap Bundle
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.ShopOfferConfig
+  _id: offer_gravity_trap
+  _order: 3
+  _enabled: 1
+  _title: shop.gravity_bundle.title
+  _description: shop.gravity_bundle.description
+  _mainIcon: {fileID: -8340345365926156504, guid: 7afb94d19a7ef854c8789763b1eb88a3, type: 3}
+  _badge:
+  _visualIconCount: 1
+  _price:
+    _type: 0
+    _productId: offer_gravity_trap
+    _previewPrice: 199 RUB
+    _goldAmount: 0
+    _gemsAmount: 0
+  _rewards:
+  - _type: 2
+    _amount: 1
+    _spell: {fileID: 11400000, guid: 9f33818ddf4146178f9daac1f1159914, type: 2}
+  - _type: 1
+    _amount: 100
+    _spell: {fileID: 0}
+  _isTimed: 0
+  _startUnixMilliseconds: 0
+  _endUnixMilliseconds: 0
+  _dailyPurchaseLimit: 0

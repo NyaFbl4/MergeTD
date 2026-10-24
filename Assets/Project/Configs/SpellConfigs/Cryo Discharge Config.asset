@@ -17,7 +17,9 @@ MonoBehaviour:
   _description: spell.cryo_discharge.description
   _icon: {fileID: 750792369792279797, guid: b84869c1e3625fd47a4906094ac57d48, type: 3}
   _background: {fileID: 7569198331679980289, guid: 4274602a3c64f3748848e3d67ed4dbb8, type: 3}
-  _unlockType: 0
+  _unlockType: 4
+  _unlockRunId: default-run-1
+  _unlockLocationNumber: 1
   _unlockGemPrice: 0
   _paymentProductId:
   _cooldown: 18

@@ -38,9 +38,13 @@ namespace Project.Scripts.UI.ShopUI
             _closeButton = _root.Q<Button>("CloseButton")
                            ?? throw new InvalidOperationException(
                                "ShopUIView: element 'CloseButton' was not found.");
-            _contentView = new ShopPanelUIView(_root, this, _shopItemTemplate);
-            _contentView.OfferPurchaseClicked += OnOfferPurchaseClicked;
             _closeButton.clicked += OnCloseButtonClicked;
+        }
+
+        public void InitializeShop(UIElements uiElements)
+        {
+            _contentView = new ShopPanelUIView(_root, this, uiElements, _shopItemTemplate);
+            _contentView.OfferPurchaseClicked += OnOfferPurchaseClicked;
         }
 
         public void SetTitle(string title) => _contentView.SetTitle(title);
@@ -63,6 +67,10 @@ namespace Project.Scripts.UI.ShopUI
         private void OnDestroy()
         {
             _closeButton.clicked -= OnCloseButtonClicked;
+            // The prefab can be destroyed before its presenter initializes the shop.
+            if (_contentView == null)
+                return;
+
             _contentView.OfferPurchaseClicked -= OnOfferPurchaseClicked;
             _contentView.Dispose();
         }

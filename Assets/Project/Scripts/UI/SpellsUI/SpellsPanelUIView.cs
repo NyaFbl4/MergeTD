@@ -21,6 +21,7 @@ namespace Project.Scripts.UI.SpellsUI
         public event Action<string> SpellSelectionClicked;
         public event Action<string> SpellInfoClicked;
         public event Action<string> SpellUpgradeClicked;
+        public event Action<string> SpellUnlockClicked;
         public event Action SpellInfoClosed;
 
         public SpellsPanelUIView(
@@ -43,6 +44,7 @@ namespace Project.Scripts.UI.SpellsUI
             _spellInfoView = new SpellInfoView(_spellInfoRoot);
             _spellInfoView.CloseClicked += OnSpellInfoClosed;
             _spellInfoView.UpgradeClicked += OnSpellUpgradeClicked;
+            _spellInfoView.UnlockClicked += OnSpellUnlockClicked;
             _spellInfoView.SelectionClicked += OnSpellSelectionClicked;
             _localizationBinding = new LocalizedVisualTreeBinding(_root);
             _localizationBinding.Apply(_localizationService);
@@ -78,8 +80,8 @@ namespace Project.Scripts.UI.SpellsUI
 
         public void ShowSpellInfo(SpellUIItemData spell)
         {
-            _spellInfoView.Bind(spell, _localizationService);
             _localizationBinding.Apply(_localizationService);
+            _spellInfoView.Bind(spell, _localizationService);
             _spellInfoView.SetVisible(true);
         }
 
@@ -92,11 +94,13 @@ namespace Project.Scripts.UI.SpellsUI
         {
             _spellInfoView.CloseClicked -= OnSpellInfoClosed;
             _spellInfoView.UpgradeClicked -= OnSpellUpgradeClicked;
+            _spellInfoView.UnlockClicked -= OnSpellUnlockClicked;
             _spellInfoView.SelectionClicked -= OnSpellSelectionClicked;
             _spellInfoView.Dispose();
             SpellSelectionClicked = null;
             SpellInfoClicked = null;
             SpellUpgradeClicked = null;
+            SpellUnlockClicked = null;
             SpellInfoClosed = null;
             _spellsContainer.Clear();
             _activeSpellsContainer.Clear();
@@ -131,6 +135,9 @@ namespace Project.Scripts.UI.SpellsUI
 
         private void OnSpellUpgradeClicked(string spellId) =>
             SpellUpgradeClicked?.Invoke(spellId);
+
+        private void OnSpellUnlockClicked(string spellId) =>
+            SpellUnlockClicked?.Invoke(spellId);
 
         private void OnSpellInfoClosed() => SpellInfoClosed?.Invoke();
     }

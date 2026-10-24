@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7354298797384c62937bf10d6ddf100e, type: 3}
+  m_Name: Gold Placement
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.ShopOfferPlacementConfig
+  _id: gold
+  _title: shop.gold_tab
+  _order: 3
+  _layout: 3
+  _offers:
+  - {fileID: 11400000, guid: 0c74f585720140a8953a2549d5db4b63, type: 2}
+  - {fileID: 11400000, guid: 60353072e7674ce7822a58022612294b, type: 2}
+  - {fileID: 11400000, guid: d5311057e2d3491dadc3794f7061b7c7, type: 2}

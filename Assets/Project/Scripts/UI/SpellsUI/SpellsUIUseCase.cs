@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.System.Save;
+using Project.Scripts.Gameplay.Run;
 
 namespace Project.Scripts.UI.SpellsUI
 {
@@ -11,6 +12,7 @@ namespace Project.Scripts.UI.SpellsUI
 
         private readonly SpellCatalog _spellCatalog;
         private readonly IWorldService _world;
+        private readonly SpellProgressionService _progression;
 
         public int SelectedCount => _world.ActiveSpellIds.Count;
         public int MaximumSelectedCount => MaximumActiveSpellCount;
@@ -24,11 +26,17 @@ namespace Project.Scripts.UI.SpellsUI
             add => _world.GemsChanged += value;
             remove => _world.GemsChanged -= value;
         }
+        public event Action<int> GoldChanged
+        {
+            add => _world.GoldChanged += value;
+            remove => _world.GoldChanged -= value;
+        }
 
-        public SpellsUIUseCase(SpellCatalog spellCatalog, IWorldService world)
+        public SpellsUIUseCase(SpellCatalog spellCatalog, IWorldService world, SpellProgressionService progression)
         {
             _spellCatalog = spellCatalog;
             _world = world;
+            _progression = progression;
         }
 
         public IReadOnlyList<SpellUIItemData> GetSpells()
@@ -45,7 +53,8 @@ namespace Project.Scripts.UI.SpellsUI
                 if (config == null || string.IsNullOrWhiteSpace(config.SpellId))
                     continue;
 
-                var level = Math.Max(1, _world.GetSpellLevel(config.SpellId));
+                var unlocked = _world.IsSpellUnlocked(config.SpellId);
+                var level = _world.GetSpellLevel(config.SpellId);
                 var maximumLevel = Math.Max(
                     level,
                     Math.Min(
@@ -54,7 +63,7 @@ namespace Project.Scripts.UI.SpellsUI
                 var targetLevel = level + 1;
                 var nextUpgrade = config.GetUpgrade(targetLevel);
                 var hasPrice = _spellCatalog.UpgradeConfig.TryGetPrice(targetLevel, out var upgradePrice);
-                var hasNextUpgrade = level < maximumLevel && nextUpgrade != null && hasPrice;
+                var hasNextUpgrade = unlocked && level < maximumLevel && nextUpgrade != null && hasPrice;
 
                 result.Add(new SpellUIItemData(
                     config.SpellId,
@@ -72,7 +81,12 @@ namespace Project.Scripts.UI.SpellsUI
                     hasNextUpgrade ? nextUpgrade.Title : string.Empty,
                     hasNextUpgrade ? nextUpgrade.Description : string.Empty,
                     hasNextUpgrade,
-                    hasNextUpgrade && _world.Gems >= upgradePrice));
+                    hasNextUpgrade && _world.Gems >= upgradePrice,
+                    unlocked,
+                    config.UnlockType,
+                    config.UnlockType == ESpellUnlockType.Gold ? config.UnlockGoldPrice : config.UnlockGemPrice,
+                    config.UnlockLocationNumber,
+                    !unlocked && _progression.CanUnlock(config.SpellId)));
             }
 
             return result;
@@ -92,7 +106,7 @@ namespace Project.Scripts.UI.SpellsUI
 
         public bool TryUpgrade(string spellId)
         {
-            if (string.IsNullOrWhiteSpace(spellId) || !ContainsSpell(spellId))
+            if (string.IsNullOrWhiteSpace(spellId) || !ContainsSpell(spellId) || !_world.IsSpellUnlocked(spellId))
                 return false;
 
             var config = _spellCatalog.Get(spellId);
@@ -111,10 +125,13 @@ namespace Project.Scripts.UI.SpellsUI
             return _world.IsSpellSelected(spellId);
         }
 
+        public bool TryUnlock(string spellId) =>
+            !string.IsNullOrWhiteSpace(spellId) && ContainsSpell(spellId) && _progression.TryUnlock(spellId);
+
         private bool CanSelect(string spellId)
         {
-            return IsSelected(spellId)
-                   || SelectedCount < MaximumActiveSpellCount;
+            return _world.IsSpellUnlocked(spellId)
+                   && (IsSelected(spellId) || SelectedCount < MaximumActiveSpellCount);
         }
 
         private bool ContainsSpell(string spellId)

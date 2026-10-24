@@ -122,12 +122,12 @@ namespace Project.Scripts.UI.MainMenuUI
             _armyView = new ArmyUIView(armyRoot, uiElements);
         }
 
-        public void InitializeShop(IUpgradeConfigProvider upgradeConfigs)
+        public void InitializeShop(IUpgradeConfigProvider upgradeConfigs, UIElements uiElements)
         {
             var shopRoot = _root.Q<TemplateContainer>("ShopPanel")
                            ?? throw new InvalidOperationException(
                                "MainMenuUIView: element 'ShopPanel' was not found.");
-            _shopView = new ShopPanelUIView(shopRoot, upgradeConfigs);
+            _shopView = new ShopPanelUIView(shopRoot, upgradeConfigs, uiElements);
         }
 
         public void InitializePurchaseWindow(UIElements uiElements)

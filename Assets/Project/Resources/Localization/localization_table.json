@@ -1,6 +1,21 @@
 {
   "defaultLanguage": "ru",
   "entries": [
+    { "key": "shop.gold_tab", "ru": "Золото", "en": "Gold" },
+    { "key": "spells.locked", "ru": "Закрыто", "en": "Locked" },
+    { "key": "spells.details", "ru": "Подробнее", "en": "Details" },
+    { "key": "spells.unlock_gold_format", "ru": "Открытие: {0} золота", "en": "Unlock: {0} gold" },
+    { "key": "spells.unlock_gems_format", "ru": "Открытие: {0} гемов", "en": "Unlock: {0} gems" },
+    { "key": "spells.unlock_run_format", "ru": "Пройдите локацию {0}", "en": "Complete location {0}" },
+    { "key": "spells.unlock_offer", "ru": "Только в наборе «Гравитационная ловушка» в магазине", "en": "Only in the Gravity Trap bundle in the shop" },
+    { "key": "spells.unlock_section", "ru": "Открытие спелла", "en": "Spell unlock" },
+    { "key": "spells.unlock_condition", "ru": "Как получить", "en": "How to obtain" },
+    { "key": "spells.insufficient_currency", "ru": "Недостаточно валюты", "en": "Not enough currency" },
+    { "key": "spells.go_to_shop", "ru": "В магазин", "en": "Go to shop" },
+    { "key": "spells.unlock", "ru": "Открыть", "en": "Unlock" },
+    { "key": "spells.completion_reward", "ru": "За прохождение", "en": "Completion reward" },
+    { "key": "shop.gravity_bundle.title", "ru": "Гравитационная ловушка", "en": "Gravity Trap" },
+    { "key": "shop.gravity_bundle.description", "ru": "Спелл навсегда + 100 гемов", "en": "Permanent spell + 100 gems" },
     { "key": "shop.energy_tab", "ru": "Энергия", "en": "Energy" },
     { "key": "shop.energy_ad.title", "ru": "Ежедневный заряд", "en": "Daily Charge" },
     { "key": "shop.energy_gems.title", "ru": "Запас энергии", "en": "Energy Reserve" },
@@ -284,6 +299,11 @@
       "key": "end_wave_lose.ad_button",
       "ru": "\u0412\u043e\u0437\u0440\u043e\u0434\u0438\u0442\u044c\u0441\u044f",
       "en": "Revive"
+    },
+    {
+      "key": "settings.go_to_menu",
+      "ru": "Выход в меню",
+      "en": "Exit to menu"
     },
     {
       "key": "settings.reset_progress",

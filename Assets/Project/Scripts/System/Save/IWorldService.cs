@@ -45,6 +45,7 @@ namespace Project.Scripts.System.Save
         IReadOnlyList<WorldTowerSaveData> Towers { get; }
         IReadOnlyList<SpellProgressSaveData> Spells { get; }
         IReadOnlyList<string> ActiveSpellIds { get; }
+        IReadOnlyList<string> CompletedRunIds { get; }
         IReadOnlyList<QuestSaveData> DailyQuests { get; }
         IReadOnlyList<QuestSaveData> WeeklyQuests { get; }
         IReadOnlyList<QuestSaveData> AchievementQuests { get; }
@@ -53,6 +54,7 @@ namespace Project.Scripts.System.Save
         event Action<int> GemsChanged;
         event Action DailyRewardChanged;
         event Action DailyQuestsChanged;
+        event Action ProgressReset;
         event Action<int> MaxBaseHealthChanged;
         event Action<int> MaxEnergyChanged;
         event Action UpgradesChanged;
@@ -84,7 +86,8 @@ namespace Project.Scripts.System.Save
             long utcDay,
             int dailyLimit,
             int gemsPrice = 0,
-            int rewardEnergy = 0);
+            int rewardEnergy = 0,
+            bool preserveSpellOnReset = false);
         void SetMaxBaseHealth(int value);
         void SetMaxEnergy(int value);
         int GetUpgradeLevel(string upgradeId);
@@ -102,6 +105,8 @@ namespace Project.Scripts.System.Save
         bool IsSpellUnlocked(string spellId);
         int GetSpellLevel(string spellId);
         void UnlockSpell(string spellId);
+        bool TryPurchaseSpell(string spellId, int goldPrice, int gemsPrice);
+        bool TryCompleteRun(string runId, IReadOnlyList<string> rewardSpellIds);
         void SetSpellLevel(string spellId, int level);
         bool TryUpgradeSpell(string spellId, int expectedLevel, int price);
         bool IsSpellSelected(string spellId);

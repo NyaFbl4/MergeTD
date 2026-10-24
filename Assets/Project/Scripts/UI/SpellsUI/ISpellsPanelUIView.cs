@@ -8,6 +8,7 @@ namespace Project.Scripts.UI.SpellsUI
         event Action<string> SpellSelectionClicked;
         event Action<string> SpellInfoClicked;
         event Action<string> SpellUpgradeClicked;
+        event Action<string> SpellUnlockClicked;
         event Action SpellInfoClosed;
 
         void SetSpells(IReadOnlyList<SpellUIItemData> spells);

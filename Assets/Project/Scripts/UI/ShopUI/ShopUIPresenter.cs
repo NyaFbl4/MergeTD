@@ -49,6 +49,7 @@ namespace Project.Scripts.UI.ShopUI
         public override void Initialize()
         {
             base.Initialize();
+            _layoutView.InitializeShop(_uiElements);
             _contentPresenter = new ShopContentPresenter(
                 _layoutView,
                 _localizationService,

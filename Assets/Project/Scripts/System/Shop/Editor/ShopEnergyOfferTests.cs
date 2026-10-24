@@ -7,6 +7,7 @@ using Project.Scripts.Gameplay.Run;
 using Project.Scripts.System.Reward;
 using Project.Scripts.System.Save;
 using Project.Scripts.UI.ShopUI;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using YG;
@@ -245,8 +246,8 @@ namespace Project.Scripts.System.Shop.Editor
         [Test]
         public void EnergyCard_BindsAmountPriceAndDisabledState()
         {
-            var template = Resources.Load<VisualTreeAsset>("UIToolkit/New/ShopEnergyOfferCard");
-            var root = template.Instantiate();
+            var uiElements = AssetDatabase.LoadAssetAtPath<UIElements>("Assets/Project/Configs/UI/UIElements.asset");
+            var root = uiElements.ShopEnergyOfferCard.Instantiate();
             var view = new ShopEnergyOfferItemView(root, _ => { });
             var config = _catalog.GetOffer("energy_gems_5");
             view.Bind(new ShopOfferUIData(config.Id, "Запас энергии", string.Empty, config.MainIcon,

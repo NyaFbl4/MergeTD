@@ -6,17 +6,21 @@ using Project.Scripts.Systems.UI;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.System.Save;
 using Cysharp.Threading.Tasks;
+using Project.Scripts.UI.LevelUI;
+using Project.Scripts.UI.MainMenuUI;
 
 namespace Project.Scripts.UI.SettingsUI
 {
     public class SettingsUIPresenter : LayoutPresenterBase<ISettingsUIView>, ISettingsUIPresenter
     {
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
+        private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IAudioManager _audioManager;
         private readonly ILocalizationService _localizationService;
         private readonly IGameManagerService _gameManagerService;
         private readonly ProgressSaveService _progressSaveService;
         private readonly IWorldService _world;
+        private bool _isReturningToMenu;
 
         public SettingsUIPresenter(
             IPublisher<HidePopupDto> hidePopupPublisher, 
@@ -24,9 +28,11 @@ namespace Project.Scripts.UI.SettingsUI
             ILocalizationService localizationService,
             ProgressSaveService progressSaveService,
             IWorldService world,
-            IGameManagerService gameManagerService)
+            IGameManagerService gameManagerService,
+            IPublisher<ShowPopupDto> showPopupPublisher)
         {
             _hidePopupPublisher = hidePopupPublisher;
+            _showPopupPublisher = showPopupPublisher;
             _audioManager = audioManager;
             _localizationService = localizationService;
             _gameManagerService = gameManagerService;
@@ -46,6 +52,7 @@ namespace Project.Scripts.UI.SettingsUI
             _layoutView.RuButtonClicked += OnRuLanguageButtonClicked;
             _layoutView.EnButtonClicked += OnEnLanguageButtonClicked;
             _layoutView.ResetProgressButtonClicked += OnResetProgressButtonClicked;
+            _layoutView.GoToMenuButtonClicked += OnGoToMenuButtonClicked;
             
             RefreshAudioButtons();
             RefreshLocalizedTexts();
@@ -53,6 +60,7 @@ namespace Project.Scripts.UI.SettingsUI
         
         public override async UniTask ActivateAsync()
         {
+            _isReturningToMenu = false;
             _gameManagerService.PauseGame();
             RefreshAudioButtons();
             RefreshLocalizedTexts();
@@ -61,20 +69,50 @@ namespace Project.Scripts.UI.SettingsUI
 
         public override async UniTask DeactivateAsync()
         {
+            var shouldResumeGame = !_isReturningToMenu;
             await base.DeactivateAsync();
-            _gameManagerService.ResumeGame();
+            if (shouldResumeGame)
+                _gameManagerService.ResumeGame();
         }
         
         private void OnResetProgressButtonClicked()
         {
+            if (_isReturningToMenu)
+                return;
+
+            _isReturningToMenu = true;
             _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _gameManagerService.FinishGame();
             _progressSaveService.Clear();
             _world.Reset();
+            ShowMainMenu();
+        }
+
+        private void OnGoToMenuButtonClicked()
+        {
+            if (_isReturningToMenu)
+                return;
+
+            _isReturningToMenu = true;
+            _audioManager.PlaySound(ESoundId.UiButtonClick);
+            _gameManagerService.FinishGame();
+            ShowMainMenu();
+        }
+
+        private void ShowMainMenu()
+        {
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(ISettingsUIPresenter),
             });
-            _gameManagerService.StartGame();
+            _hidePopupPublisher.Publish(new HidePopupDto
+            {
+                TargetPopUpType = typeof(ILevelUIPresenter),
+            });
+            _showPopupPublisher.Publish(new ShowPopupDto
+            {
+                TargetPopUpType = typeof(IMainMenuUIPresenter),
+            });
         }
         
         private void OnLanguageChanged(string _) => RefreshLocalizedTexts();
@@ -138,6 +176,7 @@ namespace Project.Scripts.UI.SettingsUI
             _layoutView.SetSoundLabel(_localizationService.Get(LocalizationKeys.SettingsSound));
             _layoutView.SetLanguageLabel(_localizationService.Get(LocalizationKeys.SettingsLanguage));
             _layoutView.SetResetButtonLabel(_localizationService.Get(LocalizationKeys.SettingsResetProgress));
+            _layoutView.SetGoToMenuButtonLabel(_localizationService.Get(LocalizationKeys.SettingsGoToMenu));
         }
         
         public override void Dispose()
@@ -149,6 +188,7 @@ namespace Project.Scripts.UI.SettingsUI
             _layoutView.EnButtonClicked -= OnEnLanguageButtonClicked;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
             _layoutView.ResetProgressButtonClicked -= OnResetProgressButtonClicked;
+            _layoutView.GoToMenuButtonClicked -= OnGoToMenuButtonClicked;
             
             base.Dispose();
         }

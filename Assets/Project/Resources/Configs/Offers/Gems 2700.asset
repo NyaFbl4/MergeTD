@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: gems_2700
   _placement: {fileID: 11400000, guid: eb810c3bd2084f55959ad7f1b1137d1e, type: 2}
   _order: 3
-  _enabled: 1
+  _enabled: 0
   _title: shop.gems_offer.title
   _description: 
   _mainIcon: {fileID: 8263698601183877077, guid: fffcf6984de81b94391dbe8bbd56d0a1, type: 3}

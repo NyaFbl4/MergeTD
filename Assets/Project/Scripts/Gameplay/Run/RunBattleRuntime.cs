@@ -20,6 +20,7 @@ namespace Project.Scripts.Gameplay.Run
         private readonly IGameManagerService _gameManagerService;
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
         private readonly BaseHealth _baseHealth;
+        private readonly SpellProgressionService _spellProgression;
 
         private bool _isGameRunning;
 
@@ -33,7 +34,8 @@ namespace Project.Scripts.Gameplay.Run
             ProgressCheckpointUseCase progressCheckpointUseCase,
             IGameManagerService gameManagerService,
             IPlayerStatsUseCase playerStatsUseCase,
-            BaseHealth baseHealth)
+            BaseHealth baseHealth,
+            SpellProgressionService spellProgression)
         {
             _state = state;
             _battlefieldRuntime = battlefieldRuntime;
@@ -41,6 +43,7 @@ namespace Project.Scripts.Gameplay.Run
             _gameManagerService = gameManagerService;
             _playerStatsUseCase = playerStatsUseCase;
             _baseHealth = baseHealth;
+            _spellProgression = spellProgression;
 
             _battlefieldRuntime.WaveExecutionCompleted += OnWaveExecutionCompleted;
             _baseHealth.Destroyed += OnBaseDestroyed;
@@ -105,6 +108,7 @@ namespace Project.Scripts.Gameplay.Run
             if (!_isGameRunning || _state.Phase != ERunPhase.Victory)
                 return;
 
+            _spellProgression.RecordVictory(_state.RunId);
             _isGameRunning = false;
             _gameManagerService.FinishGame();
         }

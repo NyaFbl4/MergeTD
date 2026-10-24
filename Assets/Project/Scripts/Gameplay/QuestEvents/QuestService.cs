@@ -164,7 +164,22 @@ namespace Project.Scripts.Gameplay.Quests
 
         public void Initialize()
         {
+            _world.ProgressReset += OnProgressReset;
             EnsureAllQuests();
+        }
+
+        private void OnProgressReset()
+        {
+            CancelPendingPersistence();
+            ClearActiveQuests();
+            ClearCategory(_weeklyQuests, _weeklyConfigs);
+            ClearCategory(_achievements, _achievementConfigs);
+            _dailyQuestDay = -1;
+            _dailyCycleDay = -1;
+            _weeklyQuestWeek = -1;
+            _isTimeAvailable = false;
+            EnsureAllQuests();
+            QuestsChanged?.Invoke();
         }
 
         public void OnStartGame()
@@ -686,11 +701,16 @@ namespace Project.Scripts.Gameplay.Quests
 
         private void FlushPendingState()
         {
+            CancelPendingPersistence();
+            PersistState();
+        }
+
+        private void CancelPendingPersistence()
+        {
             _persistCancellation.Cancel();
             _persistCancellation.Dispose();
             _persistCancellation = new CancellationTokenSource();
             _persistScheduled = false;
-            PersistState();
         }
 
         private void PersistState()
@@ -759,6 +779,7 @@ namespace Project.Scripts.Gameplay.Quests
         public void Dispose()
         {
             IGameListener.Unregister(this);
+            _world.ProgressReset -= OnProgressReset;
             FlushPendingState();
             _persistCancellation.Cancel();
             _persistCancellation.Dispose();

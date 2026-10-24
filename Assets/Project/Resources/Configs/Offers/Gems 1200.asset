@@ -18,9 +18,9 @@ MonoBehaviour:
   _enabled: 1
   _title: shop.gems_offer.title
   _description: 
-  _mainIcon: {fileID: 8263698601183877077, guid: fffcf6984de81b94391dbe8bbd56d0a1, type: 3}
+  _mainIcon: {fileID: 21300000, guid: dde1c527a878e0741b192c11394d46aa, type: 3}
   _badge: +50%
-  _visualIconCount: 2
+  _visualIconCount: 1
   _price:
     _type: 0
     _productId: gems_1200

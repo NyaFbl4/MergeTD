@@ -19,7 +19,9 @@ namespace Project.Scripts.Configs
     {
         Free = 0,
         Gems = 1,
-        Payment = 2
+        Payment = 2,
+        Gold = 3,
+        RunCompletion = 4
     }
 
     [Serializable]
@@ -47,6 +49,10 @@ namespace Project.Scripts.Configs
         [SerializeField] private ESpellUnlockType _unlockType = ESpellUnlockType.Free;
         [SerializeField, Min(0)] private int _unlockGemPrice;
         [SerializeField] private string _paymentProductId;
+        [SerializeField, Min(0)] private int _unlockGoldPrice;
+        [SerializeField] private string _unlockRunId;
+        [SerializeField, Min(1)] private int _unlockLocationNumber = 1;
+        [SerializeField] private string _unlockOfferId;
 
         [Header("Common gameplay")]
         [SerializeField, Min(0.1f)] private float _cooldown = 10f;
@@ -69,6 +75,10 @@ namespace Project.Scripts.Configs
         public ESpellUnlockType UnlockType => _unlockType;
         public int UnlockGemPrice => _unlockGemPrice;
         public string PaymentProductId => _paymentProductId;
+        public int UnlockGoldPrice => _unlockGoldPrice;
+        public string UnlockRunId => _unlockRunId;
+        public int UnlockLocationNumber => _unlockLocationNumber;
+        public string UnlockOfferId => _unlockOfferId;
         public float Cooldown => _cooldown;
         public int ManaCost => _manaCost;
         public GameObject VfxPrefab => _vfxPrefab;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Project.Scripts.Configs;
 
 namespace Project.Scripts.UI.SpellsUI
 {
@@ -20,6 +21,11 @@ namespace Project.Scripts.UI.SpellsUI
         public string UpgradeDescription { get; }
         public bool HasNextUpgrade { get; }
         public bool CanAffordUpgrade { get; }
+        public bool IsUnlocked { get; }
+        public ESpellUnlockType UnlockType { get; }
+        public int UnlockPrice { get; }
+        public int UnlockLocationNumber { get; }
+        public bool CanUnlock { get; }
 
         public SpellUIItemData(
             string spellId,
@@ -37,7 +43,12 @@ namespace Project.Scripts.UI.SpellsUI
             string upgradeTitle,
             string upgradeDescription,
             bool hasNextUpgrade,
-            bool canAffordUpgrade)
+            bool canAffordUpgrade,
+            bool isUnlocked = true,
+            ESpellUnlockType unlockType = ESpellUnlockType.Free,
+            int unlockPrice = 0,
+            int unlockLocationNumber = 0,
+            bool canUnlock = false)
         {
             SpellId = spellId;
             DisplayName = displayName;
@@ -55,6 +66,11 @@ namespace Project.Scripts.UI.SpellsUI
             UpgradeDescription = upgradeDescription;
             HasNextUpgrade = hasNextUpgrade;
             CanAffordUpgrade = canAffordUpgrade;
+            IsUnlocked = isUnlocked;
+            UnlockType = unlockType;
+            UnlockPrice = unlockPrice;
+            UnlockLocationNumber = unlockLocationNumber;
+            CanUnlock = canUnlock;
         }
     }
 }

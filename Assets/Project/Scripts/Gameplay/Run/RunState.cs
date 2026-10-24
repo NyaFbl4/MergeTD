@@ -17,6 +17,7 @@ namespace Project.Scripts.Gameplay.Run
         private bool _isBossWave => _currentWaveConfig.IsBossWave;
         
         public int CurrentWave => _currentWave;
+        public string RunId => _runSelection.SelectedRun.Id;
         public int MaxWaves => _runSelection.SelectedRun.Waves.Count;
         public ERunPhase Phase => _phase;
         public bool CanEditDefense => _canEditDefense;

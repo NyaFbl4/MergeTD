@@ -4,6 +4,7 @@ using Project.Scripts.Systems.UI;
 using Project.Scripts.System.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Project.Scripts.Configs;
 
 namespace Project.Scripts.UI.SpellsUI
 {
@@ -24,12 +25,16 @@ namespace Project.Scripts.UI.SpellsUI
         private readonly Label _upgradeLevelLabel;
         private readonly Label _nextLevelLabel;
         private readonly Label _upgradeTitleLabel;
+        private readonly Label _upgradeSectionLabel;
         private readonly Label _upgradeDescriptionLabel;
         private readonly Button _closeButton;
         private readonly Button _upgradeButton;
         private readonly Label _upgradeButtonLabel;
         private readonly VisualElement _upgradePricePanel;
         private readonly Label _upgradePriceLabel;
+        private readonly VisualElement _upgradeCurrencyIcon;
+        private readonly StyleBackground _goldCurrencyIcon;
+        private readonly StyleBackground _gemCurrencyIcon;
         private readonly Button _selectionButton;
         private readonly Label _selectionButtonLabel;
         private readonly StyleBackground _selectBackground;
@@ -39,10 +44,12 @@ namespace Project.Scripts.UI.SpellsUI
         private int _animationVersion;
         private float _openedState;
         private bool _isVisible;
+        private bool _isUnlocked;
 
         public event Action CloseClicked;
         public event Action<string> UpgradeClicked;
         public event Action<string> SelectionClicked;
+        public event Action<string> UnlockClicked;
 
         public SpellInfoView(VisualElement root)
         {
@@ -57,12 +64,16 @@ namespace Project.Scripts.UI.SpellsUI
             _upgradeLevelLabel = Require<Label>(root, "UpgradeLevelLabel");
             _nextLevelLabel = Require<Label>(root, "NextLevelLabel");
             _upgradeTitleLabel = Require<Label>(root, "UpgradeTitleLabel");
+            _upgradeSectionLabel = Require<Label>(root, "UpgradeSectionLabel");
             _upgradeDescriptionLabel = Require<Label>(root, "UpgradeDescriptionLabel");
             _closeButton = Require<Button>(root, "CloseButton");
             _upgradeButton = Require<Button>(root, "UpgradeButton");
             _upgradeButtonLabel = Require<Label>(root, "UpgradeButtonLabel");
             _upgradePricePanel = Require<VisualElement>(root, "UpgradePricePanel");
             _upgradePriceLabel = Require<Label>(root, "UpgradePriceLabel");
+            _upgradeCurrencyIcon = Require<VisualElement>(root, "UpgradeCurrencyIcon");
+            _goldCurrencyIcon = LoadBackground("UI/new/Icons/Icon_Gold");
+            _gemCurrencyIcon = LoadBackground("UI/new/Icons/Icon_Gem03_Diamond_Purple 1");
             _selectionButton = Require<Button>(root, "SetSpellButton");
             _selectionButtonLabel = Require<Label>(root, "SetSpellButtonLabel");
             _selectBackground = LoadBackground("UI/new/Buttons/Button01_175_Green");
@@ -83,10 +94,14 @@ namespace Project.Scripts.UI.SpellsUI
             ILocalizationService localizationService)
         {
             _spellId = spell.SpellId;
+            _isUnlocked = spell.IsUnlocked;
+            _upgradeSectionLabel.style.display = spell.IsUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
             _iconPanel.style.backgroundImage = new StyleBackground(spell.Background);
             _icon.style.backgroundImage = new StyleBackground(spell.Icon);
             _nameLabel.text = localizationService.Get(spell.DisplayName);
-            _levelLabel.text = localizationService.Format(
+            _levelLabel.text = !spell.IsUnlocked
+                ? localizationService.Get(LocalizationKeys.SpellsLocked)
+                : localizationService.Format(
                 LocalizationKeys.SpellsInfoLevelFormat,
                 spell.Level,
                 spell.MaximumLevel);
@@ -96,7 +111,27 @@ namespace Project.Scripts.UI.SpellsUI
                 spell.Cooldown,
                 spell.ManaCost);
 
-            if (spell.HasNextUpgrade)
+            _upgradeCurrencyIcon.style.backgroundImage = spell.UnlockType == ESpellUnlockType.Gold && !spell.IsUnlocked
+                ? _goldCurrencyIcon : _gemCurrencyIcon;
+            if (!spell.IsUnlocked)
+            {
+                var currencyPurchase = spell.UnlockType is ESpellUnlockType.Gold or ESpellUnlockType.Gems;
+                var offerPurchase = spell.UnlockType == ESpellUnlockType.Payment;
+                _upgradeLevelLabel.text = localizationService.Get(LocalizationKeys.SpellsUnlockSection);
+                _nextLevelLabel.text = string.Empty;
+                _upgradeTitleLabel.text = localizationService.Get(LocalizationKeys.SpellsUnlockCondition);
+                _upgradeDescriptionLabel.text = SpellUnlockText.Get(spell, localizationService);
+                if (currencyPurchase && !spell.CanUnlock)
+                    _upgradeDescriptionLabel.text += "\n" + localizationService.Get(LocalizationKeys.SpellsInsufficientCurrency);
+                _upgradeButtonLabel.text = localizationService.Get(offerPurchase
+                    ? LocalizationKeys.SpellsGoToShop
+                    : currencyPurchase ? LocalizationKeys.SpellsUnlock : LocalizationKeys.SpellsCompletionReward);
+                _upgradePriceLabel.text = currencyPurchase ? spell.UnlockPrice.ToString() : string.Empty;
+                _upgradePriceLabel.style.color = spell.CanUnlock ? Color.white : new Color(1f, 0.45f, 0.45f);
+                _upgradePricePanel.style.display = currencyPurchase ? DisplayStyle.Flex : DisplayStyle.None;
+                _upgradeButton.SetEnabled(spell.CanUnlock || offerPurchase);
+            }
+            else if (spell.HasNextUpgrade)
             {
                 _upgradeLevelLabel.text = localizationService.Format(
                     LocalizationKeys.SpellsUpgradeLevelFormat,
@@ -132,7 +167,9 @@ namespace Project.Scripts.UI.SpellsUI
                 _upgradeButton.style.opacity = 1f;
             }
 
-            _selectionButtonLabel.text = spell.IsSelected
+            _selectionButtonLabel.text = !spell.IsUnlocked
+                ? localizationService.Get(LocalizationKeys.SpellsLocked)
+                : spell.IsSelected
                 ? localizationService.Get(LocalizationKeys.SpellsRemove)
                 : localizationService.Get(LocalizationKeys.SpellsSelect);
             _selectionButton.style.backgroundImage = spell.IsSelected
@@ -160,10 +197,17 @@ namespace Project.Scripts.UI.SpellsUI
             CloseClicked = null;
             UpgradeClicked = null;
             SelectionClicked = null;
+            UnlockClicked = null;
         }
 
         private void OnCloseClicked() => CloseClicked?.Invoke();
-        private void OnUpgradeClicked() => UpgradeClicked?.Invoke(_spellId);
+        private void OnUpgradeClicked()
+        {
+            if (_isUnlocked)
+                UpgradeClicked?.Invoke(_spellId);
+            else
+                UnlockClicked?.Invoke(_spellId);
+        }
         private void OnSelectionClicked() => SelectionClicked?.Invoke(_spellId);
 
         private async UniTask AnimateVisibilityAsync(bool visible)

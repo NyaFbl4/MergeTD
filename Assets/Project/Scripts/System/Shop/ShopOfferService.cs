@@ -380,7 +380,8 @@ namespace Project.Scripts.System.Shop
                 utcDay,
                 config.DailyPurchaseLimit,
                 gemsPrice,
-                rewardEnergy);
+                rewardEnergy,
+                config.Price.Type == EShopOfferPriceType.RealMoney && !string.IsNullOrEmpty(spellId));
         }
 
         private void OnRewardedAdReward(string rewardId)

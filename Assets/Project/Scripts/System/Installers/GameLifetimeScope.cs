@@ -154,6 +154,7 @@ namespace Installers
             builder.Register<RunState>(Lifetime.Singleton);
             builder.Register<RunEnergyService>(Lifetime.Singleton);
             builder.Register<PlayerEnergyService>(Lifetime.Singleton);
+            builder.Register<SpellProgressionService>(Lifetime.Singleton);
             builder.Register<RunCardRuntimeState>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WeaponBarrageUseCase>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BaseRepairUseCase>(Lifetime.Singleton).AsSelf();

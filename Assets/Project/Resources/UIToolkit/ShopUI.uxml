@@ -19,6 +19,10 @@
                     <ui:Label text="Гемы" name="GemLabel" style="font-size: 48px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: middle-center;" />
                     <ui:VisualElement name="GemContainer" class="shop-offer-grid" style="width: 720px; min-width: 720px; max-width: 720px; align-self: center; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; align-content: flex-start;" />
                 </ui:VisualElement>
+                <ui:VisualElement name="GoldPanel">
+                    <ui:Label text="shop.gold_tab" name="GoldSectionLabel" style="font-size: 48px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: middle-center;"/>
+                    <ui:VisualElement name="GoldContainer" class="shop-offer-grid" style="width: 720px; min-width: 720px; max-width: 720px; align-self: center; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; align-content: flex-start;"/>
+                </ui:VisualElement>
             </ui:ScrollView>
             <ui:Label name="EmptyLabel" class="shop-empty-label" />
         </ui:VisualElement>

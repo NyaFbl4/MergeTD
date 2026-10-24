@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Configs;
 
 namespace Project.Scripts.System.Save
 {
@@ -58,6 +59,7 @@ namespace Project.Scripts.System.Save
         public IReadOnlyList<WorldTowerSaveData> Towers => _data.towers;
         public IReadOnlyList<SpellProgressSaveData> Spells => _data.spells;
         public IReadOnlyList<string> ActiveSpellIds => _data.activeSpellIds;
+        public IReadOnlyList<string> CompletedRunIds => _data.completedRunIds;
         public IReadOnlyList<QuestSaveData> DailyQuests => _data.dailyQuests;
         public IReadOnlyList<QuestSaveData> WeeklyQuests => _data.weeklyQuests;
         public IReadOnlyList<QuestSaveData> AchievementQuests => _data.achievementQuests;
@@ -67,6 +69,7 @@ namespace Project.Scripts.System.Save
         public event Action<int> GemsChanged;
         public event Action DailyRewardChanged;
         public event Action DailyQuestsChanged;
+        public event Action ProgressReset;
         public event Action<int> MaxBaseHealthChanged;
         public event Action<int> MaxEnergyChanged;
         public event Action UpgradesChanged;
@@ -293,7 +296,8 @@ namespace Project.Scripts.System.Save
             long utcDay,
             int dailyLimit,
             int gemsPrice = 0,
-            int rewardEnergy = 0)
+            int rewardEnergy = 0,
+            bool preserveSpellOnReset = false)
         {
             if (string.IsNullOrWhiteSpace(offerId))
                 throw new ArgumentException("An offer id is required.", nameof(offerId));
@@ -328,8 +332,7 @@ namespace Project.Scripts.System.Save
             if (rewardEnergy > int.MaxValue - PlayerEnergy)
                 return false;
 
-            if (goldPrice > 0
-                && !string.IsNullOrWhiteSpace(spellId)
+            if (!string.IsNullOrWhiteSpace(spellId)
                 && IsSpellUnlocked(spellId))
                 return false;
 
@@ -360,6 +363,7 @@ namespace Project.Scripts.System.Save
                 var spell = GetOrCreateSpell(spellId);
                 spell.isUnlocked = true;
                 spell.level = Math.Max(1, spell.level);
+                spell.keepUnlockedOnReset |= preserveSpellOnReset;
             }
 
             if (dailyLimit > 0)
@@ -545,6 +549,54 @@ namespace Project.Scripts.System.Save
             SpellsChanged?.Invoke();
         }
 
+        public bool TryPurchaseSpell(string spellId, int goldPrice, int gemsPrice)
+        {
+            if (string.IsNullOrWhiteSpace(spellId) || goldPrice < 0 || gemsPrice < 0
+                || (goldPrice == 0) == (gemsPrice == 0)
+                || IsSpellUnlocked(spellId) || Gold < goldPrice || Gems < gemsPrice)
+                return false;
+
+            var spell = GetOrCreateSpell(spellId);
+            _data.gold -= goldPrice;
+            _data.gems -= gemsPrice;
+            spell.isUnlocked = true;
+            spell.level = 1;
+            Save();
+            if (goldPrice > 0)
+                GoldChanged?.Invoke(Gold);
+            if (gemsPrice > 0)
+                GemsChanged?.Invoke(Gems);
+            SpellsChanged?.Invoke();
+            return true;
+        }
+
+        public bool TryCompleteRun(string runId, IReadOnlyList<string> rewardSpellIds)
+        {
+            if (string.IsNullOrWhiteSpace(runId))
+                throw new ArgumentException("A run id is required.", nameof(runId));
+            if (rewardSpellIds == null)
+                throw new ArgumentNullException(nameof(rewardSpellIds));
+            if (_data.completedRunIds.Contains(runId))
+                return false;
+
+            foreach (var id in rewardSpellIds)
+            {
+                if (string.IsNullOrWhiteSpace(id))
+                    throw new ArgumentException("Reward spell ids must not be empty.", nameof(rewardSpellIds));
+            }
+
+            _data.completedRunIds.Add(runId);
+            foreach (var id in rewardSpellIds)
+            {
+                var spell = GetOrCreateSpell(id);
+                spell.isUnlocked = true;
+                spell.level = Math.Max(1, spell.level);
+            }
+            Save();
+            SpellsChanged?.Invoke();
+            return true;
+        }
+
         public void SetSpellLevel(string spellId, int level)
         {
             if (level < 1)
@@ -565,8 +617,11 @@ namespace Project.Scripts.System.Save
             if (string.IsNullOrWhiteSpace(spellId) || expectedLevel < 1 || price < 1 || Gems < price)
                 return false;
 
-            var spell = GetOrCreateSpell(spellId);
-            var currentLevel = spell.isUnlocked ? Math.Max(1, spell.level) : 1;
+            var spell = FindSpell(spellId);
+            if (spell == null || !spell.isUnlocked)
+                return false;
+
+            var currentLevel = Math.Max(1, spell.level);
             if (currentLevel != expectedLevel)
                 return false;
 
@@ -594,7 +649,8 @@ namespace Project.Scripts.System.Save
 
             if (isSelected)
             {
-                if (_data.activeSpellIds.Contains(spellId)
+                if (!IsSpellUnlocked(spellId)
+                    || _data.activeSpellIds.Contains(spellId)
                     || _data.activeSpellIds.Count >= MaximumActiveSpellCount)
                     return false;
 
@@ -649,10 +705,25 @@ namespace Project.Scripts.System.Save
 
         public void Reset()
         {
+            var retainedSpells = new List<string>();
+            foreach (var spell in _data.spells)
+            {
+                if (spell.isUnlocked && spell.keepUnlockedOnReset)
+                    retainedSpells.Add(spell.spellId);
+            }
+
             _data = CreateDefaults();
+            foreach (var spellId in retainedSpells)
+            {
+                var spell = GetOrCreateSpell(spellId);
+                spell.isUnlocked = true;
+                spell.level = 1;
+                spell.keepUnlockedOnReset = true;
+            }
             _data.version = CurrentVersion;
             _needsUpgradeMigration = false;
             Save();
+            ProgressReset?.Invoke();
             GoldChanged?.Invoke(Gold);
             GemsChanged?.Invoke(Gems);
             DailyRewardChanged?.Invoke();
@@ -681,6 +752,12 @@ namespace Project.Scripts.System.Save
                 maxBaseHealth = InitialBaseHealth,
                 maxEnergy = InitialMaxEnergy,
                 selectedTowerLevel = 1,
+                spellProgressionVersion = 1,
+                spells = new List<SpellProgressSaveData>
+                {
+                    new(SpellIds.WeaponBarrage, true, 1)
+                },
+                activeSpellIds = new List<string> { SpellIds.WeaponBarrage },
                 towerSlots = CreateDefaultTowerSlots()
             };
         }
@@ -736,6 +813,7 @@ namespace Project.Scripts.System.Save
             _data.towerSlots ??= new List<WorldTowerSlotSaveData>();
             _data.spells ??= new List<SpellProgressSaveData>();
             _data.activeSpellIds ??= new List<string>();
+            _data.completedRunIds ??= new List<string>();
             _data.shopOffers ??= new List<ShopOfferProgressSaveData>();
 
             NormalizeQuests(_data.dailyQuests);
@@ -789,11 +867,27 @@ namespace Project.Scripts.System.Save
                     spell.level = Math.Max(1, spell.level);
             }
 
+            if (_data.spellProgressionVersion < 1)
+            {
+                // Preserve explicitly earned ownership from older saves without inferring it from selection.
+                var legacyGravity = FindSpell(SpellIds.GravityTrap);
+                if (legacyGravity != null && legacyGravity.isUnlocked)
+                    legacyGravity.keepUnlockedOnReset = true;
+                _data.spellProgressionVersion = 1;
+            }
+
+            var starterSpell = GetOrCreateSpell(SpellIds.WeaponBarrage);
+            starterSpell.isUnlocked = true;
+            starterSpell.level = Math.Max(1, starterSpell.level);
+
+            var completedRuns = new HashSet<string>(StringComparer.Ordinal);
+            _data.completedRunIds.RemoveAll(id => string.IsNullOrWhiteSpace(id) || !completedRuns.Add(id));
+
             var activeSpellIds = new HashSet<string>();
             for (var i = _data.activeSpellIds.Count - 1; i >= 0; i--)
             {
                 var spellId = _data.activeSpellIds[i];
-                if (string.IsNullOrWhiteSpace(spellId) || !activeSpellIds.Add(spellId))
+                if (string.IsNullOrWhiteSpace(spellId) || !IsSpellUnlocked(spellId) || !activeSpellIds.Add(spellId))
                     _data.activeSpellIds.RemoveAt(i);
             }
 
@@ -914,7 +1008,9 @@ namespace Project.Scripts.System.Save
             {
                 towerSlots.Add(new WorldTowerSlotSaveData(
                     TowerSlotGrid.GetSlotId(i),
-                    i == 0 ? WorldTowerSlotSaveData.Unlocked : WorldTowerSlotSaveData.Locked));
+                    i < (TowerSlotGrid.RowCount - 1) * TowerSlotGrid.ColumnCount
+                        ? WorldTowerSlotSaveData.Unlocked
+                        : WorldTowerSlotSaveData.Locked));
             }
 
             return towerSlots;

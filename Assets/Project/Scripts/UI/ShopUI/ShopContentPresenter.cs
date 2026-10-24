@@ -67,6 +67,7 @@ namespace Project.Scripts.UI.ShopUI
             var offers = new List<ShopOfferUIData>();
             var gemOffers = new List<ShopOfferUIData>();
             var energyOffers = new List<ShopOfferUIData>();
+            var goldOffers = new List<ShopOfferUIData>();
             var placements = _offerService.Placements;
             for (var i = 0; i < placements.Count; i++)
             {
@@ -75,6 +76,7 @@ namespace Project.Scripts.UI.ShopUI
                 {
                     EShopOfferPlacementLayout.GemGrid => gemOffers,
                     EShopOfferPlacementLayout.EnergyGrid => energyOffers,
+                    EShopOfferPlacementLayout.GoldGrid => goldOffers,
                     _ => offers
                 };
                 var states = _offerService.GetVisibleOffers(placement.Id);
@@ -85,7 +87,8 @@ namespace Project.Scripts.UI.ShopUI
             _view.SetOffers(offers, EShopOfferPlacementLayout.List);
             _view.SetOffers(gemOffers, EShopOfferPlacementLayout.GemGrid);
             _view.SetOffers(energyOffers, EShopOfferPlacementLayout.EnergyGrid);
-            if (offers.Count == 0 && gemOffers.Count == 0 && energyOffers.Count == 0)
+            _view.SetOffers(goldOffers, EShopOfferPlacementLayout.GoldGrid);
+            if (offers.Count == 0 && gemOffers.Count == 0 && energyOffers.Count == 0 && goldOffers.Count == 0)
                 _view.ShowEmptyState(_localizationService.Get(LocalizationKeys.ShopNoOffers));
         }
 
