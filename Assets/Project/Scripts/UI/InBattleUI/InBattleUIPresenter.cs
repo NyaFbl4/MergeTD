@@ -86,7 +86,7 @@ namespace Project.Scripts.UI.InBattleUI
         public void OnMenuShown()
         {
             _isStartingRun = false;
-            _view.SetPlayButtonEnabled(_playerEnergy.GetState().Current > 0);
+            RefreshRun();
         }
 
         public void Dispose()
@@ -144,7 +144,7 @@ namespace Project.Scripts.UI.InBattleUI
 
         private void OnPlayClicked()
         {
-            if (_isStartingRun)
+            if (_isStartingRun || !_runSelection.IsSelectedRunUnlocked)
                 return;
 
             if (!_playerEnergy.TrySpendForRun())
@@ -283,6 +283,14 @@ namespace Project.Scripts.UI.InBattleUI
                 _localizationService.Get(run.DisplayName),
                 run.Icon,
                 _runSelection.Count > 1);
+            var isUnlocked = _runSelection.IsSelectedRunUnlocked;
+            var playButtonText = isUnlocked
+                ? _localizationService.Get("menu.battle")
+                : _localizationService.Format(
+                    LocalizationKeys.RunLockedFormat,
+                    _localizationService.Get(_runSelection.PreviousRun.DisplayName));
+            _view.SetRunAccess(isUnlocked, playButtonText);
+            _view.SetPlayButtonEnabled(!_isStartingRun && _playerEnergy.GetState().Current > 0);
         }
 
         private void RefreshDailyRewards()

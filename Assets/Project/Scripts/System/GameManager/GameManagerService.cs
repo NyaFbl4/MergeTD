@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Project.Scripts.Gameplay.Run;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -9,13 +10,15 @@ namespace Project.Scripts.GameManager
     public class GameManagerService : IGameManagerService, IStartable, ITickable, IFixedTickable, IDisposable
     {
         private EGameState _gameState;
+        private readonly IRunSelectionService _runSelection;
         private readonly List<IGameListener> _gameListeners = new();
         private readonly List<IGameUpdateListener> _gameUpdateListeners = new();
         private readonly List<IGameFixedUpdateListener> _gameFixedUpdateListeners = new();
 
         [Inject]
-        private GameManagerService()
+        private GameManagerService(IRunSelectionService runSelection)
         {
+            _runSelection = runSelection;
             _gameState = EGameState.Off;
 
             IGameListener.onRegister += AddListener;
@@ -111,6 +114,9 @@ namespace Project.Scripts.GameManager
 
         public void StartGame()
         {
+            if (!_runSelection.IsSelectedRunUnlocked)
+                return;
+
             _gameState = EGameState.Play;
             Time.timeScale = 1f;
 

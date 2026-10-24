@@ -242,6 +242,8 @@ namespace Project.Scripts.UI.SettingsUI.Editor
             public int Count => 2;
             public int SelectedIndex => 1;
             public RunConfig SelectedRun { get; }
+            public RunConfig PreviousRun => null;
+            public bool IsSelectedRunUnlocked => true;
             public event Action<RunConfig> SelectionChanged { add { } remove { } }
             public void SelectNext() { }
             public void SelectPrevious() { }

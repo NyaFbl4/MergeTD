@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.System.Save;
 using UnityEngine;
 
 namespace Project.Scripts.Gameplay.Run
@@ -10,17 +11,37 @@ namespace Project.Scripts.Gameplay.Run
         private const string SelectedRunIdKey = "merge_td_selected_run_id";
 
         private readonly RunCatalog _catalog;
+        private readonly IWorldService _world;
         private int _selectedIndex;
 
         public int Count => _catalog.Runs.Count;
         public int SelectedIndex => _selectedIndex;
         public RunConfig SelectedRun => _catalog.Runs[_selectedIndex];
+        public RunConfig PreviousRun => _selectedIndex > 0 ? _catalog.Runs[_selectedIndex - 1] : null;
+        public bool IsSelectedRunUnlocked
+        {
+            get
+            {
+                if (_selectedIndex == 0)
+                    return true;
+
+                var previousRunId = PreviousRun.Id;
+                foreach (var completedRunId in _world.CompletedRunIds)
+                {
+                    if (string.Equals(completedRunId, previousRunId, StringComparison.Ordinal))
+                        return true;
+                }
+
+                return false;
+            }
+        }
 
         public event Action<RunConfig> SelectionChanged;
 
-        public RunSelectionService(RunCatalog catalog)
+        public RunSelectionService(RunCatalog catalog, IWorldService world)
         {
             _catalog = catalog;
+            _world = world;
 
             if (_catalog.Runs.Count == 0)
                 throw new InvalidOperationException("Run Catalog must contain at least one Run Config.");

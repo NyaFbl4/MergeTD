@@ -1,6 +1,7 @@
 {
   "defaultLanguage": "ru",
   "entries": [
+    { "key": "run.locked_format", "ru": "Нужно пройти {0}", "en": "Complete {0} first" },
     { "key": "shop.gold_tab", "ru": "Золото", "en": "Gold" },
     { "key": "spells.locked", "ru": "Закрыто", "en": "Locked" },
     { "key": "spells.details", "ru": "Подробнее", "en": "Details" },

@@ -275,6 +275,8 @@ namespace Project.Scripts.Gameplay.Quests.Editor
             public int Count => 1;
             public int SelectedIndex => 0;
             public RunConfig SelectedRun { get; }
+            public RunConfig PreviousRun => null;
+            public bool IsSelectedRunUnlocked => true;
             public event Action<RunConfig> SelectionChanged { add { } remove { } }
             public void SelectNext() { }
             public void SelectPrevious() { }

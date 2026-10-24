@@ -35,6 +35,11 @@ namespace Project.Scripts.UI.InBattleUI
         private readonly Label _dailyRewardCountdownLabel;
         private readonly Label _offerAmountLabel;
         private readonly VisualElement _runIcon;
+        private readonly VisualElement _lockIcon;
+        private readonly StyleLength _playButtonFontSize;
+        private readonly StyleEnum<WhiteSpace> _playButtonWhiteSpace;
+        private bool _isRunUnlocked;
+        private bool _isPlayButtonEnabled;
         private readonly VisualElement _offerOverlay;
         private readonly VisualElement _offerIcon;
         private readonly VisualElement[] _rewardCells = new VisualElement[RewardCellCount];
@@ -68,6 +73,8 @@ namespace Project.Scripts.UI.InBattleUI
             _previousRunButton = Require<Button>("PrevLevelButton");
             _nextRunButton = Require<Button>("NextLevelButton");
             _playButton = Require<Button>("PlayButton");
+            _playButtonFontSize = _playButton.style.fontSize;
+            _playButtonWhiteSpace = _playButton.style.whiteSpace;
             _dailyRewardButton = Require<Button>("DailyRewardClaimButton");
             _normalRewardButton = Require<Button>("DailyRewardNormalButton");
             _doubleRewardButton = Require<Button>("DailyRewardDoubleButton");
@@ -75,6 +82,7 @@ namespace Project.Scripts.UI.InBattleUI
             _dailyRewardCountdownLabel = Require<Label>("DailyRewardCountdownLabel");
             _offerAmountLabel = Require<Label>("DailyRewardOfferAmountLabel");
             _runIcon = Require<VisualElement>("RunIcon");
+            _lockIcon = RequireFrom<VisualElement>(_runIcon, "LockIcon");
             _offerOverlay = Require<VisualElement>("DailyRewardOfferOverlay");
             _offerIcon = Require<VisualElement>("DailyRewardOfferIcon");
             _dailyQuestHeaderLabel = Require<Label>("DailyQuestHeaderLabel");
@@ -126,7 +134,23 @@ namespace Project.Scripts.UI.InBattleUI
                 UIButtonAnimationUtility.EnableDefault(_dailyQuestClaimButtons[i]);
         }
 
-        public void SetPlayButtonEnabled(bool enabled) => _playButton.SetEnabled(enabled);
+        public void SetPlayButtonEnabled(bool enabled)
+        {
+            _isPlayButtonEnabled = enabled;
+            _playButton.SetEnabled(enabled && _isRunUnlocked);
+        }
+
+        public void SetRunAccess(bool isUnlocked, string playButtonText)
+        {
+            _isRunUnlocked = isUnlocked;
+            _lockIcon.style.display = isUnlocked ? DisplayStyle.None : DisplayStyle.Flex;
+            _playButton.text = playButtonText;
+            _playButton.style.fontSize = isUnlocked ? _playButtonFontSize : new StyleLength(24f);
+            _playButton.style.whiteSpace = isUnlocked
+                ? _playButtonWhiteSpace
+                : new StyleEnum<WhiteSpace>(WhiteSpace.Normal);
+            _playButton.SetEnabled(_isPlayButtonEnabled && isUnlocked);
+        }
 
         public void SetRun(string displayName, Sprite icon, bool canNavigate)
         {

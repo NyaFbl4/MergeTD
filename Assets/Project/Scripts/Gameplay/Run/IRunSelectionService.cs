@@ -8,6 +8,8 @@ namespace Project.Scripts.Gameplay.Run
         int Count { get; }
         int SelectedIndex { get; }
         RunConfig SelectedRun { get; }
+        RunConfig PreviousRun { get; }
+        bool IsSelectedRunUnlocked { get; }
 
         event Action<RunConfig> SelectionChanged;
 

@@ -1,13 +1,13 @@
 {
-    "idSave": 888,
+    "idSave": 911,
     "world": {
         "version": 2,
-        "gold": 50,
-        "gems": 50,
+        "gold": 350,
+        "gems": 0,
         "playerEnergy": {
             "version": 1,
-            "current": 10,
-            "nextRestoreUnixMilliseconds": 0
+            "current": 7,
+            "nextRestoreUnixMilliseconds": 1791196269222
         },
         "dailyRewardLastClaimDay": -1,
         "dailyRewardIndex": -1,
@@ -24,9 +24,45 @@
         "upgrades": [],
         "towers": [
             {
+                "slotId": "11",
+                "towerLevel": 2,
+                "towerType": 0,
+                "purchaseCost": 200
+            },
+            {
                 "slotId": "12",
                 "towerLevel": 2,
                 "towerType": 0,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "13",
+                "towerLevel": 2,
+                "towerType": 0,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "14",
+                "towerLevel": 2,
+                "towerType": 0,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "15",
+                "towerLevel": 2,
+                "towerType": 0,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "22",
+                "towerLevel": 2,
+                "towerType": 1,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "23",
+                "towerLevel": 2,
+                "towerType": 1,
                 "purchaseCost": 200
             }
         ],
@@ -109,7 +145,7 @@
         "dailyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 2,
+                "currentValue": 10,
                 "targetValue": 10,
                 "rewardGold": 100,
                 "rewardGems": 0,
@@ -117,7 +153,7 @@
             },
             {
                 "id": "5",
-                "currentValue": 0,
+                "currentValue": 10,
                 "targetValue": 10,
                 "rewardGold": 125,
                 "rewardGems": 0,
@@ -127,7 +163,7 @@
         "weeklyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 2,
+                "currentValue": 14,
                 "targetValue": 70,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -135,7 +171,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 0,
+                "currentValue": 1,
                 "targetValue": 7,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -145,7 +181,7 @@
         "achievementQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 58,
+                "currentValue": 70,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -169,7 +205,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 20,
+                "currentValue": 21,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,
