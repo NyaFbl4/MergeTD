@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Base;
@@ -27,6 +27,10 @@ namespace Project.Scripts.Gameplay.Field
         [SerializeField] private BaseHealth _baseHealth;
         [SerializeField] private Transform _sellZoneAnchor;
         [SerializeField] private TowerSellZone _sellZonePrefab;
+
+        public event global::System.Action<string> TowerSlotUnlockRequested;
+
+        private void OnTowerSlotUnlockRequested(string slotId) => TowerSlotUnlockRequested?.Invoke(slotId);
 
         private UnitsConfig _unitsConfig;
         private IUnitsCatalog _unitsCatalog;
@@ -62,6 +66,8 @@ namespace Project.Scripts.Gameplay.Field
                     continue;
 
                 var slot = _towerSlots[i];
+                slot.UnlockRequested -= OnTowerSlotUnlockRequested;
+                slot.UnlockRequested += OnTowerSlotUnlockRequested;
                 slot.Construct(
                     _unitsCatalog,
                     runState,
@@ -89,11 +95,14 @@ namespace Project.Scripts.Gameplay.Field
                     continue;
 
                 slot.SetWorldUnlocked(_world.IsTowerSlotUnlocked(slot.PersistentId));
+                slot.SetUnlockAvailable(TowerSlotUnlockConfig.IsNextLockedSlot(_world, slot.PersistentId));
             }
         }
 
         private void OnDestroy()
         {
+            foreach (var slot in _towerSlots)
+                slot.UnlockRequested -= OnTowerSlotUnlockRequested;
             if (_world != null)
                 _world.TowerSlotsChanged -= RefreshTowerSlotAvailability;
 

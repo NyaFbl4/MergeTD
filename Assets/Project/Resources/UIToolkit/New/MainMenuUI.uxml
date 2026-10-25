@@ -73,6 +73,6 @@
                 <ui:Label text="menu.base" name="ButtonLabel" style="-unity-text-outline-color: rgb(0, 0, 0); -unity-text-outline-width: 2px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); font-size: 30px; width: 100%;"/>
             </ui:Button>
         </ui:VisualElement>
-        <ui:Instance template="PurchaseWindowTemplate" name="PurchaseWindow" picking-mode="Ignore" class="purchase-window-template-host" style="display: none;"/>
+        <ui:Instance template="PurchaseWindowTemplate" name="PurchaseWindow" picking-mode="Ignore" class="purchase-window-template-host" style="display: flex;"/>
     </ui:VisualElement>
 </ui:UXML>

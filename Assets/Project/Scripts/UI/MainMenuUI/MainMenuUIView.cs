@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.TowerSlotUnlockUI;
 using Project.Scripts.UI.SpellsUI;
 using Project.Scripts.UI.ShopUI;
 using Project.Scripts.Configs;
@@ -33,6 +34,12 @@ namespace Project.Scripts.UI.MainMenuUI
         private Button _settingsButton;
         private IInBattleUIView _inBattleView;
         private IArmyUIView _armyView;
+        private ITowerSlotUnlockView _slotUnlockView;
+        public ITowerSlotUnlockView TowerSlotUnlockView => _slotUnlockView;
+
+        public void InitializeTowerSlotUnlock(UIElements uiElements) =>
+            _slotUnlockView = new TowerSlotUnlockView(_root);
+
         private IPurchaseWindowView _purchaseWindowView;
         private ISpellsPanelUIView _spellsPanelView;
         private IShopPanelUIView _shopView;
@@ -298,6 +305,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _inBattleView.Dispose();
             _armyView.Dispose();
             _purchaseWindowView.Dispose();
+            _slotUnlockView.Dispose();
             _spellsPanelView.Dispose();
             _shopView.Dispose();
             _settingsButton.clicked -= OnSettingsButtonClicked;

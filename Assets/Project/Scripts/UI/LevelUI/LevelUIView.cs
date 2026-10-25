@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.TowerSlotUnlockUI;
 using Project.Scripts.UI.CardChoiceUI;
 using Project.Scripts.System.Localization;
 using UnityEngine;
@@ -47,6 +48,7 @@ namespace Project.Scripts.UI.LevelUI
         private Label _currentBaseHealthLabel;
         private Label _maxBaseHealthLabel;
         private Label _currentWaveLabel;
+        private Label _spawnWarningLabel;
         private VisualElement _payButtonTowerIcon;
         private VisualElement _adButtonTowerIcon;
         private VisualElement _statePreparation;
@@ -55,6 +57,12 @@ namespace Project.Scripts.UI.LevelUI
         private readonly Dictionary<string, VisualElement> _spellIcons = new(StringComparer.Ordinal);
         private readonly Dictionary<string, VisualElement> _spellBackgrounds = new(StringComparer.Ordinal);
         private readonly Dictionary<string, Label> _spellManaLabels = new(StringComparer.Ordinal);
+        private ITowerSlotUnlockView _slotUnlockView;
+        public ITowerSlotUnlockView TowerSlotUnlockView => _slotUnlockView;
+
+        public void InitializeTowerSlotUnlock(UIElements uiElements) =>
+            _slotUnlockView = new TowerSlotUnlockView(_root);
+
         private IPurchaseWindowView _purchaseWindowView;
         private ICardChoiceView _cardChoiceView;
         
@@ -84,6 +92,7 @@ namespace Project.Scripts.UI.LevelUI
 
             _statePreparation = _root.Q<VisualElement>("StatePreparation");
             _stateWave = _root.Q<VisualElement>("StateWave");
+            _spawnWarningLabel = _root.Q<Label>("SpawnWarningLabel");
 
             _payTowerButton = _root.Q<Button>("PayTowerButton");
             _payGeneratorButton = _root.Q<Button>("PayElectricTowerButton");
@@ -290,6 +299,12 @@ namespace Project.Scripts.UI.LevelUI
             _currentWaveLabel.text = text;
         }
 
+        public void SetSpawnWarning(bool visible, string text)
+        {
+            _spawnWarningLabel.text = text;
+            _spawnWarningLabel.EnableInClassList("spawn-warning-visible", visible);
+        }
+
         public void SetNextWaveButtonEnabled(bool isEnabled)
         {
             _nextWaveButton?.SetEnabled(isEnabled);
@@ -430,6 +445,7 @@ namespace Project.Scripts.UI.LevelUI
             _orbitalRailgunButton.clicked -= OnOrbitalRailgunButtonClicked;
             _gravityTrapButton.clicked -= OnGravityTrapButtonClicked;
             _purchaseWindowView?.Dispose();
+            _slotUnlockView.Dispose();
             _cardChoiceView?.Dispose();
         }
     }

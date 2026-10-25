@@ -16,145 +16,54 @@ MonoBehaviour:
   _icon: {fileID: 6282827051346395398, guid: 06b4ee386d98ec74aa8c717a4495dfa0, type: 3}
   _background: {fileID: 1384094805094192650, guid: c467c63cddec54b46ac9094ccb1bbe64, type: 3}
   _displayName: run.default_5.name
-  _description: Default 20-wave run converted from Level Config.
+  _description: Balanced 7-wave run. Normal waves target 60 seconds; final boss wave targets up to 90 seconds.
   _waves:
   - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: 7350c3ffcc8b4db4385699f33dd98fb4, type: 2}
+    _waveConfig: {fileID: 11400000, guid: 77136b767f7e4ab6a2d81fa639b298c6, type: 2}
     _rewards:
     - _type: 0
-      _amount: 250
+      _amount: 307
     _isBossWave: 0
     _phaseAfterComplete: 2
   - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: e6d2ce8e4a4b39b4daeb099813825d78, type: 2}
+    _waveConfig: {fileID: 11400000, guid: f37348727137403f86d229fe6bb8ca7a, type: 2}
     _rewards:
     - _type: 0
-      _amount: 463
+      _amount: 344
     _isBossWave: 0
     _phaseAfterComplete: 2
   - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: ea241d86d43e42f44b207d726dd28e9e, type: 2}
+    _waveConfig: {fileID: 11400000, guid: 92793ff766b740d385061e8b224c27a1, type: 2}
     _rewards:
     - _type: 0
-      _amount: 747
+      _amount: 381
     _isBossWave: 0
     _phaseAfterComplete: 3
   - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: 8372af58de57a83469bbce6221d54535, type: 2}
+    _waveConfig: {fileID: 11400000, guid: b2ec0b7e082c4b01bfdd291b4c1b3c4b, type: 2}
     _rewards:
     - _type: 0
-      _amount: 1065
+      _amount: 418
     _isBossWave: 0
     _phaseAfterComplete: 2
   - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: d1c3eb7b1cb74f4fa964245d11875405, type: 2}
+    _waveConfig: {fileID: 11400000, guid: 1950a9349b384564b72a97a91802d36f, type: 2}
     _rewards:
     - _type: 0
-      _amount: 1408
+      _amount: 455
     _isBossWave: 0
     _phaseAfterComplete: 2
   - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: a6f5414d671d4e6eb54399bfe6089ab1, type: 2}
+    _waveConfig: {fileID: 11400000, guid: 1ec59f090b784b9b81b0da256907a901, type: 2}
     _rewards:
     - _type: 0
-      _amount: 1770
+      _amount: 495
     _isBossWave: 0
     _phaseAfterComplete: 3
   - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: f0434d4a6a3c43d193d8144ea1eb3b92, type: 2}
+    _waveConfig: {fileID: 11400000, guid: aa15e24be8f14a77be440400ea424e37, type: 2}
     _rewards:
     - _type: 0
-      _amount: 2149
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: 9d505db5551a4aa7924f7c532a14968a, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 2542
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: 5cef68cdb0cc433a9f870f3d2c4bc1d7, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 2948
-    _isBossWave: 0
-    _phaseAfterComplete: 3
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: e56e62df3ce94e9a9d9d7a6989ac4b33, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 3365
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: e19b1cddd8464fab986e44420392511e, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 3792
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: d7870384d5994da3b39089c829ca5772, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 4229
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: e12962c2c007481ba4e02c851ffe13b0, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 4674
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: 48b1d3b1b54f4bb0be0cefe9d1a3f4e1, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 5128
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: ac82d395fa3647d38143b93e07275110, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 5589
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: 9ce5c44ab1af477d835b4c91f6a33fb6, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 6058
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: bf7d3180ab884bb4985607abf1c9be07, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 6534
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: 070807c8a82e4cc28973eea22b0b41e7, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 7017
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: a4e40fa49e254f3e9044696766029781, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 7505
-    _isBossWave: 0
-    _phaseAfterComplete: 2
-  - _displayName: 
-    _waveConfig: {fileID: 11400000, guid: a2b9eec11d0c4f15b3425b532ccf43f5, type: 2}
-    _rewards:
-    - _type: 0
-      _amount: 8000
+      _amount: 800
     _isBossWave: 1
     _phaseAfterComplete: 4

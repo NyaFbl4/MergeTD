@@ -177,7 +177,7 @@
 }
 
 .purchase-window-card:disabled {
-    opacity: 0.42;
+    opacity: 1;
 }
 
 .purchase-window-unit-icon {

@@ -36,6 +36,20 @@ namespace Project.Scripts.Gameplay.Field
 
         private static Sprite _lockSprite;
 
+        public event Action<string> UnlockRequested;
+
+        public void RequestUnlock()
+        {
+            if (_slotType == ETowerSlotType.Locked && _runState.CanEditDefense)
+                UnlockRequested?.Invoke(PersistentId);
+        }
+
+        public void SetUnlockAvailable(bool available)
+        {
+            if (_slotType == ETowerSlotType.Locked)
+                _lockIndicator.color = available ? new Color(1f, 0.85f, 0.4f) : new Color(0.65f, 0.6f, 0.75f);
+        }
+
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
         public TowerUnit CurrentTower => _currentTower;
@@ -90,7 +104,7 @@ namespace Project.Scripts.Gameplay.Field
             if (_slotType != ETowerSlotType.Locked)
             {
                 if (_lockIndicator != null)
-                    _lockIndicator.enabled = false;
+                    _lockIndicator.gameObject.SetActive(false);
 
                 return;
             }
@@ -98,7 +112,7 @@ namespace Project.Scripts.Gameplay.Field
             if (_lockIndicator == null)
                 _lockIndicator = CreateLockIndicator();
 
-            _lockIndicator.enabled = true;
+            _lockIndicator.gameObject.SetActive(true);
         }
 
         private SpriteRenderer CreateLockIndicator()
@@ -113,6 +127,11 @@ namespace Project.Scripts.Gameplay.Field
             var largestSpriteSize = Mathf.Max(_lockSprite.bounds.size.x, _lockSprite.bounds.size.y);
             lockObject.transform.localScale = Vector3.one * (LockIndicatorMaxSize / largestSpriteSize);
 
+            // Separate click target keeps the placement collider disabled while locked.
+            var clickCollider = lockObject.AddComponent<BoxCollider2D>();
+            clickCollider.size = _lockSprite.bounds.size;
+            clickCollider.offset = _lockSprite.bounds.center;
+            lockObject.AddComponent<TowerSlotUnlockClickTarget>().Initialize(this);
             var indicator = lockObject.AddComponent<SpriteRenderer>();
             indicator.sprite = _lockSprite;
             indicator.sharedMaterial = _slotRenderer.sharedMaterial;

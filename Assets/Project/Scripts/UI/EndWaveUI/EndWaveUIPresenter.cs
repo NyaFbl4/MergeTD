@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
@@ -11,16 +12,26 @@ namespace Project.Scripts.UI.EndWaveUI
     {
         private readonly ILocalizationService _localizationService;
         private readonly IAudioManager _audioManager;
+        private readonly RunState _runState;
+        private readonly IRunSelectionService _runSelection;
         private int _waveNumber;
         private bool _hasData;
+        private bool _isVictoryReward;
+        private string _runDisplayName;
 
         public event Action CloseRequested;
         public event Action AdRequested;
 
-        public EndWaveUIPresenter(ILocalizationService localizationService, IAudioManager audioManager)
+        public EndWaveUIPresenter(
+            ILocalizationService localizationService,
+            IAudioManager audioManager,
+            RunState runState,
+            IRunSelectionService runSelection)
         {
             _localizationService = localizationService;
             _audioManager = audioManager;
+            _runState = runState;
+            _runSelection = runSelection;
         }
 
         public override void Initialize()
@@ -36,6 +47,8 @@ namespace Project.Scripts.UI.EndWaveUI
         public void SetData(int waveNumber, IReadOnlyList<WaveRewardConfig> rewards)
         {
             _waveNumber = waveNumber;
+            _isVictoryReward = _runState.Phase == ERunPhase.Victory;
+            _runDisplayName = _runSelection.SelectedRun.DisplayName;
             _hasData = true;
             RefreshLocalization();
             _layoutView.SetRewards(rewards);
@@ -50,10 +63,12 @@ namespace Project.Scripts.UI.EndWaveUI
             _layoutView.SetCloseButtonText(_localizationService.Get(LocalizationKeys.EndWaveCloseButton));
             if (_hasData)
             {
-                _layoutView.SetTitle(
-                    _localizationService
-                        .Format(LocalizationKeys.EndWaveTitleFormat, _waveNumber)
-                        .ToUpperInvariant());
+                var title = _isVictoryReward
+                    ? _localizationService.Format(
+                        LocalizationKeys.EndRunTitleFormat,
+                        _localizationService.Get(_runDisplayName))
+                    : _localizationService.Format(LocalizationKeys.EndWaveTitleFormat, _waveNumber);
+                _layoutView.SetTitle(title.ToUpperInvariant());
             }
         }
 

@@ -6,6 +6,8 @@ using Project.Scripts.Gameplay.Run.Configs;
 using Project.Scripts.System.Save;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI.Dtos;
+using Project.Scripts.UI.LevelUI;
+using Project.Scripts.UI.MainMenuUI;
 using UnityEngine;
 using VContainer.Unity;
 using YG;
@@ -26,6 +28,8 @@ namespace Project.Scripts.UI.EndWaveUI
         private IReadOnlyList<WaveRewardConfig> _currentRewards = Array.Empty<WaveRewardConfig>();
         private bool _isWaitingAdReward;
         private bool _isAdRewardClaimed;
+        private bool _isShown;
+        private bool _isVictoryReward;
 
         public EndWaveUseCase(
             RunBattleRuntime runBattleRuntime,
@@ -66,7 +70,7 @@ namespace Project.Scripts.UI.EndWaveUI
                     break;
                 case ERunPhase.Victory:
                     GrantWaveRewards(rewards);
-                    _runBattleRuntime.FinishVictory();
+                    ShowRewardPopup(waveNumber, rewards, true);
                     break;
                 case ERunPhase.Defeat:
                     break;
@@ -92,8 +96,13 @@ namespace Project.Scripts.UI.EndWaveUI
             }
         }
 
-        private void ShowRewardPopup(int waveNumber, IReadOnlyList<WaveRewardConfig> rewards)
+        private void ShowRewardPopup(
+            int waveNumber,
+            IReadOnlyList<WaveRewardConfig> rewards,
+            bool isVictoryReward = false)
         {
+            _isShown = true;
+            _isVictoryReward = isVictoryReward;
             _isWaitingAdReward = false;
             _isAdRewardClaimed = false;
             _currentRewards = rewards;
@@ -116,7 +125,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private void OnAdRequested()
         {
-            if (_isWaitingAdReward || _isAdRewardClaimed || !HasPositiveReward())
+            if (!_isShown || _isWaitingAdReward || _isAdRewardClaimed || !HasPositiveReward())
                 return;
 
             _isWaitingAdReward = true;
@@ -191,10 +200,29 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private void ClosePopupAndContinue()
         {
+            if (!_isShown)
+                return;
+
+            _isShown = false;
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(IEndWaveUIPresenter)
             });
+
+            if (_isVictoryReward)
+            {
+                _runBattleRuntime.FinishVictory();
+                _hidePopupPublisher.Publish(new HidePopupDto
+                {
+                    TargetPopUpType = typeof(ILevelUIPresenter)
+                });
+                _showPopupPublisher.Publish(new ShowPopupDto
+                {
+                    TargetPopUpType = typeof(IMainMenuUIPresenter)
+                });
+                TryShowInterstitialAd();
+                return;
+            }
 
             TryShowInterstitialAd();
             _runBattleRuntime.ContinueToNextPreparation();

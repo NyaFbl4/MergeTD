@@ -25,6 +25,12 @@ namespace Project.Scripts.Gameplay.Run
         private bool _isGameRunning;
 
         public event Action<int, IReadOnlyList<WaveRewardConfig>, ERunPhase> WaveCompleted;
+        public bool IsSpawnWarningActive => _battlefieldRuntime.IsSpawnWarningActive;
+        public event Action<bool> SpawnWarningChanged
+        {
+            add => _battlefieldRuntime.SpawnWarningChanged += value;
+            remove => _battlefieldRuntime.SpawnWarningChanged -= value;
+        }
         public bool CanUseNextWaveButton => _isGameRunning
                                            && _state.Phase == ERunPhase.Preparation;
 

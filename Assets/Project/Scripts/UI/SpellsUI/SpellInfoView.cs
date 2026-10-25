@@ -176,7 +176,7 @@ namespace Project.Scripts.UI.SpellsUI
                 ? _removeBackground
                 : _selectBackground;
             _selectionButton.SetEnabled(spell.IsSelected || spell.CanSelect);
-            _selectionButton.style.opacity = spell.IsSelected || spell.CanSelect ? 1f : 0.65f;
+            _selectionButton.style.opacity = 1f;
         }
 
         public void SetVisible(bool visible)

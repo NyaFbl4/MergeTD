@@ -1,6 +1,21 @@
 {
   "defaultLanguage": "ru",
   "entries": [
+    {"key": "slots.title", "ru": "Расширение базы", "en": "Expand base"},
+    {"key": "slots.ordinal", "ru": "Дополнительный слот {0} из {1}", "en": "Extra slot {0} of {1}"},
+    {"key": "slots.description", "ru": "Место для башни или генератора. Сохраняется между забегами.", "en": "Space for a tower or generator. Stays unlocked between runs."},
+    {"key": "slots.price", "ru": "Цена: {0:N0} золота", "en": "Cost: {0:N0} gold"},
+    {"key": "slots.balance", "ru": "У вас: {0:N0} золота", "en": "You have: {0:N0} gold"},
+    {"key": "slots.unlock", "ru": "Открыть за {0:N0}", "en": "Unlock for {0:N0}"},
+    {"key": "slots.previous_required", "ru": "Сначала откройте предыдущий слот слева.", "en": "Unlock the previous slot on the left first."},
+    {"key": "slots.missing_gold", "ru": "Не хватает {0:N0} золота", "en": "You need {0:N0} more gold"},
+    {"key": "slots.ready", "ru": "Слот откроется навсегда до сброса прогресса.", "en": "Stays unlocked until progress is reset."},
+    { "key": "level.spawn_warning", "ru": "Подкрепление врага!", "en": "Enemy reinforcements!" },
+    { "key": "run.default_6.name", "ru": "Ржавый пояс", "en": "Rust Belt" },
+    { "key": "run.default_7.name", "ru": "Выжженные пустоши", "en": "Scorched Wastelands" },
+    { "key": "run.default_8.name", "ru": "Забытый комплекс", "en": "Forgotten Complex" },
+    { "key": "run.default_9.name", "ru": "Чёрный бастион", "en": "Black Bastion" },
+    { "key": "run.default_10.name", "ru": "Сердце Зоны", "en": "Heart of the Zone" },
     { "key": "run.locked_format", "ru": "Нужно пройти {0}", "en": "Complete {0} first" },
     { "key": "shop.gold_tab", "ru": "Золото", "en": "Gold" },
     { "key": "spells.locked", "ru": "Закрыто", "en": "Locked" },
@@ -40,6 +55,11 @@
       "key": "end_wave.title_format",
       "ru": "Волна {0} пройдена",
       "en": "Wave {0} cleared"
+    },
+    {
+      "key": "end_run.title_format",
+      "ru": "Локация «{0}» пройдена",
+      "en": "Location \"{0}\" cleared"
     },
     {
       "key": "end_wave.reward_label",

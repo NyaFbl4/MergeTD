@@ -172,8 +172,10 @@ namespace Project.Scripts.System.Localization
             _currentLanguageCode = DefaultLanguage;
             _entries.Clear();
 
+            AddEntry(LocalizationKeys.LevelSpawnWarning, "Подкрепление врага!", "Enemy reinforcements!");
             AddEntry(LocalizationKeys.LevelWaveFormat, "Волна {0}", "Wave {0}");
             AddEntry(LocalizationKeys.EndWaveTitleFormat, "Волна {0} пройдена", "Wave {0} cleared");
+            AddEntry(LocalizationKeys.EndRunTitleFormat, "Локация «{0}» пройдена", "Location \"{0}\" cleared");
             AddEntry(LocalizationKeys.EndWaveRewardLabel, "Награда за волну", "Wave reward");
             AddEntry(LocalizationKeys.EndWaveCloseButton, "Продолжить", "Continue");
             AddEntry(LocalizationKeys.EndWaveAdButton, "x2 за рекламу", "x2 for ad");

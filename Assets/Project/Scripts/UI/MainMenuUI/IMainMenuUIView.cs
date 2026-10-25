@@ -1,10 +1,11 @@
-﻿using Project.Scripts.Systems.UI;
+using Project.Scripts.Systems.UI;
 using Project.Scripts.Configs;
 
 using System;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.ArmyUI;
 using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.TowerSlotUnlockUI;
 using Project.Scripts.UI.SpellsUI;
 using Project.Scripts.UI.ShopUI;
 using Project.Scripts.Gameplay.UpgradeItem;
@@ -28,6 +29,8 @@ namespace Project.Scripts.UI.MainMenuUI
 
         IInBattleUIView InBattleView { get; }
         IArmyUIView ArmyView { get; }
+        ITowerSlotUnlockView TowerSlotUnlockView { get; }
+        void InitializeTowerSlotUnlock(UIElements uiElements);
         IPurchaseWindowView PurchaseWindowView { get; }
         ISpellsPanelUIView SpellsPanelView { get; }
         IShopPanelUIView ShopView { get; }

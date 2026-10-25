@@ -20,18 +20,23 @@ namespace Project.Scripts.Gameplay.Systems
         private const float MinSpawnInterval = 0.22f;
 
         private readonly IPlayerStatsUseCase _playerStatsUseCase;
-        
+
         private bool _isWaitingWaveStart;
         private float _waveStartTimer;
         private float _spawnCooldown;
         private int _nextSequenceRuntimeIndex;
-        
+        private int _maxSpawnsPerTick = 1;
+        private float _spawnWarningSeconds;
+
+        public bool IsSpawnWarningActive { get; private set; }
+        public event Action<bool> SpawnWarningChanged;
+
         private readonly List<EnemySpawnSequenceRuntime> _sequenceRuntimes = new();
         private int _aliveEnemies;
 
         private bool _isWaveRunning;
         private bool _isGameRunning;
-        
+
         private int CurrentWaveNumber => _runState.CurrentWave;
         public event Action<int> WaveExecutionCompleted;
 
@@ -52,6 +57,7 @@ namespace Project.Scripts.Gameplay.Systems
 
         public void Dispose()
         {
+            SetSpawnWarning(false);
             IGameListener.Unregister(this);
         }
 
@@ -62,13 +68,14 @@ namespace Project.Scripts.Gameplay.Systems
                 Debug.LogWarning("BattlefieldRuntime: BattlefieldContext is not ready. Check lanes, base, and enemy prefab.");
                 return false;
             }
-            
+
             Debug.Log("BattlefieldRuntime: Battlefield Start");
-            
+
+            SetSpawnWarning(false);
             _sequenceRuntimes.Clear();
             ClearEnemiesRoot();
             _aliveEnemies = 0;
-            
+
             _isWaitingWaveStart = false;
             _waveStartTimer = 0f;
             _spawnCooldown = 0f;
@@ -98,6 +105,7 @@ namespace Project.Scripts.Gameplay.Systems
         public void OnFinishGame()
         {
             _isGameRunning = false;
+            SetSpawnWarning(false);
 
             if (_runState.Phase == ERunPhase.Defeat)
                 return;
@@ -133,7 +141,7 @@ namespace Project.Scripts.Gameplay.Systems
             }
 
         }
-        
+
         public void StartCurrentWave()
         {
             if (_runState.CurrentWave > _runState.MaxWaves)
@@ -142,27 +150,56 @@ namespace Project.Scripts.Gameplay.Systems
                 return;
             }
 
+            InitializeWave(_runState.CurrentWaveConfig.WaveConfig);
+            Debug.Log($"Wave started: #{CurrentWaveNumber}");
+            _isWaveRunning = true;
+
+            RefreshSpawnWarning();
+            _playerStatsUseCase.SetWave(CurrentWaveNumber);
+        }
+
+        private void InitializeWave(EnemyWaveConfig wave)
+        {
+            SetSpawnWarning(false);
             _sequenceRuntimes.Clear();
             _spawnCooldown = 0f;
             _nextSequenceRuntimeIndex = 0;
-
-            var wave = _runState.CurrentWaveConfig.WaveConfig;
-            Debug.Log($"Wave started: #{CurrentWaveNumber}");
-            for (var i = 0; i < wave.Sequence.Count; i++)
+            _maxSpawnsPerTick = wave.MaxSpawnsPerTick;
+            _spawnWarningSeconds = wave.SpawnWarningSeconds;
+            foreach (var sequence in wave.Sequence)
             {
-                var sequence = wave.Sequence[i];
-
-                if (sequence == null)
-                    continue;
-
-                _sequenceRuntimes.Add(new EnemySpawnSequenceRuntime(sequence));
+                if (sequence != null)
+                    _sequenceRuntimes.Add(new EnemySpawnSequenceRuntime(sequence));
             }
-
-            _isWaveRunning = true;
-
-            _playerStatsUseCase.SetWave(CurrentWaveNumber);
         }
-        
+
+        private void RefreshSpawnWarning()
+        {
+            var active = false;
+            if (_isGameRunning && _isWaveRunning && _spawnWarningSeconds > 0f)
+            {
+                foreach (var sequence in _sequenceRuntimes)
+                {
+                    var remaining = sequence.TimeUntilStart;
+                    if (sequence.Config.ShowSpawnWarning && !sequence.IsComplete
+                        && remaining > 0f && remaining <= _spawnWarningSeconds)
+                    {
+                        active = true;
+                        break;
+                    }
+                }
+            }
+            SetSpawnWarning(active);
+        }
+
+        private void SetSpawnWarning(bool active)
+        {
+            if (IsSpawnWarningActive == active)
+                return;
+            IsSpawnWarningActive = active;
+            SpawnWarningChanged?.Invoke(active);
+        }
+
         private void UpdateWaveStartDelay(float deltaTime)
         {
             _waveStartTimer -= deltaTime;
@@ -172,7 +209,7 @@ namespace Project.Scripts.Gameplay.Systems
 
             BeginWaveSpawn();
         }
-        
+
         private void BeginWaveSpawn()
         {
             _isWaitingWaveStart = false;
@@ -181,6 +218,10 @@ namespace Project.Scripts.Gameplay.Systems
 
         private void UpdateWaveSpawn(float deltaTime)
         {
+            for (var i = 0; i < _sequenceRuntimes.Count; i++)
+                _sequenceRuntimes[i].Tick(deltaTime);
+            RefreshSpawnWarning();
+
             if (_spawnCooldown > 0f)
             {
                 _spawnCooldown -= deltaTime;
@@ -195,24 +236,26 @@ namespace Project.Scripts.Gameplay.Systems
             }
 
             var checksCount = _sequenceRuntimes.Count;
-            for (var offset = 0; offset < checksCount; offset++)
+            var startIndex = _nextSequenceRuntimeIndex;
+            var spawned = 0;
+            for (var offset = 0; offset < checksCount && spawned < _maxSpawnsPerTick; offset++)
             {
-                var index = (_nextSequenceRuntimeIndex + offset) % _sequenceRuntimes.Count;
+                var index = (startIndex + offset) % _sequenceRuntimes.Count;
                 var sequenceRuntime = _sequenceRuntimes[index];
 
-                if (!sequenceRuntime.CanSpawn(deltaTime))
+                if (!sequenceRuntime.CanSpawn())
                     continue;
 
                 SpawnEnemy(sequenceRuntime.Config);
                 sequenceRuntime.MarkSpawned();
                 _spawnCooldown = MinSpawnInterval;
                 _nextSequenceRuntimeIndex = (index + 1) % _sequenceRuntimes.Count;
-                break;
+                spawned++;
             }
 
             TryCompleteWave();
         }
-        
+
         private void SpawnEnemy(EnemySpawnSequenceConfig sequence)
         {
             var lane = _context.GetRandomLane();
@@ -229,13 +272,13 @@ namespace Project.Scripts.Gameplay.Systems
             var typeHealthMultiplier = sequence.EnemyConfig.GetHealthMultiplier(enemy.EnemyType);
             var scaledHealth = Mathf.Max(1, Mathf.RoundToInt(
                 sequence.EnemyConfig.StartHealth * sequence.HealthMultiplier * typeHealthMultiplier));
-            
+
             enemy.Initialize(lane, _context.BaseHealth, sequence.EnemyConfig, scaledHealth);
             enemy.Finished += OnEnemyFinished;
 
             _aliveEnemies++;
         }
-        
+
         private void OnEnemyFinished(EnemyUnit enemy)
         {
             enemy.Finished -= OnEnemyFinished;
@@ -244,7 +287,7 @@ namespace Project.Scripts.Gameplay.Systems
 
             TryCompleteWave();
         }
-        
+
         private void TryCompleteWave()
         {
             if (!_isGameRunning || !_isWaveRunning || _runState.Phase != ERunPhase.Wave)
@@ -262,11 +305,12 @@ namespace Project.Scripts.Gameplay.Systems
             var completedWaveNumber = CurrentWaveNumber;
             var wave = _runState.CurrentWaveConfig.WaveConfig;
             Debug.Log($"Wave completed: #{completedWaveNumber}, sequences: {wave.Sequence.Count}");
-            
+
             _isWaveRunning = false;
+            SetSpawnWarning(false);
             WaveExecutionCompleted?.Invoke(completedWaveNumber);
         }
-        
+
         private EnemyUnit GetRandomEnemy(List<EnemyUnit> enemies)
         {
             if (enemies == null || enemies.Count == 0)

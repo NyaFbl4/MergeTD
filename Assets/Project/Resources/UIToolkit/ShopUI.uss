@@ -69,7 +69,7 @@
 }
 
 .shop-offer-card--disabled {
-    opacity: 0.76;
+    opacity: 1;
 }
 
 .shop-offer-icon-panel {
@@ -234,7 +234,7 @@
 }
 
 .shop-gem-card--disabled {
-    opacity: 0.82;
+    opacity: 1;
 }
 
 .shop-gem-badge {

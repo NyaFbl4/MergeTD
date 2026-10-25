@@ -98,7 +98,7 @@ namespace Project.Scripts.Gameplay.Run.Editor
             _world.AddGems(1);
             Assert.That(_ui.TryUnlock(SpellIds.EmpPulse), Is.True);
             Assert.That(_world.Gems, Is.Zero);
-            Assert.That(_world.Gold, Is.EqualTo(250));
+            Assert.That(_world.Gold, Is.EqualTo(500));
         }
 
         [TestCase(SpellIds.CryoDischarge)]

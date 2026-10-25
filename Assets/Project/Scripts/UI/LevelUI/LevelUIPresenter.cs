@@ -15,6 +15,9 @@ using Project.Scripts.System.UseCases;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.TowerSlotUnlockUI;
+using Project.Scripts.Gameplay.Field;
+using Cysharp.Threading.Tasks;
 using Project.Scripts.UI.CardChoiceUI;
 using Project.Scripts.UI.EndWaveUI;
 using Project.Scripts.UI.QuestUI;
@@ -51,6 +54,8 @@ namespace Project.Scripts.UI.LevelUI
         private readonly OrbitalRailgunUseCase _orbitalRailgunUseCase;
         private readonly GravityTrapUseCase _gravityTrapUseCase;
         private PurchaseWindowPresenter _purchaseWindowPresenter;
+        private TowerSlotUnlockPresenter _slotUnlockPresenter;
+        private readonly BattlefieldContext _battlefieldContext;
         private CardChoicePresenter _cardChoicePresenter;
         private readonly RunCardChoiceUseCase _runCardChoiceUseCase;
 
@@ -78,8 +83,10 @@ namespace Project.Scripts.UI.LevelUI
             EmpPulseUseCase empPulseUseCase,
             OrbitalRailgunUseCase orbitalRailgunUseCase,
             GravityTrapUseCase gravityTrapUseCase,
-            RunCardChoiceUseCase runCardChoiceUseCase)
+            RunCardChoiceUseCase runCardChoiceUseCase,
+            BattlefieldContext battlefieldContext)
         {
+            _battlefieldContext = battlefieldContext;
             _buyTowerUseCase = buyTowerUseCase;
             _uiElements = uiElements;
             _world = world;
@@ -107,6 +114,12 @@ namespace Project.Scripts.UI.LevelUI
         public override void Initialize()
         {
             base.Initialize();
+
+            _layoutView.InitializeTowerSlotUnlock(_uiElements);
+            _slotUnlockPresenter = new TowerSlotUnlockPresenter(
+                _layoutView.TowerSlotUnlockView, _world, _localizationService, _audioManager,
+                () => IsActive && _runState.CanEditDefense);
+            _battlefieldContext.TowerSlotUnlockRequested += OnLockedSlotClicked;
 
             _layoutView.InitializePurchaseWindow(_uiElements);
             _purchaseWindowPresenter = new PurchaseWindowPresenter(
@@ -144,6 +157,7 @@ namespace Project.Scripts.UI.LevelUI
             _baseHealth.OnCurrentHealthChanged += OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage += OnLanguageChanged;
             _runState.PhaseChanged += OnRunPhaseChanged;
+            _runBattleRuntime.SpawnWarningChanged += OnSpawnWarningChanged;
             _layoutView.WeaponBarrageButtonClicked += OnWeaponBarrageButtonClicked;
             _weaponBarrageUseCase.StateChanged += OnWeaponBarrageStateChanged;
             _layoutView.BaseRepairButtonClicked += OnBaseRepairButtonClicked;
@@ -177,6 +191,20 @@ namespace Project.Scripts.UI.LevelUI
             RefreshOrbitalRailgun();
             RefreshGravityTrap();
             RefreshActiveSpells();
+        }
+
+        private void OnLockedSlotClicked(string slotId)
+        {
+            if (!IsActive || !_runState.CanEditDefense)
+                return;
+            _purchaseWindowPresenter.Hide();
+            _slotUnlockPresenter.Show(slotId);
+        }
+
+        public override UniTask DeactivateAsync()
+        {
+            _slotUnlockPresenter.Hide();
+            return base.DeactivateAsync();
         }
 
         private void OnTowerCostChanged(int price)
@@ -482,6 +510,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnShopButtonClicked()
         {
+            _slotUnlockPresenter.Hide();
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             Debug.Log("OnShopButtonClicked");
             _showPopupPublisher.Publish(new ShowPopupDto
@@ -493,6 +522,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnSetSpellsButtonClicked()
         {
+            _slotUnlockPresenter.Hide();
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _showPopupPublisher.Publish(new ShowPopupDto
             {
@@ -502,6 +532,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnSetTowersButtonClicked()
         {
+            _slotUnlockPresenter.Hide();
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _purchaseWindowPresenter.Show();
         }
@@ -528,6 +559,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnQuestsButtonClicked()
         {
+            _slotUnlockPresenter.Hide();
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             Debug.Log("OnQuestsButtonClicked");
             _showPopupPublisher.Publish(new ShowPopupDto
@@ -538,6 +570,7 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnSettingsButtonClicked()
         {
+            _slotUnlockPresenter.Hide();
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             Debug.Log("OnSettingsButtonClicked");
             _showPopupPublisher.Publish(new ShowPopupDto
@@ -591,6 +624,7 @@ namespace Project.Scripts.UI.LevelUI
         
         private void OnLanguageChanged(string _)
         {
+            RefreshSpawnWarning();
             RefreshWaveText();
             RefreshEnergy();
             RefreshWeaponBarrage();
@@ -605,12 +639,23 @@ namespace Project.Scripts.UI.LevelUI
 
         private void OnRunPhaseChanged(ERunPhase phase)
         {
+            _slotUnlockPresenter.Hide();
             _purchaseWindowPresenter.Hide();
             RefreshRunPhaseControls();
         }
 
+        private void OnSpawnWarningChanged(bool _) => RefreshSpawnWarning();
+
+        private void RefreshSpawnWarning()
+        {
+            _layoutView.SetSpawnWarning(
+                _runState.Phase == ERunPhase.Wave && _runBattleRuntime.IsSpawnWarningActive,
+                _localizationService.Get(LocalizationKeys.LevelSpawnWarning));
+        }
+
         private void RefreshRunPhaseControls()
         {
+            RefreshSpawnWarning();
             _layoutView.SetRunPhase(_runState.Phase);
             _layoutView.SetNextWaveButtonEnabled(_runBattleRuntime.CanUseNextWaveButton);
             _layoutView.SetTowerActionsEnabled(_runState.CanEditDefense);
@@ -697,6 +742,8 @@ namespace Project.Scripts.UI.LevelUI
             _baseHealth.OnCurrentHealthChanged -= OnCurrentHealthChanged;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
             _runState.PhaseChanged -= OnRunPhaseChanged;
+            _runBattleRuntime.SpawnWarningChanged -= OnSpawnWarningChanged;
+            _layoutView.SetSpawnWarning(false, string.Empty);
             _layoutView.WeaponBarrageButtonClicked -= OnWeaponBarrageButtonClicked;
             _weaponBarrageUseCase.StateChanged -= OnWeaponBarrageStateChanged;
             _layoutView.BaseRepairButtonClicked -= OnBaseRepairButtonClicked;
@@ -716,6 +763,8 @@ namespace Project.Scripts.UI.LevelUI
             if (_isWaitingAdReward)
                 UnsubscribeRewardedAdEvents();
 
+            _battlefieldContext.TowerSlotUnlockRequested -= OnLockedSlotClicked;
+            _slotUnlockPresenter.Dispose();
             _purchaseWindowPresenter.Dispose();
             _cardChoicePresenter.Dispose();
 

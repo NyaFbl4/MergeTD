@@ -33,6 +33,7 @@ namespace Project.Scripts.UI.ArmyUI
         private readonly List<VisualElement> _lockImages = new();
         private readonly List<bool> _slotHasTower = new();
         private readonly List<bool> _slotLocked = new();
+        private readonly List<EventCallback<ClickEvent>> _slotClickCallbacks = new();
         private readonly List<EventCallback<PointerDownEvent>> _pointerDownCallbacks = new();
         private readonly List<EventCallback<PointerMoveEvent>> _pointerMoveCallbacks = new();
         private readonly List<EventCallback<PointerUpEvent>> _pointerUpCallbacks = new();
@@ -52,6 +53,7 @@ namespace Project.Scripts.UI.ArmyUI
         public event Action BuyGeneratorButtonClicked;
         public event Action SetTowersButtonClicked;
         public event Action SetSpellsButtonClicked;
+        public event Action<int> LockedSlotClicked;
         public event Action<int> TowerDragStarted;
         public event Action<int> TowerSellRequested;
         public event Action<int, int> TowerDropped;
@@ -98,6 +100,16 @@ namespace Project.Scripts.UI.ArmyUI
                 EventCallback<PointerMoveEvent> pointerMove = evt => OnSlotPointerMove(evt, slotIndex);
                 EventCallback<PointerUpEvent> pointerUp = evt => OnSlotPointerUp(evt, slotIndex);
                 EventCallback<PointerCancelEvent> pointerCancel = evt => OnSlotPointerCancel(evt, slotIndex);
+                EventCallback<ClickEvent> click = evt =>
+                {
+                    if (evt.button == 0 && _slotLocked[slotIndex] && _dragSourceIndex < 0)
+                    {
+                        LockedSlotClicked?.Invoke(slotIndex);
+                        evt.StopPropagation();
+                    }
+                };
+                slotElement.RegisterCallback(click);
+                _slotClickCallbacks.Add(click);
                 slotElement.RegisterCallback(pointerDown);
                 slotElement.RegisterCallback(pointerMove);
                 slotElement.RegisterCallback(pointerUp);
@@ -138,6 +150,13 @@ namespace Project.Scripts.UI.ArmyUI
             _lockImages[slotIndex].style.display = isLocked ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
+        public void SetSlotUnlockInfo(int slotIndex, bool isNext, string tooltip)
+        {
+            _towerSlots[slotIndex].tooltip = tooltip;
+            _lockImages[slotIndex].style.unityBackgroundImageTintColor =
+                isNext ? new Color(1f, 0.85f, 0.4f) : new Color(0.65f, 0.6f, 0.75f);
+        }
+
         public void SetPurchaseInfo(int towerLevel, int towerPrice, int generatorPrice)
         {
             _buyTowerLevelLabel.text = towerLevel.ToString();
@@ -172,6 +191,7 @@ namespace Project.Scripts.UI.ArmyUI
 
             for (var i = 0; i < _towerSlots.Count; i++)
             {
+                _towerSlots[i].UnregisterCallback(_slotClickCallbacks[i]);
                 _towerSlots[i].UnregisterCallback(_pointerDownCallbacks[i]);
                 _towerSlots[i].UnregisterCallback(_pointerMoveCallbacks[i]);
                 _towerSlots[i].UnregisterCallback(_pointerUpCallbacks[i]);
@@ -184,6 +204,7 @@ namespace Project.Scripts.UI.ArmyUI
             _lockImages.Clear();
             _slotHasTower.Clear();
             _slotLocked.Clear();
+            _slotClickCallbacks.Clear();
             _pointerDownCallbacks.Clear();
             _pointerMoveCallbacks.Clear();
             _pointerUpCallbacks.Clear();

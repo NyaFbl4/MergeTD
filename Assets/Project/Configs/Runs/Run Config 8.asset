@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 645fe2540a4f4dbc87face14ed327e24, type: 3}
+  m_Name: Run Config 8
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Gameplay.Run.Configs.RunConfig
+  _id: default-run-8
+  _icon: {fileID: 21300000, guid: b29db132051446158983e812a8b49eac, type: 3}
+  _background: {fileID: 21300000, guid: 17cd2a663f534485a7ead04c67104480, type: 3}
+  _displayName: run.default_8.name
+  _description: Balanced 10-wave run. Normal waves target 60 seconds; final boss wave targets up to 90 seconds.
+  _waves:
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: ff640be4ed6c46ae9f6a75e30c0ab76f, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 844
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: 541d6001996949c886c6c34244ba5df3, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 945
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: c2125ab8df3d48bfbc10f532aa6fe572, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 1047
+    _isBossWave: 0
+    _phaseAfterComplete: 3
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: a5cf1275ade24c5385266070895e07cb, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 1148
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: d1d2f94d75694390a8e2dc2761ebc5ba, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 1250
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: bb8000ee254648c3b9aa931720210dd5, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 1351
+    _isBossWave: 0
+    _phaseAfterComplete: 3
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: 7744fbe89d9e48b3acc0cd859485db4d, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 1452
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: 9f7f838dad2348ecbd3f87cafdbefafd, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 1554
+    _isBossWave: 0
+    _phaseAfterComplete: 2
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: e7c7b20cb688491c94c63fe1b69c7081, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 1659
+    _isBossWave: 0
+    _phaseAfterComplete: 3
+  - _displayName:
+    _waveConfig: {fileID: 11400000, guid: e8d72198a2ef4f98999884a79c52506d, type: 2}
+    _rewards:
+    - _type: 0
+      _amount: 3750
+    _isBossWave: 1
+    _phaseAfterComplete: 4

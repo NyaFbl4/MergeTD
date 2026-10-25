@@ -9,7 +9,7 @@ namespace Project.Scripts.System.Save
     public sealed class WorldService : IWorldService
     {
         private const int CurrentVersion = 2;
-        private const int InitialGold = 250;
+        private const int InitialGold = 500;
         private const int InitialBaseHealth = 10;
         private const int InitialMaxEnergy = 12;
         private const int MaximumActiveSpellCount = 3;
@@ -421,6 +421,24 @@ namespace Project.Scripts.System.Save
         {
             ValidateTowerSlotId(slotId);
             return FindTowerSlot(slotId).unlockedSlot == WorldTowerSlotSaveData.Unlocked;
+        }
+
+        public bool TryPurchaseTowerSlot(string slotId, int expectedPrice)
+        {
+            if (!TowerSlotUnlockConfig.IsNextLockedSlot(this, slotId))
+                return false;
+
+            var price = TowerSlotUnlockConfig.LoadFromResources().GetPrice(slotId);
+            if (price != expectedPrice || !CanSpendGold(price))
+                return false;
+
+            // Persist both changes together: observers never see a paid, still-locked slot.
+            _data.gold -= price;
+            FindTowerSlot(slotId).unlockedSlot = WorldTowerSlotSaveData.Unlocked;
+            Save();
+            GoldChanged?.Invoke(Gold);
+            TowerSlotsChanged?.Invoke();
+            return true;
         }
 
         public void UnlockTowerSlot(string slotId)

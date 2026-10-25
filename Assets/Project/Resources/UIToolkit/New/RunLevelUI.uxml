@@ -3,6 +3,7 @@
     <ui:Template name="PurchaseWindowTemplate" src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindowPreview.uxml?fileID=9197481963319205126&amp;guid=6f78f3413aef45d68c42bbf728d3d9af&amp;type=3#PurchaseWindowPreview"/>
     <ui:Template name="SpellButton" src="project://database/Assets/Project/Resources/UIToolkit/New/%D0%9D%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BF%D0%B0%D0%BF%D0%BA%D0%B0/SpellButton.uxml?fileID=9197481963319205126&amp;guid=290c677105eae334abb1a2452ac79b4e&amp;type=3#SpellButton"/>
     <Style src="project://database/Assets/Project/Resources/UIToolkit/New/PurchaseWindow.uss?fileID=11400000&amp;guid=1e6d40d4bbd44736a0267017630ba408&amp;type=3#PurchaseWindow"/>
+    <ui:Style src="project://database/Assets/Project/Resources/UIToolkit/New/SpawnWarning.uss?fileID=11400000&amp;guid=df156fc39584495aa8edb254e6026168&amp;type=3#SpawnWarning"/>
     <ui:VisualElement name="Layout" picking-mode="Ignore" style="flex-grow: 1; left: auto; background-position-x: center;">
         <ui:VisualElement name="TopPanel" picking-mode="Ignore" style="flex-grow: 1; height: 300px; min-height: 300px; max-height: 300px; flex-direction: row;">
             <ui:VisualElement name="ResourcesBar" style="flex-grow: 1; background-image: none; -unity-background-scale-mode: scale-to-fit; height: 100px; min-height: 100px; max-height: 100px; width: 300px; min-width: 300px; max-width: 300px; top: 20px; left: 20px;">
@@ -79,7 +80,8 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Instance template="PurchaseWindowTemplate" name="PurchaseWindow" picking-mode="Ignore" class="purchase-window-template-host" style="display: none;"/>
+        <ui:Label name="SpawnWarningLabel" picking-mode="Ignore" class="spawn-warning"/>
+        <ui:Instance template="PurchaseWindowTemplate" name="PurchaseWindow" picking-mode="Ignore" class="purchase-window-template-host" style="display: flex;"/>
         <ui:Instance template="CardChoiceWindowTemplate" name="CardChoiceWindow" picking-mode="Ignore" class="card-choice-template-host" style="display: flex; top: 0; bottom: 0; right: -3px; left: 4px;"/>
     </ui:VisualElement>
 </ui:UXML>

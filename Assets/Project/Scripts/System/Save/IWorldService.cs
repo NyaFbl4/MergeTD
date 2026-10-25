@@ -94,6 +94,7 @@ namespace Project.Scripts.System.Save
         bool TryPurchaseUpgrade(string upgradeId, int expectedLevel, int price, EWorldUpgradeType type, float value);
         bool IsTowerSlotUnlocked(string slotId);
         void UnlockTowerSlot(string slotId);
+        bool TryPurchaseTowerSlot(string slotId, int expectedPrice);
         void SetTower(string slotId, int towerLevel, ETowerType towerType, int purchaseCost);
         void MoveTower(
             string sourceSlotId,

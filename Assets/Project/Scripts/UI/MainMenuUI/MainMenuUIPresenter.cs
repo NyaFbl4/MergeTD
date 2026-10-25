@@ -1,4 +1,4 @@
-﻿using Project.Scripts.Systems.UI;
+using Project.Scripts.Systems.UI;
 using Project.Scripts.Configs;
 using System.Collections.Generic;
 using Project.Scripts.System.Save;
@@ -10,6 +10,8 @@ using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.UI.InBattleUI;
 using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.TowerSlotUnlockUI;
+using Project.Scripts.Gameplay.Field;
 using Project.Scripts.Systems.UI.Dtos;
 using Project.Scripts.System.Audio;
 using Project.Scripts.System.Reward;
@@ -53,6 +55,8 @@ namespace Project.Scripts.UI.MainMenuUI
         private IInBattleUIPresenter _inBattlePresenter;
         private IArmyUIPresenter _armyPresenter;
         private PurchaseWindowPresenter _purchaseWindowPresenter;
+        private TowerSlotUnlockPresenter _slotUnlockPresenter;
+        private TowerSlotUnlockConfig _slotUnlockConfig;
         private SpellsPanelUIPresenter _spellsPanelPresenter;
         private ShopContentPresenter _shopPresenter;
         private List<IBaseUpgradeItem> _baseUpgradeItems;
@@ -122,6 +126,15 @@ namespace Project.Scripts.UI.MainMenuUI
                 _audioManager);
             _armyPresenter.Initialize();
 
+            _layoutView.InitializeTowerSlotUnlock(_uiElements);
+            _slotUnlockConfig = TowerSlotUnlockConfig.LoadFromResources();
+            _slotUnlockPresenter = new TowerSlotUnlockPresenter(
+                _layoutView.TowerSlotUnlockView, _world, _localizationService, _audioManager,
+                () => IsActive && _menuUIUseCase.ActiveSection == MainMenuSection.Army);
+            _layoutView.ArmyView.LockedSlotClicked += OnLockedSlotClicked;
+            _world.TowerSlotsChanged += RefreshSlotUnlockHints;
+            RefreshSlotUnlockHints();
+
             _layoutView.InitializePurchaseWindow(_uiElements);
             _purchaseWindowPresenter = new PurchaseWindowPresenter(
                 _layoutView.PurchaseWindowView,
@@ -180,6 +193,32 @@ namespace Project.Scripts.UI.MainMenuUI
             RefreshBaseUpgrades();
         }
         
+        private void OnLockedSlotClicked(int index)
+        {
+            _purchaseWindowPresenter.Hide();
+            _slotUnlockPresenter.Show(TowerSlotGrid.GetSlotId(index));
+        }
+
+        private void RefreshSlotUnlockHints()
+        {
+            for (var i = 10; i < TowerSlotGrid.SlotCount; i++)
+            {
+                var id = TowerSlotGrid.GetSlotId(i);
+                var unlocked = _world.IsTowerSlotUnlocked(id);
+                var next = TowerSlotUnlockConfig.IsNextLockedSlot(_world, id);
+                var hint = unlocked ? string.Empty : next
+                    ? _localizationService.Format("slots.unlock", _slotUnlockConfig.GetPrice(id))
+                    : _localizationService.Get("slots.previous_required");
+                _layoutView.ArmyView.SetSlotUnlockInfo(i, next, hint);
+            }
+        }
+
+        public override UniTask DeactivateAsync()
+        {
+            _slotUnlockPresenter.Hide();
+            return base.DeactivateAsync();
+        }
+
         private void OnGoldChanged(int value)
         {
             _layoutView.SetGoldCount(value);
@@ -192,6 +231,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private void OnActiveSectionChanged(MainMenuSection section)
         {
+            _slotUnlockPresenter.Hide();
             _layoutView.SetActiveSection(section);
             _purchaseWindowPresenter.Hide();
             if (section == MainMenuSection.Shop)
@@ -245,6 +285,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private void OnSetTowersButtonClicked()
         {
+            _slotUnlockPresenter.Hide();
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _purchaseWindowPresenter.Show();
         }
@@ -253,6 +294,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private void OnSettingsButtonClicked()
         {
+            _slotUnlockPresenter.Hide();
             _audioManager.PlaySound(ESoundId.UiButtonClick);
             _showPopupPublisher.Publish(new ShowPopupDto
             {
@@ -272,6 +314,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         private void OnLanguageChanged(string _)
         {
+            RefreshSlotUnlockHints();
             RefreshBaseUpgrades();
         }
 
@@ -308,6 +351,9 @@ namespace Project.Scripts.UI.MainMenuUI
             _playerStats.UpgradesChanged -= OnUpgradesChanged;
             _localizationService.OnChangeLanguage -= OnLanguageChanged;
             _inBattlePresenter.Dispose();
+            _layoutView.ArmyView.LockedSlotClicked -= OnLockedSlotClicked;
+            _world.TowerSlotsChanged -= RefreshSlotUnlockHints;
+            _slotUnlockPresenter.Dispose();
             _purchaseWindowPresenter.Dispose();
             _armyPresenter.Dispose();
             _spellsPanelPresenter.Dispose();

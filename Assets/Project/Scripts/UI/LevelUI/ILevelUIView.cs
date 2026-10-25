@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using Project.Scripts.Configs;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.UI.PurchaseWindowUI;
+using Project.Scripts.UI.TowerSlotUnlockUI;
 using Project.Scripts.UI.CardChoiceUI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,6 +29,8 @@ namespace Project.Scripts.UI.LevelUI
         event Action OrbitalRailgunButtonClicked;
         event Action GravityTrapButtonClicked;
         
+        ITowerSlotUnlockView TowerSlotUnlockView { get; }
+        void InitializeTowerSlotUnlock(UIElements uiElements);
         IPurchaseWindowView PurchaseWindowView { get; }
         ICardChoiceView CardChoiceView { get; }
 
@@ -45,6 +48,7 @@ namespace Project.Scripts.UI.LevelUI
         void SetTowerLevel(int towerLevel);
         void SetCurrentWaveText(string text);
         void SetRunPhase(ERunPhase phase);
+        void SetSpawnWarning(bool visible, string text);
         void SetNextWaveButtonEnabled(bool isEnabled);
         void SetTowerActionsEnabled(bool isEnabled);
         void SetSpellVisible(string spellId, bool isVisible);

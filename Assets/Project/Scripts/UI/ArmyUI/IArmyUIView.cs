@@ -9,6 +9,8 @@ namespace Project.Scripts.UI.ArmyUI
         event Action BuyGeneratorButtonClicked;
         event Action SetTowersButtonClicked;
         event Action SetSpellsButtonClicked;
+        event Action<int> LockedSlotClicked;
+        void SetSlotUnlockInfo(int slotIndex, bool isNext, string tooltip);
         event Action<int> TowerDragStarted;
         event Action<int> TowerSellRequested;
         event Action<int, int> TowerDropped;

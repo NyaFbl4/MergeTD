@@ -134,7 +134,7 @@ namespace Project.Scripts.Gameplay.UpgradeItem
 
             var canBuy = !item.IsMaxLevel && canPurchase;
             _buyButton.SetEnabled(canBuy);
-            _buyButton.style.opacity = canBuy ? 1f : 0.55f;
+            _buyButton.style.opacity = 1f;
             _buyButton.clicked += onBuy;
         }
 

@@ -1,4 +1,4 @@
-﻿using Project.Scripts.Gameplay.Wave;
+using Project.Scripts.Gameplay.Wave;
 
 namespace Project.Scripts.Gameplay.Systems
 {
@@ -11,6 +11,7 @@ namespace Project.Scripts.Gameplay.Systems
         private float _spawnTimer;
 
         public EnemySpawnSequenceConfig Config => _config;
+        public float TimeUntilStart => _startTimer;
         public bool IsComplete => _spawnedCount >= _config.Count;
 
         public EnemySpawnSequenceRuntime(EnemySpawnSequenceConfig config)
@@ -21,25 +22,21 @@ namespace Project.Scripts.Gameplay.Systems
             _spawnedCount = 0;
         }
 
-        public bool CanSpawn(float deltaTime)
+        public void Tick(float deltaTime)
         {
             if (IsComplete)
-                return false;
+                return;
 
             if (_startTimer > 0f)
             {
                 _startTimer -= deltaTime;
-                return false;
+                return;
             }
 
-            if (_spawnTimer > 0f)
-            {
-                _spawnTimer -= deltaTime;
-                return false;
-            }
-
-            return true;
+            _spawnTimer -= deltaTime;
         }
+
+        public bool CanSpawn() => !IsComplete && _startTimer <= 0f && _spawnTimer <= 0f;
 
         public void MarkSpawned()
         {

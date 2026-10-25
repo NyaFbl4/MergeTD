@@ -2,11 +2,13 @@ namespace Project.Scripts.System.Localization
 {
     public static class LocalizationKeys
     {
+        public const string LevelSpawnWarning = "level.spawn_warning";
         public const string LevelWaveFormat = "level.wave_format";
         public const string LevelEnergyFormat = "level.energy_format";
         public const string RunLockedFormat = "run.locked_format";
 
         public const string EndWaveTitleFormat = "end_wave.title_format";
+        public const string EndRunTitleFormat = "end_run.title_format";
         public const string EndWaveRewardLabel = "end_wave.reward_label";
         public const string EndWaveCloseButton = "end_wave.close_button";
         public const string EndWaveAdButton = "end_wave.ad_button";
