@@ -105,6 +105,9 @@
         loadingCover.style.display = "";
 
         let StartUnityInstance;
+        let unityStartRequested = false;
+        let loadingCoverHidePending = false;
+        let loadingCoverHidden = false;
         let ygGameInstance = null;
         let ysdk = null;
         let initYSDK = false;
@@ -223,10 +226,7 @@
                     ygGameInstance = unityInstance;
                     SendInitSDKComplete();
 
-                    loadingCover.style.background = "";
-                    loadingCover.style.display = "none";
-                    FocusGame();
-                    // Fill Background [Build Modify]
+                    HideLoadingCoverWhenReady();
                 }).catch((message) => {
                     console.error(message);
                 });
@@ -240,8 +240,26 @@
         };
 
         function StartUnityInstance_IfUnloaded() {
-            if (spinner.style.display !== "none")
-                StartUnityInstance();
+            if (unityStartRequested)
+                return;
+
+            unityStartRequested = true;
+            StartUnityInstance();
+        }
+
+        function HideLoadingCoverWhenReady() {
+            if (!initGame || ygGameInstance == null || loadingCoverHidePending || loadingCoverHidden)
+                return;
+
+            loadingCoverHidePending = true;
+            // Allow the gameplay scene to start and render after the SDK handshake.
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                loadingCoverHidden = true;
+                loadingCover.style.background = "";
+                loadingCover.style.display = "none";
+                FocusGame();
+                // Fill Background [Build Modify]
+            }));
         }
 
         function IsLocalHost() {
@@ -326,7 +344,11 @@
 
         async function InitYSDK() {
             try {
-                if (IsLocalHost()) return;
+                if (IsLocalHost()) {
+                    initYSDK = true;
+                    SendInitSDKComplete();
+                    return;
+                }
 
                 ysdk = await YaGames.init();
                 ysdk.on('game_api_pause', PauseCallback);
@@ -355,6 +377,7 @@
 
         function InitGame() {
             initGame = true;
+            HideLoadingCoverWhenReady();
 
             setTimeout(function () {
                 if (isPausedGame == true)
