@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c38cebfe79b94065aa7a9578ed2db925, type: 3}
   m_Name: Max Base Health
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   _id: max_base_health_100
   _displayName: card.max_base_health_100.name
   _description: card.max_base_health_100.description
@@ -23,6 +23,6 @@ MonoBehaviour:
   _icon: {fileID: 0}
   _effects:
   - _effectType: 5
-    _value: 100
+    _value: 10
     _towerType: 0
     _towerLevel: 1

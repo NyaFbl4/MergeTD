@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Gameplay.Towers;
@@ -122,6 +123,7 @@ namespace Project.Scripts.System.Save
 
             _data.gold -= amount;
             Save();
+            GameAnalytics.Currency("gold", -amount);
             GoldChanged?.Invoke(Gold);
             return true;
         }
@@ -131,8 +133,10 @@ namespace Project.Scripts.System.Save
             if (amount <= 0)
                 return;
 
+            var analyticsBalanceBefore = Gold;
             _data.gold = AddClamped(_data.gold, amount);
             Save();
+            GameAnalytics.Currency("gold", Gold - analyticsBalanceBefore);
             GoldChanged?.Invoke(Gold);
         }
 
@@ -141,8 +145,10 @@ namespace Project.Scripts.System.Save
             if (amount <= 0)
                 return;
 
+            var analyticsBalanceBefore = Gems;
             _data.gems = AddClamped(_data.gems, amount);
             Save();
+            GameAnalytics.Currency("gems", Gems - analyticsBalanceBefore);
             GemsChanged?.Invoke(Gems);
         }
 
@@ -152,6 +158,8 @@ namespace Project.Scripts.System.Save
             int goldAmount,
             int gemsAmount)
         {
+            var analyticsGoldBefore = Gold;
+            var analyticsGemsBefore = Gems;
             if (moscowDay < 0)
                 throw new ArgumentOutOfRangeException(nameof(moscowDay));
 
@@ -177,6 +185,9 @@ namespace Project.Scripts.System.Save
                 GemsChanged?.Invoke(Gems);
 
             DailyRewardChanged?.Invoke();
+            GameAnalytics.Currency("gold", Gold - analyticsGoldBefore, "daily_reward");
+            GameAnalytics.Currency("gems", Gems - analyticsGemsBefore, "daily_reward");
+            GameAnalytics.Track("reward_claimed", ("source", "daily"), ("day_index", rewardIndex + 1), ("gold", goldAmount), ("gems", gemsAmount));
             return true;
         }
 
@@ -269,6 +280,7 @@ namespace Project.Scripts.System.Save
 
             _data.gems -= amount;
             Save();
+            GameAnalytics.Currency("gems", -amount);
             GemsChanged?.Invoke(Gems);
             return true;
         }
@@ -299,6 +311,10 @@ namespace Project.Scripts.System.Save
             int rewardEnergy = 0,
             bool preserveSpellOnReset = false)
         {
+            var analyticsGoldBefore = Gold;
+            var analyticsGemsBefore = Gems;
+            var analyticsEnergyBefore = PlayerEnergy;
+            var analyticsSpellWasOwned = !string.IsNullOrWhiteSpace(spellId) && IsSpellUnlocked(spellId);
             if (string.IsNullOrWhiteSpace(offerId))
                 throw new ArgumentException("An offer id is required.", nameof(offerId));
 
@@ -392,6 +408,15 @@ namespace Project.Scripts.System.Save
             if (dailyLimit > 0)
                 ShopOfferProgressChanged?.Invoke();
 
+            GameAnalytics.Currency("gold", -goldPrice, "shop_offer");
+            GameAnalytics.Currency("gold", Gold - analyticsGoldBefore + goldPrice, "shop_offer");
+            GameAnalytics.Currency("gems", -gemsPrice, "shop_offer");
+            GameAnalytics.Currency("gems", Gems - analyticsGemsBefore + gemsPrice, "shop_offer");
+            if (PlayerEnergy > analyticsEnergyBefore)
+                GameAnalytics.Track("energy_refilled", ("amount", PlayerEnergy - analyticsEnergyBefore), ("method", "shop_offer"));
+            if (!string.IsNullOrWhiteSpace(spellId) && !analyticsSpellWasOwned)
+                GameAnalytics.Track("spell_unlocked", ("spell_id", spellId), ("source", "shop_offer"));
+
             return true;
         }
 
@@ -438,6 +463,8 @@ namespace Project.Scripts.System.Save
             Save();
             GoldChanged?.Invoke(Gold);
             TowerSlotsChanged?.Invoke();
+            GameAnalytics.Currency("gold", -price, "tower_slot");
+            GameAnalytics.Track("tower_slot_unlocked", ("slot_id", slotId), ("price", price));
             return true;
         }
 
@@ -565,6 +592,8 @@ namespace Project.Scripts.System.Save
             spell.level = Math.Max(1, spell.level);
             Save();
             SpellsChanged?.Invoke();
+
+            GameAnalytics.Track("spell_unlocked", ("spell_id", spellId), ("source", "unlock"));
         }
 
         public bool TryPurchaseSpell(string spellId, int goldPrice, int gemsPrice)
@@ -585,11 +614,15 @@ namespace Project.Scripts.System.Save
             if (gemsPrice > 0)
                 GemsChanged?.Invoke(Gems);
             SpellsChanged?.Invoke();
+            GameAnalytics.Currency("gold", -goldPrice, "spell_unlock");
+            GameAnalytics.Currency("gems", -gemsPrice, "spell_unlock");
+            GameAnalytics.Track("spell_unlocked", ("spell_id", spellId), ("source", "currency"));
             return true;
         }
 
         public bool TryCompleteRun(string runId, IReadOnlyList<string> rewardSpellIds)
         {
+            var analyticsUnlockedSpells = new List<string>();
             if (string.IsNullOrWhiteSpace(runId))
                 throw new ArgumentException("A run id is required.", nameof(runId));
             if (rewardSpellIds == null)
@@ -607,10 +640,13 @@ namespace Project.Scripts.System.Save
             foreach (var id in rewardSpellIds)
             {
                 var spell = GetOrCreateSpell(id);
+                if (!spell.isUnlocked) analyticsUnlockedSpells.Add(id);
                 spell.isUnlocked = true;
                 spell.level = Math.Max(1, spell.level);
             }
             Save();
+            foreach (var id in analyticsUnlockedSpells)
+                GameAnalytics.Track("spell_unlocked", ("spell_id", id), ("source", "run_completion"));
             SpellsChanged?.Invoke();
             return true;
         }
@@ -649,6 +685,8 @@ namespace Project.Scripts.System.Save
             Save();
             GemsChanged?.Invoke(Gems);
             SpellsChanged?.Invoke();
+            GameAnalytics.Currency("gems", -price, "spell_upgrade");
+            GameAnalytics.Track("spell_upgrade", ("spell_id", spellId), ("level", currentLevel + 1), ("price", price));
             return true;
         }
 
@@ -1185,6 +1223,9 @@ namespace Project.Scripts.System.Save
             else if (type == EWorldUpgradeType.MaxEnergy)
                 MaxEnergyChanged?.Invoke(MaxEnergy);
             UpgradesChanged?.Invoke();
+            GameAnalytics.Currency("gold", -price, "upgrade");
+            GameAnalytics.Count(type.ToString().StartsWith("Tower", StringComparison.Ordinal) ? "tower_upgrade" : "base_upgrade", price,
+                ("upgrade_id", upgradeId), ("level", expectedLevel + 1), ("upgrade_type", type.ToString()));
             return true;
         }
 

@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using UnityEngine;
 using Project.Scripts.Gameplay.Run;
 
@@ -36,6 +37,7 @@ namespace Project.Scripts.System.Save
             }
             catch
             {
+                GameAnalytics.Count("save_error", 1, ("storage", "checkpoint"), ("stage", "deserialize"));
                 data = null;
                 return false;
             }

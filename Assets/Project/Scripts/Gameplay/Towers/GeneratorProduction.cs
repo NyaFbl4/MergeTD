@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using Project.Scripts.Gameplay.Run;
 using Project.Scripts.Gameplay.Run.Cards;
@@ -51,7 +52,9 @@ namespace Project.Scripts.Gameplay.Towers
                 _elapsed -= _interval;
                 var amount = Mathf.Max(1, Mathf.RoundToInt(
                     _amount * (_runCardState?.GeneratorEnergyMultiplier ?? 1f)));
+                var energyBefore = _energy.Current;
                 _energy.Add(amount);
+                GameAnalytics.Count("generator_used", _energy.Current - energyBefore);
             }
 
             return true;

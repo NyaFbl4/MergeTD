@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using Project.Scripts.System.UseCases;
 using Project.Scripts.System.Save;
@@ -55,11 +56,13 @@ namespace Project.Scripts.Gameplay.Quests
 
             var nextValue = _currentValue + value;
             _currentValue = nextValue > _targetValue ? _targetValue : nextValue;
+            if (IsCompleted) GameAnalytics.Track("quest_complete", ("quest_id", Id), ("category", Category.ToString()));
             ProgressChanged?.Invoke();
         }
 
         public bool TryClaimReward()
         {
+            using var analyticsSource = GameAnalytics.WithSource("quest_reward");
             if (!IsCompleted || _isRewardClaimed)
                 return false;
 
@@ -71,6 +74,7 @@ namespace Project.Scripts.Gameplay.Quests
                 _world.AddGems(_rewardGems);
 
             ProgressChanged?.Invoke();
+            GameAnalytics.Track("reward_claimed", ("source", "quest"), ("quest_id", Id), ("gold", _rewardGold), ("gems", _rewardGems));
             return true;
         }
 

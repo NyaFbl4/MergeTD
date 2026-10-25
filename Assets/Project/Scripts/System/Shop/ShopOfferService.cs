@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
@@ -187,6 +188,7 @@ namespace Project.Scripts.System.Shop
                 _pendingPaymentOffer = config;
                 _pendingPaymentUtcDay = ResolvePurchaseDay(config);
                 StateChanged?.Invoke();
+                GameAnalytics.Track("purchase_start", ("product_id", config.Price.ProductId), ("offer_id", config.Id));
                 YG2.BuyPayments(config.Price.ProductId);
                 return true;
             }
@@ -196,7 +198,7 @@ namespace Project.Scripts.System.Shop
                 _pendingRewardedAdOffer = config;
                 _pendingRewardedAdDay = ResolvePurchaseDay(config);
                 StateChanged?.Invoke();
-                YG2.RewardedAdvShow(RewardedAdPrefix + config.Id);
+                GameAnalytics.ShowRewarded(RewardedAdPrefix + config.Id);
                 return true;
             }
 
@@ -339,7 +341,7 @@ namespace Project.Scripts.System.Shop
             return ShopOfferTime.GetPurchaseDay(config.Price.Type, unixMilliseconds);
         }
 
-        private bool TryApplyPurchase(ShopOfferConfig config, int goldPrice, long utcDay, int gemsPrice = 0)
+        private bool TryApplyPurchase(ShopOfferConfig config, int goldPrice, long utcDay, int gemsPrice = 0, bool isRestored = false)
         {
             var rewardGold = 0;
             var rewardGems = 0;
@@ -371,7 +373,7 @@ namespace Project.Scripts.System.Shop
             if (rewardEnergy > 0)
                 _playerEnergy.GetState();
 
-            return _world.TryApplyShopOfferPurchase(
+            var delivered = _world.TryApplyShopOfferPurchase(
                 config.Id,
                 goldPrice,
                 rewardGold,
@@ -382,6 +384,11 @@ namespace Project.Scripts.System.Shop
                 gemsPrice,
                 rewardEnergy,
                 config.Price.Type == EShopOfferPriceType.RealMoney && !string.IsNullOrEmpty(spellId));
+
+            if (delivered)
+                GameAnalytics.Track("purchase_delivered", ("offer_id", config.Id), ("product_id", config.Price.ProductId),
+                    ("payment_type", config.Price.Type.ToString()), ("is_restore", isRestored), ("gold", rewardGold), ("gems", rewardGems), ("energy", rewardEnergy), ("spell_id", spellId));
+            return delivered;
         }
 
         private void OnRewardedAdReward(string rewardId)
@@ -435,6 +442,8 @@ namespace Project.Scripts.System.Shop
 
         private void OnPaymentSucceeded(string productId)
         {
+            var analyticsIsRestored = _pendingPaymentOffer == null
+                || !string.Equals(_pendingPaymentOffer.Price.ProductId, productId, StringComparison.Ordinal);
             ShopOfferConfig config;
             long currentDay;
             if (_pendingPaymentOffer != null
@@ -444,6 +453,7 @@ namespace Project.Scripts.System.Shop
                     StringComparison.Ordinal))
             {
                 config = _pendingPaymentOffer;
+                GameAnalytics.Track("purchase_success", ("product_id", productId), ("offer_id", config.Id));
                 _pendingPaymentOffer = null;
                 currentDay = _pendingPaymentUtcDay;
                 _pendingPaymentUtcDay = -1;
@@ -457,7 +467,7 @@ namespace Project.Scripts.System.Shop
                 currentDay = -1;
             }
 
-            if (TryApplyPurchase(config, 0, currentDay))
+            if (TryApplyPurchase(config, 0, currentDay, isRestored: analyticsIsRestored))
                 PurchaseSucceeded?.Invoke(config.Id);
             else
                 PurchaseFailed?.Invoke(config.Id);
@@ -475,6 +485,7 @@ namespace Project.Scripts.System.Shop
                 return;
 
             var offerId = _pendingPaymentOffer.Id;
+            GameAnalytics.Track("purchase_error", ("product_id", productId), ("offer_id", offerId), ("reason", "cancelled_or_error"));
             _pendingPaymentOffer = null;
             _pendingPaymentUtcDay = -1;
             PurchaseFailed?.Invoke(offerId);

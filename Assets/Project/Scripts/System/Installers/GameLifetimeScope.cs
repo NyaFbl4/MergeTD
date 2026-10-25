@@ -70,6 +70,7 @@ namespace Installers
         private void RegisterSystem(IContainerBuilder builder)
         {
             builder.RegisterMessagePipe();
+            builder.RegisterEntryPoint<Project.Scripts.System.Analytics.AnalyticsRuntime>(Lifetime.Singleton);
 
             // Game loop
             builder.RegisterEntryPoint<GameManagerService>(Lifetime.Singleton).As<IGameManagerService>();

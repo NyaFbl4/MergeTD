@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using Project.Scripts.Gameplay.Towers;
 using Project.Scripts.Gameplay.Run;
@@ -279,6 +280,8 @@ namespace Project.Scripts.Gameplay.Field
             if (persistWorldChange)
                 PersistCurrentTower();
 
+            if (persistWorldChange)
+                GameAnalytics.Count("tower_merge", 1, ("tower_type", _currentTower.TowerType.ToString()), ("level", nextLevel));
             return true;
         }
 

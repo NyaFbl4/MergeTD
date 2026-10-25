@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using Project.Scripts.Systems.UI;
 using Project.Scripts.Configs;
 using System.Collections.Generic;
@@ -238,11 +239,12 @@ namespace Project.Scripts.UI.MainMenuUI
                 _shopPresenter.Refresh();
         }
 
-        public override UniTask ActivateAsync()
+        public override async UniTask ActivateAsync()
         {
             _inBattlePresenter.OnMenuShown();
             RefreshPlayerEnergy();
-            return base.ActivateAsync();
+            await base.ActivateAsync();
+            GameAnalytics.EnterMenu();
         }
 
         public void Tick()

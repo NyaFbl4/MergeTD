@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 ﻿using MessagePipe;
 using Project.Scripts.GameManager;
 using Project.Scripts.System.Audio;
@@ -95,6 +96,7 @@ namespace Project.Scripts.UI.SettingsUI
 
             _isReturningToMenu = true;
             _audioManager.PlaySound(ESoundId.UiButtonClick);
+            GameAnalytics.EndRun("menu");
             _gameManagerService.FinishGame();
             ShowMainMenu();
         }

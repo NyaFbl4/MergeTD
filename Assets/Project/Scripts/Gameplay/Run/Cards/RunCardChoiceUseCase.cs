@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Gameplay.Base;
@@ -71,6 +72,9 @@ namespace Project.Scripts.Gameplay.Run.Cards
             if (!_runtimeState.TryAdd(card))
                 return;
 
+            var choices = new List<string>();
+            foreach (var choice in _choices) choices.Add(choice.Id);
+            GameAnalytics.Track("card_selected", ("card_id", card.Id), ("choices", string.Join(",", choices)));
             ApplyImmediateEffects(card);
             _audioManager.PlaySound(ESoundId.UiButtonClick);
 
@@ -88,7 +92,7 @@ namespace Project.Scripts.Gameplay.Run.Cards
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
             StateChanged?.Invoke();
-            YG2.RewardedAdvShow(_catalog.RewardedRerollAdId);
+            GameAnalytics.ShowRewarded(_catalog.RewardedRerollAdId);
         }
 
         private void OnWaveCompleted(int _, IReadOnlyList<WaveRewardConfig> __, ERunPhase phase)
@@ -199,6 +203,7 @@ namespace Project.Scripts.Gameplay.Run.Cards
 
         private void ApplyImmediateEffects(RunCardConfig card)
         {
+            using var analyticsSource = GameAnalytics.WithSource("card_reward");
             for (var i = 0; i < card.Effects.Count; i++)
             {
                 var effect = card.Effects[i];

@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
@@ -13,6 +14,10 @@ namespace Project.Scripts.UI.ShopUI
     {
         private const string UpgradeTemplateResourcePath = "UIToolkit/UpgradeObjectUI";
 
+        private readonly Dictionary<string, (VisualElement Root, string Placement)> _analyticsOffers = new();
+        private readonly HashSet<string> _seenOffers = new();
+        private readonly IVisualElementScheduledItem _analyticsSchedule;
+        private bool _shopWasVisible;
         private readonly VisualElement _root;
         private readonly IUpgradeConfigProvider _upgradeConfigs;
         private readonly VisualTreeAsset _shopItemTemplate;
@@ -72,6 +77,7 @@ namespace Project.Scripts.UI.ShopUI
             _gemOfferItemTemplate = uiElements.ShopGemOfferCard;
             _energyOfferItemTemplate = uiElements.ShopEnergyOfferCard;
             _goldOfferItemTemplate = uiElements.ShopGoldOfferCard;
+            _analyticsSchedule = _root.schedule.Execute(TrackVisibleOffers).Every(250);
         }
 
         public void SetVisible(bool visible)
@@ -128,6 +134,7 @@ namespace Project.Scripts.UI.ShopUI
 
         public void Dispose()
         {
+            _analyticsSchedule.Pause();
             ClearRenderedItems();
             OfferPurchaseClicked = null;
         }
@@ -172,7 +179,10 @@ namespace Project.Scripts.UI.ShopUI
             };
             var order = GetOfferOrder(layout);
             for (var i = 0; i < order.Count; i++)
+            {
                 _offerViews.Remove(order[i]);
+                _analyticsOffers.Remove(order[i]);
+            }
 
             order.Clear();
             targetContainer.Clear();
@@ -204,6 +214,7 @@ namespace Project.Scripts.UI.ShopUI
                 order.Add(offer.Id);
                 _offerViews.Add(offer.Id, offerView);
                 targetContainer.Add(offerRoot);
+                _analyticsOffers[offer.Id] = (offerRoot, layout.ToString());
             }
         }
 
@@ -226,6 +237,7 @@ namespace Project.Scripts.UI.ShopUI
             _energyOfferOrder.Clear();
             _goldOfferOrder.Clear();
             _offerViews.Clear();
+            _analyticsOffers.Clear();
         }
 
         private List<string> GetOfferOrder(EShopOfferPlacementLayout layout) =>
@@ -249,6 +261,48 @@ namespace Project.Scripts.UI.ShopUI
             return Resources.Load<VisualTreeAsset>(resourcePath)
                    ?? throw new MissingReferenceException(
                        $"Shop template was not found at Resources/{resourcePath}.");
+        }
+
+        private void TrackVisibleOffers()
+        {
+            if (!IsVisible(_root))
+            {
+                _shopWasVisible = false;
+                _seenOffers.Clear();
+                return;
+            }
+            if (!_shopWasVisible)
+            {
+                _shopWasVisible = true;
+                GameAnalytics.Track("shop_open", ("source", _root.name));
+            }
+            foreach (var pair in _analyticsOffers)
+            {
+                if (!_seenOffers.Contains(pair.Key) && IsVisible(pair.Value.Root))
+                {
+                    _seenOffers.Add(pair.Key);
+                    GameAnalytics.Track("offer_view", ("offer_id", pair.Key), ("placement", pair.Value.Placement));
+                }
+            }
+        }
+
+        private static bool IsVisible(VisualElement element)
+        {
+            if (element.panel == null) return false;
+            var visible = element.worldBound;
+            if (visible.width <= 0f || visible.height <= 0f || float.IsNaN(visible.width)) return false;
+            for (var ancestor = element; ancestor != null; ancestor = ancestor.parent)
+            {
+                var style = ancestor.resolvedStyle;
+                if (style.display == DisplayStyle.None || style.visibility == Visibility.Hidden || style.opacity <= 0f)
+                    return false;
+                if (ancestor is not ScrollView && ancestor != element.panel.visualTree) continue;
+                var clip = ancestor is ScrollView scroll ? scroll.contentViewport.worldBound : ancestor.worldBound;
+                visible = Rect.MinMaxRect(Mathf.Max(visible.xMin, clip.xMin), Mathf.Max(visible.yMin, clip.yMin),
+                    Mathf.Min(visible.xMax, clip.xMax), Mathf.Min(visible.yMax, clip.yMax));
+                if (visible.width <= 0f || visible.height <= 0f) return false;
+            }
+            return true;
         }
 
         private void OnOfferPurchaseClicked(string offerId) =>

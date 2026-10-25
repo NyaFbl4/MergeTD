@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using Project.Scripts.System.Reward;
 using Project.Scripts.System.Save;
@@ -57,7 +58,12 @@ namespace Project.Scripts.Gameplay.Run
 
                 if (current != _store.PlayerEnergy
                     || nextRestore != _store.PlayerEnergyNextRestoreUnixMilliseconds)
+                {
+                    var restoredAmount = current - _store.PlayerEnergy;
                     _store.SavePlayerEnergy(current, nextRestore);
+                    if (restoredAmount > 0)
+                        GameAnalytics.Count("energy_refilled", restoredAmount, ("method", "time"));
+                }
             }
 
             var remaining = hasTime && current < PlayerEnergySaveData.Capacity
@@ -70,7 +76,10 @@ namespace Project.Scripts.Gameplay.Run
         {
             var state = GetState();
             if (state.Current <= 0)
+            {
+                GameAnalytics.Count("energy_empty");
                 return false;
+            }
 
             var nextRestore = _store.PlayerEnergyNextRestoreUnixMilliseconds;
             if (state.Current == state.Max

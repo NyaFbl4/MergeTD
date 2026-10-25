@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.GameManager;
@@ -72,6 +73,7 @@ namespace Project.Scripts.Gameplay.Run
             }
 
             _progressCheckpointUseCase.StartFreshRun();
+            GameAnalytics.BeginRun(_state.RunId);
         }
 
         public void StartWave()
@@ -81,6 +83,7 @@ namespace Project.Scripts.Gameplay.Run
 
             _state.StartWave();
             _battlefieldRuntime.StartCurrentWave();
+            GameAnalytics.StartWave(_state.CurrentWave, _state.IsBossWave);
         }
 
         public void AdvanceFromLevelButton()
@@ -133,11 +136,13 @@ namespace Project.Scripts.Gameplay.Run
             _baseHealth.ResetToStartHealth();
             _isGameRunning = true;
             _gameManagerService.ResumeGame();
+            GameAnalytics.Revive();
             return _state.Phase == ERunPhase.Wave;
         }
 
         public void OnFinishGame()
         {
+            GameAnalytics.EndRun(_state.Phase == ERunPhase.Defeat ? "defeat" : "finished");
             _isGameRunning = false;
         }
 
@@ -148,12 +153,17 @@ namespace Project.Scripts.Gameplay.Run
                 return;
 
             var runWave = _state.CurrentWaveConfig;
+            GameAnalytics.CompleteWave(_baseHealth.CurrentHealth, _baseHealth.MaxHealth);
             _state.CompleteWave();
+            if (_state.Phase == ERunPhase.Victory)
+                GameAnalytics.CompleteRun();
             WaveCompleted?.Invoke(completedWaveNumber, runWave.Rewards, _state.Phase);
         }
 
         private void OnBaseDestroyed()
         {
+            if (_isGameRunning && _state.Phase == ERunPhase.Wave)
+                GameAnalytics.DefeatWave();
             _state.Defeat();
         }
 

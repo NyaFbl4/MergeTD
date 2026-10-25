@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using MessagePipe;
@@ -79,6 +80,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
         private void GrantWaveRewards(IReadOnlyList<WaveRewardConfig> rewards)
         {
+            using var analyticsSource = GameAnalytics.WithSource("wave_reward");
             for (var i = 0; i < rewards.Count; i++)
             {
                 var reward = rewards[i];
@@ -94,6 +96,8 @@ namespace Project.Scripts.UI.EndWaveUI
                         throw new ArgumentOutOfRangeException(nameof(reward.Type), reward.Type, null);
                 }
             }
+
+            GameAnalytics.Count("reward_claimed", 1, ("source", "wave"));
         }
 
         private void ShowRewardPopup(
@@ -130,7 +134,7 @@ namespace Project.Scripts.UI.EndWaveUI
 
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
-            YG2.RewardedAdvShow(DoubleWaveRewardAdId);
+            GameAnalytics.ShowRewarded(DoubleWaveRewardAdId);
         }
 
         private bool HasPositiveReward()
@@ -233,7 +237,7 @@ namespace Project.Scripts.UI.EndWaveUI
             if (YG2.nowAdsShow)
                 return;
 
-            YG2.InterstitialAdvShow();
+            GameAnalytics.ShowInterstitial("wave_end");
         }
 
         public void Dispose()

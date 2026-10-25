@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
@@ -56,6 +57,7 @@ namespace Project.Scripts.Gameplay.Systems
             if (!CanUse || !_energy.TrySpend(_config.ManaCost))
                 return false;
 
+            GameAnalytics.Count("spell_used", _config.ManaCost, ("spell_id", _config.SpellId));
             _cooldownRemaining = _config.Cooldown;
             _activeDurationRemaining = _config.Duration;
             ApplyAttackSpeedMultiplier(_config.AttackSpeedMultiplier, true);

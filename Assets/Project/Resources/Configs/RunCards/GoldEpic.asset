@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c38cebfe79b94065aa7a9578ed2db925, type: 3}
-  m_Name: Gold
-  m_EditorClassIdentifier:
+  m_Name: GoldEpic
+  m_EditorClassIdentifier: 
   _id: gold_500
   _displayName: card.gold_500.name
   _description: card.gold_500.description
   _effectText: card.gold_500.effect
-  _rarity: 0
+  _rarity: 2
   _rarityLabel: cards.rarity.common
   _selectionWeight: 1
   _tint: {r: 0.75, g: 0.58, b: 0.2, a: 1}
   _icon: {fileID: 0}
   _effects:
   - _effectType: 6
-    _value: 500
+    _value: 150
     _towerType: 0
     _towerLevel: 1

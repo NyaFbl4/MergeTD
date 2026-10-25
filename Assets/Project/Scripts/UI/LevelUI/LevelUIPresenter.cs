@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using YG;
 using MessagePipe;
@@ -554,7 +555,7 @@ namespace Project.Scripts.UI.LevelUI
             
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
-            YG2.RewardedAdvShow(UpgradeLowestTowerRewardId);
+            GameAnalytics.ShowRewarded(UpgradeLowestTowerRewardId);
         }
 
         private void OnQuestsButtonClicked()

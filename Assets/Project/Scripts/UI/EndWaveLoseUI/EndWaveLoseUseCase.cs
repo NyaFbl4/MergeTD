@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -88,7 +89,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         {
             _isWaitingAdReward = true;
             SubscribeRewardedAdEvents();
-            YG2.RewardedAdvShow(ReviveCurrentWaveAdId);
+            GameAnalytics.ShowRewarded(ReviveCurrentWaveAdId);
         }
 
         private void SubscribeRewardedAdEvents()

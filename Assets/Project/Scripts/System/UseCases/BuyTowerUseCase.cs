@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using MessagePipe;
 using Project.Scripts.Gameplay;
@@ -108,6 +109,7 @@ namespace Project.Scripts.System.UseCases
             ETowerPurchaseCurrency currency,
             int purchaseValue)
         {
+            using var analyticsSource = GameAnalytics.WithSource("tower_purchase");
             if (!_runState.CanEditDefense)
                 return EBuyTowerResult.RunPhaseLocked;
 
@@ -119,7 +121,11 @@ namespace Project.Scripts.System.UseCases
                 ? cost > 0 && _world.Gems >= cost
                 : _playerStats.CanSpend(cost);
             if (!canSpend)
+            {
+                GameAnalytics.Count("resource_shortage", cost, ("action", "tower_buy"),
+                    ("currency", currency.ToString()), ("available", currency == ETowerPurchaseCurrency.Gems ? _world.Gems : _playerStats.Gold));
                 return EBuyTowerResult.NotEnoughGold;
+            }
 
             var towerPrefab = _unitsCatalog.GetTowerPrefabByLevel(level, towerType);
 
@@ -141,6 +147,8 @@ namespace Project.Scripts.System.UseCases
             _publisherBoughtQuestEventDTO.Publish(new TowerBoughtQuestEventDTO(
                 level,
                 purchaseValue));
+            GameAnalytics.Count("tower_buy", cost, ("tower_type", towerType.ToString()),
+                ("level", level), ("currency", currency.ToString()));
             return EBuyTowerResult.Success;
         }
 

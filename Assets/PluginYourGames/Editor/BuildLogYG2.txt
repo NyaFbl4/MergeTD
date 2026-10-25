@@ -1,3 +1,3 @@
-﻿Build path: D:/!RABOTA/PetProject/Builds/MergeTD/17
-Build number: 17
+﻿Build path: C:/Users/lomok/Documents/New project 2/output/yandex-debug-checker/MergeTD
+Build number: 18
 PluginYG version: 2.0092

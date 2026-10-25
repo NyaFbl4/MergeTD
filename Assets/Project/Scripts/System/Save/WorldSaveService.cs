@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using UnityEngine;
 using VContainer.Unity;
@@ -48,6 +49,7 @@ namespace Project.Scripts.System.Save
                     YG2.saves.world = data;
                     YG2.saves.worldJson = string.Empty;
                     QueueCloudSave();
+                    GameAnalytics.Track("save_recovered", ("source", "local_backup"));
                     return true;
                 }
             }
@@ -128,6 +130,7 @@ namespace Project.Scripts.System.Save
             }
             catch
             {
+                GameAnalytics.Count("save_error", 1, ("storage", "world"), ("stage", "deserialize"));
                 data = null;
                 return false;
             }
@@ -135,8 +138,16 @@ namespace Project.Scripts.System.Save
 
         private static void SaveLocal(string json)
         {
-            PlayerPrefs.SetString(SaveKey, json);
-            PlayerPrefs.Save();
+            try
+            {
+                PlayerPrefs.SetString(SaveKey, json);
+                PlayerPrefs.Save();
+            }
+            catch (Exception exception)
+            {
+                GameAnalytics.Count("save_error", 1, ("storage", "local"), ("stage", "write"), ("error_type", exception.GetType().Name));
+                throw;
+            }
         }
 
         private void OnFocusChanged(bool hasFocus)

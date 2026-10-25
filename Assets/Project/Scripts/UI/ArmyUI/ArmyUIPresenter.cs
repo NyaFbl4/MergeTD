@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using MessagePipe;
@@ -202,6 +203,7 @@ namespace Project.Scripts.UI.ArmyUI
 
         public EBuyTowerResult TryBuy(ETowerType towerType, int level)
         {
+            using var analyticsSource = GameAnalytics.WithSource("tower_purchase");
             if (!_unitsCatalog.HasTowerLevel(level, towerType))
                 return EBuyTowerResult.ConfigError;
 
@@ -220,6 +222,7 @@ namespace Project.Scripts.UI.ArmyUI
             var purchaseValue = TowerEconomy.GetTierGoldValue(level);
             _world.SetTower(targetSlotId, level, towerType, purchaseValue);
             _towerBoughtPublisher.Publish(new TowerBoughtQuestEventDTO(level, purchaseValue));
+            GameAnalytics.Count("tower_buy", cost, ("tower_type", towerType.ToString()), ("level", level), ("currency", currency.ToString()));
             return EBuyTowerResult.Success;
         }
 
@@ -231,6 +234,7 @@ namespace Project.Scripts.UI.ArmyUI
 
         public bool TrySellTower(string slotId)
         {
+            using var analyticsSource = GameAnalytics.WithSource("tower_sale");
             if (!TowerSlotGrid.IsValidSlotId(slotId))
                 return false;
 
@@ -285,11 +289,13 @@ namespace Project.Scripts.UI.ArmyUI
                 TowerEconomy.CombinePurchaseCosts(
                     sourceTower.purchaseCost,
                     targetTower.purchaseCost));
+            GameAnalytics.Count("tower_merge", 1, ("tower_type", sourceTower.towerType.ToString()), ("level", nextLevel));
             return true;
         }
 
         private EBuyTowerResult TryBuyForGold(ETowerType towerType, int towerLevel, int cost)
         {
+            using var analyticsSource = GameAnalytics.WithSource("tower_purchase");
             if (!_unitsCatalog.HasTowerLevel(towerLevel, towerType))
                 return EBuyTowerResult.ConfigError;
 
@@ -302,6 +308,7 @@ namespace Project.Scripts.UI.ArmyUI
 
             _world.SetTower(targetSlotId, towerLevel, towerType, cost);
             _towerBoughtPublisher.Publish(new TowerBoughtQuestEventDTO(towerLevel, cost));
+            GameAnalytics.Count("tower_buy", cost, ("tower_type", towerType.ToString()), ("level", towerLevel), ("currency", "Gold"));
             return EBuyTowerResult.Success;
         }
 

@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Configs;
@@ -148,6 +149,7 @@ namespace Project.Scripts.Gameplay.Systems
                 return;
             }
 
+            GameAnalytics.Count("spell_used", _config.ManaCost, ("spell_id", _config.SpellId));
             _isTargeting = false;
             _waitForPointerRelease = false;
             _targetingPreviewObject.SetActive(false);

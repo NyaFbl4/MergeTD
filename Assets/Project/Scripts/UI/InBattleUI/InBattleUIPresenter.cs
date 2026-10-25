@@ -1,3 +1,4 @@
+using Project.Scripts.System.Analytics;
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -194,7 +195,7 @@ namespace Project.Scripts.UI.InBattleUI
             _isWaitingDailyRewardAd = true;
             _view.SetDailyRewardOfferButtonsEnabled(false);
             SubscribeRewardedAdEvents();
-            YG2.RewardedAdvShow(DailyRewardAdId);
+            GameAnalytics.ShowRewarded(DailyRewardAdId);
         }
 
         private void OnDailyQuestClaimClicked(IQuestRuntime quest)
