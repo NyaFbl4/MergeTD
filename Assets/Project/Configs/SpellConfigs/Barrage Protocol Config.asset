@@ -18,9 +18,12 @@ MonoBehaviour:
   _icon: {fileID: -7794484074879603317, guid: a9d82559243660d4d9a81cf70f3fc85a, type: 3}
   _background: {fileID: 4977526221841929852, guid: 83fc82f110364614fbec332a148a404a, type: 3}
   _unlockType: 3
-  _unlockGoldPrice: 10000
   _unlockGemPrice: 0
-  _paymentProductId:
+  _paymentProductId: 
+  _unlockGoldPrice: 10000
+  _unlockRunId: 
+  _unlockLocationNumber: 1
+  _unlockOfferId: 
   _cooldown: 25
   _manaCost: 6
   _vfxPrefab: {fileID: 0}
@@ -39,3 +42,4 @@ MonoBehaviour:
     _description: spell.barrage_protocol.upgrade_4.description
   _attackSpeedMultiplier: 1.5
   _duration: 8
+  _buffIcon: {fileID: 21300000, guid: 706bc5acdf165194bbd8323161db5aa1, type: 3}

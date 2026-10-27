@@ -275,7 +275,6 @@ namespace Project.Scripts.UI.MainMenuUI
             }
 
             _layoutView.SetPlayerEnergy(state.Current, state.Max, countdown);
-            _layoutView.InBattleView.SetPlayButtonEnabled(state.Current > 0);
         }
 
         private void OnSectionClicked(MainMenuSection section)

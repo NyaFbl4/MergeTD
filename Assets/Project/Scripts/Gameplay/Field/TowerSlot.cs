@@ -48,7 +48,7 @@ namespace Project.Scripts.Gameplay.Field
         public void SetUnlockAvailable(bool available)
         {
             if (_slotType == ETowerSlotType.Locked)
-                _lockIndicator.color = available ? new Color(1f, 0.85f, 0.4f) : new Color(0.65f, 0.6f, 0.75f);
+                _lockIndicator.color = new Color(0.65f, 0.6f, 0.75f);
         }
 
         public bool IsOccupied => _currentTower != null;

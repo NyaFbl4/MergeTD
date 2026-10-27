@@ -1,13 +1,13 @@
 {
-    "idSave": 1184,
+    "idSave": 1355,
     "world": {
         "version": 2,
-        "gold": 2275,
+        "gold": 475,
         "gems": 0,
         "playerEnergy": {
             "version": 1,
-            "current": 6,
-            "nextRestoreUnixMilliseconds": 1791196248389
+            "current": 998,
+            "nextRestoreUnixMilliseconds": 0
         },
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 0,
@@ -21,7 +21,12 @@
         "towerAttackSpeedBonus": 0.0,
         "towerCritChanceBonus": 0.0,
         "towerCritDamageBonus": 0.0,
-        "upgrades": [],
+        "upgrades": [
+            {
+                "id": "start-energy",
+                "level": 3
+            }
+        ],
         "towers": [
             {
                 "slotId": "11",
@@ -31,9 +36,9 @@
             },
             {
                 "slotId": "12",
-                "towerLevel": 1,
+                "towerLevel": 2,
                 "towerType": 0,
-                "purchaseCost": 100
+                "purchaseCost": 200
             },
             {
                 "slotId": "13",
@@ -43,9 +48,9 @@
             },
             {
                 "slotId": "14",
-                "towerLevel": 1,
+                "towerLevel": 2,
                 "towerType": 0,
-                "purchaseCost": 100
+                "purchaseCost": 200
             },
             {
                 "slotId": "15",
@@ -55,9 +60,33 @@
             },
             {
                 "slotId": "21",
-                "towerLevel": 1,
-                "towerType": 0,
-                "purchaseCost": 100
+                "towerLevel": 2,
+                "towerType": 1,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "22",
+                "towerLevel": 2,
+                "towerType": 1,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "23",
+                "towerLevel": 2,
+                "towerType": 1,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "24",
+                "towerLevel": 2,
+                "towerType": 1,
+                "purchaseCost": 200
+            },
+            {
+                "slotId": "25",
+                "towerLevel": 2,
+                "towerType": 1,
+                "purchaseCost": 200
             }
         ],
         "towerSlots": [
@@ -134,21 +163,53 @@
                 "isUnlocked": true,
                 "level": 1,
                 "keepUnlockedOnReset": false
+            },
+            {
+                "spellId": "base_repair",
+                "isUnlocked": true,
+                "level": 1,
+                "keepUnlockedOnReset": false
+            },
+            {
+                "spellId": "barrage_protocol",
+                "isUnlocked": true,
+                "level": 1,
+                "keepUnlockedOnReset": false
+            },
+            {
+                "spellId": "emp_pulse",
+                "isUnlocked": true,
+                "level": 1,
+                "keepUnlockedOnReset": false
+            },
+            {
+                "spellId": "orbital_railgun",
+                "isUnlocked": true,
+                "level": 1,
+                "keepUnlockedOnReset": false
+            },
+            {
+                "spellId": "gravity_trap",
+                "isUnlocked": true,
+                "level": 1,
+                "keepUnlockedOnReset": false
             }
         ],
         "spellProgressionVersion": 1,
         "completedRunIds": [
-            "default-run-1"
+            "default-run-1",
+            "default-run-2"
         ],
         "activeSpellIds": [
-            "weapon_barrage",
+            "emp_pulse",
+            "gravity_trap",
             "cryo_discharge"
         ],
         "shopOffers": [],
         "dailyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 6,
+                "currentValue": 10,
                 "targetValue": 10,
                 "rewardGold": 100,
                 "rewardGems": 0,
@@ -166,7 +227,7 @@
         "weeklyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 6,
+                "currentValue": 15,
                 "targetValue": 70,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -184,7 +245,7 @@
         "achievementQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 6,
+                "currentValue": 15,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -192,7 +253,7 @@
             },
             {
                 "id": "DealDamageQuest",
-                "currentValue": 112180,
+                "currentValue": 125000,
                 "targetValue": 125000,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -200,7 +261,7 @@
             },
             {
                 "id": "KillEnemyQuest",
-                "currentValue": 231,
+                "currentValue": 473,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -208,7 +269,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 9,
+                "currentValue": 14,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,

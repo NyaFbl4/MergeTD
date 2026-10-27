@@ -22,6 +22,7 @@ namespace Project.Scripts.UI.InBattleUI
         void SetRun(string displayName, Sprite icon, bool canNavigate);
         void SetRunAccess(bool isUnlocked, string playButtonText);
         void SetPlayButtonEnabled(bool enabled);
+        void ShowEnergyNotice(string message);
         void SetDailyRewards(
             IReadOnlyList<DailyRewardEntry> rewards,
             DailyRewardState state,

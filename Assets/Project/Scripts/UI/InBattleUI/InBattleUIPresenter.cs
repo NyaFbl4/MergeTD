@@ -145,12 +145,28 @@ namespace Project.Scripts.UI.InBattleUI
 
         private void OnPlayClicked()
         {
-            if (_isStartingRun || !_runSelection.IsSelectedRunUnlocked)
+            if (_isStartingRun)
                 return;
+
+            if (!_runSelection.IsSelectedRunUnlocked)
+            {
+                _audioManager.PlaySound(ESoundId.UiButtonClick);
+                _runSelection.SelectPrevious();
+                return;
+            }
 
             if (!_playerEnergy.TrySpendForRun())
             {
-                _view.SetPlayButtonEnabled(false);
+                _audioManager.PlaySound(ESoundId.UiButtonClick);
+                var state = _playerEnergy.GetState();
+                var message = _localizationService.Get(LocalizationKeys.RunEnergyEmpty);
+                if (state.IsTimeAvailable)
+                {
+                    var seconds = (long)Math.Ceiling(state.TimeUntilNextRestore.TotalSeconds);
+                    var countdown = $"{seconds / 3600:00}:{seconds % 3600 / 60:00}:{seconds % 60:00}";
+                    message = _localizationService.Format(LocalizationKeys.RunEnergyEmptyFormat, countdown);
+                }
+                _view.ShowEnergyNotice(message);
                 return;
             }
 
@@ -291,7 +307,7 @@ namespace Project.Scripts.UI.InBattleUI
                     LocalizationKeys.RunLockedFormat,
                     _localizationService.Get(_runSelection.PreviousRun.DisplayName));
             _view.SetRunAccess(isUnlocked, playButtonText);
-            _view.SetPlayButtonEnabled(!_isStartingRun && _playerEnergy.GetState().Current > 0);
+            _view.SetPlayButtonEnabled(!_isStartingRun);
         }
 
         private void RefreshDailyRewards()

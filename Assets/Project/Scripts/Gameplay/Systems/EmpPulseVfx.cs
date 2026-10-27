@@ -73,83 +73,86 @@ namespace Project.Scripts.Gameplay.Systems
 
     internal sealed class EmpStunVfx : MonoBehaviour
     {
-        private const int CircleSegments = 28;
-        private const float RingRadius = 0.58f;
+        private const float StunTintStrength = 0.6f;
+        private const float FadeDuration = 0.5f;
 
-        private LineRenderer _ring;
-        private SpellStatusIconVfx _statusIcon;
-        private Material _material;
+        private SpriteRenderer[] _targetRenderers;
+        private Color[] _originalColors;
         private float _duration;
         private float _elapsed;
 
-        public static void Play(Transform target, float duration, Sprite icon)
+        public static void Play(Transform target, float duration)
         {
             var effectObject = new GameObject("EMP Stun Effect")
             {
                 hideFlags = HideFlags.DontSave
             };
             effectObject.transform.SetParent(target, false);
-            effectObject.AddComponent<EmpStunVfx>().Initialize(duration, icon);
+            effectObject.AddComponent<EmpStunVfx>().Initialize(duration);
         }
 
-        private void Initialize(float duration, Sprite icon)
+        private void Initialize(float duration)
         {
             _duration = duration;
-            _material = new Material(Shader.Find("Sprites/Default"))
-            {
-                name = "EMP Stun Effect Material"
-            };
-
-            _ring = gameObject.AddComponent<LineRenderer>();
-            _ring.sharedMaterial = _material;
-            _ring.useWorldSpace = false;
-            _ring.loop = true;
-            _ring.positionCount = CircleSegments;
-            _ring.startWidth = 0.06f;
-            _ring.endWidth = 0.06f;
-            _ring.sortingOrder = 516;
-
-            for (var i = 0; i < CircleSegments; i++)
-            {
-                var angle = Mathf.PI * 2f * i / CircleSegments;
-                var distortion = i % 2 == 0 ? 1f : 0.78f;
-                _ring.SetPosition(i, new Vector3(
-                    Mathf.Cos(angle) * RingRadius * distortion,
-                    Mathf.Sin(angle) * RingRadius * distortion,
-                    0f));
-            }
-
-            _statusIcon = SpellStatusIconVfx.Create(
-                transform,
-                icon,
-                new Color(0.75f, 0.65f, 1f, 1f),
-                new Vector3(0f, 0.95f, 0f),
-                0.3f,
-                9f,
-                0.06f);
+            CacheTargetRenderers();
+            ApplyStunTint(StunTintStrength);
         }
 
         private void Update()
         {
             _elapsed += Time.deltaTime;
-            transform.Rotate(0f, 0f, 150f * Time.deltaTime);
 
-            var pulse = 1f + Mathf.Sin(_elapsed * 11f) * 0.12f;
-            transform.localScale = new Vector3(pulse, pulse, 1f);
-
-            var fade = Mathf.Clamp01((_duration - _elapsed) / 0.35f);
-            var color = new Color(0.45f, 0.75f, 1f, fade);
-            _ring.startColor = color;
-            _ring.endColor = new Color(0.75f, 0.35f, 1f, fade);
-            _statusIcon.SetOpacity(fade);
+            var fade = Mathf.Clamp01((_duration - _elapsed) / FadeDuration);
+            ApplyStunTint(StunTintStrength * fade);
 
             if (_elapsed >= _duration)
                 Destroy(gameObject);
         }
 
+        private void CacheTargetRenderers()
+        {
+            var renderers = transform.parent.GetComponentsInChildren<SpriteRenderer>(true);
+            var targetCount = 0;
+
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i].GetComponent<SpellStatusIconVfx>() == null)
+                    targetCount++;
+            }
+
+            _targetRenderers = new SpriteRenderer[targetCount];
+            _originalColors = new Color[targetCount];
+
+            var targetIndex = 0;
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                var renderer = renderers[i];
+                if (renderer.GetComponent<SpellStatusIconVfx>() != null)
+                    continue;
+
+                _targetRenderers[targetIndex] = renderer;
+                _originalColors[targetIndex] = renderer.color;
+                targetIndex++;
+            }
+        }
+
+        private void ApplyStunTint(float strength)
+        {
+            for (var i = 0; i < _targetRenderers.Length; i++)
+            {
+                var renderer = _targetRenderers[i];
+                if (renderer == null)
+                    continue;
+
+                var originalColor = _originalColors[i];
+                var stunColor = new Color(0.75f, 0.35f, 1f, originalColor.a);
+                renderer.color = Color.Lerp(originalColor, stunColor, strength);
+            }
+        }
+
         private void OnDestroy()
         {
-            Destroy(_material);
+            ApplyStunTint(0f);
         }
     }
 }

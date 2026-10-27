@@ -58,16 +58,15 @@ namespace Project.Scripts.UI.SpellsUI
             _nameLabel.text = localizationService.Get(spell.DisplayName);
             _descriptionLabel.text = localizationService.Get(spell.Description);
             _levelLabel.text = !spell.IsUnlocked
-                ? localizationService.Get(LocalizationKeys.SpellsLocked)
+                ? string.Empty
                 : localizationService.Format(
                 LocalizationKeys.SpellsLevelFormat,
                 spell.Level);
-            _cooldownLabel.text = !spell.IsUnlocked
-                ? SpellUnlockText.Get(spell, localizationService)
-                : localizationService.Format(
+            _cooldownLabel.text = localizationService.Format(
                 LocalizationKeys.SpellsCooldownFormat,
                 spell.Cooldown,
                 spell.ManaCost);
+            _levelLabel.style.display = spell.IsUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
 
             if (_icon != null)
             {

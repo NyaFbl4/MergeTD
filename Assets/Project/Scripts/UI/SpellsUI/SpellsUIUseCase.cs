@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Project.Scripts.Configs;
 using Project.Scripts.System.Save;
 using Project.Scripts.Gameplay.Run;
@@ -89,7 +90,7 @@ namespace Project.Scripts.UI.SpellsUI
                     !unlocked && _progression.CanUnlock(config.SpellId)));
             }
 
-            return result;
+            return result.OrderByDescending(spell => spell.IsUnlocked).ToList();
         }
 
         public bool ToggleSelection(string spellId)

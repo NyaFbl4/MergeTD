@@ -19,7 +19,11 @@ MonoBehaviour:
   _background: {fileID: 4977526221841929852, guid: 83fc82f110364614fbec332a148a404a, type: 3}
   _unlockType: 1
   _unlockGemPrice: 150
-  _paymentProductId:
+  _paymentProductId: 
+  _unlockGoldPrice: 0
+  _unlockRunId: 
+  _unlockLocationNumber: 1
+  _unlockOfferId: 
   _cooldown: 20
   _manaCost: 5
   _vfxPrefab: {fileID: 1814315751473787963, guid: e9459def1a517a24ba482f9e639df7ff, type: 3}
@@ -36,7 +40,7 @@ MonoBehaviour:
   - _level: 4
     _title: spell.emp_pulse.upgrade_4.title
     _description: spell.emp_pulse.upgrade_4.description
-  _radius: 2.5
+  _radius: 1.5
   _stunDuration: 3
   _enemyLayer:
     serializedVersion: 2

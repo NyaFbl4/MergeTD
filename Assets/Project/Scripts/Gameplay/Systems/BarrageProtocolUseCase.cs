@@ -133,7 +133,7 @@ namespace Project.Scripts.Gameplay.Systems
                     _activeEffects.Add(BarrageProtocolVfx.Play(
                         tower.transform,
                         _config.Duration,
-                        _config.Icon).gameObject);
+                        _config.BuffIcon).gameObject);
             }
         }
 

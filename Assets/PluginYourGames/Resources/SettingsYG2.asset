@@ -208,7 +208,7 @@ MonoBehaviour:
     loadSceneIfSDKLate: 1
     loadSceneIndex: 1
     initDelaySimulation: 0
-    buildNumber: 15
+    buildNumber: 20
   Simulation:
     device: 0
     language: ru
@@ -219,14 +219,14 @@ MonoBehaviour:
     testFailAds: 0
     pauseOnFocusGame: 0
   Templates:
-    logoImageFormat: 0
-    backgroundImgFormat: 0
+    logoImageFormat: 1
+    backgroundImgFormat: 2
     gradientBackgroundByLoadGame:
       radial: 0
       angleInclination: 140
       color1: {r: 1, g: 0.831, b: 0.149, a: 1}
       color2: {r: 0.36, g: 0.09, b: 1, a: 1}
-    customProgressBar: 1
+    customProgressBar: 0
     progressBarSettigs:
       round: 1
       roundAngle: 10
@@ -234,10 +234,10 @@ MonoBehaviour:
       height: 24
       color1: {r: 0.25, g: 0.6392, b: 1, a: 1}
       color2: {r: 1, g: 0.831, b: 0.149, a: 0.7}
-    fixedAspectRatio: 1
+    fixedAspectRatio: 0
     aspectRatio: 9/16
     disableForMobile: 0
-    fillBackground: 1
+    fillBackground: 0
     imageBackground: 1
     imageName: yandex_games_background_framed.png
     gradientBackgroundByAspectRatio:

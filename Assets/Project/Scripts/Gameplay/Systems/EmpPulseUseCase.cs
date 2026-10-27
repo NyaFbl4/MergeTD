@@ -174,7 +174,7 @@ namespace Project.Scripts.Gameplay.Systems
                     continue;
 
                 if (enemy.TryApplyStun(_config.StunDuration))
-                    EmpStunVfx.Play(enemy.transform, _config.StunDuration, _config.Icon);
+                    EmpStunVfx.Play(enemy.transform, _config.StunDuration);
             }
         }
 

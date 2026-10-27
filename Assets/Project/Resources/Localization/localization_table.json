@@ -1,6 +1,8 @@
 {
   "defaultLanguage": "ru",
   "entries": [
+    { "key": "run.energy_empty", "ru": "Недостаточно энергии.", "en": "Not enough energy." },
+    { "key": "run.energy_empty_format", "ru": "Недостаточно энергии. +1 через {0}", "en": "Not enough energy. +1 in {0}" },
     {"key": "slots.title", "ru": "Расширение базы", "en": "Expand base"},
     {"key": "slots.ordinal", "ru": "Дополнительный слот {0} из {1}", "en": "Extra slot {0} of {1}"},
     {"key": "slots.description", "ru": "Место для башни или генератора. Сохраняется между забегами.", "en": "Space for a tower or generator. Stays unlocked between runs."},
@@ -278,7 +280,7 @@
         },
         {
           "key": "quest.done",
-          "ru": "Готово",
+          "ru": "Собрано",
           "en": "Done"
         },
         {

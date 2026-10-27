@@ -28,6 +28,8 @@ namespace Project.Scripts.UI.InBattleUI
         private readonly Button _previousRunButton;
         private readonly Button _nextRunButton;
         private readonly Button _playButton;
+        private readonly Label _energyNoticeLabel;
+        private readonly IVisualElementScheduledItem _hideEnergyNotice;
         private readonly Button _dailyRewardButton;
         private readonly Button _normalRewardButton;
         private readonly Button _doubleRewardButton;
@@ -38,7 +40,6 @@ namespace Project.Scripts.UI.InBattleUI
         private readonly VisualElement _lockIcon;
         private readonly StyleLength _playButtonFontSize;
         private readonly StyleEnum<WhiteSpace> _playButtonWhiteSpace;
-        private bool _isRunUnlocked;
         private bool _isPlayButtonEnabled;
         private readonly VisualElement _offerOverlay;
         private readonly VisualElement _offerIcon;
@@ -73,6 +74,9 @@ namespace Project.Scripts.UI.InBattleUI
             _previousRunButton = Require<Button>("PrevLevelButton");
             _nextRunButton = Require<Button>("NextLevelButton");
             _playButton = Require<Button>("PlayButton");
+            _energyNoticeLabel = Require<Label>("EnergyNoticeLabel");
+            _hideEnergyNotice = _energyNoticeLabel.schedule.Execute(HideEnergyNotice);
+            _hideEnergyNotice.Pause();
             _playButtonFontSize = _playButton.style.fontSize;
             _playButtonWhiteSpace = _playButton.style.whiteSpace;
             _dailyRewardButton = Require<Button>("DailyRewardClaimButton");
@@ -137,23 +141,36 @@ namespace Project.Scripts.UI.InBattleUI
         public void SetPlayButtonEnabled(bool enabled)
         {
             _isPlayButtonEnabled = enabled;
-            _playButton.SetEnabled(enabled && _isRunUnlocked);
+            _playButton.SetEnabled(enabled);
+        }
+
+        public void ShowEnergyNotice(string message)
+        {
+            _energyNoticeLabel.text = message;
+            _energyNoticeLabel.style.display = DisplayStyle.Flex;
+            _hideEnergyNotice.ExecuteLater(3000);
+        }
+
+        private void HideEnergyNotice()
+        {
+            _hideEnergyNotice.Pause();
+            _energyNoticeLabel.style.display = DisplayStyle.None;
         }
 
         public void SetRunAccess(bool isUnlocked, string playButtonText)
         {
-            _isRunUnlocked = isUnlocked;
             _lockIcon.style.display = isUnlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _playButton.text = playButtonText;
             _playButton.style.fontSize = isUnlocked ? _playButtonFontSize : new StyleLength(24f);
             _playButton.style.whiteSpace = isUnlocked
                 ? _playButtonWhiteSpace
                 : new StyleEnum<WhiteSpace>(WhiteSpace.Normal);
-            _playButton.SetEnabled(_isPlayButtonEnabled && isUnlocked);
+            _playButton.SetEnabled(_isPlayButtonEnabled);
         }
 
         public void SetRun(string displayName, Sprite icon, bool canNavigate)
         {
+            HideEnergyNotice();
             _levelNameLabel.text = displayName;
             _runIcon.style.backgroundImage = icon == null
                 ? new StyleBackground(StyleKeyword.None)
@@ -271,11 +288,14 @@ namespace Project.Scripts.UI.InBattleUI
 
         public void SetVisible(bool visible)
         {
+            if (!visible)
+                HideEnergyNotice();
             _root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         public void Dispose()
         {
+            HideEnergyNotice();
             _pulseVersion++;
             _previousRunButton.clicked -= OnPreviousRunClicked;
             _nextRunButton.clicked -= OnNextRunClicked;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -40,11 +40,14 @@
     </div>
     <div id="loading-cover" style="display:none;">
         <div id="unity-loading-bar">
-            <div id="unity-logo"><img src="Images/logo.png"></div>
-            <div id="unity-progress-bar-empty" style="display: none;">
+            <div id="unity-logo"><img src="Images/logo.png" alt="Merge Shooter" width="1038" height="490"></div>
+            <img class="spinner" src="Images/Loading_Rotate.png" width="56" height="56" alt="" aria-hidden="true">
+            <div id="unity-progress-bar-empty" role="progressbar" aria-label="Загрузка игры" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                 <div id="unity-progress-bar-full"></div>
             </div>
-            <div class="spinner"></div>
+            <div id="loading-details">
+                <span id="loading-status" role="status" aria-live="polite">Загрузка игры…</span>
+            </div>
         </div>
     </div>
 
@@ -76,6 +79,21 @@
         const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
         const progressBarFull = document.querySelector("#unity-progress-bar-full");
         const spinner = document.querySelector('.spinner');
+        const loadingStatus = document.querySelector('#loading-status');
+        let displayedLoadingProgress = 0;
+        let loadingFailed = false;
+
+        function SetLoadingProgress(percent) {
+            displayedLoadingProgress = Math.max(displayedLoadingProgress, Math.min(100, Math.max(0, Math.floor(percent))));
+            progressBarFull.style.width = displayedLoadingProgress + '%';
+            progressBarEmpty.setAttribute('aria-valuenow', displayedLoadingProgress);
+        }
+
+        function ShowLoadingError() {
+            loadingFailed = true;
+            loadingStatus.textContent = 'Не удалось загрузить игру. Обновите страницу.';
+            spinner.style.display = 'none';
+        }
 
         const canFullscreen = (function () {
             for (const key of [
@@ -218,16 +236,20 @@
         script.onload = () => {
             StartUnityInstance = function () {
                 createUnityInstance(canvas, config, (progress) => {
-                    spinner.style.display = "none";
-                    progressBarEmpty.style.display = "";
-                    const adjustedProgress = Math.max(progress, 0.05);
-                    progressBarFull.style.width = `${100 * adjustedProgress}%`;
+                    // Reserve the final step for SDK, saves and the first game frame.
+                    SetLoadingProgress(progress * 95);
                 }).then((unityInstance) => {
                     ygGameInstance = unityInstance;
+                    SetLoadingProgress(95);
+                    if (!loadingFailed) {
+                        loadingStatus.textContent = 'Подготовка игры…';
+                        spinner.style.display = '';
+                    }
                     SendInitSDKComplete();
 
                     HideLoadingCoverWhenReady();
                 }).catch((message) => {
+                    ShowLoadingError();
                     console.error(message);
                 });
             };
@@ -237,6 +259,11 @@
             
             if (IsLocalHost() || syncInit)
                 StartUnityInstance_IfUnloaded();
+        };
+
+        script.onerror = () => {
+            ShowLoadingError();
+            console.error('Unity loader failed to load.');
         };
 
         function StartUnityInstance_IfUnloaded() {
@@ -252,6 +279,9 @@
                 return;
 
             loadingCoverHidePending = true;
+            SetLoadingProgress(100);
+            loadingStatus.textContent = 'Готово';
+            spinner.style.display = 'none';
             // Allow the gameplay scene to start and render after the SDK handshake.
             requestAnimationFrame(() => requestAnimationFrame(() => {
                 loadingCoverHidden = true;
@@ -368,6 +398,7 @@
                 LogStyledMessage('Init YandexSDK Success');
 
             } catch (e) {
+                ShowLoadingError();
                 console.error('CRASH Initialization SDK: ', e);
             }
 

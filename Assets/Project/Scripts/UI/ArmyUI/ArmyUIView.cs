@@ -154,7 +154,7 @@ namespace Project.Scripts.UI.ArmyUI
         {
             _towerSlots[slotIndex].tooltip = tooltip;
             _lockImages[slotIndex].style.unityBackgroundImageTintColor =
-                isNext ? new Color(1f, 0.85f, 0.4f) : new Color(0.65f, 0.6f, 0.75f);
+                new Color(0.65f, 0.6f, 0.75f);
         }
 
         public void SetPurchaseInfo(int towerLevel, int towerPrice, int generatorPrice)

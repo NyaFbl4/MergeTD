@@ -22,34 +22,34 @@ MonoBehaviour:
     _waveConfig: {fileID: 11400000, guid: 5f1830fd70f4494ab3541c6befa9156c, type: 2}
     _rewards:
     - _type: 0
-      _amount: 158
+      _amount: 94
     _isBossWave: 0
     _phaseAfterComplete: 2
   - _displayName: 
     _waveConfig: {fileID: 11400000, guid: c701691084d549298cf303d4ccd21636, type: 2}
     _rewards:
     - _type: 0
-      _amount: 177
+      _amount: 106
     _isBossWave: 0
     _phaseAfterComplete: 2
   - _displayName: 
     _waveConfig: {fileID: 11400000, guid: 29d7aeb4becf4bd2b06fc31301524d89, type: 2}
     _rewards:
     - _type: 0
-      _amount: 197
+      _amount: 118
     _isBossWave: 0
     _phaseAfterComplete: 3
   - _displayName: 
     _waveConfig: {fileID: 11400000, guid: bccfa3e8b85744db93f6f851e8486880, type: 2}
     _rewards:
     - _type: 0
-      _amount: 218
+      _amount: 130
     _isBossWave: 0
     _phaseAfterComplete: 2
   - _displayName: 
     _waveConfig: {fileID: 11400000, guid: 33ea78b15d1747509f4617464e51a1d3, type: 2}
     _rewards:
     - _type: 0
-      _amount: 250
+      _amount: 152
     _isBossWave: 1
     _phaseAfterComplete: 4

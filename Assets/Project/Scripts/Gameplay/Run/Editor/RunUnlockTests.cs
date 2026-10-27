@@ -3,6 +3,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Project.Scripts.GameManager;
 using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.System.Audio;
 using Project.Scripts.System.Localization;
 using Project.Scripts.System.Reward;
 using Project.Scripts.System.Save;
@@ -132,7 +133,7 @@ namespace Project.Scripts.Gameplay.Run.Editor
         }
 
         [Test]
-        public void EnergyRefresh_CannotEnableLockedPlayButton()
+        public void RequiredRunButton_CanBeEnabledWhileLockRemainsVisible()
         {
             var root = LoadView(out var view);
             using (view)
@@ -140,7 +141,7 @@ namespace Project.Scripts.Gameplay.Run.Editor
                 var originalFontSize = root.Q<Button>("PlayButton").style.fontSize;
                 view.SetRunAccess(false, "Нужно пройти Старый кордон");
                 view.SetPlayButtonEnabled(true);
-                Assert.That(root.Q<Button>("PlayButton").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("PlayButton").enabledSelf, Is.True);
                 Assert.That(root.Q("LockIcon").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 view.SetRunAccess(true, "В бой");
                 Assert.That(root.Q("LockIcon").style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -161,7 +162,7 @@ namespace Project.Scripts.Gameplay.Run.Editor
                 presenter.OnMenuShown();
                 var button = root.Q<Button>("PlayButton");
                 Assert.That(button.text, Is.EqualTo("Нужно пройти " + _catalog.Runs[0].DisplayName));
-                Assert.That(button.enabledSelf, Is.False);
+                Assert.That(button.enabledSelf, Is.True);
                 _world.TryCompleteRun(_catalog.Runs[0].Id, Array.Empty<string>());
                 presenter.OnMenuShown();
                 Assert.That(button.enabledSelf, Is.True);
@@ -170,22 +171,79 @@ namespace Project.Scripts.Gameplay.Run.Editor
             }
         }
 
-        [Test]
-        public void LockedPlayAttempt_DoesNotSpendEnergyOrStartGame()
+        [TestCase(0)]
+        [TestCase(5)]
+        public void LockedPlayAttempt_SelectsRequiredRunWithoutSpendingEnergyOrStartingGame(int energy)
         {
             _selection.SelectNext();
+            var requiredRun = _selection.PreviousRun;
+            _world.SavePlayerEnergy(energy, 1_700_000_000_000 + PlayerEnergyService.RestoreIntervalMilliseconds);
             var root = LoadView(out var view);
             using (view)
             {
                 var presenter = CreatePresenter(view);
                 presenter.OnMenuShown();
+                Assert.That(root.Q<Button>("PlayButton").enabledSelf, Is.True);
                 var energyBefore = _world.PlayerEnergy;
                 var completedBefore = _world.CompletedRunIds.Count;
                 typeof(InBattleUIPresenter).GetMethod("OnPlayClicked", BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(presenter, null);
                 Assert.That(_world.PlayerEnergy, Is.EqualTo(energyBefore));
                 Assert.That(_world.CompletedRunIds.Count, Is.EqualTo(completedBefore));
-                Assert.That(root.Q<Button>("PlayButton").enabledSelf, Is.False);
+                Assert.That(_selection.SelectedRun, Is.SameAs(requiredRun));
+                presenter.OnMenuShown();
+                Assert.That(root.Q("LockIcon").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Button>("PlayButton").enabledSelf, Is.True);
+            }
+        }
+
+        [Test]
+        public void LockedPlayAttempt_SelectsNamedPreviousRunEvenWhenItIsAlsoLocked()
+        {
+            _selection.SelectPrevious();
+            var requiredRun = _selection.PreviousRun;
+            var root = LoadView(out var view);
+            using (view)
+            {
+                var presenter = CreatePresenter(view);
+                presenter.OnMenuShown();
+                Assert.That(root.Q<Button>("PlayButton").text,
+                    Is.EqualTo("Нужно пройти " + requiredRun.DisplayName));
+                var energyBefore = _world.PlayerEnergy;
+                typeof(InBattleUIPresenter).GetMethod("OnPlayClicked", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(presenter, null);
+                Assert.That(_selection.SelectedRun, Is.SameAs(requiredRun));
+                Assert.That(_selection.IsSelectedRunUnlocked, Is.False);
+                Assert.That(_world.PlayerEnergy, Is.EqualTo(energyBefore));
+            }
+        }
+
+        [Test]
+        public void UnlockedPlayAttempt_WithNoEnergyShowsNoticeAndRemainsClickableWithoutStartingGame()
+        {
+            _world.SavePlayerEnergy(0, 1_700_000_000_000 + PlayerEnergyService.RestoreIntervalMilliseconds);
+            var root = LoadView(out var view);
+            using (view)
+            {
+                var clock = new TimeProvider();
+                var presenter = CreatePresenter(view, clock);
+                presenter.OnMenuShown();
+                Assert.That(root.Q<Button>("PlayButton").enabledSelf, Is.True);
+                typeof(InBattleUIPresenter).GetMethod("OnPlayClicked", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(presenter, null);
+                var notice = root.Q<Label>("EnergyNoticeLabel");
+                Assert.That(notice.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(notice.text, Is.EqualTo("Недостаточно энергии. +1 через 01:00:00"));
+                clock.Now += 60_000;
+                typeof(InBattleUIPresenter).GetMethod("OnPlayClicked", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(presenter, null);
+                Assert.That(notice.text, Is.EqualTo("Недостаточно энергии. +1 через 00:59:00"));
+                Assert.That(root.Query<Label>("EnergyNoticeLabel").ToList().Count, Is.EqualTo(1));
+                Assert.That(root.Q<Button>("PlayButton").enabledSelf, Is.True);
+                Assert.That(_selection.SelectedIndex, Is.Zero);
+                Assert.That(_world.PlayerEnergy, Is.Zero);
+                presenter.OnMenuShown();
+                Assert.That(notice.style.display.value, Is.EqualTo(DisplayStyle.None));
             }
         }
 
@@ -219,10 +277,10 @@ namespace Project.Scripts.Gameplay.Run.Editor
             }
         }
 
-        private InBattleUIPresenter CreatePresenter(InBattleUIView view)
+        private InBattleUIPresenter CreatePresenter(InBattleUIView view, TimeProvider clock = null)
         {
             return new InBattleUIPresenter(view, _selection, null, null, null, null, null,
-                new Localization(), null, new PlayerEnergyService(_world, new TimeProvider()));
+                new Localization(), new AudioManager(), new PlayerEnergyService(_world, clock ?? new TimeProvider()));
         }
 
         private static VisualElement LoadView(out InBattleUIView view)
@@ -242,6 +300,17 @@ namespace Project.Scripts.Gameplay.Run.Editor
                 PlayerPrefs.DeleteKey(key);
         }
 
+        private sealed class AudioManager : IAudioManager
+        {
+            public bool IsMusicEnabled => false;
+            public bool IsSoundEnabled => false;
+            public void PlaySound(ESoundId soundId) { }
+            public void PlayMusic() { }
+            public void StopMusic() { }
+            public void SetMusicEnabled(bool enabled) { }
+            public void SetSoundEnabled(bool enabled) { }
+        }
+
         private sealed class StartListener : IGameStartListener
         {
             public int StartCalls { get; private set; }
@@ -250,9 +319,11 @@ namespace Project.Scripts.Gameplay.Run.Editor
 
         private sealed class TimeProvider : IDailyRewardTimeProvider
         {
+            public long Now = 1_700_000_000_000;
+
             public bool TryGetCurrentUnixMilliseconds(out long unixMilliseconds)
             {
-                unixMilliseconds = 1_700_000_000_000;
+                unixMilliseconds = Now;
                 return true;
             }
         }
@@ -263,7 +334,10 @@ namespace Project.Scripts.Gameplay.Run.Editor
             public string CurrentLanguageCode => "ru";
             public bool SetLanguage(string languageCode) => false;
             public string Get(string key) => key == "menu.battle" ? "В бой" : key;
-            public string Format(string key, params object[] args) => string.Format("Нужно пройти {0}", args);
+            public string Format(string key, params object[] args) => string.Format(
+                key == LocalizationKeys.RunEnergyEmptyFormat
+                    ? "Недостаточно энергии. +1 через {0}"
+                    : "Нужно пройти {0}", args);
         }
     }
 }

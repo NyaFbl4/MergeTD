@@ -6,6 +6,8 @@ namespace Project.Scripts.System.Localization
         public const string LevelWaveFormat = "level.wave_format";
         public const string LevelEnergyFormat = "level.energy_format";
         public const string RunLockedFormat = "run.locked_format";
+        public const string RunEnergyEmpty = "run.energy_empty";
+        public const string RunEnergyEmptyFormat = "run.energy_empty_format";
 
         public const string EndWaveTitleFormat = "end_wave.title_format";
         public const string EndRunTitleFormat = "end_run.title_format";
