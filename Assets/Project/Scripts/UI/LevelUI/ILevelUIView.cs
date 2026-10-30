@@ -39,7 +39,7 @@ namespace Project.Scripts.UI.LevelUI
         void SetPriceTower(int price);
         void SetGeneratorPrice(int price);
         void SetGeneratorPurchaseEnabled(bool isEnabled);
-        void SetEnergy(int current, int maximum);
+        void SetEnergy(double current, int maximum);
         void SetMoney(int money);
         void SetGems(int gems);
         void SetTowerIcon(Sprite towerIcon);

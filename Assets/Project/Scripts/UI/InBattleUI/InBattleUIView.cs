@@ -235,6 +235,9 @@ namespace Project.Scripts.UI.InBattleUI
             var doubledAmount = (int)Math.Min(int.MaxValue, (long)reward.Amount * 2);
             _offerIcon.style.backgroundImage = GetRewardIcon(reward.Currency);
             _offerAmountLabel.text = doubledAmount.ToString();
+            Require<VisualElement>("DailyRewardAcceleratorBonus").style.display =
+                reward.BonusAccelerators > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            Require<Label>("DailyRewardAcceleratorBonusAmount").text = reward.BonusAccelerators.ToString();
             SetDailyRewardOfferButtonsEnabled(true);
             _offerOverlay.style.display = DisplayStyle.Flex;
         }

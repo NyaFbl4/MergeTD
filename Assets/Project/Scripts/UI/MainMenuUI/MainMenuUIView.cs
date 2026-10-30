@@ -30,6 +30,8 @@ namespace Project.Scripts.UI.MainMenuUI
         private Label _goldCountLabel;
         private Label _gemsCountLabel;
         private Label _energyCountLabel;
+        private Label _acceleratorsLabel;
+        private Label _acceleratorsCountLabel;
         private Label _energyCountdownLabel;
         private Button _settingsButton;
         private IInBattleUIView _inBattleView;
@@ -74,6 +76,10 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             base.Awake();
             
+            _acceleratorsLabel = _root.Q<Label>("AcceleratorsLabel")
+                ?? throw new InvalidOperationException("MainMenuUIView requires AcceleratorsLabel.");
+            _acceleratorsCountLabel = _root.Q<Label>("AcceleratorCountLabel")
+                ?? throw new InvalidOperationException("MainMenuUIView requires AcceleratorCountLabel.");
             _goldCountLabel = _root.Q<Label>("GoldLabel");
             _gemsCountLabel = _root.Q<Label>("GemLabel");
             _energyCountLabel = _root.Q<Label>("EnergyLabel")
@@ -191,6 +197,12 @@ namespace Project.Scripts.UI.MainMenuUI
         public void SetDiamondCount(int diamondCount)
         {
             UIIntegerAnimationUtility.SetValue(_gemsCountLabel, Math.Max(0, diamondCount));
+        }
+
+        public void SetAccelerators(int count, string text)
+        {
+            UIIntegerAnimationUtility.SetValue(_acceleratorsCountLabel, Math.Max(0, count));
+            _acceleratorsLabel.text = text;
         }
 
         public void SetPlayerEnergy(int current, int max, string countdown)

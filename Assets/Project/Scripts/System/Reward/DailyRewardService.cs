@@ -231,7 +231,8 @@ namespace Project.Scripts.System.Reward
                 state.CurrentDay,
                 state.AvailableRewardIndex,
                 gold,
-                gems);
+                gems,
+                reward.BonusAccelerators);
         }
     }
 }

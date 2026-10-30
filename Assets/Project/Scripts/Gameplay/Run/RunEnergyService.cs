@@ -7,9 +7,9 @@ namespace Project.Scripts.Gameplay.Run
     {
         private readonly IWorldService _world;
 
-        public int Current { get; private set; }
+        public double Current { get; private set; }
         public int Max => _world.MaxEnergy;
-        public event Action<int> Changed;
+        public event Action<double> Changed;
 
         public RunEnergyService(IWorldService world)
         {
@@ -17,12 +17,12 @@ namespace Project.Scripts.Gameplay.Run
             _world.MaxEnergyChanged += OnMaxEnergyChanged;
         }
 
-        public void Add(int amount)
+        public void Add(double amount)
         {
-            if (amount <= 0)
+            if (amount <= 0 || double.IsNaN(amount) || double.IsInfinity(amount))
                 return;
 
-            Restore((int)Math.Min(Max, (long)Current + amount));
+            Restore(Math.Min(Max, Current + amount));
         }
 
         public bool TrySpend(int cost)
@@ -36,8 +36,11 @@ namespace Project.Scripts.Gameplay.Run
 
         public void Reset() => Restore(0);
 
-        public void Restore(int amount)
+        public void Restore(double amount)
         {
+            if (double.IsNaN(amount) || double.IsInfinity(amount))
+                return;
+
             var value = Math.Max(0, Math.Min(Max, amount));
             if (value == Current)
                 return;

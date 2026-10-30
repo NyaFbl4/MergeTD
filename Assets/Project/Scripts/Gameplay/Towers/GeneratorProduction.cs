@@ -8,6 +8,8 @@ namespace Project.Scripts.Gameplay.Towers
 {
     public sealed class GeneratorProduction : IDisposable
     {
+        private const double ProductionSpeedMultiplier = 2d;
+
         private readonly RunState _runState;
         private readonly RunEnergyService _energy;
         private readonly RunCardRuntimeState _runCardState;
@@ -33,7 +35,7 @@ namespace Project.Scripts.Gameplay.Towers
             _runState = runState;
             _energy = energy;
             _runCardState = runCardState;
-            _interval = interval;
+            _interval = interval / ProductionSpeedMultiplier;
             _amount = amount;
             _runState.PhaseChanged += OnPhaseChanged;
         }
@@ -50,8 +52,9 @@ namespace Project.Scripts.Gameplay.Towers
             while (_elapsed >= _interval)
             {
                 _elapsed -= _interval;
+                // Preserve the existing card rounding before splitting the reward.
                 var amount = Mathf.Max(1, Mathf.RoundToInt(
-                    _amount * (_runCardState?.GeneratorEnergyMultiplier ?? 1f)));
+                    _amount * (_runCardState?.GeneratorEnergyMultiplier ?? 1f))) / ProductionSpeedMultiplier;
                 var energyBefore = _energy.Current;
                 _energy.Add(amount);
                 GameAnalytics.Count("generator_used", _energy.Current - energyBefore);

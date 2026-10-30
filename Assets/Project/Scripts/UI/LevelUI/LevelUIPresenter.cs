@@ -219,6 +219,8 @@ namespace Project.Scripts.UI.LevelUI
             if (!string.IsNullOrWhiteSpace(displayName))
                 waveText = $"{waveText}: {_localizationService.Get(displayName)}";
 
+            if (_gameManagerService.SpeedMultiplier > 1f)
+                waveText += " • ×1.5";
             _layoutView.SetCurrentWaveText(waveText);
         }
 
@@ -236,7 +238,7 @@ namespace Project.Scripts.UI.LevelUI
             Debug.Log($"BuyGenerator result: {result}");
         }
 
-        private void OnEnergyChanged(int energy)
+        private void OnEnergyChanged(double energy)
         {
             RefreshEnergy();
             RefreshWeaponBarrage();

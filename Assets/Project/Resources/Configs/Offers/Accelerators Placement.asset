@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7354298797384c62937bf10d6ddf100e, type: 3}
+  m_Name: Accelerators Placement
+  m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.ShopOfferPlacementConfig
+  _id: accelerators
+  _title: shop.accelerators.title
+  _order: 5
+  _layout: 4
+  _offers:
+  - {fileID: 11400000, guid: 5c4116a2cd264764b8c5dd534624352d, type: 2}
+  - {fileID: 11400000, guid: 903b00c2b2094383b519e9f593192364, type: 2}
+  - {fileID: 11400000, guid: 5f001453d1414fb0b464bd671bc2ff22, type: 2}

@@ -595,6 +595,14 @@
     { "key": "spell.gravity_trap.upgrade_3.title", "ru": "Широкий горизонт", "en": "Wide Horizon" },
     { "key": "spell.gravity_trap.upgrade_3.description", "ru": "Радиус области увеличивается на 0,75.", "en": "Area radius increases by 0.75." },
     { "key": "spell.gravity_trap.upgrade_4.title", "ru": "Стабильная сингулярность", "en": "Stable Singularity" },
-    { "key": "spell.gravity_trap.upgrade_4.description", "ru": "Длительность ловушки увеличивается на 2 секунды.", "en": "Trap duration increases by 2 seconds." }
+    { "key": "spell.gravity_trap.upgrade_4.description", "ru": "Длительность ловушки увеличивается на 2 секунды.", "en": "Trap duration increases by 2 seconds." },
+    {"key": "shop.accelerators.title", "ru": "Ускорители", "en": "Accelerators"},
+    {"key": "shop.accelerators_ads.title", "ru": "Ускоритель за рекламу", "en": "Watch an ad for an accelerator"},
+    {"key": "shop.accelerators_gems.title", "ru": "1 ускоритель", "en": "1 accelerator"},
+    {"key": "shop.accelerators_cash.title", "ru": "5 ускорителей", "en": "5 accelerators"},
+    {"key": "shop.accelerators.description", "ru": "Скорость боя ×1,5. Один ускоритель при каждом входе в ран.", "en": "Battle speed ×1.5. One accelerator per run entry."},
+    {"key": "shop.accelerator_storage_full", "ru": "Хранилище ускорителей заполнено", "en": "Accelerator storage is full"},
+    {"key": "run.accelerators_available", "ru": "Ускорители: {0} • ×1,5 • −1 при входе", "en": "Accelerators: {0} • ×1.5 • −1 on entry"},
+    {"key": "run.accelerators_empty", "ru": "Ускорители: {0} • скорость ×1", "en": "Accelerators: {0} • speed ×1"}
   ]
 }

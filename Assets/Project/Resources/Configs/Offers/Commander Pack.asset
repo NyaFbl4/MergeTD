@@ -18,14 +18,15 @@ MonoBehaviour:
   _enabled: 1
   _title: shop.gold_gems_offer.title
   _description: shop.gold_gems_offer.description
-  _mainIcon: {fileID: 21300000, guid: 7231194f1d064e35b62927239b2fe637, type: 3}
-  _badge:
+  _mainIcon: {fileID: 5356779575590540033, guid: 6fe1b9aab6c2ba442a5628f13ccb360a, type: 3}
+  _badge: 
   _visualIconCount: 1
   _price:
     _type: 0
     _productId: offer_gold_gems
     _previewPrice: 199 RUB
     _goldAmount: 1
+    _gemsAmount: 1
   _rewards:
   - _type: 0
     _amount: 5000

@@ -253,6 +253,7 @@ namespace Project.Scripts.Gameplay.Run.Editor
             _selection.SelectNext();
             var builder = new ContainerBuilder();
             builder.RegisterInstance<IRunSelectionService>(_selection);
+            builder.RegisterInstance<IWorldService>(_world);
             builder.Register<GameManagerService>(Lifetime.Singleton);
             using (var container = builder.Build())
             {

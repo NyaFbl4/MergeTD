@@ -230,6 +230,8 @@ namespace Project.Scripts.UI.SettingsUI.Editor
             public int FinishCalls;
             public int StartCalls;
             public int ResumeCalls;
+            public float SpeedMultiplier => 1f;
+            public bool IsRunActive => false;
             public void StartGame() => StartCalls++;
             public void FinishGame() => FinishCalls++;
             public void PauseGame() { }

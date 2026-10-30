@@ -194,6 +194,7 @@ namespace Project.Scripts.UI.MainMenuUI
             
             _menuUIUseCase.GoldChanged += OnGoldChanged;
             _menuUIUseCase.GemsChanged += OnGemsChanged;
+            _world.AcceleratorsChanged += OnAcceleratorsChanged;
             _menuUIUseCase.ActiveSectionChanged += OnActiveSectionChanged;
             _layoutView.SectionClicked += OnSectionClicked;
             _layoutView.SettingsButtonClicked += OnSettingsButtonClicked;
@@ -256,6 +257,8 @@ namespace Project.Scripts.UI.MainMenuUI
 
         public override async UniTask ActivateAsync()
         {
+            if (_gameManagerService.IsRunActive)
+                _gameManagerService.FinishGame();
             _inBattlePresenter.OnMenuShown();
             RefreshPlayerEnergy();
             await base.ActivateAsync();
@@ -274,8 +277,13 @@ namespace Project.Scripts.UI.MainMenuUI
             RefreshPlayerEnergy();
         }
 
+        private void OnAcceleratorsChanged(int _) => RefreshPlayerEnergy();
+
         private void RefreshPlayerEnergy()
         {
+            _layoutView.SetAccelerators(_world.Accelerators, _localizationService.Format(
+                _world.Accelerators > 0 ? "run.accelerators_available" : "run.accelerators_empty",
+                _world.Accelerators));
             var state = _playerEnergy.GetState();
             var countdown = string.Empty;
             if (state.Current < state.Max)
@@ -360,6 +368,7 @@ namespace Project.Scripts.UI.MainMenuUI
         {
             _menuUIUseCase.GoldChanged -= OnGoldChanged;
             _menuUIUseCase.GemsChanged -= OnGemsChanged;
+            _world.AcceleratorsChanged -= OnAcceleratorsChanged;
             _menuUIUseCase.ActiveSectionChanged -= OnActiveSectionChanged;
             _layoutView.SectionClicked -= OnSectionClicked;
             _layoutView.SettingsButtonClicked -= OnSettingsButtonClicked;

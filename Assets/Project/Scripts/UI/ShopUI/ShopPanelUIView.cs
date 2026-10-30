@@ -24,6 +24,7 @@ namespace Project.Scripts.UI.ShopUI
         private readonly VisualTreeAsset _offerItemTemplate;
         private readonly VisualTreeAsset _gemOfferItemTemplate;
         private readonly VisualTreeAsset _energyOfferItemTemplate;
+        private readonly VisualTreeAsset _acceleratorOfferItemTemplate;
         private readonly VisualTreeAsset _goldOfferItemTemplate;
         private readonly Label _titleLabel;
         private readonly Label _emptyLabel;
@@ -34,12 +35,15 @@ namespace Project.Scripts.UI.ShopUI
         private readonly VisualElement _gemContainer;
         private readonly VisualElement _energyPanel;
         private readonly VisualElement _energyContainer;
+        private readonly VisualElement _acceleratorPanel;
+        private readonly VisualElement _acceleratorContainer;
         private readonly VisualElement _goldPanel;
         private readonly VisualElement _goldContainer;
         private readonly List<VisualElement> _upgradeItemRoots = new();
         private readonly List<string> _offerOrder = new();
         private readonly List<string> _gemOfferOrder = new();
         private readonly List<string> _energyOfferOrder = new();
+        private readonly List<string> _acceleratorOfferOrder = new();
         private readonly List<string> _goldOfferOrder = new();
         private readonly Dictionary<string, IShopOfferItemView> _offerViews =
             new(StringComparer.Ordinal);
@@ -69,6 +73,8 @@ namespace Project.Scripts.UI.ShopUI
             _gemContainer = Require<VisualElement>("GemContainer");
             _energyPanel = Require<VisualElement>("EnergyOffersPanel");
             _energyContainer = Require<VisualElement>("EnergyContainer");
+            _acceleratorPanel = Require<VisualElement>("AcceleratorOffersPanel");
+            _acceleratorContainer = Require<VisualElement>("AcceleratorContainer");
             _goldPanel = Require<VisualElement>("GoldPanel");
             _goldContainer = Require<VisualElement>("GoldContainer");
             _emptyLabel = Require<Label>("EmptyLabel");
@@ -76,6 +82,7 @@ namespace Project.Scripts.UI.ShopUI
             _offerItemTemplate = uiElements.ShopOfferCard;
             _gemOfferItemTemplate = uiElements.ShopGemOfferCard;
             _energyOfferItemTemplate = uiElements.ShopEnergyOfferCard;
+            _acceleratorOfferItemTemplate = uiElements.ShopAcceleratorOfferCard;
             _goldOfferItemTemplate = uiElements.ShopGoldOfferCard;
             _analyticsSchedule = _root.schedule.Execute(TrackVisibleOffers).Every(250);
         }
@@ -114,6 +121,7 @@ namespace Project.Scripts.UI.ShopUI
             {
                 EShopOfferPlacementLayout.GemGrid => _gemPanel,
                 EShopOfferPlacementLayout.EnergyGrid => _energyPanel,
+                EShopOfferPlacementLayout.AcceleratorGrid => _acceleratorPanel,
                 EShopOfferPlacementLayout.GoldGrid => _goldPanel,
                 _ => _offerPanel
             };
@@ -162,11 +170,13 @@ namespace Project.Scripts.UI.ShopUI
         {
             var useGemGrid = layout == EShopOfferPlacementLayout.GemGrid;
             var useEnergyGrid = layout == EShopOfferPlacementLayout.EnergyGrid;
+            var useAcceleratorGrid = layout == EShopOfferPlacementLayout.AcceleratorGrid;
             var useGoldGrid = layout == EShopOfferPlacementLayout.GoldGrid;
             var targetContainer = layout switch
             {
                 EShopOfferPlacementLayout.GemGrid => _gemContainer,
                 EShopOfferPlacementLayout.EnergyGrid => _energyContainer,
+                EShopOfferPlacementLayout.AcceleratorGrid => _acceleratorContainer,
                 EShopOfferPlacementLayout.GoldGrid => _goldContainer,
                 _ => _offerContainer
             };
@@ -174,6 +184,7 @@ namespace Project.Scripts.UI.ShopUI
             {
                 EShopOfferPlacementLayout.GemGrid => _gemOfferItemTemplate,
                 EShopOfferPlacementLayout.EnergyGrid => _energyOfferItemTemplate,
+                EShopOfferPlacementLayout.AcceleratorGrid => _acceleratorOfferItemTemplate,
                 EShopOfferPlacementLayout.GoldGrid => _goldOfferItemTemplate,
                 _ => _offerItemTemplate
             };
@@ -192,7 +203,11 @@ namespace Project.Scripts.UI.ShopUI
                 var offer = offers[i];
                 var offerRoot = template.Instantiate();
                 IShopOfferItemView offerView;
-                if (useEnergyGrid)
+                if (useAcceleratorGrid)
+                {
+                    offerView = new ShopAcceleratorOfferItemView(offerRoot, OnOfferPurchaseClicked);
+                }
+                else if (useEnergyGrid)
                 {
                     offerView = new ShopEnergyOfferItemView(offerRoot, OnOfferPurchaseClicked);
                 }
@@ -227,14 +242,17 @@ namespace Project.Scripts.UI.ShopUI
             _offerContainer.Clear();
             _gemContainer.Clear();
             _energyContainer.Clear();
+            _acceleratorContainer.Clear();
             _goldContainer.Clear();
             _offerPanel.style.display = DisplayStyle.None;
             _gemPanel.style.display = DisplayStyle.None;
             _energyPanel.style.display = DisplayStyle.None;
+            _acceleratorPanel.style.display = DisplayStyle.None;
             _goldPanel.style.display = DisplayStyle.None;
             _offerOrder.Clear();
             _gemOfferOrder.Clear();
             _energyOfferOrder.Clear();
+            _acceleratorOfferOrder.Clear();
             _goldOfferOrder.Clear();
             _offerViews.Clear();
             _analyticsOffers.Clear();
@@ -245,6 +263,7 @@ namespace Project.Scripts.UI.ShopUI
             {
                 EShopOfferPlacementLayout.GemGrid => _gemOfferOrder,
                 EShopOfferPlacementLayout.EnergyGrid => _energyOfferOrder,
+                EShopOfferPlacementLayout.AcceleratorGrid => _acceleratorOfferOrder,
                 EShopOfferPlacementLayout.GoldGrid => _goldOfferOrder,
                 _ => _offerOrder
             };

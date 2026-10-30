@@ -22,6 +22,7 @@ namespace Project.Scripts.UI.ShopUI
         private readonly UIElements _uiElements;
         private readonly Func<bool> _isActive;
         private readonly Sprite _energyIcon;
+        private readonly Sprite _acceleratorIcon;
         private readonly Sprite _rewardedAdIcon;
 
         private float _nextTimerRefreshAt;
@@ -43,6 +44,7 @@ namespace Project.Scripts.UI.ShopUI
             _offerService = offerService;
             _uiElements = uiElements;
             _isActive = isActive;
+            _acceleratorIcon = LoadSingleSprite("UI/new/Icons/Icon_Stopwatch");
             _energyIcon = LoadSingleSprite("UI/new/Icons/Icon_Energy");
             _rewardedAdIcon = LoadSingleSprite("UI/new/Icons/Icon_ImageIcon_Ad_00_l");
         }
@@ -67,6 +69,7 @@ namespace Project.Scripts.UI.ShopUI
             var offers = new List<ShopOfferUIData>();
             var gemOffers = new List<ShopOfferUIData>();
             var energyOffers = new List<ShopOfferUIData>();
+            var acceleratorOffers = new List<ShopOfferUIData>();
             var goldOffers = new List<ShopOfferUIData>();
             var placements = _offerService.Placements;
             for (var i = 0; i < placements.Count; i++)
@@ -76,6 +79,7 @@ namespace Project.Scripts.UI.ShopUI
                 {
                     EShopOfferPlacementLayout.GemGrid => gemOffers,
                     EShopOfferPlacementLayout.EnergyGrid => energyOffers,
+                    EShopOfferPlacementLayout.AcceleratorGrid => acceleratorOffers,
                     EShopOfferPlacementLayout.GoldGrid => goldOffers,
                     _ => offers
                 };
@@ -87,8 +91,9 @@ namespace Project.Scripts.UI.ShopUI
             _view.SetOffers(offers, EShopOfferPlacementLayout.List);
             _view.SetOffers(gemOffers, EShopOfferPlacementLayout.GemGrid);
             _view.SetOffers(energyOffers, EShopOfferPlacementLayout.EnergyGrid);
+            _view.SetOffers(acceleratorOffers, EShopOfferPlacementLayout.AcceleratorGrid);
             _view.SetOffers(goldOffers, EShopOfferPlacementLayout.GoldGrid);
-            if (offers.Count == 0 && gemOffers.Count == 0 && energyOffers.Count == 0 && goldOffers.Count == 0)
+            if (offers.Count == 0 && gemOffers.Count == 0 && energyOffers.Count == 0 && goldOffers.Count == 0 && acceleratorOffers.Count == 0)
                 _view.ShowEmptyState(_localizationService.Get(LocalizationKeys.ShopNoOffers));
         }
 
@@ -182,6 +187,9 @@ namespace Project.Scripts.UI.ShopUI
                             reward.Spell.Icon,
                             _localizationService.Get(reward.Spell.DisplayName)));
                         break;
+                    case EShopOfferRewardType.Accelerators:
+                        result.Add(new ShopOfferRewardUIData(_acceleratorIcon, reward.Amount.ToString()));
+                        break;
                     case EShopOfferRewardType.Energy:
                         result.Add(new ShopOfferRewardUIData(_energyIcon, reward.Amount.ToString()));
                         break;
@@ -246,6 +254,8 @@ namespace Project.Scripts.UI.ShopUI
                     _localizationService.Get(LocalizationKeys.ShopOfferInsufficientGems),
                 EShopOfferBlockReason.AdUnavailable =>
                     _localizationService.Get(LocalizationKeys.ShopOfferAdUnavailable),
+                EShopOfferBlockReason.AcceleratorStorageFull =>
+                    _localizationService.Get("shop.accelerator_storage_full"),
                 EShopOfferBlockReason.EnergyStorageFull =>
                     _localizationService.Get(LocalizationKeys.ShopOfferEnergyStorageFull),
                 _ => throw new ArgumentOutOfRangeException(nameof(reason), reason, null)

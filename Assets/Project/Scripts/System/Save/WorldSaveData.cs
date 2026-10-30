@@ -12,6 +12,7 @@ namespace Project.Scripts.System.Save
         public Project.Scripts.Gameplay.Tutorial.SpellTutorialSaveData spellTutorial;
         public int gold;
         public int gems;
+        public int accelerators;
         public PlayerEnergySaveData playerEnergy;
         public long dailyRewardLastClaimDay = -1;
         public int dailyRewardIndex = -1;

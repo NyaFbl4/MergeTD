@@ -66,7 +66,7 @@ namespace Project.Scripts.Gameplay.Tutorial
         public static SpellTutorialStep PreparationStep(bool hasGenerator) =>
             hasGenerator ? SpellTutorialStep.StartWave : SpellTutorialStep.BuyGenerator;
 
-        public static bool CanPrompt(int energy, int cost, bool spellReady, bool hasEnemy, bool running) =>
+        public static bool CanPrompt(double energy, int cost, bool spellReady, bool hasEnemy, bool running) =>
             cost >= 0 && energy >= cost && spellReady && hasEnemy && running;
 
         public static bool CanCountCast(SpellTutorialStep step, ERunPhase phase) =>

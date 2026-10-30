@@ -29,6 +29,8 @@ namespace Project.Scripts.System.Save
     {
         int Gold { get; }
         int Gems { get; }
+        int Accelerators { get; }
+        bool TrySpendAccelerator();
         long DailyRewardLastClaimDay { get; }
         int DailyRewardIndex { get; }
         long DailyQuestDay { get; }
@@ -52,6 +54,7 @@ namespace Project.Scripts.System.Save
 
         event Action<int> GoldChanged;
         event Action<int> GemsChanged;
+        event Action<int> AcceleratorsChanged;
         event Action DailyRewardChanged;
         event Action DailyQuestsChanged;
         event Action ProgressReset;
@@ -67,7 +70,7 @@ namespace Project.Scripts.System.Save
         bool TrySpendGold(int amount);
         void AddGold(int amount);
         void AddGems(int amount);
-        bool TryClaimDailyReward(long moscowDay, int rewardIndex, int goldAmount, int gemsAmount);
+        bool TryClaimDailyReward(long moscowDay, int rewardIndex, int goldAmount, int gemsAmount, int acceleratorsAmount = 0);
         void SaveQuests(
             long moscowDay,
             int cycleDay,
@@ -87,7 +90,8 @@ namespace Project.Scripts.System.Save
             int dailyLimit,
             int gemsPrice = 0,
             int rewardEnergy = 0,
-            bool preserveSpellOnReset = false);
+            bool preserveSpellOnReset = false,
+            int rewardAccelerators = 0);
         void SetMaxBaseHealth(int value);
         void SetMaxEnergy(int value);
         int GetUpgradeLevel(string upgradeId);

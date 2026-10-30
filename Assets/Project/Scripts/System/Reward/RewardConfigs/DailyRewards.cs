@@ -18,6 +18,8 @@ namespace Project.Scripts.System.Reward.RewardConfigs
 
         public EDailyRewardCurrency Currency => _currency;
         public int Amount => _amount;
+        [SerializeField, Min(0)] private int _bonusAccelerators;
+        public int BonusAccelerators => _bonusAccelerators;
     }
 
     [CreateAssetMenu(menuName = "Project/Configs/Daily rewards", fileName = "Daily Rewards")]
@@ -40,6 +42,9 @@ namespace Project.Scripts.System.Reward.RewardConfigs
                 var reward = _dailyRewardsConfig[i]
                              ?? throw new InvalidOperationException(
                                  $"Daily reward at index {i} is missing.");
+
+                if (reward.BonusAccelerators < 0)
+                    throw new InvalidOperationException($"Daily reward at index {i} has negative accelerators.");
 
                 if (reward.Amount <= 0)
                     throw new InvalidOperationException(

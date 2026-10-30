@@ -244,9 +244,9 @@ namespace Project.Scripts.UI.LevelUI
             spellBackground.style.backgroundImage = new StyleBackground(background);
         }
 
-        public void SetEnergy(int current, int maximum)
+        public void SetEnergy(double current, int maximum)
         {
-            _currentEnergyLabel.text = current.ToString();
+            _currentEnergyLabel.text = current.ToString("0.#");
             _maxEnergyLabel.text = maximum.ToString();
 
             var fill = maximum > 0

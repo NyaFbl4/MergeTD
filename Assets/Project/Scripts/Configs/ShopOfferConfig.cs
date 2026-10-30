@@ -17,7 +17,8 @@ namespace Project.Scripts.Configs
         Gold = 0,
         Gems = 1,
         Spell = 2,
-        Energy = 3
+        Energy = 3,
+        Accelerators = 4
     }
 
     public enum EShopOfferPlacementLayout
@@ -25,7 +26,8 @@ namespace Project.Scripts.Configs
         List = 0,
         GemGrid = 1,
         EnergyGrid = 2,
-        GoldGrid = 3
+        GoldGrid = 3,
+        AcceleratorGrid = 4
     }
 
     [Serializable]
@@ -91,6 +93,7 @@ namespace Project.Scripts.Configs
                 case EShopOfferRewardType.Gold:
                 case EShopOfferRewardType.Gems:
                 case EShopOfferRewardType.Energy:
+                case EShopOfferRewardType.Accelerators:
                     if (_amount <= 0)
                     {
                         throw new InvalidOperationException(
@@ -217,10 +220,11 @@ namespace Project.Scripts.Configs
             {
                 if (_rewards.Count != 1
                     || (!rewardTypes.Contains(EShopOfferRewardType.Energy)
-                        && !rewardTypes.Contains(EShopOfferRewardType.Gold)))
+                        && !rewardTypes.Contains(EShopOfferRewardType.Gold)
+                        && !rewardTypes.Contains(EShopOfferRewardType.Accelerators)))
                 {
                     throw new InvalidOperationException(
-                        $"Gem-priced offer '{_id}' must reward only gold or player energy.");
+                        $"Gem-priced offer '{_id}' must reward only gold, player energy or accelerators.");
                 }
 
                 return;
@@ -228,8 +232,9 @@ namespace Project.Scripts.Configs
 
             if (_price.Type == EShopOfferPriceType.RewardedAd)
             {
-                if (_rewards.Count != 1 || !rewardTypes.Contains(EShopOfferRewardType.Energy))
-                    throw new InvalidOperationException($"Energy offer '{_id}' must reward only player energy.");
+                if (_rewards.Count != 1 || (!rewardTypes.Contains(EShopOfferRewardType.Energy)
+                    && !rewardTypes.Contains(EShopOfferRewardType.Accelerators)))
+                    throw new InvalidOperationException($"Energy offer '{_id}' must reward only player energy or accelerators.");
 
                 if (_dailyPurchaseLimit != 1)
                     throw new InvalidOperationException($"Rewarded energy offer '{_id}' must allow one claim per day.");
@@ -348,6 +353,14 @@ namespace Project.Scripts.Configs
                     {
                         throw new InvalidOperationException(
                             $"Gold section '{placement.Id}' requires a gold reward purchased with gems.");
+                    }
+
+                    if (placement.Layout == EShopOfferPlacementLayout.AcceleratorGrid
+                        && (offer.Rewards.Count != 1
+                            || offer.Rewards[0].Type != EShopOfferRewardType.Accelerators))
+                    {
+                        throw new InvalidOperationException(
+                            $"Accelerator section '{placement.Id}' requires only an accelerator reward.");
                     }
 
                     offers.Add(offer);

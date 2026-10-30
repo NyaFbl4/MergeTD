@@ -20,7 +20,8 @@ namespace Project.Scripts.System.Shop
         PurchaseInProgress = 5,
         InsufficientGems = 6,
         AdUnavailable = 7,
-        EnergyStorageFull = 8
+        EnergyStorageFull = 8,
+        AcceleratorStorageFull = 9
     }
 
     public readonly struct ShopOfferState
@@ -128,6 +129,7 @@ namespace Project.Scripts.System.Shop
             YG2.onErrorRewardedAdv += OnRewardedAdError;
             _world.GoldChanged += OnGoldChanged;
             _world.GemsChanged += OnGoldChanged;
+            _world.AcceleratorsChanged += OnGoldChanged;
             _world.SpellsChanged += OnWorldStateChanged;
             _world.ShopOfferProgressChanged += OnWorldStateChanged;
             RecoverUnconsumedPayments();
@@ -143,6 +145,7 @@ namespace Project.Scripts.System.Shop
             YG2.onErrorRewardedAdv -= OnRewardedAdError;
             _world.GoldChanged -= OnGoldChanged;
             _world.GemsChanged -= OnGoldChanged;
+            _world.AcceleratorsChanged -= OnGoldChanged;
             _world.SpellsChanged -= OnWorldStateChanged;
             _world.ShopOfferProgressChanged -= OnWorldStateChanged;
         }
@@ -308,6 +311,11 @@ namespace Project.Scripts.System.Shop
 
             for (var i = 0; i < config.Rewards.Count; i++)
             {
+                if (config.Rewards[i].Type == EShopOfferRewardType.Accelerators
+                    && config.Rewards[i].Amount > int.MaxValue - _world.Accelerators
+                    && blockReason == EShopOfferBlockReason.None)
+                    blockReason = EShopOfferBlockReason.AcceleratorStorageFull;
+
                 if (config.Rewards[i].Type == EShopOfferRewardType.Energy
                     && config.Rewards[i].Amount > int.MaxValue - _world.PlayerEnergy
                     && blockReason == EShopOfferBlockReason.None)
@@ -346,6 +354,7 @@ namespace Project.Scripts.System.Shop
             var rewardGold = 0;
             var rewardGems = 0;
             var rewardEnergy = 0;
+            var rewardAccelerators = 0;
             var spellId = string.Empty;
 
             for (var i = 0; i < config.Rewards.Count; i++)
@@ -361,6 +370,9 @@ namespace Project.Scripts.System.Shop
                         break;
                     case EShopOfferRewardType.Spell:
                         spellId = reward.Spell.SpellId;
+                        break;
+                    case EShopOfferRewardType.Accelerators:
+                        rewardAccelerators = AddClamped(rewardAccelerators, reward.Amount);
                         break;
                     case EShopOfferRewardType.Energy:
                         rewardEnergy = AddClamped(rewardEnergy, reward.Amount);
@@ -383,11 +395,12 @@ namespace Project.Scripts.System.Shop
                 config.DailyPurchaseLimit,
                 gemsPrice,
                 rewardEnergy,
-                config.Price.Type == EShopOfferPriceType.RealMoney && !string.IsNullOrEmpty(spellId));
+                config.Price.Type == EShopOfferPriceType.RealMoney && !string.IsNullOrEmpty(spellId),
+                rewardAccelerators);
 
             if (delivered)
                 GameAnalytics.Track("purchase_delivered", ("offer_id", config.Id), ("product_id", config.Price.ProductId),
-                    ("payment_type", config.Price.Type.ToString()), ("is_restore", isRestored), ("gold", rewardGold), ("gems", rewardGems), ("energy", rewardEnergy), ("spell_id", spellId));
+                    ("payment_type", config.Price.Type.ToString()), ("is_restore", isRestored), ("gold", rewardGold), ("gems", rewardGems), ("energy", rewardEnergy), ("accelerators", rewardAccelerators), ("spell_id", spellId));
             return delivered;
         }
 

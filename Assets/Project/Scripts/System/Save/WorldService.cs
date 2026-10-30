@@ -58,6 +58,7 @@ namespace Project.Scripts.System.Save
 
         public int Gold => _data.gold;
         public int Gems => _data.gems;
+        public int Accelerators => _data.accelerators;
         public int PlayerEnergy => _data.playerEnergy.current;
         public long PlayerEnergyNextRestoreUnixMilliseconds => _data.playerEnergy.nextRestoreUnixMilliseconds;
         public long DailyRewardLastClaimDay => _data.dailyRewardLastClaimDay;
@@ -84,6 +85,7 @@ namespace Project.Scripts.System.Save
 
         public event Action<int> GoldChanged;
         public event Action<int> GemsChanged;
+        public event Action<int> AcceleratorsChanged;
         public event Action DailyRewardChanged;
         public event Action DailyQuestsChanged;
         public event Action ProgressReset;
@@ -168,11 +170,24 @@ namespace Project.Scripts.System.Save
             GemsChanged?.Invoke(Gems);
         }
 
+        public bool TrySpendAccelerator()
+        {
+            if (Accelerators <= 0)
+                return false;
+
+            _data.accelerators--;
+            Save();
+            AcceleratorsChanged?.Invoke(Accelerators);
+            GameAnalytics.Currency("accelerators", -1, "run_entry");
+            return true;
+        }
+
         public bool TryClaimDailyReward(
             long moscowDay,
             int rewardIndex,
             int goldAmount,
-            int gemsAmount)
+            int gemsAmount,
+            int acceleratorsAmount = 0)
         {
             var analyticsGoldBefore = Gold;
             var analyticsGemsBefore = Gems;
@@ -182,7 +197,8 @@ namespace Project.Scripts.System.Save
             if (rewardIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(rewardIndex));
 
-            if (goldAmount < 0 || gemsAmount < 0 || goldAmount == 0 && gemsAmount == 0)
+            if (goldAmount < 0 || gemsAmount < 0 || acceleratorsAmount < 0
+                || goldAmount == 0 && gemsAmount == 0 && acceleratorsAmount == 0)
                 throw new ArgumentOutOfRangeException(nameof(goldAmount));
 
             if (moscowDay <= _data.dailyRewardLastClaimDay)
@@ -190,6 +206,7 @@ namespace Project.Scripts.System.Save
 
             _data.gold = AddClamped(_data.gold, goldAmount);
             _data.gems = AddClamped(_data.gems, gemsAmount);
+            _data.accelerators = AddClamped(_data.accelerators, acceleratorsAmount);
             _data.dailyRewardLastClaimDay = moscowDay;
             _data.dailyRewardIndex = rewardIndex;
             Save();
@@ -199,6 +216,9 @@ namespace Project.Scripts.System.Save
 
             if (gemsAmount > 0)
                 GemsChanged?.Invoke(Gems);
+
+            if (acceleratorsAmount > 0)
+                AcceleratorsChanged?.Invoke(Accelerators);
 
             DailyRewardChanged?.Invoke();
             GameAnalytics.Currency("gold", Gold - analyticsGoldBefore, "daily_reward");
@@ -325,7 +345,8 @@ namespace Project.Scripts.System.Save
             int dailyLimit,
             int gemsPrice = 0,
             int rewardEnergy = 0,
-            bool preserveSpellOnReset = false)
+            bool preserveSpellOnReset = false,
+            int rewardAccelerators = 0)
         {
             var analyticsGoldBefore = Gold;
             var analyticsGemsBefore = Gems;
@@ -349,16 +370,22 @@ namespace Project.Scripts.System.Save
             if (rewardEnergy < 0)
                 throw new ArgumentOutOfRangeException(nameof(rewardEnergy));
 
+            if (rewardAccelerators < 0)
+                throw new ArgumentOutOfRangeException(nameof(rewardAccelerators));
+
             if (dailyLimit < 0)
                 throw new ArgumentOutOfRangeException(nameof(dailyLimit));
 
-            if (rewardGold == 0 && rewardGems == 0 && rewardEnergy == 0 && string.IsNullOrWhiteSpace(spellId))
+            if (rewardGold == 0 && rewardGems == 0 && rewardEnergy == 0 && rewardAccelerators == 0 && string.IsNullOrWhiteSpace(spellId))
                 throw new ArgumentException("An offer requires at least one reward.", nameof(offerId));
 
             if (dailyLimit > 0 && utcDay < 0)
                 return false;
 
             if (Gold < goldPrice || Gems < gemsPrice)
+                return false;
+
+            if (rewardAccelerators > int.MaxValue - Accelerators)
                 return false;
 
             if (rewardEnergy > int.MaxValue - PlayerEnergy)
@@ -383,6 +410,7 @@ namespace Project.Scripts.System.Save
             _data.gold -= goldPrice;
             _data.gold = AddClamped(_data.gold, rewardGold);
             _data.gems = AddClamped(_data.gems - gemsPrice, rewardGems);
+            _data.accelerators += rewardAccelerators;
             if (rewardEnergy > 0)
             {
                 _data.playerEnergy.current += rewardEnergy;
@@ -417,6 +445,9 @@ namespace Project.Scripts.System.Save
 
             if (gemsPrice > 0 || rewardGems > 0)
                 GemsChanged?.Invoke(Gems);
+
+            if (rewardAccelerators > 0)
+                AcceleratorsChanged?.Invoke(Accelerators);
 
             if (!string.IsNullOrWhiteSpace(spellId))
                 SpellsChanged?.Invoke();
@@ -797,6 +828,7 @@ namespace Project.Scripts.System.Save
             _data.version = CurrentVersion;
             _needsUpgradeMigration = false;
             Save();
+            AcceleratorsChanged?.Invoke(Accelerators);
             ProgressReset?.Invoke();
             GoldChanged?.Invoke(Gold);
             GemsChanged?.Invoke(Gems);
@@ -850,6 +882,7 @@ namespace Project.Scripts.System.Save
             _data.spellTutorial.Normalize();
             _data.gold = Math.Max(0, _data.gold);
             _data.gems = Math.Max(0, _data.gems);
+            _data.accelerators = Math.Max(0, _data.accelerators);
             _data.playerEnergy = PlayerEnergySaveData.Normalize(_data.playerEnergy);
             if (_data.dailyRewardLastClaimDay <= 0)
             {

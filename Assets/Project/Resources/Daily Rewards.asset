@@ -21,6 +21,7 @@ MonoBehaviour:
     _amount: 500
   - _currency: 1
     _amount: 10
+    _bonusAccelerators: 1
   - _currency: 0
     _amount: 750
   - _currency: 1

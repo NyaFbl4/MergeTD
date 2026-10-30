@@ -15,6 +15,10 @@
                     <ui:Label text="shop.energy_tab" name="EnergySectionLabel" style="font-size: 48px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: middle-center;" />
                     <ui:VisualElement name="EnergyContainer" style="width: 720px; min-width: 720px; max-width: 720px; align-self: center; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; align-content: flex-start;" />
                 </ui:VisualElement>
+                <ui:VisualElement name="AcceleratorOffersPanel">
+                    <ui:Label text="shop.accelerators.title" name="AcceleratorSectionLabel" style="font-size: 48px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: middle-center;" />
+                    <ui:VisualElement name="AcceleratorContainer" style="width: 720px; min-width: 720px; max-width: 720px; align-self: center; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; align-content: flex-start;" />
+                </ui:VisualElement>
                 <ui:VisualElement name="GemPanel">
                     <ui:Label text="Гемы" name="GemLabel" style="font-size: 48px; -unity-font-definition: resource(&quot;Fonts/Lilita One Regular&quot;); -unity-text-align: middle-center;" />
                     <ui:VisualElement name="GemContainer" class="shop-offer-grid" style="width: 720px; min-width: 720px; max-width: 720px; align-self: center; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; align-content: flex-start;" />

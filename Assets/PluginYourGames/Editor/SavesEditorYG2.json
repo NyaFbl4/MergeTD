@@ -1,5 +1,5 @@
 {
-    "idSave": 1566,
+    "idSave": 1626,
     "world": {
         "version": 2,
         "towerTutorial": {
@@ -11,11 +11,12 @@
             "version": 1,
             "step": 6
         },
-        "gold": 1125,
+        "gold": 1599,
         "gems": 0,
+        "accelerators": 0,
         "playerEnergy": {
             "version": 1,
-            "current": 1,
+            "current": 0,
             "nextRestoreUnixMilliseconds": 1791196237795
         },
         "dailyRewardLastClaimDay": 20731,
@@ -219,7 +220,7 @@
             },
             {
                 "id": "DealDamageQuest",
-                "currentValue": 48275,
+                "currentValue": 83375,
                 "targetValue": 125000,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -227,7 +228,7 @@
             },
             {
                 "id": "KillEnemyQuest",
-                "currentValue": 151,
+                "currentValue": 265,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -235,7 +236,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 7,
+                "currentValue": 12,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,

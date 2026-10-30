@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="CardChoicePanel" src="project://database/Assets/Project/Resources/UIToolkit/New/%D0%9D%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BF%D0%B0%D0%BF%D0%BA%D0%B0/CardChoicePanel.uxml?fileID=9197481963319205126&amp;guid=a95a502351c35134697d054a773a5a74&amp;type=3#CardChoicePanel"/>
-    <ui:Style src="CardChoiceUI.uss"/>
-    <ui:VisualElement name="CardChoiceRoot" class="card-choice-overlay">
+    <Style src="project://database/Assets/Project/Resources/UIToolkit/New/CardChoiceUI.uss?fileID=11400000&amp;guid=74eaca7e798f4d82924fbb9804e609e8&amp;type=3#CardChoiceUI"/>
+    <ui:VisualElement name="CardChoiceRoot" class="card-choice-overlay" style="display: none; width: 100%; height: 100%;">
         <ui:VisualElement class="card-choice-dialog">
             <ui:Label name="CardChoiceTitle" text="cards.choice_title" class="card-choice-title"/>
             <ui:VisualElement name="CardChoiceCards" class="card-choice-cards">

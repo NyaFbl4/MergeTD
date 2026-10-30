@@ -53,6 +53,7 @@ namespace Project.Scripts.UI.MainMenuUI
         void SetGoldCount(int goldCount);
         void SetDiamondCount(int diamondCount);
         void SetPlayerEnergy(int current, int max, string countdown);
+        void SetAccelerators(int count, string text);
         void SetActiveSection(MainMenuSection section);
     }
 }

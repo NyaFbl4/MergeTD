@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +14,7 @@ namespace Project.Scripts.Configs
         [SerializeField] private VisualTreeAsset _shopOfferCard;
         [SerializeField] private VisualTreeAsset _shopGemOfferCard;
         [SerializeField] private VisualTreeAsset _shopEnergyOfferCard;
+        [SerializeField] private VisualTreeAsset _shopAcceleratorOfferCard;
         [SerializeField] private VisualTreeAsset _shopGoldOfferCard;
         [SerializeField] private List<Sprite> _towerIcons;
         [SerializeField] private List<Sprite> _generatorIcons;
@@ -35,6 +36,7 @@ namespace Project.Scripts.Configs
         public VisualTreeAsset ShopOfferCard => _shopOfferCard;
         public VisualTreeAsset ShopGemOfferCard => _shopGemOfferCard;
         public VisualTreeAsset ShopEnergyOfferCard => _shopEnergyOfferCard;
+        public VisualTreeAsset ShopAcceleratorOfferCard => _shopAcceleratorOfferCard;
         public VisualTreeAsset ShopGoldOfferCard => _shopGoldOfferCard;
         public List<Sprite> TowerIcons => _towerIcons;
         public List<Sprite> GeneratorIcons => _generatorIcons;

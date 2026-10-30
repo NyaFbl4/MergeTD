@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Project.Scripts.Gameplay.Run;
+using Project.Scripts.System.Save;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -10,15 +11,20 @@ namespace Project.Scripts.GameManager
     public class GameManagerService : IGameManagerService, IStartable, ITickable, IFixedTickable, IDisposable
     {
         private EGameState _gameState;
+        private bool _hasRunSession;
+        public bool IsRunActive => _hasRunSession;
+        private readonly IWorldService _world;
+        public float SpeedMultiplier { get; private set; } = 1f;
         private readonly IRunSelectionService _runSelection;
         private readonly List<IGameListener> _gameListeners = new();
         private readonly List<IGameUpdateListener> _gameUpdateListeners = new();
         private readonly List<IGameFixedUpdateListener> _gameFixedUpdateListeners = new();
 
         [Inject]
-        private GameManagerService(IRunSelectionService runSelection)
+        private GameManagerService(IRunSelectionService runSelection, IWorldService world)
         {
             _runSelection = runSelection;
+            _world = world;
             _gameState = EGameState.Off;
 
             IGameListener.onRegister += AddListener;
@@ -32,6 +38,8 @@ namespace Project.Scripts.GameManager
 
         public void Dispose()
         {
+            SpeedMultiplier = 1f;
+            Time.timeScale = 1f;
             _gameState = EGameState.Finish;
 
             IGameListener.onRegister -= AddListener;
@@ -114,11 +122,13 @@ namespace Project.Scripts.GameManager
 
         public void StartGame()
         {
-            if (!_runSelection.IsSelectedRunUnlocked)
+            if (_hasRunSession || !_runSelection.IsSelectedRunUnlocked)
                 return;
 
+            _hasRunSession = true;
             _gameState = EGameState.Play;
-            Time.timeScale = 1f;
+            SpeedMultiplier = _world.TrySpendAccelerator() ? 1.5f : 1f;
+            Time.timeScale = SpeedMultiplier;
 
             var listenersSnapshot = _gameListeners.ToArray();
             for (var i = 0; i < listenersSnapshot.Length; i++)
@@ -140,7 +150,9 @@ namespace Project.Scripts.GameManager
 
         public void FinishGame()
         {
+            _hasRunSession = false;
             _gameState = EGameState.Finish;
+            SpeedMultiplier = 1f;
             Time.timeScale = 0f;
 
             var listenersSnapshot = _gameListeners.ToArray();
@@ -186,7 +198,7 @@ namespace Project.Scripts.GameManager
                 }
             }
             
-            Time.timeScale = 1;
+            Time.timeScale = SpeedMultiplier;
             _gameState = EGameState.Play;
             Debug.Log("RESUME");
         }

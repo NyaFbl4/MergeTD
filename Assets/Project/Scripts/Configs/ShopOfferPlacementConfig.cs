@@ -12,7 +12,7 @@ namespace Project.Scripts.Configs
         [SerializeField] private string _id;
         [SerializeField] private string _title;
         [SerializeField] private int _order;
-        [SerializeField, Tooltip("List: OfferContainer. GemGrid: GemContainer. EnergyGrid: EnergyContainer. GoldGrid: GoldContainer.")]
+        [SerializeField, Tooltip("List: OfferContainer. GemGrid: GemContainer. EnergyGrid: EnergyContainer. GoldGrid: GoldContainer. AcceleratorGrid: AcceleratorContainer.")]
         private EShopOfferPlacementLayout _layout;
         [SerializeField, Tooltip("Порядок элементов задаёт порядок карточек в разделе.")]
         private List<ShopOfferConfig> _offers = new();
@@ -26,7 +26,8 @@ namespace Project.Scripts.Configs
         public void Validate()
         {
             if (_layout is not EShopOfferPlacementLayout.List and not EShopOfferPlacementLayout.GemGrid
-                and not EShopOfferPlacementLayout.EnergyGrid and not EShopOfferPlacementLayout.GoldGrid)
+                and not EShopOfferPlacementLayout.EnergyGrid and not EShopOfferPlacementLayout.GoldGrid
+                and not EShopOfferPlacementLayout.AcceleratorGrid)
                 throw new InvalidOperationException($"Shop section '{name}' has an unsupported layout.");
 
             if (_offers == null)
