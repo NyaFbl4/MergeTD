@@ -17,14 +17,14 @@ MonoBehaviour:
   _order: 0
   _enabled: 1
   _title: shop.gold_offer.title
-  _description:
-  _mainIcon: {fileID: 21300000, guid: 73e4e8bdf12df5e4693d5d940bf1f456, type: 3}
-  _badge:
+  _description: 
+  _mainIcon: {fileID: 380831837197612461, guid: 7be2d7b2fe5e29b4f804cfacea6890ac, type: 3}
+  _badge: 
   _visualIconCount: 1
   _price:
     _type: 2
-    _productId:
-    _previewPrice:
+    _productId: 
+    _previewPrice: 
     _goldAmount: 1
     _gemsAmount: 50
   _rewards:

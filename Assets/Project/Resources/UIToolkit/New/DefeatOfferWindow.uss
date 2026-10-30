@@ -1,0 +1,112 @@
+.defeat-offer-host {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.defeat-offer-host--visible {
+    display: flex;
+}
+
+.defeat-offer-overlay {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.defeat-offer-scrim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(9, 5, 22, 0.86);
+}
+
+.defeat-offer-dialog {
+    width: 96%;
+    max-width: 1040px;
+    padding: 28px;
+    align-items: stretch;
+    background-image: resource("UI/new/BorderFrame_Round03");
+    -unity-background-image-tint-color: rgb(69, 58, 105);
+    -unity-slice-left: 20;
+    -unity-slice-top: 20;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 20;
+}
+
+.defeat-offer-title,
+.defeat-offer-description,
+.defeat-offer-notice,
+.defeat-offer-button {
+    color: rgb(255, 255, 255);
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgb(20, 12, 38);
+    -unity-text-outline-width: 1px;
+    white-space: normal;
+    flex-shrink: 0;
+}
+
+.defeat-offer-title {
+    font-size: 48px;
+    color: rgb(255, 232, 145);
+}
+
+.defeat-offer-description {
+    font-size: 30px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+
+.defeat-offer-card {
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.defeat-offer-actions {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.defeat-offer-button {
+    flex-grow: 1;
+    font-size: 32px;
+    min-height: 90px;
+    max-width: 430px;
+    margin: 8px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource("UI/new/BorderFrame_Round03");
+    -unity-background-image-tint-color: rgb(93, 116, 160);
+    -unity-slice-left: 20;
+    -unity-slice-top: 20;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 20;
+    border-width: 0;
+}
+
+.defeat-offer-upgrade,
+.defeat-offer-notice,
+.defeat-offer-host--purchased #BuyButton {
+    display: none;
+}
+
+.defeat-offer-host--purchased .defeat-offer-upgrade,
+.defeat-offer-host--notice .defeat-offer-notice {
+    display: flex;
+}
+
+.defeat-offer-upgrade {
+    -unity-background-image-tint-color: rgb(39, 192, 46);
+}
+
+.defeat-offer-notice {
+    font-size: 26px;
+    color: rgb(255, 232, 145);
+    margin-top: 16px;
+}

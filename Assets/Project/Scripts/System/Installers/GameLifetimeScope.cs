@@ -90,6 +90,7 @@ namespace Installers
             builder.Register<YGDailyRewardTimeProvider>(Lifetime.Singleton).As<IDailyRewardTimeProvider>();
             builder.Register<DailyRewardService>(Lifetime.Singleton);
             builder.RegisterEntryPoint<ShopOfferService>(Lifetime.Singleton).AsSelf();
+            builder.Register<DefeatOfferState>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RunBackgroundRuntime>(Lifetime.Singleton);
             
             // UI core

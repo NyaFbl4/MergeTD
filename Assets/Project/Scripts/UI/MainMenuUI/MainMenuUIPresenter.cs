@@ -51,6 +51,8 @@ namespace Project.Scripts.UI.MainMenuUI
         private readonly IPlayerStatsUseCase _playerStats;
         private readonly BaseHealth _baseHealth;
         private readonly ShopOfferService _shopOfferService;
+        private readonly DefeatOfferState _defeatOfferState;
+        private DefeatOfferPresenter _defeatOfferPresenter;
         private readonly PlayerEnergyService _playerEnergy;
         private float _nextEnergyRefreshAt;
         private IInBattleUIPresenter _inBattlePresenter;
@@ -81,7 +83,8 @@ namespace Project.Scripts.UI.MainMenuUI
             IPlayerStatsUseCase playerStats,
             BaseHealth baseHealth,
             ShopOfferService shopOfferService,
-            PlayerEnergyService playerEnergy)
+            PlayerEnergyService playerEnergy,
+            DefeatOfferState defeatOfferState)
         {
             _menuUIUseCase = menuUIUseCase;
             _uiElements = uiElements;
@@ -102,6 +105,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _baseHealth = baseHealth;
             _shopOfferService = shopOfferService;
             _playerEnergy = playerEnergy;
+            _defeatOfferState = defeatOfferState;
         }
         
         public override void Initialize()
@@ -118,6 +122,16 @@ namespace Project.Scripts.UI.MainMenuUI
                 _uiElements,
                 () => _menuUIUseCase.ActiveSection == MainMenuSection.Shop);
             _shopPresenter.Initialize();
+            _layoutView.InitializeDefeatOffer(_uiElements);
+            _defeatOfferPresenter = new DefeatOfferPresenter(
+                _layoutView.DefeatOfferView,
+                _defeatOfferState,
+                _shopOfferService,
+                _localizationService,
+                _audioManager,
+                _shopPresenter.CreateUIData,
+                () => _menuUIUseCase.SelectSection(MainMenuSection.Army));
+            _defeatOfferPresenter.Initialize();
 
             _layoutView.InitializeArmy(_uiElements);
             _armyPresenter = new ArmyUIPresenter(
@@ -216,6 +230,7 @@ namespace Project.Scripts.UI.MainMenuUI
 
         public override UniTask DeactivateAsync()
         {
+            _defeatOfferPresenter.Hide();
             _slotUnlockPresenter.Hide();
             return base.DeactivateAsync();
         }
@@ -245,6 +260,8 @@ namespace Project.Scripts.UI.MainMenuUI
             RefreshPlayerEnergy();
             await base.ActivateAsync();
             GameAnalytics.EnterMenu();
+            if (IsActive)
+                _defeatOfferPresenter.ShowPendingOffer();
         }
 
         public void Tick()
@@ -358,6 +375,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _purchaseWindowPresenter.Dispose();
             _armyPresenter.Dispose();
             _spellsPanelPresenter.Dispose();
+            _defeatOfferPresenter.Dispose();
             _shopPresenter.Dispose();
 
             base.Dispose();

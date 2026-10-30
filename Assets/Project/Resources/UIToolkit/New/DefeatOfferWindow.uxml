@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="DefeatOfferWindow.uss" />
+    <ui:VisualElement name="DefeatOfferWindow" class="defeat-offer-overlay">
+        <ui:VisualElement class="defeat-offer-scrim" />
+        <ui:VisualElement class="defeat-offer-dialog">
+            <ui:Label name="DefeatOfferTitle" class="defeat-offer-title" />
+            <ui:Label name="DefeatOfferDescription" class="defeat-offer-description" />
+            <ui:VisualElement name="DefeatOfferCard" class="defeat-offer-card" />
+            <ui:Label name="DefeatOfferNotice" class="defeat-offer-notice" />
+            <ui:VisualElement class="defeat-offer-actions">
+                <ui:Button name="DefeatOfferUpgrade" class="defeat-offer-button defeat-offer-upgrade" />
+                <ui:Button name="DefeatOfferClose" class="defeat-offer-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

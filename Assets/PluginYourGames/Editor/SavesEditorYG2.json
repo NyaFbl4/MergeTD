@@ -1,5 +1,5 @@
 {
-    "idSave": 1516,
+    "idSave": 1566,
     "world": {
         "version": 2,
         "towerTutorial": {
@@ -11,11 +11,11 @@
             "version": 1,
             "step": 6
         },
-        "gold": 1200,
+        "gold": 1125,
         "gems": 0,
         "playerEnergy": {
             "version": 1,
-            "current": 9,
+            "current": 1,
             "nextRestoreUnixMilliseconds": 1791196237795
         },
         "dailyRewardLastClaimDay": 20731,
@@ -35,19 +35,43 @@
             {
                 "slotId": "11",
                 "towerLevel": 1,
-                "towerType": 1,
+                "towerType": 0,
                 "purchaseCost": 100
             },
             {
                 "slotId": "12",
-                "towerLevel": 2,
+                "towerLevel": 1,
                 "towerType": 0,
-                "purchaseCost": 200
+                "purchaseCost": 100
             },
             {
                 "slotId": "13",
                 "towerLevel": 1,
                 "towerType": 0,
+                "purchaseCost": 100
+            },
+            {
+                "slotId": "14",
+                "towerLevel": 1,
+                "towerType": 0,
+                "purchaseCost": 100
+            },
+            {
+                "slotId": "15",
+                "towerLevel": 1,
+                "towerType": 0,
+                "purchaseCost": 100
+            },
+            {
+                "slotId": "21",
+                "towerLevel": 1,
+                "towerType": 0,
+                "purchaseCost": 100
+            },
+            {
+                "slotId": "22",
+                "towerLevel": 1,
+                "towerType": 1,
                 "purchaseCost": 100
             },
             {
@@ -138,13 +162,20 @@
             "default-run-1"
         ],
         "activeSpellIds": [
-            "weapon_barrage"
+            "weapon_barrage",
+            "cryo_discharge"
         ],
-        "shopOffers": [],
+        "shopOffers": [
+            {
+                "offerId": "energy_ad_2",
+                "utcDay": 20731,
+                "purchasesToday": 1
+            }
+        ],
         "dailyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 4,
+                "currentValue": 9,
                 "targetValue": 10,
                 "rewardGold": 100,
                 "rewardGems": 0,
@@ -156,13 +187,13 @@
                 "targetValue": 10,
                 "rewardGold": 125,
                 "rewardGems": 0,
-                "isRewardClaimed": false
+                "isRewardClaimed": true
             }
         ],
         "weeklyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 4,
+                "currentValue": 9,
                 "targetValue": 70,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -170,7 +201,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 5,
+                "currentValue": 7,
                 "targetValue": 7,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -180,7 +211,7 @@
         "achievementQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 4,
+                "currentValue": 9,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -188,7 +219,7 @@
             },
             {
                 "id": "DealDamageQuest",
-                "currentValue": 38375,
+                "currentValue": 48275,
                 "targetValue": 125000,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -196,7 +227,7 @@
             },
             {
                 "id": "KillEnemyQuest",
-                "currentValue": 112,
+                "currentValue": 151,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -204,7 +235,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 5,
+                "currentValue": 7,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,

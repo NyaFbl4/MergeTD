@@ -179,6 +179,15 @@ MonoBehaviour:
       priceCurrencyCode: YAN
       currencyImageURL: https://yastatic.net/s3/games-static/static-data/images/payments/sdk/currency-icon-s@2x.png
       consumed: 1
+    - id: offer_gold_gems
+      title: Commander Pack
+      description: 5000 gold + 100 gems
+      imageURI: demo image
+      price: 199 RUB
+      priceValue: 199
+      priceCurrencyCode: RUB
+      currencyImageURL: https://yastatic.net/s3/games-static/static-data/images/payments/sdk/currency-icon-s@2x.png
+      consumed: 1
   RewardedAdv:
     skipInterAdvAfterReward: 1
     labelAdvSimLabel: 0

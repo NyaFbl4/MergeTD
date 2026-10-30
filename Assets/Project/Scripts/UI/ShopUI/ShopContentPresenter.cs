@@ -111,7 +111,7 @@ namespace Project.Scripts.UI.ShopUI
             _offerService.PurchaseSucceeded -= OnOfferPurchaseSucceeded;
         }
 
-        private ShopOfferUIData CreateUIData(ShopOfferState state)
+        public ShopOfferUIData CreateUIData(ShopOfferState state)
         {
             var config = state.Config;
             var rewards = CreateRewards(config);

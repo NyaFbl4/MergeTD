@@ -34,6 +34,8 @@ namespace Project.Scripts.UI.MainMenuUI
         IPurchaseWindowView PurchaseWindowView { get; }
         ISpellsPanelUIView SpellsPanelView { get; }
         IShopPanelUIView ShopView { get; }
+        IDefeatOfferWindowView DefeatOfferView { get; }
+        void InitializeDefeatOffer(UIElements uiElements);
 
         void InitializeShop(IUpgradeConfigProvider upgradeConfigs, UIElements uiElements);
         void InitializeArmy(UIElements uiElements);

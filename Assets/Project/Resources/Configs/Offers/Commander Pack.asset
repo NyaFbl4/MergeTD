@@ -33,7 +33,7 @@ MonoBehaviour:
   - _type: 1
     _amount: 100
     _spell: {fileID: 0}
-  _isTimed: 1
+  _isTimed: 0
   _startUnixMilliseconds: 1791158400000
   _endUnixMilliseconds: 1793232000000
   _dailyPurchaseLimit: 0

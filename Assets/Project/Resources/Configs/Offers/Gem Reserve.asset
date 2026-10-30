@@ -18,14 +18,15 @@ MonoBehaviour:
   _enabled: 1
   _title: shop.gems_bundle_offer.title
   _description: shop.gems_bundle_offer.description
-  _mainIcon: {fileID: 21300000, guid: 85e5755c1f204fb3beb617c5f341bbaa, type: 3}
-  _badge:
+  _mainIcon: {fileID: 6143901806938940914, guid: b6df77acbbbf1b148b80e60737d53e51, type: 3}
+  _badge: 
   _visualIconCount: 1
   _price:
     _type: 0
     _productId: offer_gems_300
     _previewPrice: 299 RUB
     _goldAmount: 1
+    _gemsAmount: 1
   _rewards:
   - _type: 1
     _amount: 300

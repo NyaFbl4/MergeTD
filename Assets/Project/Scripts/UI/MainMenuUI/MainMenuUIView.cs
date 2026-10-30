@@ -43,6 +43,11 @@ namespace Project.Scripts.UI.MainMenuUI
         private IPurchaseWindowView _purchaseWindowView;
         private ISpellsPanelUIView _spellsPanelView;
         private IShopPanelUIView _shopView;
+        public IDefeatOfferWindowView DefeatOfferView { get; private set; }
+
+        public void InitializeDefeatOffer(UIElements uiElements) =>
+            DefeatOfferView = new DefeatOfferWindowView(_root, uiElements);
+
         private VisualElement _basePanel;
         private Label _baseUpgradesTitleLabel;
         private ScrollView _baseUpgradesScrollView;
@@ -308,6 +313,7 @@ namespace Project.Scripts.UI.MainMenuUI
             _slotUnlockView.Dispose();
             _spellsPanelView.Dispose();
             _shopView.Dispose();
+            DefeatOfferView.Dispose();
             _settingsButton.clicked -= OnSettingsButtonClicked;
 
             for (var i = 0; i < _sectionButtons.Length; i++)

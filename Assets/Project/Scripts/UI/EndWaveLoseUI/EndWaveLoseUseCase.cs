@@ -1,5 +1,8 @@
 using Project.Scripts.System.Analytics;
 using System;
+using System.Collections.Generic;
+using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.System.Shop;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using Project.Scripts.Gameplay.Base;
@@ -23,6 +26,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         private readonly IPublisher<ShowPopupDto> _showPopupPublisher;
         private readonly IPublisher<HidePopupDto> _hidePopupPublisher;
         private readonly RunState _runState;
+        private readonly DefeatOfferState _defeatOfferState;
 
         private bool _isShown;
         private bool _isWaitingAdReward;
@@ -35,7 +39,8 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             RunBattleRuntime runBattleRuntime,
             IPublisher<ShowPopupDto> showPopupPublisher,
             IPublisher<HidePopupDto> hidePopupPublisher,
-            RunState runState)
+            RunState runState,
+            DefeatOfferState defeatOfferState)
         {
             _baseHealth = baseHealth;
             _endWaveLoseUIPresenter = endWaveLoseUIPresenter;
@@ -43,13 +48,21 @@ namespace Project.Scripts.UI.EndWaveLoseUI
             _showPopupPublisher = showPopupPublisher;
             _hidePopupPublisher = hidePopupPublisher;
             _runState = runState;
+            _defeatOfferState = defeatOfferState;
         }
 
         public void Initialize()
         {
             _baseHealth.Destroyed += OnBaseDestroyed;
+            _runBattleRuntime.WaveCompleted += OnWaveCompleted;
             _endWaveLoseUIPresenter.CloseRequested += OnCloseRequested;
             _endWaveLoseUIPresenter.AdRequested += OnAdRequested;
+        }
+
+        private void OnWaveCompleted(int waveNumber, IReadOnlyList<WaveRewardConfig> rewards, ERunPhase phase)
+        {
+            if (phase == ERunPhase.Victory)
+                _defeatOfferState.RecordVictory();
         }
 
         private void OnBaseDestroyed()
@@ -71,7 +84,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
 
         private void OnCloseRequested()
         {
-            if (_isWaitingAdReward)
+            if (!_isShown || _isWaitingAdReward)
                 return;
 
             ClosePopupAndOpenMenu();
@@ -179,6 +192,9 @@ namespace Project.Scripts.UI.EndWaveLoseUI
 
         private void OpenMainMenu()
         {
+            if (_runState.Phase == ERunPhase.Defeat)
+                _defeatOfferState.RecordDefeat();
+
             _hidePopupPublisher.Publish(new HidePopupDto
             {
                 TargetPopUpType = typeof(ILevelUIPresenter)
@@ -204,6 +220,7 @@ namespace Project.Scripts.UI.EndWaveLoseUI
         public void Dispose()
         {
             _baseHealth.Destroyed -= OnBaseDestroyed;
+            _runBattleRuntime.WaveCompleted -= OnWaveCompleted;
             _endWaveLoseUIPresenter.CloseRequested -= OnCloseRequested;
             _endWaveLoseUIPresenter.AdRequested -= OnAdRequested;
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51791cb188754f3194ceac3884d298fe, type: 3}
   m_Name: Enemy Config
   m_EditorClassIdentifier: Assembly-CSharp::Project.Scripts.Configs.EnemyConfig
-  _startHealth: 500
+  _startHealth: 575
   _startDamage: 1
   _startMoveSpeed: 0.5
   _typeStats:

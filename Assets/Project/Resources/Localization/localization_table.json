@@ -1,6 +1,13 @@
 {
   "defaultLanguage": "ru",
   "entries": [
+    {"key": "defeat_offer.title", "ru": "Усиль армию", "en": "Strengthen your army"},
+    {"key": "defeat_offer.description", "ru": "Получи золото и подготовь оборону к следующей попытке.", "en": "Get gold and prepare your defense for the next attempt."},
+    {"key": "defeat_offer.close", "ru": "Закрыть", "en": "Close"},
+    {"key": "defeat_offer.upgrade", "ru": "Усилить армию", "en": "Strengthen army"},
+    {"key": "defeat_offer.success_title", "ru": "Награды получены!", "en": "Rewards received!"},
+    {"key": "defeat_offer.success_description", "ru": "Используй полученное золото для покупки башен и усиления армии.", "en": "Use your gold to buy towers and strengthen your army."},
+    {"key": "defeat_offer.purchase_failed", "ru": "Покупка не завершена. Можно попробовать снова.", "en": "Purchase was not completed. You can try again."},
     {"key": "tutorial.spells.generator_title", "ru": "Установи генератор", "en": "Place a generator"},
     {"key": "tutorial.spells.generator", "ru": "Генератор производит энергию для заклинаний. Нажми на кнопку покупки.", "en": "Generators produce energy for spells. Tap the buy button."},
     {"key": "tutorial.spells.start_title", "ru": "Заряди заклинание", "en": "Charge your spell"},
