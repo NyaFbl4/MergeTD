@@ -77,6 +77,8 @@ namespace Installers
             builder.RegisterEntryPoint<QuestService>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BattlefieldRuntime>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<RunBattleRuntime>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<Project.Scripts.Gameplay.Tutorial.TowerTutorialRuntime>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<Project.Scripts.Gameplay.Tutorial.SpellTutorialRuntime>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BaseUpgradeWaveRecoveryUseCase>(Lifetime.Singleton);
             builder.RegisterEntryPoint<GameBootstrap>(Lifetime.Singleton);
             builder.RegisterEntryPoint<AudioManager>(Lifetime.Singleton).As<IAudioManager>().AsSelf();

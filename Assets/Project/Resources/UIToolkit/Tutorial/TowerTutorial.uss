@@ -1,0 +1,61 @@
+.tower-tutorial-host, .tower-tutorial-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.tower-tutorial-hidden { display: none; }
+.tower-tutorial-mask { position: absolute; background-color: rgba(9, 18, 31, 0.48); }
+.tower-tutorial-outline {
+    position: absolute;
+    border-width: 7px;
+    border-color: rgb(255, 220, 105);
+    border-radius: 20px;
+}
+.tower-tutorial-message-panel {
+    position: absolute;
+    background-color: rgb(34, 51, 69);
+    border-color: rgb(247, 197, 84);
+    border-width: 5px;
+    border-radius: 30px;
+    padding: 12px 26px 22px 26px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+}
+.tower-tutorial-counter {
+    font-size: 28px;
+    color: rgb(223, 232, 238);
+    -unity-text-align: middle-center;
+}
+.tower-tutorial-title {
+    font-size: 48px;
+    color: rgb(255, 220, 124);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+.tower-tutorial-message {
+    font-size: 43px;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+.tower-tutorial-hand {
+    position: absolute;
+    background-image: resource("UI/new/Icons/Icon_ImageIcon_Tutorial_Hand");
+    -unity-background-scale-mode: scale-to-fit;
+}
+.tower-tutorial-skip {
+    position: absolute;
+    top: 170px;
+    right: 35px;
+    min-width: 210px;
+    min-height: 80px;
+    background-color: rgb(34, 51, 69);
+    border-color: rgb(247, 197, 84);
+    border-width: 3px;
+    border-radius: 16px;
+    padding: 10px 20px;
+    color: rgb(255, 255, 255);
+    font-size: 35px;
+    -unity-font-definition: resource("Fonts/Lilita One Regular");
+}

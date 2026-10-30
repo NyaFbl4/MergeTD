@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="TowerTutorial.uss" />
+    <ui:VisualElement name="TutorialRoot" class="tower-tutorial-root" picking-mode="Ignore">
+        <ui:VisualElement name="MaskTop" class="tower-tutorial-mask" />
+        <ui:VisualElement name="MaskBottom" class="tower-tutorial-mask" />
+        <ui:VisualElement name="MaskLeft" class="tower-tutorial-mask" />
+        <ui:VisualElement name="MaskRight" class="tower-tutorial-mask" />
+        <ui:VisualElement name="FirstOutline" class="tower-tutorial-outline" picking-mode="Ignore" />
+        <ui:VisualElement name="SecondOutline" class="tower-tutorial-outline" picking-mode="Ignore" />
+        <ui:VisualElement name="TutorialMessagePanel" class="tower-tutorial-message-panel" picking-mode="Ignore">
+            <ui:Label name="TutorialCounter" class="tower-tutorial-counter" picking-mode="Ignore" />
+            <ui:Label name="TutorialTitle" class="tower-tutorial-title" picking-mode="Ignore" />
+            <ui:Label name="TutorialMessage" class="tower-tutorial-message" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="TutorialHand" class="tower-tutorial-hand" picking-mode="Ignore" />
+        <ui:Button name="TutorialSkip" class="tower-tutorial-skip" />
+    </ui:VisualElement>
+</ui:UXML>

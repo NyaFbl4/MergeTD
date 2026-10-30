@@ -39,6 +39,7 @@ namespace Project.Scripts.Gameplay.Systems
         private bool _isDisposed;
 
         public event Action StateChanged;
+        public event Action<Vector2> CastStarted;
 
         public float CooldownRemaining => _cooldownRemaining;
         public bool IsTargeting => _isTargeting;
@@ -93,7 +94,11 @@ namespace Project.Scripts.Gameplay.Systems
         public void OnUpdate(float deltaTime)
         {
             UpdateCooldown(deltaTime);
+            UpdateTargeting();
+        }
 
+        public void UpdateTargeting()
+        {
             if (!_isTargeting)
                 return;
 
@@ -158,6 +163,9 @@ namespace Project.Scripts.Gameplay.Systems
 
         private void BeginCast(Vector2 center)
         {
+            if (!_runState.SpellTutorialInput.AllowsTarget(center))
+                return;
+
             if (!_energy.TrySpend(_config.ManaCost))
             {
                 CancelTargeting();
@@ -174,6 +182,7 @@ namespace Project.Scripts.Gameplay.Systems
             CancelActiveCast();
             _isCasting = true;
             _castCancellation = CancellationTokenSource.CreateLinkedTokenSource(_lifetimeCancellation.Token);
+            CastStarted?.Invoke(center);
             ExecuteCastAsync(center, _castCancellation.Token).Forget();
             StateChanged?.Invoke();
         }

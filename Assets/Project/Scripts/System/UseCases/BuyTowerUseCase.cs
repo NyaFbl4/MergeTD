@@ -110,7 +110,8 @@ namespace Project.Scripts.System.UseCases
             int purchaseValue)
         {
             using var analyticsSource = GameAnalytics.WithSource("tower_purchase");
-            if (!_runState.CanEditDefense)
+            if (!_runState.CanEditDefense || !_runState.TutorialInput.AllowsPurchase(towerType, level)
+                || !_runState.SpellTutorialInput.AllowsPurchase(towerType, level))
                 return EBuyTowerResult.RunPhaseLocked;
 
             var slot = _battlefieldContext.FindFirstFreePlaceableSlot();

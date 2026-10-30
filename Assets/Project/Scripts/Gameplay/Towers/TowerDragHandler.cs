@@ -1,4 +1,4 @@
-﻿using Project.Scripts.Gameplay.Field;
+using Project.Scripts.Gameplay.Field;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
@@ -50,7 +50,8 @@ namespace Project.Scripts.Gameplay.Towers
                 return;
             }
             
-            if (!_sourceSlot.CanEditTower)
+            if (!_sourceSlot.CanEditTower || !_sourceSlot.TutorialInput.AllowsDrag(_sourceSlot.PersistentId)
+                || _sourceSlot.SpellTutorialInput.Active)
                 return;
 
             _startPos = transform.position;
@@ -58,6 +59,7 @@ namespace Project.Scripts.Gameplay.Towers
                 return;
             
             _isDragging = true;
+            _sourceSlot.TutorialInput.IsDragging = true;
             _startSortingLayerId = _sortingGroup.sortingLayerID;
             _startSortingOrder = _sortingGroup.sortingOrder;
             _sortingGroup.sortingLayerID = _sellZone.SortingLayerId;
@@ -85,7 +87,7 @@ namespace Project.Scripts.Gameplay.Towers
             
             var world = GetPointerWorldPosition(eventData);
 
-             if (_sellZone.ContainsScreenPoint(eventData.position, _camera))
+             if (!_sourceSlot.TutorialInput.Active && _sellZone.ContainsScreenPoint(eventData.position, _camera))
              {
                  _sourceSlot.SellDetachedTower(_towerUnit, _sellZone.CurrentRefund);
                  CompleteDrag();
@@ -93,7 +95,9 @@ namespace Project.Scripts.Gameplay.Towers
              }
 
              var targetSlot = FindSlotUnderPointer(world);
-             if (targetSlot != null && targetSlot.TryAttachExistingTower(_towerUnit, false))
+             if (targetSlot != null
+                 && _sourceSlot.TutorialInput.AllowsDrop(_sourceSlot.PersistentId, targetSlot.PersistentId)
+                 && targetSlot.TryAttachExistingTower(_towerUnit, false))
              {
                  targetSlot.CommitMoveFrom(_sourceSlot);
                  CompleteDrag();
@@ -114,6 +118,7 @@ namespace Project.Scripts.Gameplay.Towers
         private void CompleteDrag()
         {
             _isDragging = false;
+            _sourceSlot.TutorialInput.IsDragging = false;
             _sortingGroup.sortingLayerID = _startSortingLayerId;
             _sortingGroup.sortingOrder = _startSortingOrder;
             _sellZone.Hide();

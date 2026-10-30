@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: gold_500
   _displayName: card.gold_500.name
   _description: card.gold_500.description
-  _effectText: card.gold_500.effect
+  _effectText: card.gold_150.effect
   _rarity: 2
   _rarityLabel: cards.rarity.common
   _selectionWeight: 1

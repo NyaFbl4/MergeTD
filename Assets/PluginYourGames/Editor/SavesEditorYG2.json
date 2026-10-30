@@ -1,13 +1,22 @@
 {
-    "idSave": 1355,
+    "idSave": 1516,
     "world": {
         "version": 2,
-        "gold": 475,
+        "towerTutorial": {
+            "version": 1,
+            "step": 4,
+            "towerLevel": 1
+        },
+        "spellTutorial": {
+            "version": 1,
+            "step": 6
+        },
+        "gold": 1200,
         "gems": 0,
         "playerEnergy": {
             "version": 1,
-            "current": 998,
-            "nextRestoreUnixMilliseconds": 0
+            "current": 9,
+            "nextRestoreUnixMilliseconds": 1791196237795
         },
         "dailyRewardLastClaimDay": 20731,
         "dailyRewardIndex": 0,
@@ -21,17 +30,12 @@
         "towerAttackSpeedBonus": 0.0,
         "towerCritChanceBonus": 0.0,
         "towerCritDamageBonus": 0.0,
-        "upgrades": [
-            {
-                "id": "start-energy",
-                "level": 3
-            }
-        ],
+        "upgrades": [],
         "towers": [
             {
                 "slotId": "11",
                 "towerLevel": 1,
-                "towerType": 0,
+                "towerType": 1,
                 "purchaseCost": 100
             },
             {
@@ -42,51 +46,15 @@
             },
             {
                 "slotId": "13",
-                "towerLevel": 2,
-                "towerType": 0,
-                "purchaseCost": 200
-            },
-            {
-                "slotId": "14",
-                "towerLevel": 2,
-                "towerType": 0,
-                "purchaseCost": 200
-            },
-            {
-                "slotId": "15",
                 "towerLevel": 1,
                 "towerType": 0,
                 "purchaseCost": 100
             },
             {
-                "slotId": "21",
-                "towerLevel": 2,
-                "towerType": 1,
-                "purchaseCost": 200
-            },
-            {
-                "slotId": "22",
-                "towerLevel": 2,
-                "towerType": 1,
-                "purchaseCost": 200
-            },
-            {
                 "slotId": "23",
-                "towerLevel": 2,
+                "towerLevel": 1,
                 "towerType": 1,
-                "purchaseCost": 200
-            },
-            {
-                "slotId": "24",
-                "towerLevel": 2,
-                "towerType": 1,
-                "purchaseCost": 200
-            },
-            {
-                "slotId": "25",
-                "towerLevel": 2,
-                "towerType": 1,
-                "purchaseCost": 200
+                "purchaseCost": 100
             }
         ],
         "towerSlots": [
@@ -163,53 +131,20 @@
                 "isUnlocked": true,
                 "level": 1,
                 "keepUnlockedOnReset": false
-            },
-            {
-                "spellId": "base_repair",
-                "isUnlocked": true,
-                "level": 1,
-                "keepUnlockedOnReset": false
-            },
-            {
-                "spellId": "barrage_protocol",
-                "isUnlocked": true,
-                "level": 1,
-                "keepUnlockedOnReset": false
-            },
-            {
-                "spellId": "emp_pulse",
-                "isUnlocked": true,
-                "level": 1,
-                "keepUnlockedOnReset": false
-            },
-            {
-                "spellId": "orbital_railgun",
-                "isUnlocked": true,
-                "level": 1,
-                "keepUnlockedOnReset": false
-            },
-            {
-                "spellId": "gravity_trap",
-                "isUnlocked": true,
-                "level": 1,
-                "keepUnlockedOnReset": false
             }
         ],
         "spellProgressionVersion": 1,
         "completedRunIds": [
-            "default-run-1",
-            "default-run-2"
+            "default-run-1"
         ],
         "activeSpellIds": [
-            "emp_pulse",
-            "gravity_trap",
-            "cryo_discharge"
+            "weapon_barrage"
         ],
         "shopOffers": [],
         "dailyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 10,
+                "currentValue": 4,
                 "targetValue": 10,
                 "rewardGold": 100,
                 "rewardGems": 0,
@@ -221,13 +156,13 @@
                 "targetValue": 10,
                 "rewardGold": 125,
                 "rewardGems": 0,
-                "isRewardClaimed": true
+                "isRewardClaimed": false
             }
         ],
         "weeklyQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 15,
+                "currentValue": 4,
                 "targetValue": 70,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -235,7 +170,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 7,
+                "currentValue": 5,
                 "targetValue": 7,
                 "rewardGold": 0,
                 "rewardGems": 10,
@@ -245,7 +180,7 @@
         "achievementQuests": [
             {
                 "id": "BuyTowerQuest",
-                "currentValue": 15,
+                "currentValue": 4,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -253,7 +188,7 @@
             },
             {
                 "id": "DealDamageQuest",
-                "currentValue": 125000,
+                "currentValue": 38375,
                 "targetValue": 125000,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -261,7 +196,7 @@
             },
             {
                 "id": "KillEnemyQuest",
-                "currentValue": 473,
+                "currentValue": 112,
                 "targetValue": 500,
                 "rewardGold": 0,
                 "rewardGems": 50,
@@ -269,7 +204,7 @@
             },
             {
                 "id": "2",
-                "currentValue": 14,
+                "currentValue": 5,
                 "targetValue": 50,
                 "rewardGold": 0,
                 "rewardGems": 50,

@@ -8,6 +8,8 @@ namespace Project.Scripts.System.Save
     public sealed class WorldSaveData
     {
         public int version = 1;
+        public Project.Scripts.Gameplay.Tutorial.TowerTutorialSaveData towerTutorial;
+        public Project.Scripts.Gameplay.Tutorial.SpellTutorialSaveData spellTutorial;
         public int gold;
         public int gems;
         public PlayerEnergySaveData playerEnergy;

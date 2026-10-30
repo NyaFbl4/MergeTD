@@ -78,7 +78,7 @@ namespace Project.Scripts.Gameplay.Run
 
         public void StartWave()
         {
-            if (!_isGameRunning || !_state.CanEditDefense)
+            if (!_isGameRunning || !_state.CanEditDefense || !_state.TutorialInput.CanStartWave || !_state.SpellTutorialInput.CanStartWave)
                 return;
 
             _state.StartWave();

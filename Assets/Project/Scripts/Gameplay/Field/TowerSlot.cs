@@ -41,7 +41,7 @@ namespace Project.Scripts.Gameplay.Field
 
         public void RequestUnlock()
         {
-            if (_slotType == ETowerSlotType.Locked && _runState.CanEditDefense)
+            if (_slotType == ETowerSlotType.Locked && _runState.CanEditDefense && !_runState.TutorialInput.Active && !_runState.SpellTutorialInput.Active)
                 UnlockRequested?.Invoke(PersistentId);
         }
 
@@ -51,6 +51,8 @@ namespace Project.Scripts.Gameplay.Field
                 _lockIndicator.color = new Color(0.65f, 0.6f, 0.75f);
         }
 
+        public Project.Scripts.Gameplay.Tutorial.TowerTutorialInput TutorialInput => _runState.TutorialInput;
+        public Project.Scripts.Gameplay.Tutorial.SpellTutorialInput SpellTutorialInput => _runState.SpellTutorialInput;
         public bool IsOccupied => _currentTower != null;
         public Transform TowerAnchor => _towerAnchor != null ? _towerAnchor : transform;
         public TowerUnit CurrentTower => _currentTower;

@@ -40,6 +40,22 @@ namespace Project.Scripts.System.Save
         private WorldSaveData _data;
         private bool _needsUpgradeMigration;
 
+        public Project.Scripts.Gameplay.Tutorial.TowerTutorialSaveData TowerTutorial => _data.towerTutorial;
+        public Project.Scripts.Gameplay.Tutorial.SpellTutorialSaveData SpellTutorial => _data.spellTutorial;
+
+        public void SaveSpellTutorial(Project.Scripts.Gameplay.Tutorial.SpellTutorialStep step)
+        {
+            _data.spellTutorial.step = step;
+            Save();
+        }
+
+        public void SaveTowerTutorial(Project.Scripts.Gameplay.Tutorial.TowerTutorialStep step, int level)
+        {
+            _data.towerTutorial.step = step;
+            _data.towerTutorial.towerLevel = Math.Max(1, level);
+            Save();
+        }
+
         public int Gold => _data.gold;
         public int Gems => _data.gems;
         public int PlayerEnergy => _data.playerEnergy.current;
@@ -751,6 +767,8 @@ namespace Project.Scripts.System.Save
             }
 
             HasPersistedData = true;
+            _data.towerTutorial = Project.Scripts.Gameplay.Tutorial.TowerTutorialSaveData.ForExistingPlayer();
+            _data.spellTutorial = Project.Scripts.Gameplay.Tutorial.SpellTutorialSaveData.ForExistingPlayer();
             UnlockOccupiedTowerSlots();
             Save();
             GoldChanged?.Invoke(Gold);
@@ -800,6 +818,8 @@ namespace Project.Scripts.System.Save
                 // A new world may still have a legacy checkpoint with shop upgrades to import.
                 version = 1,
                 gold = InitialGold,
+                towerTutorial = new Project.Scripts.Gameplay.Tutorial.TowerTutorialSaveData(),
+                spellTutorial = new Project.Scripts.Gameplay.Tutorial.SpellTutorialSaveData(),
                 gems = 0,
                 playerEnergy = new PlayerEnergySaveData(),
                 dailyQuestDay = -1,
@@ -820,6 +840,14 @@ namespace Project.Scripts.System.Save
 
         private void Normalize()
         {
+            var canContinueOnboarding = _data.towerTutorial != null
+                && (_data.completedRunIds == null || !_data.completedRunIds.Contains("default-run-1"));
+            _data.towerTutorial ??= Project.Scripts.Gameplay.Tutorial.TowerTutorialSaveData.ForExistingPlayer();
+            _data.towerTutorial.Normalize();
+            _data.spellTutorial ??= canContinueOnboarding
+                ? new Project.Scripts.Gameplay.Tutorial.SpellTutorialSaveData()
+                : Project.Scripts.Gameplay.Tutorial.SpellTutorialSaveData.ForExistingPlayer();
+            _data.spellTutorial.Normalize();
             _data.gold = Math.Max(0, _data.gold);
             _data.gems = Math.Max(0, _data.gems);
             _data.playerEnergy = PlayerEnergySaveData.Normalize(_data.playerEnergy);

@@ -1,4 +1,4 @@
-﻿using Project.Scripts.Gameplay.Run.Configs;
+using Project.Scripts.Gameplay.Run.Configs;
 
 using System;
 
@@ -16,6 +16,9 @@ namespace Project.Scripts.Gameplay.Run
         private bool _canUseAbilities => _phase == ERunPhase.Wave;
         private bool _isBossWave => _currentWaveConfig.IsBossWave;
         
+        public Project.Scripts.Gameplay.Tutorial.TowerTutorialInput TutorialInput { get; } = new();
+        public Project.Scripts.Gameplay.Tutorial.SpellTutorialInput SpellTutorialInput { get; } = new();
+
         public int CurrentWave => _currentWave;
         public string RunId => _runSelection.SelectedRun.Id;
         public int MaxWaves => _runSelection.SelectedRun.Waves.Count;
@@ -46,7 +49,7 @@ namespace Project.Scripts.Gameplay.Run
 
         public void StartWave()
         {
-            if (_phase != ERunPhase.Preparation)
+            if (_phase != ERunPhase.Preparation || !TutorialInput.CanStartWave || !SpellTutorialInput.CanStartWave)
                 return;
 
             SetPhase(ERunPhase.Wave);
